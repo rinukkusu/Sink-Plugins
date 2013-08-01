@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 /**
  * CommandsPlugin Class
- *
+ * <p/>
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class
@@ -42,7 +42,7 @@ public class CommandsPlugin extends JavaPlugin
     public void onEnable()
     {
         log = getLogger();
-        if (!getDataFolder().exists())
+        if (! getDataFolder().exists())
         {
             getDataFolder().mkdirs();
         }
@@ -147,11 +147,15 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("speclist").setExecutor(new SpecCommands.SpeclistCommand());
     }
 
+    // Don't use Bukkit.broadcast, use this instead!
     public static void broadcast(String message, String permission)
     {
-        for(Player p : Bukkit.getOnlinePlayers())
+        for (Player p : Bukkit.getOnlinePlayers())
         {
-            if (!p.hasPermission(permission)) continue;
+            if (! p.hasPermission(permission))
+            {
+                continue;
+            }
             p.sendMessage(message);
         }
         Bukkit.getLogger().log(Level.INFO, message);
@@ -270,7 +274,7 @@ public class CommandsPlugin extends JavaPlugin
                 @Override
                 public void run()
                 {
-                    if(!toTmpFreeze.contains(player.getName()))
+                    if (! toTmpFreeze.contains(player.getName()))
                     {
                         return;
                     }
@@ -289,7 +293,7 @@ public class CommandsPlugin extends JavaPlugin
 
     public void onDisable()
     {
-        if (!getDataFolder().exists())
+        if (! getDataFolder().exists())
         {
             getDataFolder().mkdirs();
         }
