@@ -1,0 +1,21 @@
+name: AntiSpamPlugin
+version: 1.0
+description: Anti Spam Plugin
+author: Trojaner
+website: http://static-interface.de
+main: de.static_interface.antispamplugin.AntiSpamPlugin
+depend: [CommandsPlugin]
+permissions:
+ antispamplugin.*:
+   description: Gives access to all AntiSpamPlugin commands
+   children:
+     antispamplugin.message: true
+     antispamplugin.bypass: true
+
+ antispamplugin.bypass:
+    description: Allows to bypass AntiSpamPlugin
+    default: op
+
+ antispamplugin.message:
+    description: Allows to receive Messages
+    default: op

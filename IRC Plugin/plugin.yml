@@ -1,0 +1,22 @@
+name: IRCPlugin
+version: 1.0
+description: Plugin that links Chat to IRC
+author: Trojaner
+website: http://static-interface.de
+main: de.static_interface.ircplugin.IRCPluginMain
+
+commands:
+  irc:
+    description: Shows information about the IRC
+    permission: ircplugin.irc
+  say:
+    description: Links to the say command for the IRC.
+
+permissions:
+  ircplugin.*:
+    description: Gives access to all IRC commands
+    children:
+      inferno.irc: true
+  ircplugin.irc:
+    description: Shows information about the IRC
+    default: true

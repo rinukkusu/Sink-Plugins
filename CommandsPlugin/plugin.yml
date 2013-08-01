@@ -1,0 +1,180 @@
+name: CommandsPlugin
+version: 1.4
+description: General Commands Plugin
+author: Trojaner
+website: http://static-interface.de
+main: de.static_interface.commandsplugin.CommandsPlugin
+
+commands:
+  commandsver:
+    description: Shows Version
+    permission: commandsplugin.ver
+
+  drug:
+    description: Take drugs!
+    permission: commandsplugin.drug
+
+  milk:
+    description: Remove the invisibility potion of players
+    permission: commandsplugin.milk
+
+  warn:
+    description: Warn a player
+    permission: commandsplugin.warn
+
+  freeze:
+    description: Freeze or unfreeze a player.
+    usage: "Benutzung: /<command> <Spieler> <Grund>"
+    permission: commandsplugin.freeze.freeze
+
+  tmpfreeze:
+    description: Temporarily freeze a player.
+    usage: "Benutzung: /<command> <Spieler> <Sekunden> <Grund>"
+    permission: commandsplugin.freeze.tmpfreeze
+
+  freezeall:
+    description: Freeze or unfreeze every players.
+    usage: "Benutzung: /<command> <Grund>"
+    permission: commandsplugin.freeze.freezeall
+
+  freezelist:
+    description: List all the freezed or tmpfreezed players.
+    permission: commandsplugin.freeze.list
+
+  globalmute:
+    descripion: Mutes all players
+    usage: "Benutzung: /<command> [Grund]"
+    permission: commandsplugin.globalmute
+
+  teamchat:
+    description: Staff only chat
+    usage: "Benutzung: /<command> <Nachricht>"
+    permission: commandsplugin.teamchat
+    aliases: tc
+
+  newbiechat:
+    description: Chat for new users
+    usage: "Benutzung: /<command> <Nachricht>"
+    permission: commandsplugin.newbiechat
+    aliases: nc
+
+  spec:
+    description: Spectate a player
+    usage: "Benutzung: /<command> <Spieler>"
+    permission: commandsplugin.spectate
+    aliases: spectate
+
+  unspec:
+    description: Unspec yourself
+    permission: commandsplugin.spectate
+    aliases: unspectate
+
+  speclist:
+    description: See speced players
+    permission: commandsplugin.spectate
+    aliases: spectatorlist
+
+permissions:
+  commandsplugin.*:
+    description: Gives access to all commands
+    children:
+      commandsplugin.drug: true
+      commandsplugin.milk: true
+      commandsplugin.message: true
+      commandsplugin.freeze: true
+      commandsplugin.ver: true
+      commandsplugin.globalmute: true
+      commandsplugin.teamchat: true
+      commandsplugin.newbiechat: true
+      commandsplugin:spectate: true
+
+  commandsplugin.drug:
+    description: Allows to use the drug command
+    default: true
+
+  commandsplugin.milk:
+    description: Allow to use the milk command
+    default: op
+    children:
+      commandsplugin.milk.message: true
+
+  commandsplugin.milk.message:
+    description: Allows to get message when somebodys potion got removed
+    default: op
+
+  commandsplugin.warn:
+    description: Allows to warn players
+    default: op
+    children:
+      commandsplugin.warn.message: true
+
+  commandsplugin.warn.message:
+    description: Allows to receive a messeage when somebody got warned
+    default: op
+
+  commandsplugin.freeze.*:
+    description: Be able to use all freeze commands.
+    children:
+      commandsplugin.freeze.freeze: true
+      commandsplugin.freeze.freezeall: true
+      commandsplugin.freeze.unfreezeall: true
+      commandsplugin.freeze.tmpfreeze: true
+      commandsplugin.freeze.list: true
+      commandsplugin.freeze.message: true
+      commandsplugin.freeze.bypass: true
+
+  commandsplugin.freeze.freeze:
+    description: Be able to freeze players.
+    default: op
+
+  commandsplugin.freeze.tmpfreeze:
+    description: Be able to temporarily freeze players.
+    default: op
+
+  commandsplugin.freeze.freezeall:
+    description: Be able to freeze every players.
+    default: op
+
+  commandsplugin.freeze.bypass:
+    description: Bypass freeze.
+    default: op
+
+  commandsplugin.freeze.list:
+    description: Be able to list every freezed or tmpfreezed players.
+    default: op
+
+  commandsplugin.freeze.message:
+    description: Allows to receive a message when somebody got freezed
+    default: true
+
+  commandsplugin.ver:
+    description: Allows to use commandsver command
+    default: true
+
+  commandsplugin.globalmute:
+    description: Allows to use globalmute command
+    default: op
+    children:
+      commandsplugin.globalmute.never: true
+
+  commandsplugin.globalmute.bypass:
+    description: Allows to bypass globalmute
+    default: op
+
+  commandsplugin.teamchat:
+    description: Allows to use teamchat command
+    default: op
+
+  commandsplugin.newbiechat:
+    description: Allows to use newchat command
+    default: false
+
+  commandsplugin.spectate:
+    description: Allows to use spec command
+    default: op
+    children:
+      commandsplugin.spectate.bypass: true
+
+  commandsplugin.spectate.bypass:
+    description: Players with this permission cannot be spectated
+    default: op
