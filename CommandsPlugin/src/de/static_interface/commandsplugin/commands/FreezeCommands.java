@@ -97,12 +97,12 @@ public class FreezeCommands
 
     }
 
-    public static class TmpFreezeCommand implements CommandExecutor
+    public static class TmpfreezeCommand implements CommandExecutor
     {
 
         private final CommandsPlugin plugin;
 
-        public TmpFreezeCommand(CommandsPlugin plugin)
+        public TmpfreezeCommand(CommandsPlugin plugin)
         {
             this.plugin = plugin;
         }
@@ -203,11 +203,11 @@ public class FreezeCommands
         }
     }
 
-    public static class FreezeAllCommand implements CommandExecutor
+    public static class FreezeallCommand implements CommandExecutor
     {
         private final CommandsPlugin plugin;
 
-        public FreezeAllCommand(CommandsPlugin plugin)
+        public FreezeallCommand(CommandsPlugin plugin)
         {
             this.plugin = plugin;
         }
@@ -258,12 +258,12 @@ public class FreezeCommands
         }
     }
 
-    public static class FreezeListCommand implements CommandExecutor
+    public static class FreezelistCommand implements CommandExecutor
     {
 
         private final CommandsPlugin plugin;
 
-        public FreezeListCommand(CommandsPlugin plugin)
+        public FreezelistCommand(CommandsPlugin plugin)
         {
             this.plugin = plugin;
         }
@@ -320,7 +320,7 @@ public class FreezeCommands
         }
     }
 
-    public static boolean isNumber(String in)
+    private static boolean isNumber(String in)
     {
         try
         {

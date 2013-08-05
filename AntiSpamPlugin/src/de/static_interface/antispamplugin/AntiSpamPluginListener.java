@@ -19,7 +19,10 @@ public class AntiSpamPluginListener implements Listener
     {
         String message = event.getMessage();
         Player player = event.getPlayer();
-        //if (player.hasPermission("commandsplugin.bypass")) return;
+        if (player.hasPermission("commandsplugin.bypass"))
+        {
+            return;
+        }
         if (ContainsArrayItem(message, blacklist))
         {
             AntiSpamPlugin.warnPlayer(player, "Posting von einem Blacklist - Wort.");

@@ -58,21 +58,21 @@ commands:
     permission: commandsplugin.newbiechat
     aliases: nc
 
-  spec:
+  spectate:
     description: Spectate a player
     usage: "Benutzung: /<command> <Spieler>"
     permission: commandsplugin.spectate
-    aliases: spectate
+    aliases: spec
 
-  unspec:
+  unspectate:
     description: Unspec yourself
     permission: commandsplugin.spectate
-    aliases: unspectate
+    aliases: unspec
 
-  speclist:
+  spectatorlist:
     description: See speced players
     permission: commandsplugin.spectate
-    aliases: spectatorlist
+    aliases: speclist
 
 permissions:
   commandsplugin.*:
@@ -163,6 +163,10 @@ permissions:
 
   commandsplugin.teamchat:
     description: Allows to use teamchat command
+    default: op
+
+  commandsplugin.teamchat.color:
+    description: Allows you to use color on teamchat
     default: op
 
   commandsplugin.newbiechat:

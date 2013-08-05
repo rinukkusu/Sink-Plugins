@@ -2,9 +2,9 @@ package de.static_interface.commandsplugin;
 
 import de.static_interface.commandsplugin.commands.*;
 import de.static_interface.commandsplugin.listener.FreezeListener;
-import de.static_interface.commandsplugin.listener.GlobalMuteListener;
-import de.static_interface.commandsplugin.listener.SpecListener;
-import de.static_interface.commandsplugin.listener.TradeChatListener;
+import de.static_interface.commandsplugin.listener.GlobalmuteListener;
+import de.static_interface.commandsplugin.listener.SpectateListener;
+import de.static_interface.commandsplugin.listener.TradechatListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -124,9 +124,9 @@ public class CommandsPlugin extends JavaPlugin
     {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new FreezeListener(this), this);
-        pm.registerEvents(new GlobalMuteListener(), this);
-        pm.registerEvents(new TradeChatListener(), this);
-        pm.registerEvents(new SpecListener(), this);
+        pm.registerEvents(new GlobalmuteListener(), this);
+        pm.registerEvents(new TradechatListener(), this);
+        pm.registerEvents(new SpectateListener(), this);
     }
 
     private void registerCommands()
@@ -136,15 +136,15 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("milk").setExecutor(new MilkCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand(this));
-        getCommand("tmpfreeze").setExecutor(new FreezeCommands.TmpFreezeCommand(this));
-        getCommand("freezeall").setExecutor(new FreezeCommands.FreezeAllCommand(this));
-        getCommand("freezelist").setExecutor(new FreezeCommands.FreezeListCommand(this));
+        getCommand("tmpfreeze").setExecutor(new FreezeCommands.TmpfreezeCommand(this));
+        getCommand("freezeall").setExecutor(new FreezeCommands.FreezeallCommand(this));
+        getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand(this));
         getCommand("globalmute").setExecutor(new GlobalmuteCommand());
         getCommand("teamchat").setExecutor(new TeamchatCommand());
         getCommand("newbiechat").setExecutor(new NewbiechatCommand());
-        getCommand("spec").setExecutor(new SpecCommands.SpecCommand());
-        getCommand("unspec").setExecutor(new SpecCommands.UnspecCommand());
-        getCommand("speclist").setExecutor(new SpecCommands.SpeclistCommand());
+        getCommand("spec").setExecutor(new SpectateCommands.SpectateCommand());
+        getCommand("unspec").setExecutor(new SpectateCommands.UnspectateCommand());
+        getCommand("speclist").setExecutor(new SpectateCommands.SpectatorlistCommand());
     }
 
     // Don't use Bukkit.broadcast, use this instead!
@@ -344,13 +344,13 @@ public class CommandsPlugin extends JavaPlugin
             log.log(Level.SEVERE, "Fehler beim speichern der freezedPlayers.txt ", e);
         }
 
-        for (Player p : SpecCommands.specedPlayers.keySet())
+        for (Player p : SpectateCommands.specedPlayers.keySet())
         {
-            Player target = SpecCommands.specedPlayers.get(p);
+            Player target = SpectateCommands.specedPlayers.get(p);
             target.eject();
-            SpecCommands.show(p);
-            SpecCommands.specedPlayers.remove(p);
-            p.sendMessage(SpecCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
+            SpectateCommands.show(p);
+            SpectateCommands.specedPlayers.remove(p);
+            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
         }
 
         log.info("Disabled.");

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 public class NewbiechatCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.BLUE + "[INFO] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.LIGHT_PURPLE + "[Neu] " + ChatColor.WHITE;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

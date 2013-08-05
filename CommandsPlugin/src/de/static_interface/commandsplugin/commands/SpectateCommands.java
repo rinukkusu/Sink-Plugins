@@ -9,12 +9,12 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
-public class SpecCommands
+public class SpectateCommands
 {
     public static HashMap<Player, Player> specedPlayers = new HashMap<Player, Player>();
     public static String prefix = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.WHITE;
 
-    public static class SpecCommand implements CommandExecutor
+    public static class SpectateCommand implements CommandExecutor
     {
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -60,7 +60,7 @@ public class SpecCommands
         }
     }
 
-    public static class UnspecCommand implements CommandExecutor
+    public static class UnspectateCommand implements CommandExecutor
     {
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -87,7 +87,7 @@ public class SpecCommands
         }
     }
 
-    public static class SpeclistCommand implements CommandExecutor
+    public static class SpectatorlistCommand implements CommandExecutor
     {
 
         @Override
