@@ -19,7 +19,7 @@ public class MilkCommand implements CommandExecutor
     {
         if (! ( sender instanceof Player ))
         {
-            sender.sendMessage(prefix + "This command can only be run by a player.");
+            sender.sendMessage(prefix + "Dieser Befehl kann nur von einem Spieler genutzt werden.");
             return true;
         }
         Player player = (Player) sender;

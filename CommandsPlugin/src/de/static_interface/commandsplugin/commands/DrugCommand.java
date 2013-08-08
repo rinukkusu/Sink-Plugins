@@ -18,7 +18,7 @@ public class DrugCommand implements CommandExecutor
     {
         if (! ( sender instanceof Player ))
         {
-            sender.sendMessage("This command can only be run by a player.");
+            sender.sendMessage("Dieser Befehl kann nur von einem Spieler genutzt werden.");
             return true;
         }
 
@@ -58,7 +58,7 @@ public class DrugCommand implements CommandExecutor
                 else if (amplifier >= 5)
                 {
                     Bukkit.getServer().broadcastMessage(prefix + ChatColor.RED + player.getDisplayName() + ChatColor.WHITE + " nahm zu viele Drogen und ist deswegen gestorben.");
-                    player.setHealth(0.0);
+                    player.setHealth(0.0); // Bug: Will send message "%player% died", needs to be fixed
                     return true;
                 }
                 player.removePotionEffect(PotionEffectType.BLINDNESS);

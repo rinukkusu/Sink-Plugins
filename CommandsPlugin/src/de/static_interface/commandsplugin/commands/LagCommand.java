@@ -15,7 +15,7 @@ public class LagCommand implements CommandExecutor
     {
         double realTPS = CommandsPlugin.getCommandsTimer().getAverageTPS();
         double shownTPS = Math.round(realTPS);
-        if (realTPS >= 18)
+        if (realTPS >= 18.5)
         {
             commandSender.sendMessage(prefix + ChatColor.GREEN + "Der Server laggt gerade nicht!");
         }

@@ -7,8 +7,6 @@ import java.io.IOException;
 
 /**
  * Currenty unused
- * <p/>
- * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
  */
 
 @SuppressWarnings("UnusedDeclaration")
@@ -22,6 +20,8 @@ public class PlayerConfiguration
     String freezeTimePath = freezePath + ".freezetime";
 
     /**
+     * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
+     *
      * @param playerName Player name. Do not use Displayname or Customname!
      */
     public PlayerConfiguration(String playerName)

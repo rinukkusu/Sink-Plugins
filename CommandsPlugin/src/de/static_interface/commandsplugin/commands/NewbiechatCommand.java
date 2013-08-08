@@ -1,6 +1,7 @@
 package de.static_interface.commandsplugin.commands;
 
 import de.static_interface.commandsplugin.CommandsPlugin;
+import de.static_interface.commandsplugin.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class NewbiechatCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.LIGHT_PURPLE + "[Neu] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.YELLOW + "[SupportChat] " + ChatColor.WHITE;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -36,6 +37,10 @@ public class NewbiechatCommand implements CommandExecutor
         else
         {
             name = ChatColor.RED + "Console";
+        }
+        if (sender.hasPermission("commandsplugin.newbiechat.color"))
+        {
+            message = Util.ReplaceFormattingAndColorCodes(message);
         }
         CommandsPlugin.broadcast(prefix + name + ChatColor.WHITE + ": " + message, "commandsplugin.newbiechat");
         return true;

@@ -3,25 +3,17 @@ package de.static_interface.commandsplugin;
 import de.static_interface.commandsplugin.commands.*;
 import de.static_interface.commandsplugin.listener.*;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * CommandsPlugin Class
- *
+ * <p/>
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class
@@ -30,11 +22,8 @@ import java.util.regex.Pattern;
 
 public class CommandsPlugin extends JavaPlugin
 {
-    private Logger log;
+    private static Logger log;
     public static boolean globalmuteEnabled = false;
-    public static Set<String> toFreeze = new HashSet<String>();
-    private ArrayList<String[]> toTmpFreeze = new ArrayList<String[]>();
-    public static Set<String> freezeAll = new HashSet<String>();
     private static CommandsTimer timer;
     private static File dataFolder;
 
@@ -50,117 +39,36 @@ public class CommandsPlugin extends JavaPlugin
         {
             getDataFolder().mkdirs();
         }
-        File saveFile = new File(getDataFolder(), "freezedPlayers.txt");
-        if (saveFile.exists())
-        {
-            try
-            {
-                InputStream ips = new FileInputStream(saveFile);
-                InputStreamReader ipsr = new InputStreamReader(ips);
-                BufferedReader br = new BufferedReader(ipsr);
-                String line;
-                while (( line = br.readLine() ) != null)
-                {
-                    toFreeze.add(line.trim());
-                }
-            }
-            catch (Exception exc)
-            {
-                log.log(Level.SEVERE, "Fehler beim laden der freezedPlayers.txt ", exc);
-            }
-        }
-        saveFile = new File(getDataFolder(), "freezedTmpPlayers.txt");
-        if (saveFile.exists())
-        {
-            try
-            {
-                InputStream ips = new FileInputStream(saveFile);
-                InputStreamReader ipsr = new InputStreamReader(ips);
-                BufferedReader br = new BufferedReader(ipsr);
-                String line;
-                while (( line = br.readLine() ) != null)
-                {
-                    Pattern p = Pattern.compile("(.*):(.*);");
-                    Matcher m = p.matcher(line);
-                    while (m.find())
-                    {
-                        String array[] = { m.group(1).trim(), m.group(2).trim() };
-                        final String playerName = m.group(1).trim();
-                        final long time = Long.parseLong(m.group(2).trim());
-                        final int IDListArray = toTmpFreeze.size();
-                        if (Bukkit.getOfflinePlayer(playerName) != null)
-                        {
-                            toTmpFreeze.add(IDListArray, array);
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-                            {
-                                @Override
-                                public void run()
-                                {
-                                    OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
-                                    if (player != null)
-                                    {
-                                        unfreeze(player);
-                                        toTmpFreeze.remove(IDListArray);
-                                        Bukkit.getPlayer(player.getName()).sendMessage("Du wurdest nach " + time + " Sekunden ungefreezt.");
-                                    }
-                                }
-                            }, time * 20);
-                            if (! toFreeze.contains(playerName))
-                            {
-                                toFreeze.add(playerName);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception exc)
-            {
-                log.log(Level.SEVERE, "Fehler beim laden der freezedTmpPlayers.txt ", exc);
-            }
-            registerEvents();
-            registerCommands();
-
-        }
-
+        registerEvents();
+        registerCommands();
+        log.info("Loading freezed players...");
+        FreezeCommands.loadFreezedPlayers(log, getDataFolder(), this);
+        log.info("Done!");
     }
 
+    public void onDisable()
+    {
+        for (Player p : SpectateCommands.specedPlayers.keySet())
+        {
+            Player target = SpectateCommands.specedPlayers.get(p);
+            target.eject();
+            SpectateCommands.show(p);
+            SpectateCommands.specedPlayers.remove(p);
+            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
+        }
+        log.info("Unloading freezed players...");
+        FreezeCommands.unloadFreezedPlayers(log, getDataFolder());
+        log.info("Disabled.");
+    }
+
+    /**
+     * Get Data Folder
+     *
+     * @return Data Folder of this plugin
+     */
     public static File getDataFolderStatic()
     {
         return dataFolder;
-    }
-
-    private void registerEvents()
-    {
-        PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new FreezeListener(this), this);
-        pm.registerEvents(new GlobalmuteListener(), this);
-        pm.registerEvents(new TradechatListener(), this);
-        pm.registerEvents(new SpectateListener(), this);
-        pm.registerEvents(new PlayerConfigurationListener(), this);
-    }
-
-    public static CommandsTimer getCommandsTimer()
-    {
-        return timer;
-    }
-
-    private void registerCommands()
-    {
-        getCommand("commandsver").setExecutor(new CommandsverCommand(this));
-        getCommand("drug").setExecutor(new DrugCommand());
-        getCommand("milk").setExecutor(new MilkCommand());
-        getCommand("warn").setExecutor(new WarnCommand());
-        getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand(this));
-        getCommand("tmpfreeze").setExecutor(new FreezeCommands.TmpfreezeCommand(this));
-        getCommand("freezeall").setExecutor(new FreezeCommands.FreezeallCommand(this));
-        getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand(this));
-        getCommand("globalmute").setExecutor(new GlobalmuteCommand());
-        getCommand("teamchat").setExecutor(new TeamchatCommand());
-        getCommand("newbiechat").setExecutor(new NewbiechatCommand());
-        getCommand("spectate").setExecutor(new SpectateCommands.SpectateCommand());
-        getCommand("unspectate").setExecutor(new SpectateCommands.UnspectateCommand());
-        getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
-        getCommand("lag").setExecutor(new LagCommand());
     }
 
     /**
@@ -179,201 +87,45 @@ public class CommandsPlugin extends JavaPlugin
             }
             p.sendMessage(message);
         }
-        Bukkit.getLogger().log(Level.INFO, message);
+        log.log(Level.INFO, message);
     }
 
-    public boolean canBeFrozen(Player player)
+    /**
+     * Get CommandsTimer
+     *
+     * @return CommandsTimer
+     */
+    public static CommandsTimer getCommandsTimer()
     {
-        return ! player.hasPermission("commandsplugin.freeze.never");
+        return timer;
     }
 
-    public boolean isFrozen(Player player)
+    private void registerEvents()
     {
-        if (player == null)
-        {
-            return false;
-        }
-
-        if (freezeAll.contains(player.getWorld().getName()))
-        {
-            return canBeFrozen(player);
-        }
-
-        return toFreeze.contains(player.getName());
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new FreezeListener(), this);
+        pm.registerEvents(new GlobalmuteListener(), this);
+        pm.registerEvents(new TradechatListener(), this);
+        pm.registerEvents(new SpectateListener(), this);
+        pm.registerEvents(new PlayerConfigurationListener(), this);
     }
 
-    public int isTmpFrozen(Player player)
+    private void registerCommands()
     {
-        if (player == null)
-        {
-            return - 1;
-        }
-
-        for (String[] string : toTmpFreeze)
-        {
-            if (player.getName().equalsIgnoreCase(string[0]))
-            {
-                return Integer.parseInt(string[1]);
-            }
-        }
-
-        return 0;
-    }
-
-    public boolean toggleFreezeAll()
-    {
-        if (freezeAll.size() == Bukkit.getWorlds().size())
-        {
-            freezeAll.clear();
-            return false;
-        }
-
-        for (World w : Bukkit.getWorlds())
-        {
-            if (! freezeAll.contains(w.getName()))
-            {
-                freezeAll.add(w.getName());
-            }
-        }
-
-        return true;
-    }
-
-    public boolean toggleFreeze(Player player)
-    {
-        if (toTmpFreeze.contains(player.getName()))
-        {
-            toTmpFreeze.remove(player.getName());
-        }
-        if (toFreeze.contains(player.getName()))
-        {
-            toFreeze.remove(player.getName());
-
-            return false;
-        }
-        else
-        {
-            toFreeze.add(player.getName());
-            return true;
-        }
-    }
-
-    public void unfreeze(Player player)
-    {
-        if (toFreeze.contains(player.getName()))
-        {
-            toFreeze.remove(player.getName());
-        }
-        if (toTmpFreeze.contains(player.getName()))
-        {
-            toTmpFreeze.remove(player.getName());
-        }
-    }
-
-    public void unfreeze(OfflinePlayer player)
-    {
-        if (toFreeze.contains(player.getName()))
-        {
-            toFreeze.remove(player.getName());
-        }
-        if (toTmpFreeze.contains(player.getName()))
-        {
-            toTmpFreeze.remove(player.getName());
-        }
-    }
-
-    public boolean temporarilyFreeze(final Player player, final int seconds)
-    {
-        if (! toFreeze.contains(player.getName()) && ! toTmpFreeze.contains(player.getName()))
-        {
-            toFreeze.add(player.getName());
-            String[] array = { player.getName(), String.valueOf(seconds) };
-            final int IDListArray = toTmpFreeze.size();
-            toTmpFreeze.add(IDListArray, array);
-            Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    if (! toTmpFreeze.contains(player.getName()))
-                    {
-                        return;
-                    }
-                    unfreeze(player);
-                    toTmpFreeze.remove(IDListArray);
-                    player.sendMessage(ChatColor.RED + "[Freeze]" + ChatColor.WHITE + " Du wurdest nach " + seconds + " Sekunden ungefreezt.");
-                }
-            }, seconds * 20);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public void onDisable()
-    {
-        if (! getDataFolder().exists())
-        {
-            getDataFolder().mkdirs();
-        }
-        File saveFile = new File(getDataFolder(), "freezedPlayers.txt");
-        if (saveFile.exists())
-        {
-            saveFile.delete();
-        }
-
-        try
-        {
-            BufferedWriter out = new BufferedWriter(new FileWriter(saveFile));
-
-            for (String freezedPlayer : toFreeze)
-            {
-                if (! toTmpFreeze.contains(freezedPlayer))
-                {
-                    out.write(freezedPlayer + "\n");
-                }
-            }
-
-            out.close();
-        }
-        catch (Exception e)
-        {
-            log.log(Level.SEVERE, "Fehler beim speichern der freezedPlayers.txt ", e);
-        }
-
-        saveFile = new File(getDataFolder(), "freezedTmpPlayers.txt");
-        if (saveFile.exists())
-        {
-            saveFile.delete();
-        }
-
-        try
-        {
-            BufferedWriter out = new BufferedWriter(new FileWriter(saveFile));
-
-            for (String[] array : toTmpFreeze)
-            {
-                out.write(array[0] + ":" + array[1] + ";\n");
-            }
-
-            out.close();
-        }
-        catch (Exception e)
-        {
-            log.log(Level.SEVERE, "Fehler beim speichern der freezedPlayers.txt ", e);
-        }
-
-        for (Player p : SpectateCommands.specedPlayers.keySet())
-        {
-            Player target = SpectateCommands.specedPlayers.get(p);
-            target.eject();
-            SpectateCommands.show(p);
-            SpectateCommands.specedPlayers.remove(p);
-            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
-        }
-
-        log.info("Disabled.");
+        getCommand("commandsver").setExecutor(new CommandsverCommand(this));
+        getCommand("drug").setExecutor(new DrugCommand());
+        getCommand("milk").setExecutor(new MilkCommand());
+        getCommand("warn").setExecutor(new WarnCommand());
+        getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand());
+        getCommand("tmpfreeze").setExecutor(new FreezeCommands.TmpfreezeCommand(this));
+        getCommand("freezeall").setExecutor(new FreezeCommands.FreezeallCommand());
+        getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand());
+        getCommand("globalmute").setExecutor(new GlobalmuteCommand());
+        getCommand("teamchat").setExecutor(new TeamchatCommand());
+        getCommand("newbiechat").setExecutor(new NewbiechatCommand());
+        getCommand("spectate").setExecutor(new SpectateCommands.SpectateCommand());
+        getCommand("unspectate").setExecutor(new SpectateCommands.UnspectateCommand());
+        getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
+        getCommand("lag").setExecutor(new LagCommand());
     }
 }

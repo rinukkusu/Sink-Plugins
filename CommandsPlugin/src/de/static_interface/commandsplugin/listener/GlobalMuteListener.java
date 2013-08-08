@@ -14,7 +14,7 @@ public class GlobalmuteListener implements Listener
     {
         if (CommandsPlugin.globalmuteEnabled && ! event.getPlayer().hasPermission("commandsplugin.globalmute.bypass"))
         {
-            event.getPlayer().sendMessage(GlobalmuteCommand.prefix + "Du kannst nicht schreiben wenn der Globale Mute aktiviert ist.");
+            event.getPlayer().sendMessage(GlobalmuteCommand.prefix + "Du kannst nicht schreiben wenn der globale Mute aktiviert ist.");
             event.setCancelled(true);
         }
     }

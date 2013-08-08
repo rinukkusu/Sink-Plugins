@@ -118,6 +118,12 @@ public class SpectateCommands
         }
     }
 
+    /**
+     * Hide a player for all players except with this permission
+     *
+     * @param player     Player to hide
+     * @param permission Players with this permission will be able to see that player
+     */
     public static void hide(Player player, String permission)
     {
         for (Player p : Bukkit.getOnlinePlayers())
@@ -130,6 +136,11 @@ public class SpectateCommands
         }
     }
 
+    /**
+     * Show player again to all
+     *
+     * @param player Player who was hidden
+     */
     public static void show(Player player)
     {
         for (Player p : Bukkit.getOnlinePlayers())

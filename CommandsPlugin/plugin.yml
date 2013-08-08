@@ -88,7 +88,9 @@ permissions:
       commandsplugin.ver: true
       commandsplugin.globalmute: true
       commandsplugin.teamchat: true
+      commandsplugin.teamchat.color: true
       commandsplugin.newbiechat: true
+      commandsplugin.newbiechat.color: true
       commandsplugin:spectate: true
 
   commandsplugin.drug:
@@ -175,6 +177,10 @@ permissions:
   commandsplugin.newbiechat:
     description: Allows to use newchat command
     default: false
+
+  commandsplugin.newbiechat.color:
+     description: Allows you to use color on newbiechat
+     default: op
 
   commandsplugin.spectate:
     description: Allows to use spec command

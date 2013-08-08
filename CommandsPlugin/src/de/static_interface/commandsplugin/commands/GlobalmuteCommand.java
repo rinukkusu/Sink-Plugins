@@ -41,22 +41,22 @@ public class GlobalmuteCommand implements CommandExecutor
                 }
                 if (commandSender instanceof Player)
                 {
-                    Bukkit.broadcastMessage(prefix + "Global Mute von " + ( (Player) commandSender ).getDisplayName() + " aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
+                    Bukkit.broadcastMessage(prefix + "Der globale Mute wurde von " + ( (Player) commandSender ).getDisplayName() + " aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
                 }
                 else
                 {
-                    Bukkit.broadcastMessage(prefix + "Global Mute von der aus Console aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
+                    Bukkit.broadcastMessage(prefix + "Der globale Mute von der Console aus aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
                 }
             }
             else
             {
                 if (commandSender instanceof Player)
                 {
-                    Bukkit.broadcastMessage(prefix + "Global Mute von " + ( (Player) commandSender ).getDisplayName() + " aktiviert. Alle Spieler sind jetzt stumm.");
+                    Bukkit.broadcastMessage(prefix + "Der global Mute wurde von " + ( (Player) commandSender ).getDisplayName() + " aktiviert. Alle Spieler sind jetzt stumm.");
                 }
                 else
                 {
-                    Bukkit.broadcastMessage(prefix + "Global Mute von der aus Console aktiviert. Alle Spieler sind jetzt stumm.");
+                    Bukkit.broadcastMessage(prefix + "Der global Mute wurde von der Console aus aktiviert. Alle Spieler sind jetzt stumm.");
                 }
             }
             CommandsPlugin.globalmuteEnabled = true;
@@ -66,11 +66,11 @@ public class GlobalmuteCommand implements CommandExecutor
         {
             if (commandSender instanceof Player)
             {
-                Bukkit.broadcastMessage(prefix + "Global Mute von " + ( (Player) commandSender ).getDisplayName() + " deaktiviert.");
+                Bukkit.broadcastMessage(prefix + "Der global Mute wurde von " + ( (Player) commandSender ).getDisplayName() + " deaktiviert.");
             }
             else
             {
-                Bukkit.broadcastMessage(prefix + "Global Mute von der aus Console deaktiviert.");
+                Bukkit.broadcastMessage(prefix + "Der global Mute wude von der Console aus deaktiviert.");
             }
         }
         return true;

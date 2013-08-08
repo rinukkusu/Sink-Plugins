@@ -20,7 +20,17 @@ public class CommandsverCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        sender.sendMessage(prefix + "CommandsPlugin by Trojaner");
+        String authors = "";
+        for (String s : plugin.getDescription().getAuthors())
+        {
+            if (authors.equals(""))
+            {
+                authors = s;
+                continue;
+            }
+            authors = authors + ", " + s;
+        }
+        sender.sendMessage(prefix + "CommandsPlugin by " + authors);
         sender.sendMessage(prefix + "Version: " + plugin.getDescription().getVersion());
         return true;
     }
