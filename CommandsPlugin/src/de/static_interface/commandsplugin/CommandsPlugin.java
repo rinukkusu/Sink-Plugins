@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 /**
  * CommandsPlugin Class
- * <p/>
+ *
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class
@@ -163,10 +163,8 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("lag").setExecutor(new LagCommand());
     }
 
-    // Don't use Bukkit.broadcast, use this instead!
-
     /**
-     * Use this instead of @link{Bukkit.broadcast}
+     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
      *
      * @param message    Message to send
      * @param permission Send message to players with this permission
