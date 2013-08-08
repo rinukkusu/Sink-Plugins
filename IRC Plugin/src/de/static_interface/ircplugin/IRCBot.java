@@ -23,7 +23,7 @@ public class IRCBot extends PircBot
     {
         this.setName(BotName);
         this.setLogin(BotName);
-        this.setVersion("Bukkit IRC Plugin, (c) Adventuria 2013");
+        this.setVersion("Bukkit IRC Plugin, (c) 2013 dventuria");
     }
 
     public void sendCleanMessage(String target, String message)
@@ -68,7 +68,7 @@ public class IRCBot extends PircBot
     @Override
     public void onJoin(String channel, String sender, String login, String hostname)
     {
-        //Todo: Verschiedene Nachrichten
+        //Todo: Diffrent Welcomemessages
         if (sender.equals(getNick()))
         {
             return;
@@ -85,9 +85,9 @@ public class IRCBot extends PircBot
             if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
                     || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
                     || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
-                    && ( message.toLowerCase().contains("minecraftbot") || message.toLowerCase().contains("bot") ))
+                    && ( message.toLowerCase().contains("adventuriabot") || message.toLowerCase().contains("bot") ))
             {
-                sendMessage(channel, "Hallo, " + sender); //Todo: Verschiedene Nachrichten
+                sendMessage(channel, "Hallo, " + sender); //Todo: Diffrent Welcomemessages
                 return;
             }
             if (! message.toLowerCase().startsWith("!"))
@@ -99,7 +99,7 @@ public class IRCBot extends PircBot
             String cmd = args[0].toLowerCase();
 
             boolean isOp = isOp(channel, sender);
-            boolean isWhitelist = Contains(Whitelist, sender);
+            boolean isWhitelist = EqualsArrayItem(sender, Whitelist);
 
             if (cmd.equals("toggle"))
             {
@@ -221,7 +221,7 @@ public class IRCBot extends PircBot
         return false;
     }
 
-    public boolean Contains(String[] array, String input)
+    public boolean EqualsArrayItem(String input, String[] array)
     {
         for (String s : array)
         {
