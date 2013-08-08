@@ -1,5 +1,5 @@
 name: CommandsPlugin
-version: 1.4
+version: 1.4.1
 description: General Commands Plugin
 author: Trojaner
 website: http://static-interface.de
@@ -9,6 +9,9 @@ commands:
   commandsver:
     description: Shows Version
     permission: commandsplugin.ver
+  lag:
+    description: Shows information about server lag
+    permission: commandsplugin.lag
 
   drug:
     description: Take drugs!

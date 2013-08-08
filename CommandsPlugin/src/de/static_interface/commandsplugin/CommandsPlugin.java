@@ -38,9 +38,16 @@ public class CommandsPlugin extends JavaPlugin
     public static Set<String> toFreeze = new HashSet<String>();
     private ArrayList<String[]> toTmpFreeze = new ArrayList<String[]>();
     public static Set<String> freezeAll = new HashSet<String>();
+    public static CommandsTimer timer;
+    public static LagTimer lagTimer;
 
     public void onEnable()
     {
+        timer = new CommandsTimer();
+        lagTimer = new LagTimer();
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
         log = getLogger();
         if (! getDataFolder().exists())
         {
@@ -129,6 +136,11 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new SpectateListener(), this);
     }
 
+    public static CommandsTimer getCommandsTimer()
+    {
+        return timer;
+    }
+
     private void registerCommands()
     {
         getCommand("commandsver").setExecutor(new CommandsverCommand(this));
@@ -142,12 +154,20 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("globalmute").setExecutor(new GlobalmuteCommand());
         getCommand("teamchat").setExecutor(new TeamchatCommand());
         getCommand("newbiechat").setExecutor(new NewbiechatCommand());
-        getCommand("spec").setExecutor(new SpectateCommands.SpectateCommand());
-        getCommand("unspec").setExecutor(new SpectateCommands.UnspectateCommand());
-        getCommand("speclist").setExecutor(new SpectateCommands.SpectatorlistCommand());
+        getCommand("spectate").setExecutor(new SpectateCommands.SpectateCommand());
+        getCommand("unspectate").setExecutor(new SpectateCommands.UnspectateCommand());
+        getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
+        getCommand("lag").setExecutor(new LagCommand());
     }
 
     // Don't use Bukkit.broadcast, use this instead!
+
+    /**
+     * Use this instead of @link{Bukkit.broadcast}
+     *
+     * @param message    Message to send
+     * @param permission Send message to players with this permission
+     */
     public static void broadcast(String message, String permission)
     {
         for (Player p : Bukkit.getOnlinePlayers())

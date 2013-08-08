@@ -39,7 +39,7 @@ public class AntiSpamPlugin extends JavaPlugin
 
     public static void warnPlayer(Player player, String reason)
     {
-        player.sendMessage("Du wurdest automatisch für den folgenden Grund verwarnt: " + reason);
+        player.sendMessage(prefix + "Du wurdest automatisch für den folgenden Grund verwarnt: " + reason);
         CommandsPlugin.broadcast(prefix + player.getDisplayName() + " wurde automatisch verwarnt. Grund: " + reason, "antispamplugin.message");
     }
 }
