@@ -29,6 +29,33 @@ public class Util
         return input;
     }
 
+    public static String RemoveFormattingAndColorCodes(String input)
+    {
+        input = input.replace("§0", "");
+        input = input.replace("§1", "");
+        input = input.replace("§2", "");
+        input = input.replace("§3", "");
+        input = input.replace("§4", "");
+        input = input.replace("§5", "");
+        input = input.replace("§6", "");
+        input = input.replace("§7", "");
+        input = input.replace("§8", "");
+        input = input.replace("§9", "");
+        input = input.replace("§a", "");
+        input = input.replace("§b", "");
+        input = input.replace("§c", "");
+        input = input.replace("§d", "");
+        input = input.replace("§e", "");
+        input = input.replace("§f", "");
+        input = input.replace("§k", "");
+        input = input.replace("§l", "");
+        input = input.replace("§m", "");
+        input = input.replace("§n", "");
+        input = input.replace("§o", "");
+        input = input.replace("§r", "");
+        return input;
+    }
+
     public static boolean isNumber(String input)
     {
         try

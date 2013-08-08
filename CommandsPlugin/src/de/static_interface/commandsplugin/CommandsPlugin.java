@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 
 public class CommandsPlugin extends JavaPlugin
 {
-    private static Logger log;
     public static boolean globalmuteEnabled = false;
+    private static Logger log;
     private static CommandsTimer timer;
     private static File dataFolder;
 
@@ -87,7 +87,7 @@ public class CommandsPlugin extends JavaPlugin
             }
             p.sendMessage(message);
         }
-        log.log(Level.INFO, message);
+        log.log(Level.INFO, Util.RemoveFormattingAndColorCodes(message));
     }
 
     /**

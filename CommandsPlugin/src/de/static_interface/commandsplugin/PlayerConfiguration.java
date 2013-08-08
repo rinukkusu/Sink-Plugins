@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
+
 /**
  * Currenty unused
  */
@@ -17,7 +18,8 @@ public class PlayerConfiguration
     YamlConfiguration playerYamlConfig;
     String freezePath = playerName + ".Freeze";
     String freezedPath = freezePath + ".freezed";
-    String freezeTimePath = freezePath + ".freezetime";
+    String freezedTimePath = freezePath + ".freezetime";
+    File playersPath;
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
@@ -27,7 +29,8 @@ public class PlayerConfiguration
     public PlayerConfiguration(String playerName)
     {
         this.playerName = playerName;
-        playerConfigFile = new File(( CommandsPlugin.getDataFolderStatic() + File.pathSeparator + "Players" ), playerName + ".yml");
+        playersPath = new File(CommandsPlugin.getDataFolderStatic() + File.separator + "Players");
+        playerConfigFile = new File(playersPath, playerName + ".yml");
         playerYamlConfig = ( exists() ) ? YamlConfiguration.loadConfiguration(playerConfigFile) : null;
     }
 
@@ -44,16 +47,19 @@ public class PlayerConfiguration
     {
         try
         {
-            if (! CommandsPlugin.getDataFolderStatic().exists() && ! CommandsPlugin.getDataFolderStatic().mkdirs())
+            if (! playersPath.exists() && ! playersPath.mkdirs())
             {
-                throw new IOException("Couldn't create \"Players\" folder!");
+                throw new IOException("Couldn't create \"" + playersPath.getAbsolutePath() + "\" folder!");
             }
             if (! playerConfigFile.exists() && ! playerConfigFile.createNewFile())
             {
                 throw new IOException("Couldn't create player config: " + playerConfigFile);
             }
-            setFreezed(false);
-            setFreezeTime(0);
+            playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
+            playerYamlConfig.createSection(freezePath);
+            playerYamlConfig.addDefault(freezedPath, false);
+            playerYamlConfig.addDefault(freezedTimePath, 0);
+            playerYamlConfig.options().copyDefaults(true);
         }
         catch (IOException e)
         {
@@ -66,7 +72,7 @@ public class PlayerConfiguration
      */
     public boolean exists()
     {
-        return new File(( CommandsPlugin.getDataFolderStatic() + File.pathSeparator + "Players" ), playerName + ".yml").exists();
+        return playerConfigFile.exists();
     }
 
     /**
@@ -87,7 +93,7 @@ public class PlayerConfiguration
      */
     public int getFreezeTime()
     {
-        return playerYamlConfig.getInt(freezeTimePath);
+        return playerYamlConfig.getInt(freezedTimePath);
     }
 
     /**
@@ -107,6 +113,6 @@ public class PlayerConfiguration
      */
     public void setFreezeTime(int time)
     {
-        playerYamlConfig.set(freezeTimePath, time);
+        playerYamlConfig.set(freezedTimePath, time);
     }
 }
