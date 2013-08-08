@@ -28,8 +28,8 @@ public class AntiSpamPluginListener implements Listener
         String word = ContainsArrayItem(message, blacklist);
         if (! word.equals(""))
         {
-            message = message.replace(word, ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
-            AntiSpamPlugin.warnPlayer(player, "Schreiben der Nachricht: ");
+            message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
+            AntiSpamPlugin.warnPlayer(player, "Schreiben eines verbotenen Wortes: " + message);
             event.setCancelled(true);
         }
         Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
@@ -54,7 +54,7 @@ public class AntiSpamPluginListener implements Listener
                 return;
             }
             AntiSpamPlugin.warnPlayer(event.getPlayer(), "Fremdwerbung für folgende Domain: " + match + " !");
-            event.setMessage(message.replace(match, "http://kepler-forum.de/board"));
+            event.setMessage(message.replace(match, "kepler-forum.de/board"));
         }
     }
 
@@ -63,11 +63,11 @@ public class AntiSpamPluginListener implements Listener
         int i = 0;
         for (String s : stringArray)
         {
-            i++;
             if (input.contains(s))
             {
                 return stringArray[i];
             }
+            i++;
         }
         return "";
     }
