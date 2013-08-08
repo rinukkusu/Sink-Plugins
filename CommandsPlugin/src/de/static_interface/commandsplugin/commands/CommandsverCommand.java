@@ -32,6 +32,7 @@ public class CommandsverCommand implements CommandExecutor
         }
         sender.sendMessage(prefix + "CommandsPlugin by " + authors);
         sender.sendMessage(prefix + "Version: " + plugin.getDescription().getVersion());
+        sender.sendMessage(prefix + "Copyright © Adventuria 2013 ");
         return true;
     }
 }

@@ -17,13 +17,13 @@ import org.jibble.pircbot.User;
 public class IRCBot extends PircBot
 {
     private boolean disabled = false;
-    String BotName = "MinecraftBot";
+    String BotName = "AdventuriaBot";
 
     public IRCBot()
     {
         this.setName(BotName);
         this.setLogin(BotName);
-        this.setVersion("Bukkit IRC Plugin, (c) Trojaner");
+        this.setVersion("Bukkit IRC Plugin, (c) Adventuria 2013");
     }
 
     public void sendCleanMessage(String target, String message)
@@ -36,7 +36,7 @@ public class IRCBot extends PircBot
         sendMessage(target, message);
     }
 
-    String[] Whitelist = { "Trojaner", "Trojaner_" };
+    String[] Whitelist = { "Trojaner", "Trojaner_" }; //Very, very poorly written
 
     private static String RemoveColorCodes(String input)
     {
@@ -82,13 +82,12 @@ public class IRCBot extends PircBot
     {
         try
         {
-            //Todo: Verschiedene Nachrichten
             if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
                     || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
                     || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
                     && ( message.toLowerCase().contains("minecraftbot") || message.toLowerCase().contains("bot") ))
             {
-                sendMessage(channel, "Hallo, " + sender);
+                sendMessage(channel, "Hallo, " + sender); //Todo: Verschiedene Nachrichten
                 return;
             }
             if (! message.toLowerCase().startsWith("!"))
@@ -237,6 +236,6 @@ public class IRCBot extends PircBot
     @Override
     public void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
     {
-        sendMessage(getChannels()[0], sourceNick + " hat mich mit dem Wert \"" + pingValue + "\" angepingt");
+        sendMessage(getChannels()[0], sourceNick + " hat mich mit dem Wert \"" + pingValue + "\" angepingt.");
     }
 }
