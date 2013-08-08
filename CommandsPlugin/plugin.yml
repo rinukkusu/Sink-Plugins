@@ -179,8 +179,8 @@ permissions:
     default: false
 
   commandsplugin.newbiechat.color:
-     description: Allows you to use color on newbiechat
-     default: op
+    description: Allows you to use color on newbiechat
+    default: op
 
   commandsplugin.spectate:
     description: Allows to use spec command

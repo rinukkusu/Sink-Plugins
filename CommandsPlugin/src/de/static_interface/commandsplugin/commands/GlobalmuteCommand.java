@@ -8,14 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * GlobalMuteCommand Class
- * <p/>
- * Author: Trojaner
- * Date: 28.07.13
- * Description: Class for global mute command
- * Copyright © Trojaner 2013
- */
 public class GlobalmuteCommand implements CommandExecutor
 {
     public static String prefix = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.WHITE;

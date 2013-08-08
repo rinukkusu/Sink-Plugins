@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * <p/>
  * Author: Trojaner
  * Date: 27.07.13
- * Description: Main Class
+ * Description: Main Class for plugin
  * Copyright © Trojaner 2013
  */
 

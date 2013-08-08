@@ -8,17 +8,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * WarnCommand Class
- * <p/>
- * Author: Trojaner
- * Date: 27.07.13
- * Description: Class for Warn Command
- * Copyright © Trojaner 2013
- */
 public class WarnCommand implements CommandExecutor
 {
-
     public static String prefix = ChatColor.RED + "[Warn] " + ChatColor.WHITE;
 
     @Override
