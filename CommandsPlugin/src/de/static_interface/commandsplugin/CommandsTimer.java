@@ -25,6 +25,7 @@ public class CommandsTimer implements Runnable
     @Override
     public void run()
     {
+        onTick();
         final long startTime = System.nanoTime();
         long timeSpent = ( startTime - lastPoll ) / 1000;
         if (timeSpent == 0)
@@ -83,6 +84,11 @@ public class CommandsTimer implements Runnable
                 }
             }
         }
+    }
+
+    private void onTick()
+    {
+        //ToDo
     }
 
     public double getAverageTPS()

@@ -1,10 +1,7 @@
 package de.static_interface.commandsplugin;
 
 import de.static_interface.commandsplugin.commands.*;
-import de.static_interface.commandsplugin.listener.FreezeListener;
-import de.static_interface.commandsplugin.listener.GlobalmuteListener;
-import de.static_interface.commandsplugin.listener.SpectateListener;
-import de.static_interface.commandsplugin.listener.TradechatListener;
+import de.static_interface.commandsplugin.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -33,19 +30,19 @@ import java.util.regex.Pattern;
 
 public class CommandsPlugin extends JavaPlugin
 {
-    Logger log;
+    private Logger log;
     public static boolean globalmuteEnabled = false;
     public static Set<String> toFreeze = new HashSet<String>();
     private ArrayList<String[]> toTmpFreeze = new ArrayList<String[]>();
     public static Set<String> freezeAll = new HashSet<String>();
-    public static CommandsTimer timer;
-    public static LagTimer lagTimer;
+    private static CommandsTimer timer;
+    private static File dataFolder;
 
     public void onEnable()
     {
         timer = new CommandsTimer();
-        lagTimer = new LagTimer();
-
+        LagTimer lagTimer = new LagTimer();
+        dataFolder = getDataFolder();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
         log = getLogger();
@@ -127,6 +124,11 @@ public class CommandsPlugin extends JavaPlugin
 
     }
 
+    public static File getDataFolderStatic()
+    {
+        return dataFolder;
+    }
+
     private void registerEvents()
     {
         PluginManager pm = Bukkit.getPluginManager();
@@ -134,6 +136,7 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new GlobalmuteListener(), this);
         pm.registerEvents(new TradechatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
+        pm.registerEvents(new PlayerConfigurationListener(), this);
     }
 
     public static CommandsTimer getCommandsTimer()
