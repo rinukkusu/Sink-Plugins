@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 /**
  * CommandsPlugin Class
- * <p/>
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class for plugin

@@ -3,6 +3,7 @@ package de.static_interface.antispamplugin;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,58 +15,45 @@ import java.util.regex.Pattern;
 
 public class AntiSpamPluginListener implements Listener
 {
-    String[] blacklist = { "pimmel", "fak", "schlampe", "verdammt", "scheiß", "scheiss", "sex", "fresse", "nackt", "trojana", "piss", "faggit", "faggot", "damnmit", "son of a bitch", "screw", "cum", "goddamn", "anus", "nigger", "nigga", "suck", "damn", "shit", "cocksucker", "motherfucker", "cunt", "dick", "shitface", "twat", "bastard", "hooker", "prostitue", "hure", "asshole", "arschloch", "penis", "fotze", "pussy", "idiot", "dummkopf", "noob", "bitch", "fuck", "hurensohn" };
+    String[] blacklist = { "schlampe", "verdammt", "sex",
+            "fresse", "fick", "trojana", "son of a bitch", "screw",
+            "goddamn", "anus", "nigger", "nigga", "suck", "damn", "cocksucker", "motherfucker", "cunt",
+            "dick", "bastard", "hure", "asshole", "arschloch", "penis", "fotze",
+            "pussy", "bitch", "fuck", "hurensohn" };
+
     String[] whiteListDomains = { "kepler-forum.de", "youtube.de", "youtube.com", "google.de" };
 
-
-    //ToDo: make this more clean...
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
-        String message = event.getMessage();
-        Player player = event.getPlayer();
-        if (player.hasPermission("commandsplugin.bypass"))
-        {
-            return;
-        }
-        String word = ContainsArrayItem(message, blacklist);
-        if (! word.equals(""))
-        {
-            message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
-            AntiSpamPlugin.warnPlayer(player, "Schreiben eines verbotenen Wortes: " + message);
-            event.setCancelled(true);
-        }
-        Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
-        Matcher matcher = pattern.matcher(message);
-        if (matcher.find())
-        {
-            String match = matcher.group(0);
-            AntiSpamPlugin.warnPlayer(event.getPlayer(), "Fremdwerbung für folgende IP: " + match + " !");
-            event.setMessage(message.replace(match, "127.0.0.1"));
-        }
-        pattern = Pattern.compile("[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S)?");
-        matcher = pattern.matcher(message);
-        if (matcher.find())
-        {
-            String match = matcher.group(0);
-            if (match.contains(".."))
-            {
-                return;
-            }
-            if (! ContainsArrayItem(match, whiteListDomains).equals(""))
-            {
-                return;
-            }
-            AntiSpamPlugin.warnPlayer(event.getPlayer(), "Fremdwerbung für folgende Domain: " + match + " !");
-            event.setMessage(message.replace(match, "kepler-forum.de/board"));
-        }
+        checkMessage(event);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        String message = event.getMessage();
-        Player player = event.getPlayer();
+        checkMessage(event);
+    }
+
+    public void checkMessage(Event event)
+    {
+        String message;
+        Player player;
+
+        if (event instanceof AsyncPlayerChatEvent) //ToDo: make this more clean...
+        {
+            message = ( (AsyncPlayerChatEvent) event ).getMessage();
+            player = ( (AsyncPlayerChatEvent) event ).getPlayer();
+        }
+        else if (event instanceof PlayerCommandPreprocessEvent)
+        {
+            message = ( (PlayerCommandPreprocessEvent) event ).getMessage();
+            player = ( (PlayerCommandPreprocessEvent) event ).getPlayer();
+        }
+        else
+        {
+            throw new IllegalArgumentException("Event muss be an instance of AsyncPlayerChatEvent or PlayerCommandPreprocessEvent!");
+        }
         if (player.hasPermission("commandsplugin.bypass"))
         {
             return;
@@ -75,15 +63,29 @@ public class AntiSpamPluginListener implements Listener
         {
             message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
             AntiSpamPlugin.warnPlayer(player, "Schreiben eines verbotenen Wortes: " + message);
-            event.setCancelled(true);
+            if (event instanceof AsyncPlayerChatEvent)
+            {
+                ( (AsyncPlayerChatEvent) event ).setCancelled(true);
+            }
+            else if (event instanceof PlayerCommandPreprocessEvent)
+            {
+                ( (PlayerCommandPreprocessEvent) event ).setCancelled(true);
+            }
         }
         Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
         Matcher matcher = pattern.matcher(message);
         if (matcher.find())
         {
             String match = matcher.group(0);
-            AntiSpamPlugin.warnPlayer(event.getPlayer(), "Fremdwerbung für folgende IP: " + match + " !");
-            event.setMessage(message.replace(match, "127.0.0.1"));
+            AntiSpamPlugin.warnPlayer(player, "Fremdwerbung für folgende IP: " + match + " !");
+            if (event instanceof AsyncPlayerChatEvent)
+            {
+                ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "127.0.0.1"));
+            }
+            else if (event instanceof PlayerCommandPreprocessEvent)
+            {
+                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "127.0.0.1"));
+            }
         }
         pattern = Pattern.compile(" [a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S)? ");
         matcher = pattern.matcher(message);
@@ -98,8 +100,15 @@ public class AntiSpamPluginListener implements Listener
             {
                 return;
             }
-            AntiSpamPlugin.warnPlayer(event.getPlayer(), "Fremdwerbung für folgende Domain: " + match + " !");
-            event.setMessage(message.replace(match, "kepler-forum.de/board"));
+            AntiSpamPlugin.warnPlayer(player, "Fremdwerbung für folgende Domain: " + match + " !");
+            if (event instanceof AsyncPlayerChatEvent)
+            {
+                ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
+            }
+            else if (event instanceof PlayerCommandPreprocessEvent)
+            {
+                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
+            }
         }
     }
 
@@ -108,7 +117,8 @@ public class AntiSpamPluginListener implements Listener
         int i = 0;
         for (String s : stringArray)
         {
-            if (input.contains(s.toLowerCase()))    //ToDo make this better
+            if (input.contains(" " + s.toLowerCase() + " ") || input.contains(" " + s.toLowerCase()) || input.contains(s.toLowerCase() + " ")
+                    || ( stringArray.length == 0 && input.contains(s.toLowerCase()) ))
             {
                 return stringArray[i];
             }

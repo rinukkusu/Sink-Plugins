@@ -49,7 +49,7 @@ public class MilkCommand implements CommandExecutor
                 CommandsPlugin.broadcast(prefix + s, "commandsplugin.milk.message");
                 return true;
             }
-            sender.sendMessage(prefix + ChatColor.RED + "Es gibt keine Spieler die einen Unsichtbarkeits Trank haben...");
+            sender.sendMessage(prefix + ChatColor.RED + "Es gibt zur Zeit keine Spieler die einen Unsichtbarkeits Trank haben...");
             return true;
         }
         //Remove from specified player

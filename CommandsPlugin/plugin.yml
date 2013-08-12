@@ -77,6 +77,10 @@ commands:
     permission: commandsplugin.spectate
     aliases: speclist
 
+  votekick:
+    description: Votekick a player
+    permission: commandsplugin.votekick
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -92,6 +96,8 @@ permissions:
       commandsplugin.newbiechat: true
       commandsplugin.newbiechat.color: true
       commandsplugin:spectate: true
+      commandsplugin.votekick: true
+      commandsplugin.votekick.bypass: true
 
   commandsplugin.drug:
     description: Allows to use the drug command
@@ -191,3 +197,11 @@ permissions:
   commandsplugin.spectate.bypass:
     description: Players with this permission cannot be spectated
     default: op
+
+  commandsplugin.votekick:
+    default: true
+    description: Players with this permission can start a vote kick
+
+  commandsplugin.votekick.bypass
+    default: op
+    description: Players with this permission cant be vote kicked

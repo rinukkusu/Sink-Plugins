@@ -1,19 +1,16 @@
 package de.static_interface.ircplugin;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jibble.pircbot.IrcException;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -47,12 +44,7 @@ public class IRCPluginMain extends JavaPlugin implements Listener
             ircBot.connect(Host, 6667);
             ircBot.joinChannel(Channel);
         }
-        catch (IOException e)
-        {
-            log.severe("An Exception occurred while trying to connect to " + Host + ":");
-            log.severe(e.toString());
-        }
-        catch (IrcException e)
+        catch (IOException | IrcException e)
         {
             log.severe("An Exception occurred while trying to connect to " + Host + ":");
             log.severe(e.toString());
@@ -112,25 +104,34 @@ public class IRCPluginMain extends JavaPlugin implements Listener
         ircBot.sendCleanMessage(Channel, "[" + event.getPlayer().getDisplayName() + "] " + message);
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        if (cmd.getName().equalsIgnoreCase("say"))
+        ircBot.sendMessage(Channel, "-> onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event): " + event.getMessage());
+        String tmp = event.getMessage().replaceFirst("/", "");
+        String[] cmdwithargs = tmp.split(" ");
+        List<String> args = Arrays.asList(cmdwithargs);
+        String cmd = cmdwithargs[0];
+        args.remove(cmd); //Remove command from args
+        switch (cmd.toLowerCase())
         {
-            String message = "";
-            for (String s : args)
+            case "say":
             {
-                if (message.equals(""))
+                String message = "";
+                for (String s : args)
                 {
-                    message = s;
+                    if (message.equals(""))
+                    {
+                        message = s;
+                    }
+                    else
+                    {
+                        message = message + " " + s;
+                    }
                 }
-                else
-                {
-                    message = message + " " + s;
-                }
+                ircBot.sendCleanMessage(Channel, "[Server] " + message);
             }
-            ircBot.sendCleanMessage(Channel, "[Server] " + message);
-            return true;
         }
-        return false;
+        event.setCancelled(false);
     }
 }
