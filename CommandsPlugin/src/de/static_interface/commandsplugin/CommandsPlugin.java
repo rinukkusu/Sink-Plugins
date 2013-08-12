@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * Description: Main Class for plugin
  * Copyright © Trojaner 2013
  */
+                         ///k
 
 public class CommandsPlugin extends JavaPlugin
 {
@@ -26,6 +27,10 @@ public class CommandsPlugin extends JavaPlugin
     private static CommandsTimer timer;
     private static File dataFolder;
 
+
+    /**
+     * Is called when the plugin is loaded
+     */
     public void onEnable()
     {
         timer = new CommandsTimer();
