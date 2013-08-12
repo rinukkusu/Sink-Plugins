@@ -67,7 +67,7 @@ public class AntiSpamPluginListener implements Listener
             {
                 ( (AsyncPlayerChatEvent) event ).setCancelled(true);
             }
-            else if (event instanceof PlayerCommandPreprocessEvent)
+            else
             {
                 ( (PlayerCommandPreprocessEvent) event ).setCancelled(true);
             }
@@ -82,7 +82,7 @@ public class AntiSpamPluginListener implements Listener
             {
                 ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "127.0.0.1"));
             }
-            else if (event instanceof PlayerCommandPreprocessEvent)
+            else
             {
                 ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "127.0.0.1"));
             }
@@ -105,7 +105,7 @@ public class AntiSpamPluginListener implements Listener
             {
                 ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
             }
-            else if (event instanceof PlayerCommandPreprocessEvent)
+            else
             {
                 ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
             }

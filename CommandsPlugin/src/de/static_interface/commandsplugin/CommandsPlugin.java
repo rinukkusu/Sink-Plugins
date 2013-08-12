@@ -18,7 +18,6 @@ import java.util.logging.Logger;
  * Description: Main Class for plugin
  * Copyright © Trojaner 2013
  */
-                         ///k
 
 public class CommandsPlugin extends JavaPlugin
 {
@@ -29,7 +28,7 @@ public class CommandsPlugin extends JavaPlugin
 
 
     /**
-     * Is called when the plugin is loaded
+     * Is called when the plugin was loaded
      */
     public void onEnable()
     {
