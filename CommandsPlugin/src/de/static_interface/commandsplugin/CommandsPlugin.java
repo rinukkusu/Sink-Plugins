@@ -26,6 +26,10 @@ public class CommandsPlugin extends JavaPlugin
     private static CommandsTimer timer;
     private static File dataFolder;
 
+
+    /**
+     * Is called when the plugin is loaded
+     */
     public void onEnable()
     {
         timer = new CommandsTimer();
