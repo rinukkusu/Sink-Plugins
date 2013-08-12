@@ -17,11 +17,11 @@ public class LagCommand implements CommandExecutor
         double shownTPS = Math.round(realTPS);
         if (realTPS >= 18.5)
         {
-            commandSender.sendMessage(prefix + ChatColor.GREEN + "Der Server laggt gerade nicht!");
+            commandSender.sendMessage(prefix + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
         }
         else if (realTPS >= 16)
         {
-            commandSender.sendMessage(prefix + ChatColor.GOLD + "Der Server könnte gerade etwas laggen!");
+            commandSender.sendMessage(prefix + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
         }
         else
         {

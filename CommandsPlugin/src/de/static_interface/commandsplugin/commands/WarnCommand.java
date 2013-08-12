@@ -35,12 +35,17 @@ public class WarnCommand implements CommandExecutor
         }
         if (target.getDisplayName().equals(player.getDisplayName()))
         {
-            player.sendMessage(prefix + "Du kannst dich selbst nicht verwarnen!");
+            player.sendMessage(prefix + "Du kannst dich nicht selbst verwarnen!");
             return true;
         }
         if (args.length == 1)
         {
             player.sendMessage(prefix + "Du musst einen Grund angeben!");
+            return false;
+        }
+        if (args.length > 2 )
+        {
+            player.sendMessage(prefix + "Zu viele Argumente!");
             return false;
         }
         String reason = "";
