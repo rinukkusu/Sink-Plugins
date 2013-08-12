@@ -15,13 +15,13 @@ import java.util.regex.Pattern;
 
 public class AntiSpamPluginListener implements Listener
 {
-    String[] blacklist = { "schlampe", "verdammt", "sex",
+    String[] blacklist = { "schlampe", "sex",
             "fresse", "fick", "trojana", "son of a bitch", "screw",
             "goddamn", "anus", "nigger", "nigga", "suck", "damn", "cocksucker", "motherfucker", "cunt",
             "dick", "bastard", "hure", "asshole", "arschloch", "penis", "fotze",
             "pussy", "bitch", "fuck", "hurensohn" };
 
-    String[] whiteListDomains = { "kepler-forum.de", "youtube.de", "youtube.com", "google.de" };
+    String[] whiteListDomains = { "kepler-forum.de", "youtube.de", "youtube.com", "google.de", "adventuria.eu" };
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
@@ -103,11 +103,11 @@ public class AntiSpamPluginListener implements Listener
             AntiSpamPlugin.warnPlayer(player, "Fremdwerbung für folgende Domain: " + match + " !");
             if (event instanceof AsyncPlayerChatEvent)
             {
-                ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
+                ( (AsyncPlayerChatEvent) event ).setMessage(message.replace(match, "adventuria.eu"));
             }
             else
             {
-                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "kepler-forum.de/board"));
+                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "adventuria.eu"));
             }
         }
     }
