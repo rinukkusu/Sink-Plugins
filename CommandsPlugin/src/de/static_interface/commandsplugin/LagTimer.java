@@ -12,13 +12,13 @@ public class LagTimer implements Runnable
     public void run()
     {
         double tps = CommandsPlugin.getCommandsTimer().getAverageTPS();
-        if (tps <= 16)
+        if (tps <= 17)
         {
             Bukkit.broadcastMessage(prefix + ChatColor.RED + "Der Server laggt gerade!");
         }
         else if (tps <= 18)
         {
-            Bukkit.broadcastMessage(prefix + ChatColor.GOLD + "Der Server könnte gerade etwas laggen!");
+            Bukkit.broadcastMessage(prefix + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
         }
     }
 }
