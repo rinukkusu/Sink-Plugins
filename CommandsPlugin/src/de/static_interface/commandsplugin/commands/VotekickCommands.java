@@ -16,14 +16,17 @@ public class VotekickCommands
 {
     public static String prefix = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
 
-    private static int votesYes = 0;
-    private static int votesNo = 0;
-    private static boolean voteEnabled;
+    private static double votesYes = 0;
+    private static double votesNo = 0;
+    private static boolean voteStarted;
     private static Player targetPlayer;
 
     private static String target;
 
     public static List<CommandSender> votedPlayers = new ArrayList<>();
+
+    //ToDo: /voteadmin enable and disable with boolean: voteEnabled
+    //ToDo: Add Timer to show remaining seconds...
 
     public static class VotekickCommand implements CommandExecutor
     {
@@ -61,7 +64,7 @@ public class VotekickCommands
                     reason = reason + " " + arg;
                 }
             }
-            if (voteEnabled)
+            if (voteStarted)
             {
                 sender.sendMessage(prefix + "Du kannst nicht einen Votekick starten während ein anderer Votekick läuft!");
                 return true;
@@ -89,6 +92,11 @@ public class VotekickCommands
             }
             targetPlayer = ( Bukkit.getServer().getPlayer(args[0]) );
             target = targetPlayer.getDisplayName();
+            if (targetPlayer == sender)
+            {
+                sender.sendMessage(prefix + "Du kannst nicht einen Votekick gegen dich selbst starten!");
+                return true;
+            }
             if (targetPlayer.hasPermission("commandsplugin.votekick.bypass") && ! sender.hasPermission("commandsplugin.votekick.bypass"))
             {
                 sender.sendMessage(prefix + "Du kannst nicht einen Votekick gegen diese Person starten!");
@@ -105,9 +113,9 @@ public class VotekickCommands
             }
             else
             {
-                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick für " + target + " gestartet. Grund: " + reason + " Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick für " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
             }
-            voteEnabled = true;
+            voteStarted = true;
             long time = 20 * 180; // 20 Ticks * 180 = 3 Minutes
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
@@ -157,7 +165,7 @@ public class VotekickCommands
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
         {
             CommandsPlugin.broadcast(prefix + "Der Votekick gegen " + target + " wurde durch " + CommandsPlugin.getSenderName(commandSender) + " beendet.", "commandsplugin.votekick.vote");
-            voteEnabled = false;
+            voteStarted = false;
             endVoteKick();
             return true;
         }
@@ -165,7 +173,7 @@ public class VotekickCommands
 
     private static void endVoteKick()
     {
-        if (voteEnabled)
+        if (voteStarted)
         {
             double percentYes = ( votesYes / ( votesYes + votesNo ) ) * 100;
             double percentNo = ( votesNo / ( votesYes + votesNo ) ) * 100;
@@ -183,13 +191,13 @@ public class VotekickCommands
         votesYes = 0;
         votesNo = 0;
         targetPlayer = null;
-        voteEnabled = false;
+        voteStarted = false;
         votedPlayers.clear();
     }
 
     private static boolean sendStatus(CommandSender sender)
     {
-        if (! VotekickCommands.voteEnabled)
+        if (! VotekickCommands.voteStarted)
         {
             sender.sendMessage(prefix + "Derzeit läuft kein Votekick...");
             return true;
@@ -202,7 +210,7 @@ public class VotekickCommands
 
     private static boolean vote(CommandSender sender, boolean yes)
     {
-        if (! VotekickCommands.voteEnabled)
+        if (! VotekickCommands.voteStarted)
         {
             sender.sendMessage(prefix + "Derzeit läuft kein Votekick...");
             return true;
