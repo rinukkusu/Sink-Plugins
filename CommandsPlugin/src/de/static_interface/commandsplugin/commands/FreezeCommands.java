@@ -24,11 +24,11 @@ import java.util.regex.Pattern;
 
 public class FreezeCommands
 {
-    public static String prefix = ChatColor.RED + "[Freeze] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
 
-    public static Set<String> toFreeze = new HashSet<String>();
-    private static ArrayList<String[]> toTmpFreeze = new ArrayList<String[]>();
-    public static Set<String> freezeAll = new HashSet<String>();
+    public static Set<String> toFreeze = new HashSet<>();
+    private static ArrayList<String[]> toTmpFreeze = new ArrayList<>();
+    public static Set<String> freezeAll = new HashSet<>();
 
     public static class FreezeCommand implements CommandExecutor
     {

@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class DrugCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.AQUA + "[Drogen] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -26,7 +26,7 @@ public class DrugCommand implements CommandExecutor
 
         if (! player.hasPotionEffect(PotionEffectType.BLINDNESS))
         {
-            player.sendMessage(ChatColor.BLUE + "Du hast Drogen genommen...");
+            player.sendMessage(prefix + ChatColor.BLUE + "Du hast Drogen genommen...");
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 20, 1), true);
         }
         else

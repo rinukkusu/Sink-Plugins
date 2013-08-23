@@ -27,17 +27,17 @@ commands:
 
   freeze:
     description: Freeze or unfreeze a player.
-    usage: "Benutzung: /<command> <Spieler> <Grund>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Grund>"
     permission: commandsplugin.freeze.freeze
 
   tmpfreeze:
     description: Temporarily freeze a player.
-    usage: "Benutzung: /<command> <Spieler> <Sekunden> <Grund>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Sekunden> <Grund>"
     permission: commandsplugin.freeze.tmpfreeze
 
   freezeall:
     description: Freeze or unfreeze every players.
-    usage: "Benutzung: /<command> <Grund>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Grund>"
     permission: commandsplugin.freeze.freezeall
 
   freezelist:
@@ -46,24 +46,24 @@ commands:
 
   globalmute:
     descripion: Mutes all players
-    usage: "Benutzung: /<command> [Grund]"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command>[Grund]"
     permission: commandsplugin.globalmute
 
   teamchat:
     description: Staff only chat
-    usage: "Benutzung: /<command> <Nachricht>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Nachricht>"
     permission: commandsplugin.teamchat
     aliases: tc
 
   newbiechat:
     description: Chat for new users
-    usage: "Benutzung: /<command> <Nachricht>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Nachricht>"
     permission: commandsplugin.newbiechat
     aliases: nc
 
   spectate:
     description: Spectate a player
-    usage: "Benutzung: /<command> <Spieler>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
     permission: commandsplugin.spectate
     aliases: spec
 
@@ -79,7 +79,16 @@ commands:
 
   votekick:
     description: Votekick a player
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> [Grund]"
     permission: commandsplugin.votekick
+
+  voteyes:
+    description: Votes yes on a votekick
+    permission: commandsplugin.votekick.vote
+
+  voteno:
+    description: Votes no on a votekick
+    permission: commandsplugin.votekick.vote
 
 permissions:
   commandsplugin.*:
@@ -201,7 +210,20 @@ permissions:
   commandsplugin.votekick:
     default: true
     description: Players with this permission can start a vote kick
+    children:
+      commandsplugin.votekick.vote: true
 
-  commandsplugin.votekick.bypass
+  commandsplugin.votekick.bypass:
     default: op
-    description: Players with this permission cant be vote kicked
+    description: Players with this permission cannot be vote kicked
+
+  commandsplugin.votekick.staff:
+    default: op
+    description: If a player with this permission is online, nobody can start a votekick.
+    children:
+      commandsplugin.votekick: true
+      commandsplugin.votekick.bypass: true
+
+  commandsplugin.votekick.vote:
+     default: true
+     description: Players with this permission can vote on a votekick.

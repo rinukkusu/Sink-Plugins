@@ -3,6 +3,8 @@ package de.static_interface.commandsplugin;
 import de.static_interface.commandsplugin.commands.*;
 import de.static_interface.commandsplugin.listener.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -130,5 +132,22 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("unspectate").setExecutor(new SpectateCommands.UnspectateCommand());
         getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
         getCommand("lag").setExecutor(new LagCommand());
+        getCommand("votekick").setExecutor(new VotekickCommands.VotekickCommand(this));
+        getCommand("voteyes").setExecutor(new VotekickCommands.VoteyesCommand());
+        getCommand("voteno").setExecutor(new VotekickCommands.VotenoCommand());
+    }
+
+    public static String getSenderName(CommandSender sender)
+    {
+        String senderName;
+        if (sender instanceof Player)
+        {
+            senderName = ( (Player) sender ).getDisplayName();
+        }
+        else
+        {
+            senderName = ChatColor.RED + "Console";
+        }
+        return senderName;
     }
 }

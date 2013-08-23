@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class NewbiechatCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.YELLOW + "[SupportChat] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

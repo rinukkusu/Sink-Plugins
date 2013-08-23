@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public class SpectateCommands
 {
-    public static HashMap<Player, Player> specedPlayers = new HashMap<Player, Player>();
-    public static String prefix = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.WHITE;
+    public static HashMap<Player, Player> specedPlayers = new HashMap<>();
+    public static String prefix = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.RESET;
 
     public static class SpectateCommand implements CommandExecutor
     {

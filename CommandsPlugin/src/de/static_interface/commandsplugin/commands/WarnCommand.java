@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class WarnCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.RED + "[Warn] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.RED + "[Warn] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

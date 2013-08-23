@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 public class CommandsverCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
 
     Plugin plugin;
 

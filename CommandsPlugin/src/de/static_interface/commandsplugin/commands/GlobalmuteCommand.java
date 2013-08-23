@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class GlobalmuteCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.WHITE;
+    public static String prefix = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
