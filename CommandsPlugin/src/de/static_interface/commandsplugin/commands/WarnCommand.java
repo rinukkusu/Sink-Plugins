@@ -43,11 +43,6 @@ public class WarnCommand implements CommandExecutor
             player.sendMessage(prefix + "Du musst einen Grund angeben!");
             return false;
         }
-        if (args.length > 2 )
-        {
-            player.sendMessage(prefix + "Zu viele Argumente!");
-            return false;
-        }
         String reason = "";
         int i = - 1;
         for (String s : args)
