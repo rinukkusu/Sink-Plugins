@@ -14,7 +14,7 @@ import java.util.logging.Level;
  * Auhtor: Trojaner
  * Date: 27.07.13
  * Description: Main Class
- * Copyright © Trojaner 2013
+ * Copyright © Adventuria 2013
  */
 
 public class AntiSpamPlugin extends JavaPlugin

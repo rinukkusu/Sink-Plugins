@@ -90,6 +90,14 @@ commands:
     description: Votes no on a votekick
     permission: commandsplugin.votekick.vote
 
+  votestatus:
+    description: Shows Votekick status
+    permission: commandsplugin.votekick.vote
+
+  endvote:
+    description: Ends a votekick
+    permission: commandsplugin.votekick.endvote
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -227,3 +235,9 @@ permissions:
   commandsplugin.votekick.vote:
      default: true
      description: Players with this permission can vote on a votekick.
+
+  commandsplugin.votekick.endvote:
+     default: op
+     description: Cancels a votekick
+     children:
+       commandsplugin.votekick.staff: true

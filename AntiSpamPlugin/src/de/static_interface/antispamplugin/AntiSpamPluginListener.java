@@ -59,7 +59,7 @@ public class AntiSpamPluginListener implements Listener
             return;
         }
         String word = ContainsArrayItem(message, blacklist);
-        if (! word.equals(""))
+        if (word != null)
         {
             message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
             AntiSpamPlugin.warnPlayer(player, "Schreiben eines verbotenen Wortes: " + message);
@@ -96,7 +96,7 @@ public class AntiSpamPluginListener implements Listener
             {
                 return;
             }
-            if (! ContainsArrayItem(match, whiteListDomains).equals(""))
+            if (ContainsArrayItem(match, whiteListDomains) != null)
             {
                 return;
             }
@@ -124,6 +124,6 @@ public class AntiSpamPluginListener implements Listener
             }
             i++;
         }
-        return "";
+        return null;
     }
 }

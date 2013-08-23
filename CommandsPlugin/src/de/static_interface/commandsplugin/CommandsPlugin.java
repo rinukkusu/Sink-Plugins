@@ -18,7 +18,7 @@ import java.util.logging.Logger;
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class for plugin
- * Copyright © Trojaner 2013
+ * Copyright © Adventuria 2013
  */
 
 public class CommandsPlugin extends JavaPlugin
@@ -135,6 +135,8 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("votekick").setExecutor(new VotekickCommands.VotekickCommand(this));
         getCommand("voteyes").setExecutor(new VotekickCommands.VoteyesCommand());
         getCommand("voteno").setExecutor(new VotekickCommands.VotenoCommand());
+        getCommand("votestatus").setExecutor(new VotekickCommands.VotestatusCommand());
+        getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand());
     }
 
     public static String getSenderName(CommandSender sender)
