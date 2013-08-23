@@ -175,8 +175,8 @@ public class VotekickCommands
     {
         if (voteStarted)
         {
-            double percentYes = ( votesYes / ( votesYes + votesNo ) ) * 100;
-            double percentNo = ( votesNo / ( votesYes + votesNo ) ) * 100;
+            double percentYes = Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
+            double percentNo = Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
             if (percentYes > 50)
             {
                 CommandsPlugin.broadcast(prefix + target + " wurde gekickt, da die Mehrheit der Spieler dafür war. (Ja: " + percentYes + "%, Nein: " + percentNo + "%)", "commandsplugin.votekick.vote");
@@ -202,8 +202,8 @@ public class VotekickCommands
             sender.sendMessage(prefix + "Derzeit läuft kein Votekick...");
             return true;
         }
-        double percentYes = ( votesYes / ( votesYes + votesNo ) ) * 100;
-        double percentNo = ( votesNo / ( votesYes + votesNo ) ) * 100;
+        double percentYes = Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
+        double percentNo = Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
         sender.sendMessage(prefix + "Status: Ja: " + percentYes + "%, Nein: " + percentNo + "%.");
         return true;
     }
