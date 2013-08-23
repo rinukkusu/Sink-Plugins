@@ -40,7 +40,7 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (args.length < 2)
+            if (args.length < 1)
             {
                 return false;
             }
