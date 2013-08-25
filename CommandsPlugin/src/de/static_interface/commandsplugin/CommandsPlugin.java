@@ -10,6 +10,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,15 +25,13 @@ import java.util.logging.Logger;
 
 public class CommandsPlugin extends JavaPlugin
 {
-    public static boolean globalmuteEnabled = false;
+    public static boolean globalmuteEnabled;
+    public static List<String> tmpBannedPlayers;
+
     private static Logger log;
     private static CommandsTimer timer;
     private static File dataFolder;
 
-
-    /**
-     * Is called when the plugin was loaded
-     */
     public void onEnable()
     {
         timer = new CommandsTimer();
@@ -49,6 +49,7 @@ public class CommandsPlugin extends JavaPlugin
         log.info("Loading freezed players...");
         FreezeCommands.loadFreezedPlayers(log, getDataFolder(), this);
         log.info("Done!");
+        tmpBannedPlayers = new ArrayList<>();
     }
 
     public void onDisable()
@@ -78,9 +79,9 @@ public class CommandsPlugin extends JavaPlugin
 
     /**
      * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
-     *
+     * Send message to all players with specified permission.
      * @param message    Message to send
-     * @param permission Send message to players with this permission
+     * @param permission Permission needed to receive the message
      */
     public static void broadcast(String message, String permission)
     {
@@ -113,6 +114,7 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new TradechatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
         pm.registerEvents(new PlayerConfigurationListener(), this);
+        pm.registerEvents(new VotekickListener(), this);
     }
 
     private void registerCommands()
@@ -133,10 +135,11 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
         getCommand("lag").setExecutor(new LagCommand());
         getCommand("votekick").setExecutor(new VotekickCommands.VotekickCommand(this));
-        getCommand("voteyes").setExecutor(new VotekickCommands.VoteyesCommand());
-        getCommand("voteno").setExecutor(new VotekickCommands.VotenoCommand());
+        getCommand("voteyes").setExecutor(new VotekickCommands.VoteyesCommand(this));
+        getCommand("voteno").setExecutor(new VotekickCommands.VotenoCommand(this));
         getCommand("votestatus").setExecutor(new VotekickCommands.VotestatusCommand());
-        getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand());
+        getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand(this));
+        getCommand("votekickunban").setExecutor(new VotekickCommands.VotekickunbanCommand());
     }
 
     public static String getSenderName(CommandSender sender)
@@ -151,5 +154,24 @@ public class CommandsPlugin extends JavaPlugin
             senderName = ChatColor.RED + "Console";
         }
         return senderName;
+    }
+
+    /**
+     * Add Temp Ban
+     *
+     * @param username Player to ban
+     */
+    public static void addTempBan(String username)
+    {
+        tmpBannedPlayers.add(username);
+    }
+
+    /**
+     * Remove Temp Ban
+     * @param username Player to unban
+     */
+    public static void removeTempBan(String username)
+    {
+        tmpBannedPlayers.remove(username);
     }
 }

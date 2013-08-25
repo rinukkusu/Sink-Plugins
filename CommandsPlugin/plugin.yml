@@ -98,6 +98,11 @@ commands:
     description: Ends a votekick
     permission: commandsplugin.votekick.endvote
 
+  votekickunban:
+    description: Unbans a player banned by a votekick
+    permission: commandsplugin.votekick.unban
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -239,5 +244,11 @@ permissions:
   commandsplugin.votekick.endvote:
      default: op
      description: Cancels a votekick
+     children:
+       commandsplugin.votekick.staff: true
+
+  commandsplugin.votekick.unban:
+     default: op
+     description: Unban a player banned by a votekick
      children:
        commandsplugin.votekick.staff: true

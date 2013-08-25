@@ -46,6 +46,11 @@ public class VotekickCommands
             }
 
             String reason = "";
+            if (Bukkit.getOnlinePlayers().length < 2)
+            {
+                sender.sendMessage(prefix + "Es sind zu wenige Leute für einen Votekick online!");
+                return true;
+            }
             if (args.length > 2)
             {
                 int i = 0;
@@ -109,21 +114,21 @@ public class VotekickCommands
             }
             if (reason.equals(""))
             {
-                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick für " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
             }
             else
             {
-                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick für " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
             }
             voteStarted = true;
-            long time = 20 * 180; // 20 Ticks * 180 = 3 Minutes
+            long time = 20 * 180; // 20 Ticks (= 1 second) * 180 = 3 Minutes
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    VotekickCommands.endVoteKick();
+                    VotekickCommands.endVoteKick(plugin);
                 }
             }, time);
             return true;
@@ -132,20 +137,33 @@ public class VotekickCommands
 
     public static class VoteyesCommand implements CommandExecutor
     {
+        Plugin plugin;
+
+        public VoteyesCommand(Plugin plugin)
+        {
+            this.plugin = plugin;
+        }
 
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            return vote(sender, true);
+            return vote(sender, true, plugin);
         }
     }
 
     public static class VotenoCommand implements CommandExecutor
     {
+        Plugin plugin;
+
+        public VotenoCommand(Plugin plugin)
+        {
+            this.plugin = plugin;
+        }
+
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            return vote(sender, false);
+            return vote(sender, false, plugin);
         }
     }
 
@@ -160,28 +178,63 @@ public class VotekickCommands
 
     public static class EndvoteCommand implements CommandExecutor
     {
+        Plugin plugin;
+
+        public EndvoteCommand(Plugin plugin)
+        {
+            this.plugin = plugin;
+        }
 
         @Override
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
         {
             CommandsPlugin.broadcast(prefix + "Der Votekick gegen " + target + " wurde durch " + CommandsPlugin.getSenderName(commandSender) + " beendet.", "commandsplugin.votekick.vote");
             voteStarted = false;
-            endVoteKick();
+            endVoteKick(plugin);
             return true;
         }
     }
 
-    private static void endVoteKick()
+    public static class VotekickunbanCommand implements CommandExecutor
+    {
+        @Override
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+        {
+            if (args.length != 1)
+            {
+                return false;
+            }
+            String username = args[0];
+            CommandsPlugin.removeTempBan(username);
+            sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
+            return false;
+        }
+    }
+
+    private static void endVoteKick(Plugin plugin)
     {
         if (voteStarted)
         {
             int percentYes = (int) Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
             int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
+            if (( percentYes + percentNo ) <= 1)
+            {
+                CommandsPlugin.broadcast(prefix + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "commandsplugin.votekick.vote");
+            }
             if (percentYes > 50)
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde gekickt, da die Mehrheit der Spieler dafür war. (Ja: " + percentYes + "%, Nein: " + percentNo + "%)", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war. (Ja: " + percentYes + "%, Nein: " + percentNo + "%)", "commandsplugin.votekick.vote");
+                final String username = targetPlayer.getName();
                 targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
-                //ToDo: Temp Ban Player for 5 Minutes
+                CommandsPlugin.addTempBan(username);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        CommandsPlugin.removeTempBan(username);
+                    }
+                }, 20 * 300); //Unban player after 5 minutes
             }
             else
             {
@@ -208,7 +261,7 @@ public class VotekickCommands
         return true;
     }
 
-    private static boolean vote(CommandSender sender, boolean yes)
+    private static boolean vote(CommandSender sender, boolean yes, Plugin plugin)
     {
         if (! VotekickCommands.voteStarted)
         {
@@ -235,7 +288,7 @@ public class VotekickCommands
 
         if (( votesYes + votesNo ) == Bukkit.getOnlinePlayers().length)
         {
-            VotekickCommands.endVoteKick();
+            VotekickCommands.endVoteKick(plugin);
         }
         return true;
     }
