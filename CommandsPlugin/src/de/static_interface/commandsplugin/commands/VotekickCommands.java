@@ -25,7 +25,7 @@ public class VotekickCommands
 
     public static List<CommandSender> votedPlayers = new ArrayList<>();
 
-    //ToDo: /voteadmin enable and disable with boolean: voteEnabled
+    //ToDo: /voteadmin enable and disable with variable: voteEnabled
     //ToDo: Add Timer to show remaining seconds...
 
     public static class VotekickCommand implements CommandExecutor
@@ -205,6 +205,11 @@ public class VotekickCommands
                 return false;
             }
             String username = args[0];
+            if (! CommandsPlugin.tmpBannedPlayers.contains(username))
+            {
+                sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!.");
+                return true;
+            }
             CommandsPlugin.removeTempBan(username);
             sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
             return false;
