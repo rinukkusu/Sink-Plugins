@@ -12,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -80,6 +79,7 @@ public class CommandsPlugin extends JavaPlugin
     /**
      * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
      * Send message to all players with specified permission.
+     *
      * @param message    Message to send
      * @param permission Permission needed to receive the message
      */
@@ -93,7 +93,7 @@ public class CommandsPlugin extends JavaPlugin
             }
             p.sendMessage(message);
         }
-        log.log(Level.INFO, Util.RemoveFormattingAndColorCodes(message));
+        Bukkit.getConsoleSender().sendMessage(message);
     }
 
     /**
@@ -168,6 +168,7 @@ public class CommandsPlugin extends JavaPlugin
 
     /**
      * Remove Temp Ban
+     *
      * @param username Player to unban
      */
     public static void removeTempBan(String username)

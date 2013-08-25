@@ -15,11 +15,6 @@ public class WarnCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (! ( sender instanceof Player ))
-        {
-            sender.sendMessage(prefix + "This command can only be run by a player.");
-            return true;
-        }
         if (args.length < 1)
         {
             sender.sendMessage(prefix + ChatColor.RED + "Zu wenige Argumente!");
@@ -27,20 +22,19 @@ public class WarnCommand implements CommandExecutor
             return false;
         }
         Player target = ( Bukkit.getServer().getPlayer(args[0]) );
-        Player player = (Player) sender;
         if (target == null)
         {
-            player.sendMessage(prefix + args[0] + " ist nicht online!");
+            sender.sendMessage(prefix + args[0] + " ist nicht online!");
             return true;
         }
-        if (target.getDisplayName().equals(player.getDisplayName()))
+        if (target.getDisplayName().equals(CommandsPlugin.getSenderName(sender)))
         {
-            player.sendMessage(prefix + "Du kannst dich nicht selbst verwarnen!");
+            sender.sendMessage(prefix + "Du kannst dich nicht selbst verwarnen!");
             return true;
         }
         if (args.length == 1)
         {
-            player.sendMessage(prefix + "Du musst einen Grund angeben!");
+            sender.sendMessage(prefix + "Du musst einen Grund angeben!");
             return false;
         }
         String reason = "";
@@ -59,8 +53,8 @@ public class WarnCommand implements CommandExecutor
             }
             reason = reason + " " + s;
         }
-        target.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + player.getDisplayName() + " verwarnt. Grund: " + reason);
-        CommandsPlugin.broadcast(prefix + target.getDisplayName() + " wurde von " + player.getDisplayName() + " verwarnt. Grund: " + reason, "commandsplugin.warn.message");
+        target.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason);
+        CommandsPlugin.broadcast(prefix + target.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason, "commandsplugin.warn.message");
         return true;
     }
 }

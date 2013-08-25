@@ -1,7 +1,7 @@
 name: CommandsPlugin
-version: 1.4.1
+version: 1.5
 description: General Commands Plugin
-author: Trojaner
+author: [Trojaner, Diar]
 website: http://static-interface.de
 main: de.static_interface.commandsplugin.CommandsPlugin
 
@@ -9,9 +9,6 @@ commands:
   commandsver:
     description: Shows Version
     permission: commandsplugin.ver
-  lag:
-    description: Shows information about server lag
-    permission: commandsplugin.lag
 
   drug:
     description: Take drugs!
@@ -76,6 +73,10 @@ commands:
     description: See speced players
     permission: commandsplugin.spectate
     aliases: speclist
+
+  lag:
+    description: Shows information about server lag
+    permission: commandsplugin.lag
 
   votekick:
     description: Votekick a player
@@ -226,6 +227,10 @@ permissions:
     children:
       commandsplugin.votekick.vote: true
 
+  commandsplugin.votekick.vote:
+    default: true
+    description: Players with this permission can vote on a votekick.
+
   commandsplugin.votekick.bypass:
     default: op
     description: Players with this permission cannot be vote kicked
@@ -236,10 +241,6 @@ permissions:
     children:
       commandsplugin.votekick: true
       commandsplugin.votekick.bypass: true
-
-  commandsplugin.votekick.vote:
-     default: true
-     description: Players with this permission can vote on a votekick.
 
   commandsplugin.votekick.endvote:
      default: op

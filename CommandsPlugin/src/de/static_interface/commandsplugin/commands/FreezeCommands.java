@@ -9,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -32,7 +31,7 @@ public class FreezeCommands
 
     public static class FreezeCommand implements CommandExecutor
     {
-        public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             if (args.length < 1)
             {
@@ -61,10 +60,6 @@ public class FreezeCommands
             {
                 if (p.getName().toLowerCase().contains(args[0].toLowerCase()) || p.getName().equalsIgnoreCase(args[0]))
                 {
-                    if (args.length < 2 && ! toFreeze.contains(p.getName()))
-                    {
-                        return false;
-                    }
                     if (! canBeFrozen(p) && sender instanceof Player)
                     {
                         sender.sendMessage(prefix + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
@@ -72,28 +67,18 @@ public class FreezeCommands
                     }
                     if (toggleFreeze(p))
                     {
-                        if (sender instanceof Player)
+                        if (args.length < 2)
                         {
-                            p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + ( (Player) sender ).getDisplayName() + " eingefroren. Grund: " + reason);
-                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + ( (Player) sender ).getDisplayName() + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren.", "commandsplugin.freeze.message");
                         }
                         else
                         {
-                            p.sendMessage(prefix + ChatColor.RED + "Du wurdest von der Console aus eingefroren. Grund: " + reason);
-                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von der Console aus eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
                         }
                         return true;
                     }
-                    if (sender instanceof Player)
-                    {
-                        p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + ( (Player) sender ).getDisplayName() + " aufgetaut.");
-                        CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + ( (Player) sender ).getDisplayName() + " aufgetaut.", "commandsplugin.freeze.message");
-                    }
-                    else
-                    {
-                        p.sendMessage(prefix + ChatColor.RED + "Du wurdest von der Console aus aufgetaut.");
-                        CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von der Console aus aufgetaut.", "commandsplugin.freeze.message");
-                    }
+                    p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
+                    CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " wieder aufgetaut.", "commandsplugin.freeze.message");
                     return true;
                 }
             }
@@ -112,7 +97,7 @@ public class FreezeCommands
         }
 
 
-        public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             if (args.length < 3)
             {
@@ -191,16 +176,8 @@ public class FreezeCommands
                         sender.sendMessage(prefix + "Dieser Spieler wurde schon eingefroren");
                         return true;
                     }
-                    if (sender instanceof Player)
-                    {
-                        p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + ( (Player) sender ).getDisplayName() + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
-                        CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + ( (Player) sender ).getDisplayName() + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
-                    }
-                    else
-                    {
-                        p.sendMessage(prefix + ChatColor.RED + "Du wurdest von der Console aus für " + seconds + " Sekunden eingefroren. Grund: " + reason);
-                        CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von der Console aus für " + seconds + " Sekunden eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
-                    }
+                    p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
+                    CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
                 }
             }
             return true;
@@ -209,7 +186,7 @@ public class FreezeCommands
 
     public static class FreezeallCommand implements CommandExecutor
     {
-        public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             if (args.length < 1 && freezeAll.size() != Bukkit.getWorlds().size())
             {
@@ -231,25 +208,11 @@ public class FreezeCommands
 
             if (toggleFreezeAll())
             {
-                if (sender instanceof ConsoleCommandSender)
-                {
-                    Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von der Console aus eingefroren. Grund: " + reason);
-                }
-                else
-                {
-                    Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + ( (Player) sender ).getDisplayName() + " eingefroren. Grund: " + reason);
-                }
+                Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason);
             }
             else
             {
-                if (sender instanceof ConsoleCommandSender)
-                {
-                    Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von der Console aus aufgetaut.");
-                }
-                else
-                {
-                    Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + ( (Player) sender ).getDisplayName() + " aufgetaut.");
-                }
+                Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
             }
             return true;
         }
@@ -257,7 +220,7 @@ public class FreezeCommands
 
     public static class FreezelistCommand implements CommandExecutor
     {
-        public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             String frozenList = "";
             String tmpfrozenList = "";
@@ -553,7 +516,6 @@ public class FreezeCommands
             {
                 out.write(array[0] + ":" + array[1] + ";\n");
             }
-
             out.close();
         }
         catch (Exception e)

@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class TeamchatCommand implements CommandExecutor
 {
@@ -29,20 +28,11 @@ public class TeamchatCommand implements CommandExecutor
             }
             message = message + " " + s;
         }
-        String name;
-        if (sender instanceof Player)
-        {
-            name = ChatColor.WHITE + ( (Player) sender ).getDisplayName();
-        }
-        else
-        {
-            name = ChatColor.RED + "Console";
-        }
         if (sender.hasPermission("commandsplugin.teamchat.color"))
         {
             message = Util.ReplaceFormattingAndColorCodes(message);
         }
-        CommandsPlugin.broadcast(prefix + name + ChatColor.WHITE + ": " + message, "commandsplugin.teamchat");
+        CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.teamchat");
         return true;
     }
 }

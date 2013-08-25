@@ -207,12 +207,12 @@ public class VotekickCommands
             String username = args[0];
             if (! CommandsPlugin.tmpBannedPlayers.contains(username))
             {
-                sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!.");
+                sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!");
                 return true;
             }
             CommandsPlugin.removeTempBan(username);
             sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
-            return false;
+            return true;
         }
     }
 
@@ -228,7 +228,7 @@ public class VotekickCommands
             }
             if (percentYes > 50)
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war. (Ja: " + percentYes + "%, Nein: " + percentNo + "%)", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
                 final String username = targetPlayer.getName();
                 targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
                 CommandsPlugin.addTempBan(username);
@@ -243,7 +243,7 @@ public class VotekickCommands
             }
             else
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war. (Ja: " + percentYes + "%, Nein: " + percentNo + "%)", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(prefix + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
             }
         }
         votesYes = 0;

@@ -21,7 +21,7 @@ public class SpectateCommands
         {
             if (! ( sender instanceof Player ))
             {
-                sender.sendMessage("This command can only be run by a player.");
+                sender.sendMessage("Dieser Befehl kann nur von einem Spieler ausgeführt werden!");
                 return true;
             }
             Player player = (Player) sender;

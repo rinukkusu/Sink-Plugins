@@ -17,12 +17,6 @@ public class MilkCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (! ( sender instanceof Player ))
-        {
-            sender.sendMessage(prefix + "Dieser Befehl kann nur von einem Spieler genutzt werden.");
-            return true;
-        }
-        Player player = (Player) sender;
         if (args.length == 0) //Remove all
         {
             String s = "";
@@ -45,7 +39,7 @@ public class MilkCommand implements CommandExecutor
             }
             if (i > 0)
             {
-                CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch " + player.getDisplayName() + " entfernt:", "commandsplugin.milk.message");
+                CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt:", "commandsplugin.milk.message");
                 CommandsPlugin.broadcast(prefix + s, "commandsplugin.milk.message");
                 return true;
             }
@@ -62,7 +56,7 @@ public class MilkCommand implements CommandExecutor
 
         if (target.hasPotionEffect(PotionEffectType.INVISIBILITY))
         {
-            CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + player.getDisplayName() + " entfernt.", "commandsplugin.milk.message");
+            CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt.", "commandsplugin.milk.message");
             target.removePotionEffect(PotionEffectType.INVISIBILITY);
             return true;
         }

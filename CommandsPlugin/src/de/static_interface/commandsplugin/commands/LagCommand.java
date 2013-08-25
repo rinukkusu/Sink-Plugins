@@ -11,23 +11,23 @@ public class LagCommand implements CommandExecutor
     public static String prefix = ChatColor.DARK_PURPLE + "[Lag] " + ChatColor.RESET;
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         double realTPS = CommandsPlugin.getCommandsTimer().getAverageTPS();
         double shownTPS = Math.round(realTPS);
         if (realTPS >= 18.5)
         {
-            commandSender.sendMessage(prefix + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
+            sender.sendMessage(prefix + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
         }
         else if (realTPS >= 17)
         {
-            commandSender.sendMessage(prefix + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
+            sender.sendMessage(prefix + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
         }
         else
         {
-            commandSender.sendMessage(prefix + ChatColor.RED + "Der Server laggt gerade!");
+            sender.sendMessage(prefix + ChatColor.RED + "Der Server laggt gerade!");
         }
-        commandSender.sendMessage(prefix + "(TPS: " + shownTPS + ")");
+        sender.sendMessage(prefix + "(TPS: " + shownTPS + ")");
         return true;
     }
 }
