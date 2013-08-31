@@ -104,6 +104,12 @@ commands:
     permission: commandsplugin.votekick.unban
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
 
+  commandsdebug:
+    description: Debug Plugin
+    permission: commandsplugin.debug
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <option> <args>"
+    aliases: cdebug
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -253,3 +259,7 @@ permissions:
      description: Unban a player banned by a votekick
      children:
        commandsplugin.votekick.staff: true
+
+  commandsplugin.debug:
+     default: op
+     description: Permission required for debugging

@@ -63,6 +63,12 @@ public class CommandsPlugin extends JavaPlugin
         }
         log.info("Unloading freezed players...");
         FreezeCommands.unloadFreezedPlayers(log, getDataFolder());
+        log.info("Saving player configurations...");
+        for(Player p : Bukkit.getOnlinePlayers())
+        {
+            PlayerConfiguration config = new PlayerConfiguration(p.getName());
+            config.save();
+        }
         log.info("Disabled.");
     }
 
@@ -140,6 +146,7 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("votestatus").setExecutor(new VotekickCommands.VotestatusCommand());
         getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand(this));
         getCommand("votekickunban").setExecutor(new VotekickCommands.VotekickunbanCommand());
+        getCommand("commandsdebug").setExecutor(new CommandsdebugCommand());
     }
 
     public static String getSenderName(CommandSender sender)

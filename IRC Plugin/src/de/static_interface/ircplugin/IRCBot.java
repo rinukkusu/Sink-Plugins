@@ -3,6 +3,7 @@ package de.static_interface.ircplugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
@@ -16,7 +17,7 @@ import org.jibble.pircbot.User;
 
 public class IRCBot extends PircBot
 {
-    private boolean disabled = false;
+    public static boolean disabled = false;
     String BotName = "AdventuriaBot";
 
     public IRCBot()
@@ -32,36 +33,62 @@ public class IRCBot extends PircBot
         {
             return;
         }
-        message = RemoveColorCodes(message);
+        message = replaceColorCodes(message);
         sendMessage(target, message);
     }
 
     String[] Whitelist = { "Trojaner", "Trojaner_" }; //Very, very poorly written
 
-    private static String RemoveColorCodes(String input)
+    public static String replaceAmpersandColorCodes(String input)
     {
-        input = input.replace("§0", "");
-        input = input.replace("§1", "");
-        input = input.replace("§2", "");
-        input = input.replace("§3", "");
-        input = input.replace("§4", "");
-        input = input.replace("§5", "");
-        input = input.replace("§6", "");
-        input = input.replace("§7", "");
-        input = input.replace("§8", "");
-        input = input.replace("§9", "");
-        input = input.replace("§a", "");
-        input = input.replace("§b", "");
-        input = input.replace("§c", "");
-        input = input.replace("§d", "");
-        input = input.replace("§e", "");
-        input = input.replace("§f", "");
+        input = input.replace("&a","§a");
+        input = input.replace("&b","§b");
+        input = input.replace("&c","§c");
+        input = input.replace("&d","§d");
+        input = input.replace("&e","§e");
+        input = input.replace("&f","§f");
+        input = input.replace("&1","§1");
+        input = input.replace("&2","§2");
+        input = input.replace("&3","§3");
+        input = input.replace("&4","§4");
+        input = input.replace("&5","§5");
+        input = input.replace("&6","§6");
+        input = input.replace("&7","§7");
+        input = input.replace("&8","§8");
+        input = input.replace("&9","§9");
+        input = input.replace("&k","§k");
+        input = input.replace("&l","§l");
+        input = input.replace("&m","§m");
+        input = input.replace("&n","§n");
+        input = input.replace("&o","§o");
+        input = input.replace("&r","§r");
+        return input;
+    }
+
+    public static String replaceColorCodes(String input)
+    {
+        input = input.replace(ChatColor.BLACK.toString(), Colors.BLACK);
+        input = input.replace(ChatColor.DARK_BLUE.toString(), Colors.DARK_BLUE);
+        input = input.replace(ChatColor.DARK_GREEN.toString(), Colors.DARK_GREEN);
+        input = input.replace(ChatColor.DARK_AQUA.toString(), Colors.TEAL);
+        input = input.replace(ChatColor.DARK_RED.toString(), Colors.RED);
+        input = input.replace(ChatColor.DARK_PURPLE.toString(), Colors.PURPLE);
+        input = input.replace(ChatColor.GOLD.toString(), Colors.OLIVE);
+        input = input.replace(ChatColor.GRAY.toString(), Colors.LIGHT_GRAY);
+        input = input.replace(ChatColor.DARK_GRAY.toString(), Colors.DARK_GRAY);
+        input = input.replace(ChatColor.BLUE.toString(), Colors.BLUE);
+        input = input.replace(ChatColor.GREEN.toString(), Colors.GREEN);
+        input = input.replace(ChatColor.AQUA.toString(), Colors.CYAN);
+        input = input.replace(ChatColor.RED.toString(), Colors.RED);
+        input = input.replace(ChatColor.LIGHT_PURPLE.toString(), Colors.PURPLE);
+        input = input.replace(ChatColor.YELLOW.toString(), Colors.YELLOW);
+        input = input.replace(ChatColor.WHITE.toString(), Colors.NORMAL);
         input = input.replace("§k", "");
-        input = input.replace("§l", "");
-        input = input.replace("§m", "");
-        input = input.replace("§n", "");
-        input = input.replace("§o", "");
-        input = input.replace("§r", "");
+        input = input.replace(ChatColor.BOLD.toString(), Colors.BOLD);
+        input = input.replace(ChatColor.STRIKETHROUGH.toString(), "");
+        input = input.replace(ChatColor.UNDERLINE.toString(), Colors.UNDERLINE);
+        input = input.replace(ChatColor.ITALIC.toString(), "");
+        input = input.replace(ChatColor.RESET.toString(), Colors.NORMAL);
         return input;
     }
 
@@ -74,7 +101,25 @@ public class IRCBot extends PircBot
             return;
         }
         sendMessage(channel, "Willkommen, " + sender + "!");
+        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " ist dem Kanal beigetreten.");
         super.onJoin(channel, sender, login, hostname);
+    }
+    @Override
+    public void onPart(String channel, String sender, String login, String hostname)
+    {
+        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
+    }
+
+    @Override
+    public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
+    {
+        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + recipientNick + ChatColor.WHITE + " wurde von " + kickerNick + " aus dem Kanal geworfen. Grund: " + reason + ".");
+    }
+
+    @Override
+    public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
+    {
+        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + "Server"+ "] " + ChatColor.DARK_AQUA + sourceNick + ChatColor.WHITE + " hat den Server verlassen. (\"" + reason + "\")");
     }
 
     @Override
@@ -125,8 +170,13 @@ public class IRCBot extends PircBot
 
             if (cmd.equals("say"))
             {
-                Bukkit.getServer().broadcastMessage(ChatColor.YELLOW + "[IRC] [" + sender + "] " + ChatColor.WHITE + message.replaceFirst("say", ""));
-                sendCleanMessage(channel, "[IRC] [" + sender + "] " + message.replaceFirst("say", ""));
+                if (args.length < 2)
+                {
+                    sendCleanMessage(channel, "Usage: !say <text>");
+                }
+                String messageWithPrefix = ChatColor.GRAY + "[IRC] " + "[" + channel +"] " +  ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
+                Bukkit.getServer().broadcastMessage(messageWithPrefix);
+                sendCleanMessage(channel, replaceColorCodes(messageWithPrefix));
             }
 
             if (cmd.equals("kick"))
@@ -182,10 +232,10 @@ public class IRCBot extends PircBot
                         players = players + ", " + p.getDisplayName();
                     }
                 }
-                sendCleanMessage(channel, "Online Players: " + players);
+                sendCleanMessage(channel, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
 
-            if (cmd.equals("permissions") | cmd.equals("perms"))
+            if (cmd.equals("permissions") || cmd.equals("perms"))
             {
                 if (isOp | isWhitelist)
                 {

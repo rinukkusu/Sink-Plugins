@@ -1,9 +1,11 @@
 package de.static_interface.commandsplugin;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 
 /**
@@ -13,27 +15,27 @@ import java.io.IOException;
 @SuppressWarnings("UnusedDeclaration")
 public class PlayerConfiguration
 {
-    String playerName;
+    private static String playerName;
     File playerConfigFile;
     YamlConfiguration playerYamlConfig;
-    String freezePath = playerName + ".Freeze";
-    String freezedPath = freezePath + ".freezed";
-    String freezedTimePath = freezePath + ".freezetime";
     File playersPath;
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
-     *
      * @param playerName Player name. Do not use Displayname or Customname!
      */
     public PlayerConfiguration(String playerName)
     {
-        this.playerName = playerName;
+        PlayerConfiguration.playerName = playerName;
         playersPath = new File(CommandsPlugin.getDataFolderStatic() + File.separator + "Players");
         playerConfigFile = new File(playersPath, playerName + ".yml");
         playerYamlConfig = ( exists() ) ? YamlConfiguration.loadConfiguration(playerConfigFile) : null;
     }
 
+    /**
+     * Get Player YAML Configuration
+     * @return playerYAMLConfiguration
+     */
     public YamlConfiguration getPlayerConfiguration()
     {
         playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
@@ -56,14 +58,16 @@ public class PlayerConfiguration
                 throw new IOException("Couldn't create player config: " + playerConfigFile);
             }
             playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
-            playerYamlConfig.createSection(freezePath);
-            playerYamlConfig.addDefault(freezedPath, false);
-            playerYamlConfig.addDefault(freezedTimePath, 0);
+            //playerYamlConfig.createSection(FREEZEPATH);
+            playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
+            playerYamlConfig.addDefault(playerName + ".Freeze.freezedtime", 0);
             playerYamlConfig.options().copyDefaults(true);
+            save();
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + playerConfigFile);
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
         }
     }
 
@@ -76,14 +80,37 @@ public class PlayerConfiguration
     }
 
     /**
+     * Save config file
+     */
+    public void save()
+    {
+        if (playerConfigFile == null)
+        {
+            return;
+        }
+        try
+        {
+            playerYamlConfig.save(playerConfigFile);
+        }
+        catch (IOException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save player config file: " + playerConfigFile + "!");
+        }
+    }
+
+    public void set(String path, Object value)
+    {
+        playerYamlConfig.set(path, value);
+        save();
+    }
+
+    /**
      * Get freeze value
-     *
      * @return true if player is freezed
      */
-
     public boolean getFreezed()
     {
-        return playerYamlConfig.getBoolean(freezedPath);
+        return playerYamlConfig.getBoolean(playerName + ".Freeze.freezed");
     }
 
     /**
@@ -93,7 +120,7 @@ public class PlayerConfiguration
      */
     public int getFreezeTime()
     {
-        return playerYamlConfig.getInt(freezedTimePath);
+        return playerYamlConfig.getInt(playerName + ".Freeze.freezedtime");
     }
 
     /**
@@ -103,7 +130,7 @@ public class PlayerConfiguration
      */
     public void setFreezed(boolean value)
     {
-        playerYamlConfig.set(freezedPath, value);
+        playerYamlConfig.set(playerName + ".Freeze.freezed", value);
     }
 
     /**
@@ -113,6 +140,6 @@ public class PlayerConfiguration
      */
     public void setFreezeTime(int time)
     {
-        playerYamlConfig.set(freezedTimePath, time);
+        playerYamlConfig.set(playerName + ".Freeze.freezedtime", time);
     }
 }

@@ -1,5 +1,6 @@
 package de.static_interface.ircplugin;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  * IRCPluginMain
@@ -25,7 +27,7 @@ import java.util.logging.Logger;
 public class IRCPluginMain extends JavaPlugin implements Listener
 {
     private String Host = "irc.lolnein.de";
-    private String Channel = "#IRCBot";
+    private String Channel = "#AdventuriaBot";
     private int Port = 6667;
 
     IRCBot ircBot;
@@ -54,24 +56,27 @@ public class IRCPluginMain extends JavaPlugin implements Listener
     @Override
     public void onDisable()
     {
-        ircBot.quitServer("Plugin deactivated");
+        ircBot.quitServer("Plugin reload or plugin has been deactivated");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        ircBot.sendCleanMessage(Channel, event.getJoinMessage());
+        if (IRCBot.disabled) return;
+        ircBot.sendCleanMessage(Channel, event.getJoinMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        ircBot.sendCleanMessage(Channel, event.getQuitMessage());
+        if (IRCBot.disabled) return;
+        ircBot.sendCleanMessage(Channel, event.getQuitMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerKick(PlayerKickEvent event)
     {
+        if (IRCBot.disabled) return;
         if (! event.getReason().equals(""))
         {
             ircBot.sendCleanMessage(Channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked for reason: " + event.getReason());
@@ -82,44 +87,65 @@ public class IRCPluginMain extends JavaPlugin implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
+        if (IRCBot.disabled) return;
         ircBot.sendCleanMessage(Channel, event.getDeathMessage());
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
+        if (IRCBot.disabled) return;
+        String message = event.getMessage();
         if (ircBot == null)
         {
             return;
         }
-        if (! event.getMessage().startsWith("!"))
+        String prefix;
+        if (message.length() < 2) return;
+        if (message.startsWith("$"))
         {
-            return;
+            prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] ";
+            message = message.replaceFirst("^" + Pattern.quote("$"),"");
         }
-        String message = event.getMessage().replaceFirst("!", "");
-
-        ircBot.sendCleanMessage(Channel, "[" + event.getPlayer().getDisplayName() + "] " + message);
+        else if (message.startsWith("!"))
+        {
+            prefix = ChatColor.GRAY + "[Schrei] ";
+            message = message.replaceFirst("!","");
+        }
+        else if (message.startsWith("?"))
+        {
+            prefix = ChatColor.GRAY + "[" + ChatColor.GREEN + "FRAGE" + ChatColor.GRAY + "] ";
+            message = message.replaceFirst("^" + Pattern.quote("?"),"");
+        }
+        else return; // Local Chat
+        String formattedMessage = prefix + event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
+        ircBot.sendCleanMessage(Channel, IRCBot.replaceColorCodes(formattedMessage));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        ircBot.sendMessage(Channel, "-> onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event): " + event.getMessage());
+        if (IRCBot.disabled) return;
         String tmp = event.getMessage().replaceFirst("/", "");
         String[] cmdwithargs = tmp.split(" ");
         List<String> args = Arrays.asList(cmdwithargs);
         String cmd = cmdwithargs[0];
-        args.remove(cmd); //Remove command from args
         switch (cmd.toLowerCase())
         {
             case "say":
             {
                 String message = "";
+                boolean commandSkip = true;
                 for (String s : args)
                 {
+                    if (commandSkip)
+                    {
+                        commandSkip = false;
+                        continue;
+                    }
                     if (message.equals(""))
                     {
                         message = s;
@@ -129,9 +155,8 @@ public class IRCPluginMain extends JavaPlugin implements Listener
                         message = message + " " + s;
                     }
                 }
-                ircBot.sendCleanMessage(Channel, "[Server] " + message);
+                ircBot.sendCleanMessage(Channel, IRCBot.replaceColorCodes(IRCBot.replaceAmpersandColorCodes(ChatColor.DARK_PURPLE + "[Server] " + message)));
             }
         }
-        event.setCancelled(false);
     }
 }
