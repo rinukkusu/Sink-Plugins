@@ -45,7 +45,7 @@ public class CommandsPlugin extends JavaPlugin
         }
         registerEvents();
         registerCommands();
-        log.info("Loading freezed players...");
+        log.info("Loading frozen players...");
         FreezeCommands.loadFreezedPlayers(log, getDataFolder(), this);
         log.info("Done!");
         tmpBannedPlayers = new ArrayList<>();
@@ -59,9 +59,9 @@ public class CommandsPlugin extends JavaPlugin
             target.eject();
             SpectateCommands.show(p);
             SpectateCommands.specedPlayers.remove(p);
-            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
+            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einen Reload gezwungen den Spectate Modus zu verlassen.");
         }
-        log.info("Unloading freezed players...");
+        log.info("Unloading frozen players...");
         FreezeCommands.unloadFreezedPlayers(log, getDataFolder());
         log.info("Disabled.");
     }
@@ -110,8 +110,8 @@ public class CommandsPlugin extends JavaPlugin
     {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new FreezeListener(), this);
-        pm.registerEvents(new GlobalmuteListener(), this);
-        pm.registerEvents(new TradechatListener(), this);
+        pm.registerEvents(new GlobalMuteListener(), this);
+        pm.registerEvents(new TradeChatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
         pm.registerEvents(new PlayerConfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
