@@ -22,10 +22,10 @@ public class CommandsverCommand implements CommandExecutor
     {
         String tmp = ( (String) plugin.getDescription().getAuthors().toArray()[0] ).replace("[", "");
         tmp = tmp.replace("]", "");
-        String[] authorsTMP = tmp.split(",");
+        String[] authorsArray = tmp.split(",");
         String authors = "";
         int i = 0;
-        for (String s : authorsTMP)
+        for (String s : authorsArray)
         {
             i++;
             if (authors.equals(""))
@@ -33,7 +33,7 @@ public class CommandsverCommand implements CommandExecutor
                 authors = s;
                 continue;
             }
-            if (i == authorsTMP.length)
+            if (i == authorsArray.length)
             {
                 authors = authors + " and " + s;
                 continue;
