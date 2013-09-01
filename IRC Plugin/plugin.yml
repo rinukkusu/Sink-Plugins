@@ -3,7 +3,7 @@ version: 1.0
 description: Plugin that links Chat to IRC
 author: Trojaner
 website: http://static-interface.de
-main: de.static_interface.ircplugin.IRCPluginMain
+main: de.static_interface.ircplugin.IRCPlugin
 
 commands:
   irc:
