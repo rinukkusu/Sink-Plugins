@@ -77,7 +77,7 @@ public class FreezeListener implements Listener
             {
                 return;
             }
-            event.getPlayer().sendMessage(FreezeCommands.prefix + "Du bist eingefroren und darfst keine Commands nutzen.");
+            event.getPlayer().sendMessage(FreezeCommands.PREFIX + "Du bist eingefroren und darfst keine Commands nutzen.");
             event.setCancelled(true);
         }
     }

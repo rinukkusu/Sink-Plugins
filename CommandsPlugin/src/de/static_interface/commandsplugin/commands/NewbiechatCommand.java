@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class NewbiechatCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -32,7 +32,7 @@ public class NewbiechatCommand implements CommandExecutor
         {
             message = Util.ReplaceFormattingAndColorCodes(message);
         }
-        CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.newbiechat");
+        CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.newbiechat");
         return true;
     }
 }

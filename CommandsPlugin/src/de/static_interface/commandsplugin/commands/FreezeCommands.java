@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class FreezeCommands
 {
-    public static String prefix = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
 
     public static Set<String> toFreeze = new HashSet<>();
     private static ArrayList<String[]> toTmpFreeze = new ArrayList<>();
@@ -62,23 +62,23 @@ public class FreezeCommands
                 {
                     if (! canBeFrozen(p) && sender instanceof Player)
                     {
-                        sender.sendMessage(prefix + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
+                        sender.sendMessage(PREFIX + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
                         return true;
                     }
                     if (toggleFreeze(p))
                     {
                         if (args.length < 2)
                         {
-                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren.", "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren.", "commandsplugin.freeze.message");
                         }
                         else
                         {
-                            CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
                         }
                         return true;
                     }
-                    p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
-                    CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " wieder aufgetaut.", "commandsplugin.freeze.message");
+                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
+                    CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " wieder aufgetaut.", "commandsplugin.freeze.message");
                     return true;
                 }
             }
@@ -158,7 +158,7 @@ public class FreezeCommands
 
                 if (seconds <= 0)
                 {
-                    sender.sendMessage(prefix + ChatColor.RED + "Ungültige Zeit (muss größer als 0 sein)!");
+                    sender.sendMessage(PREFIX + ChatColor.RED + "Ungültige Zeit (muss größer als 0 sein)!");
                     return true;
                 }
             }
@@ -173,11 +173,11 @@ public class FreezeCommands
                 {
                     if (! temporarilyFreeze(p, seconds, plugin))
                     {
-                        sender.sendMessage(prefix + "Dieser Spieler wurde schon eingefroren");
+                        sender.sendMessage(PREFIX + "Dieser Spieler wurde schon eingefroren");
                         return true;
                     }
-                    p.sendMessage(prefix + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
-                    CommandsPlugin.broadcast(prefix + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
+                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
+                    CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
                 }
             }
             return true;
@@ -208,11 +208,11 @@ public class FreezeCommands
 
             if (toggleFreezeAll())
             {
-                Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason);
+                CommandsPlugin.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason);
             }
             else
             {
-                Bukkit.broadcastMessage(prefix + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
+                CommandsPlugin.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + CommandsPlugin.getSenderName(sender) + " aufgetaut.");
             }
             return true;
         }
@@ -253,20 +253,20 @@ public class FreezeCommands
 
             if (frozenList.length() > 0)
             {
-                sender.sendMessage(prefix + "Eingefrorene Spieler: " + frozenList);
+                sender.sendMessage(PREFIX + "Eingefrorene Spieler: " + frozenList);
             }
             else
             {
-                sender.sendMessage(prefix + "Es gibt keine eingefrorenen Spieler.");
+                sender.sendMessage(PREFIX + "Es gibt keine eingefrorenen Spieler.");
             }
 
             if (tmpfrozenList.length() > 0)
             {
-                sender.sendMessage(prefix + "Temporär eingefrorene Spieler: " + tmpfrozenList);
+                sender.sendMessage(PREFIX + "Temporär eingefrorene Spieler: " + tmpfrozenList);
             }
             else
             {
-                sender.sendMessage(prefix + "Es gibt keine temporär eingefrorenen Spieler.");
+                sender.sendMessage(PREFIX + "Es gibt keine temporär eingefrorenen Spieler.");
             }
             return true;
         }

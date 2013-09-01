@@ -14,7 +14,7 @@ import java.util.List;
 
 public class VotekickCommands
 {
-    public static String prefix = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
 
     private static double votesYes = 0;
     private static double votesNo = 0;
@@ -48,7 +48,7 @@ public class VotekickCommands
             String reason = "";
             if (Bukkit.getOnlinePlayers().length < 2)
             {
-                sender.sendMessage(prefix + "Es sind zu wenige Leute für einen Votekick online!");
+                sender.sendMessage(PREFIX + "Es sind zu wenige Leute für einen Votekick online!");
                 return true;
             }
             if (args.length > 2)
@@ -71,7 +71,7 @@ public class VotekickCommands
             }
             if (voteStarted)
             {
-                sender.sendMessage(prefix + "Du kannst nicht einen Votekick starten während ein anderer Votekick läuft!");
+                sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten während ein anderer Votekick läuft!");
                 return true;
             }
             boolean voteable = false;
@@ -92,33 +92,33 @@ public class VotekickCommands
             }
             if (! voteable)
             {
-                sender.sendMessage(prefix + "Du kannst nicht einen Votekick starten wenn ein Teammitglied online ist!");
+                sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten wenn ein Teammitglied online ist!");
                 return true;
             }
             targetPlayer = ( Bukkit.getServer().getPlayer(args[0]) );
             target = targetPlayer.getDisplayName();
             if (targetPlayer == sender)
             {
-                sender.sendMessage(prefix + "Du kannst nicht einen Votekick gegen dich selbst starten!");
+                sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen dich selbst starten!");
                 return true;
             }
             if (targetPlayer.hasPermission("commandsplugin.votekick.bypass") && ! sender.hasPermission("commandsplugin.votekick.bypass"))
             {
-                sender.sendMessage(prefix + "Du kannst nicht einen Votekick gegen diese Person starten!");
+                sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");
                 return true;
             }
             if (target == null)
             {
-                sender.sendMessage(prefix + args[0] + " ist nicht online!");
+                sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
                 return true;
             }
             if (reason.equals(""))
             {
-                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
             }
             else
             {
-                CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "commandsplugin.votekick.vote");
             }
             voteStarted = true;
             long time = 20 * 180; // 20 Ticks (= 1 second) * 180 = 3 Minutes
@@ -188,7 +188,7 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
         {
-            CommandsPlugin.broadcast(prefix + "Der Votekick gegen " + target + " wurde durch " + CommandsPlugin.getSenderName(commandSender) + " beendet.", "commandsplugin.votekick.vote");
+            CommandsPlugin.broadcast(PREFIX + "Der Votekick gegen " + target + " wurde durch " + CommandsPlugin.getSenderName(commandSender) + " beendet.", "commandsplugin.votekick.vote");
             voteStarted = false;
             endVoteKick(plugin);
             return true;
@@ -207,11 +207,11 @@ public class VotekickCommands
             String username = args[0];
             if (! CommandsPlugin.tmpBannedPlayers.contains(username))
             {
-                sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!");
+                sender.sendMessage(PREFIX + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!");
                 return true;
             }
             CommandsPlugin.removeTempBan(username);
-            sender.sendMessage(prefix + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
+            sender.sendMessage(PREFIX + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
             return true;
         }
     }
@@ -224,11 +224,11 @@ public class VotekickCommands
             int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
             if (( percentYes + percentNo ) <= 1)
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(PREFIX + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "commandsplugin.votekick.vote");
             }
             if (percentYes > 50)
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
                 final String username = targetPlayer.getName();
                 targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
                 CommandsPlugin.addTempBan(username);
@@ -243,7 +243,7 @@ public class VotekickCommands
             }
             else
             {
-                CommandsPlugin.broadcast(prefix + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
+                CommandsPlugin.broadcast(PREFIX + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "commandsplugin.votekick.vote");
             }
         }
         votesYes = 0;
@@ -257,12 +257,12 @@ public class VotekickCommands
     {
         if (! VotekickCommands.voteStarted)
         {
-            sender.sendMessage(prefix + "Derzeit läuft kein Votekick...");
+            sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
         }
         int percentYes = (int) Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
         int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
-        sender.sendMessage(prefix + "Status: Ja: " + percentYes + "%, Nein: " + percentNo + "%.");
+        sender.sendMessage(PREFIX + "Status: Ja: " + percentYes + "%, Nein: " + percentNo + "%.");
         return true;
     }
 
@@ -270,22 +270,22 @@ public class VotekickCommands
     {
         if (! VotekickCommands.voteStarted)
         {
-            sender.sendMessage(prefix + "Derzeit läuft kein Votekick...");
+            sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
         }
         if (votedPlayers.contains(sender))
         {
-            sender.sendMessage(prefix + "Du kannst nur einmal voten!");
+            sender.sendMessage(PREFIX + "Du kannst nur einmal voten!");
             return true;
         }
         if (yes)
         {
-            sender.sendMessage(prefix + "Du hast für einen Kick gestimmt!");
+            sender.sendMessage(PREFIX + "Du hast für einen Kick gestimmt!");
             votesYes = votesYes + 1;
         }
         else
         {
-            sender.sendMessage(prefix + "Du hast gegen einen Kick gestimmt!");
+            sender.sendMessage(PREFIX + "Du hast gegen einen Kick gestimmt!");
             votesNo = votesNo + 1;
         }
         votedPlayers.add(sender);

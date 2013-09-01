@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 public class MilkCommand implements CommandExecutor
 {
 
-    public static String prefix = ChatColor.BLUE + "[Milk] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.BLUE + "[Milk] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -39,28 +39,28 @@ public class MilkCommand implements CommandExecutor
             }
             if (i > 0)
             {
-                CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt:", "commandsplugin.milk.message");
-                CommandsPlugin.broadcast(prefix + s, "commandsplugin.milk.message");
+                CommandsPlugin.broadcast(PREFIX + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt:", "commandsplugin.milk.message");
+                CommandsPlugin.broadcast(PREFIX + s, "commandsplugin.milk.message");
                 return true;
             }
-            sender.sendMessage(prefix + ChatColor.RED + "Es gibt zur Zeit keine Spieler die einen Unsichtbarkeits Trank haben...");
+            sender.sendMessage(PREFIX + ChatColor.RED + "Es gibt zur Zeit keine Spieler die einen Unsichtbarkeits Trank haben...");
             return true;
         }
         //Remove from specified player
         Player target = ( Bukkit.getServer().getPlayer(args[0]) );
         if (target == null)
         {
-            sender.sendMessage(prefix + args[0] + " ist nicht online!");
+            sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
             return true;
         }
 
         if (target.hasPotionEffect(PotionEffectType.INVISIBILITY))
         {
-            CommandsPlugin.broadcast(prefix + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt.", "commandsplugin.milk.message");
+            CommandsPlugin.broadcast(PREFIX + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + CommandsPlugin.getSenderName(sender) + " entfernt.", "commandsplugin.milk.message");
             target.removePotionEffect(PotionEffectType.INVISIBILITY);
             return true;
         }
-        sender.sendMessage(prefix + ChatColor.RED + "Spieler \"" + target.getDisplayName() + "\" hat keinen Unsichtbarkeits Trank Effekt!");
+        sender.sendMessage(PREFIX + ChatColor.RED + "Spieler \"" + target.getDisplayName() + "\" hat keinen Unsichtbarkeits Trank Effekt!");
         return true;
     }
 }

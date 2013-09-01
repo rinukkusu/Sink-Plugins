@@ -1,5 +1,6 @@
 package de.static_interface.ircplugin;
 
+import de.static_interface.ircplugin.commands.IrclistCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,14 +24,14 @@ import java.util.regex.Pattern;
  * Copyright © 2013 Trojaner
  */
 
-@SuppressWarnings({ "UnusedDeclaration", "FieldCanBeLocal" })
-public class IRCPluginMain extends JavaPlugin implements Listener
+@SuppressWarnings({ "FieldCanBeLocal" })
+public class IRCPlugin extends JavaPlugin implements Listener
 {
-    private String Host = "irc.lolnein.de";
-    private String Channel = "#AdventuriaBot";
-    private int Port = 6667;
+    private String host = "irc.lolnein.de";
+    private static String channel = "#AdventuriaBot";
+    private int port = 6667;
 
-    IRCBot ircBot;
+    static IRCBot ircBot;
     Logger log;
 
     @Override
@@ -43,14 +44,15 @@ public class IRCPluginMain extends JavaPlugin implements Listener
 
         try
         {
-            ircBot.connect(Host, 6667);
-            ircBot.joinChannel(Channel);
+            ircBot.connect(host, port);
+            ircBot.joinChannel(channel);
         }
         catch (IOException | IrcException e)
         {
-            log.severe("An Exception occurred while trying to connect to " + Host + ":");
+            log.severe("An Exception occurred while trying to connect to " + host + ":");
             log.severe(e.toString());
         }
+        getCommand("irclist").setExecutor(new IrclistCommand());
     }
 
     @Override
@@ -62,73 +64,97 @@ public class IRCPluginMain extends JavaPlugin implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        if (IRCBot.disabled) return;
-        ircBot.sendCleanMessage(Channel, event.getJoinMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
+        if (IRCBot.disabled)
+        {
+            return;
+        }
+        ircBot.sendCleanMessage(channel, event.getJoinMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        if (IRCBot.disabled) return;
-        ircBot.sendCleanMessage(Channel, event.getQuitMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
+        if (IRCBot.disabled)
+        {
+            return;
+        }
+        ircBot.sendCleanMessage(channel, event.getQuitMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerKick(PlayerKickEvent event)
     {
-        if (IRCBot.disabled) return;
+        if (IRCBot.disabled)
+        {
+            return;
+        }
         if (! event.getReason().equals(""))
         {
-            ircBot.sendCleanMessage(Channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked for reason: " + event.getReason());
+            ircBot.sendCleanMessage(channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked for reason: " + event.getReason());
         }
         else
         {
-            ircBot.sendCleanMessage(Channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked!");
+            ircBot.sendCleanMessage(channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked!");
         }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if (IRCBot.disabled) return;
-        ircBot.sendCleanMessage(Channel, event.getDeathMessage());
+        if (IRCBot.disabled)
+        {
+            return;
+        }
+        ircBot.sendCleanMessage(channel, event.getDeathMessage());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
-        if (IRCBot.disabled) return;
+        if (IRCBot.disabled)
+        {
+            return;
+        }
         String message = event.getMessage();
         if (ircBot == null)
         {
             return;
         }
         String prefix;
-        if (message.length() < 2) return;
+        if (message.length() < 2)
+        {
+            return;
+        }
         if (message.startsWith("$"))
         {
             prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] ";
-            message = message.replaceFirst("^" + Pattern.quote("$"),"");
+            message = message.replaceFirst("^" + Pattern.quote("$"), "");
         }
         else if (message.startsWith("!"))
         {
             prefix = ChatColor.GRAY + "[Schrei] ";
-            message = message.replaceFirst("!","");
+            message = message.replaceFirst("!", "");
         }
         else if (message.startsWith("?"))
         {
             prefix = ChatColor.GRAY + "[" + ChatColor.GREEN + "FRAGE" + ChatColor.GRAY + "] ";
-            message = message.replaceFirst("^" + Pattern.quote("?"),"");
+            message = message.replaceFirst("^" + Pattern.quote("?"), "");
         }
-        else return; // Local Chat
+        else
+        {
+            return; // Local Chat
+        }
         String formattedMessage = prefix + event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
-        ircBot.sendCleanMessage(Channel, IRCBot.replaceColorCodes(formattedMessage));
+        ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(formattedMessage));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        if (IRCBot.disabled) return;
+        if (IRCBot.disabled)
+        {
+            return;
+        }
         String tmp = event.getMessage().replaceFirst("/", "");
         String[] cmdwithargs = tmp.split(" ");
         List<String> args = Arrays.asList(cmdwithargs);
@@ -155,8 +181,18 @@ public class IRCPluginMain extends JavaPlugin implements Listener
                         message = message + " " + s;
                     }
                 }
-                ircBot.sendCleanMessage(Channel, IRCBot.replaceColorCodes(IRCBot.replaceAmpersandColorCodes(ChatColor.DARK_PURPLE + "[Server] " + message)));
+                ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(IRCBot.replaceAmpersandColorCodes(ChatColor.DARK_PURPLE + "[Server] " + message)));
             }
         }
+    }
+
+    public static IRCBot getIRCBot()
+    {
+        return ircBot;
+    }
+
+    public static String getChannel()
+    {
+        return channel;
     }
 }

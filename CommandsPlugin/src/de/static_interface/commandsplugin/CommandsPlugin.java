@@ -2,6 +2,7 @@ package de.static_interface.commandsplugin;
 
 import de.static_interface.commandsplugin.commands.*;
 import de.static_interface.commandsplugin.listener.*;
+import de.static_interface.ircplugin.IRCPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -31,10 +32,14 @@ public class CommandsPlugin extends JavaPlugin
     private static CommandsTimer timer;
     private static File dataFolder;
 
+    static IRCPlugin ircPlugin;
+
     public void onEnable()
     {
         timer = new CommandsTimer();
         LagTimer lagTimer = new LagTimer();
+        PluginManager pm = Bukkit.getPluginManager();
+        ircPlugin = (IRCPlugin) pm.getPlugin("IRCPlugin");
         dataFolder = getDataFolder();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
@@ -59,12 +64,12 @@ public class CommandsPlugin extends JavaPlugin
             target.eject();
             SpectateCommands.show(p);
             SpectateCommands.specedPlayers.remove(p);
-            p.sendMessage(SpectateCommands.prefix + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
+            p.sendMessage(SpectateCommands.PREFIX + "Du wurdest durch einem Reload gezwungen den Spectate Modus zu verlassen.");
         }
         log.info("Unloading freezed players...");
         FreezeCommands.unloadFreezedPlayers(log, getDataFolder());
         log.info("Saving player configurations...");
-        for(Player p : Bukkit.getOnlinePlayers())
+        for (Player p : Bukkit.getOnlinePlayers())
         {
             PlayerConfiguration config = new PlayerConfiguration(p.getName());
             config.save();
@@ -80,6 +85,24 @@ public class CommandsPlugin extends JavaPlugin
     public static File getDataFolderStatic()
     {
         return dataFolder;
+    }
+
+    /**
+     * Use this instead of {@link org.bukkit.Bukkit#broadcastMessage(String message)}.
+     *
+     * @param message Message to send
+     */
+    public static void broadcastMessage(String message)
+    {
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
+            p.sendMessage(message);
+        }
+        Bukkit.getConsoleSender().sendMessage(message);
+        if (ircPlugin != null)
+        {
+            IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
+        }
     }
 
     /**
@@ -119,7 +142,7 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new GlobalmuteListener(), this);
         pm.registerEvents(new TradechatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
-        pm.registerEvents(new PlayerConfigurationListener(), this);
+        pm.registerEvents(new PlayerconfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
     }
 

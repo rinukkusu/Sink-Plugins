@@ -20,7 +20,7 @@ public class SpectateListener implements Listener
             Player player = getHashMapKey(SpectateCommands.specedPlayers, event.getPlayer());
             SpectateCommands.specedPlayers.remove(player);
             SpectateCommands.show(player);
-            player.sendMessage(SpectateCommands.prefix + "Spieler hat das Spiel verlassen, Spectate Modus wurde beendet.");
+            player.sendMessage(SpectateCommands.PREFIX + "Spieler hat das Spiel verlassen, Spectate Modus wurde beendet.");
         }
         if (SpectateCommands.specedPlayers.containsKey(event.getPlayer()))
         {

@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class SpectateCommands
 {
     public static HashMap<Player, Player> specedPlayers = new HashMap<>();
-    public static String prefix = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.RESET;
 
     public static class SpectateCommand implements CommandExecutor
     {
@@ -27,7 +27,7 @@ public class SpectateCommands
             Player player = (Player) sender;
             if (specedPlayers.containsKey(player))
             {
-                player.sendMessage(prefix + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit /unspec bevor du einen anderen Spieler beobachtest..");
+                player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit /unspec bevor du einen anderen Spieler beobachtest..");
                 return true;
             }
             if (args.length < 1)
@@ -38,17 +38,17 @@ public class SpectateCommands
             Player target = ( Bukkit.getServer().getPlayer(args[0]) );
             if (target == null)
             {
-                player.sendMessage(prefix + args[0] + " ist nicht online!");
+                player.sendMessage(PREFIX + args[0] + " ist nicht online!");
                 return true;
             }
 
             if (target.hasPermission("commandsplugin.spectate.bypass"))
             {
-                player.sendMessage(prefix + "Der Spectate Modus kann nicht für den gewählten Spieler aktiviert werden!");
+                player.sendMessage(PREFIX + "Der Spectate Modus kann nicht für den gewählten Spieler aktiviert werden!");
                 return true;
             }
 
-            player.sendMessage(prefix + "Zum verlassen des spectate Modus, /unspec nutzen.");
+            player.sendMessage(PREFIX + "Zum verlassen des spectate Modus, /unspec nutzen.");
 
 
             specedPlayers.put(player, target);
@@ -74,7 +74,7 @@ public class SpectateCommands
             Player player = (Player) sender;
             if (! specedPlayers.containsKey(player))
             {
-                player.sendMessage(prefix + ChatColor.RED + "Du befindest dich nicht im Spectate Modus!");
+                player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich nicht im Spectate Modus!");
                 return true;
             }
             Player target = specedPlayers.get(player);
@@ -82,7 +82,7 @@ public class SpectateCommands
             target.eject();
             show(player);
             specedPlayers.remove(player);
-            sender.sendMessage(prefix + "Du hast den Spectate Modus verlassen.");
+            sender.sendMessage(PREFIX + "Du hast den Spectate Modus verlassen.");
             return true;
         }
     }
@@ -93,7 +93,7 @@ public class SpectateCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            sender.sendMessage(prefix + "Spieler im Spectate Modus:");
+            sender.sendMessage(PREFIX + "Spieler im Spectate Modus:");
             int i = 0;
             String message = "";
             for (Player player : specedPlayers.keySet())
@@ -113,7 +113,7 @@ public class SpectateCommands
             {
                 message = "Es gibt keine Spieler im Spectate Modus.";
             }
-            sender.sendMessage(prefix + message);
+            sender.sendMessage(PREFIX + message);
             return true;
         }
     }

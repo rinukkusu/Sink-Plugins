@@ -11,7 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class DrugCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -26,7 +26,7 @@ public class DrugCommand implements CommandExecutor
 
         if (! player.hasPotionEffect(PotionEffectType.BLINDNESS))
         {
-            player.sendMessage(prefix + ChatColor.BLUE + "Du hast Drogen genommen...");
+            player.sendMessage(PREFIX + ChatColor.BLUE + "Du hast Drogen genommen...");
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 20, 1), true);
         }
         else
@@ -41,23 +41,23 @@ public class DrugCommand implements CommandExecutor
                 int amplifier = pe.getAmplifier();
                 if (amplifier == 1)
                 {
-                    player.sendMessage(prefix + ChatColor.BLUE + "Du hast mehr Drogen genommen...");
+                    player.sendMessage(PREFIX + ChatColor.BLUE + "Du hast mehr Drogen genommen...");
                 }
                 else if (amplifier == 2)
                 {
-                    player.sendMessage(prefix + ChatColor.BLUE + "Vielleicht solltest du nicht so viele Drogen nehmen.");
+                    player.sendMessage(PREFIX + ChatColor.BLUE + "Vielleicht solltest du nicht so viele Drogen nehmen.");
                 }
                 else if (amplifier == 3)
                 {
-                    player.sendMessage(prefix + ChatColor.BLUE + "Noch mehr Drogen...");
+                    player.sendMessage(PREFIX + ChatColor.BLUE + "Noch mehr Drogen...");
                 }
                 else if (amplifier == 4)
                 {
-                    player.sendMessage(prefix + ChatColor.BLUE + "Wow, du hast so viele Drogen genommen... und lebst immer noch!");
+                    player.sendMessage(PREFIX + ChatColor.BLUE + "Wow, du hast so viele Drogen genommen... und lebst immer noch!");
                 }
                 else if (amplifier >= 5)
                 {
-                    Bukkit.getServer().broadcastMessage(prefix + ChatColor.RED + player.getDisplayName() + ChatColor.WHITE + " nahm zu viele Drogen und ist deswegen gestorben.");
+                    Bukkit.getServer().broadcastMessage(PREFIX + ChatColor.RED + player.getDisplayName() + ChatColor.WHITE + " nahm zu viele Drogen und ist deswegen gestorben.");
                     player.setHealth(0.0); // Bug: Will send message "%player% died", needs to be fixed
                     return true;
                 }

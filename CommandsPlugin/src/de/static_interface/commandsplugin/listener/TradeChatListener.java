@@ -1,6 +1,6 @@
 package de.static_interface.commandsplugin.listener;
 
-import org.bukkit.Bukkit;
+import de.static_interface.commandsplugin.CommandsPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,10 +14,10 @@ public class TradechatListener implements Listener
     {
         if (event.getMessage().startsWith("$"))
         {
-            String message = event.getMessage().replaceFirst("(.*)$(.*)", "");
+            String message = event.getMessage().replaceFirst("$", "");
             String formattedMessage = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
             formattedMessage = formattedMessage.replace("%2$s", message);
-            Bukkit.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] " + formattedMessage);
+            CommandsPlugin.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] " + formattedMessage);
             event.setCancelled(true);
         }
     }

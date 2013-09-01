@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 
 public class CommandsverCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
 
     Plugin plugin;
 
@@ -40,9 +40,9 @@ public class CommandsverCommand implements CommandExecutor
             }
             authors = authors + ", " + s;
         }
-        sender.sendMessage(prefix + plugin.getDescription().getName() + " by " + authors);
-        sender.sendMessage(prefix + "Version: " + plugin.getDescription().getVersion());
-        sender.sendMessage(prefix + "Copyright © 2013 Adventuria");
+        sender.sendMessage(PREFIX + plugin.getDescription().getName() + " by " + authors);
+        sender.sendMessage(PREFIX + "Version: " + plugin.getDescription().getVersion());
+        sender.sendMessage(PREFIX + "Copyright © 2013 Adventuria");
         return true;
     }
 }

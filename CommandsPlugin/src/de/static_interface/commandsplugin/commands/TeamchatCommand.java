@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class TeamchatCommand implements CommandExecutor
 {
-    public static String prefix = ChatColor.GRAY + "[" + ChatColor.DARK_RED + "T" + ChatColor.RED + "eam" + ChatColor.DARK_RED + "C" + ChatColor.RED + "hat" + ChatColor.GRAY + "] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_RED + "T" + ChatColor.RED + "eam" + ChatColor.DARK_RED + "C" + ChatColor.RED + "hat" + ChatColor.GRAY + "] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -32,7 +32,7 @@ public class TeamchatCommand implements CommandExecutor
         {
             message = Util.ReplaceFormattingAndColorCodes(message);
         }
-        CommandsPlugin.broadcast(prefix + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.teamchat");
+        CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.teamchat");
         return true;
     }
 }

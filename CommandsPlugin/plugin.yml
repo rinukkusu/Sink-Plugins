@@ -4,6 +4,7 @@ description: General Commands Plugin
 author: [Trojaner, Diar]
 website: http://static-interface.de
 main: de.static_interface.commandsplugin.CommandsPlugin
+soft-depend: [IRCPlugin]
 
 commands:
   commandsver:
