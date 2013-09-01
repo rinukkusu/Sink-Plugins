@@ -18,17 +18,29 @@ public class IrclistCommand implements CommandExecutor
         String message = "";
         for (User user : users)
         {
+            String name = user.getNick();
+            if (name.equals(IRCPlugin.getIRCBot().getNick()))
+            {
+                continue;
+            }
+            if (user.isOp())
+            {
+                name = ChatColor.RED + name + ChatColor.RESET;
+            }
             if (message.equals(""))
             {
-                message = user.getNick();
+                message = name;
             }
             else
             {
-                message = message + ", " + user.getNick();
+                message = message + ", " + name;
             }
-            sender.sendMessage(PREFIX + "Online IRC Users: " + message);
         }
-
+        if (users.length <= 1)
+        {
+            message = "Zur Zeit sind keine Benutzer im IRC.";
+        }
+        sender.sendMessage(PREFIX + "Online IRC Benutzer: " + message);
         return true;
     }
 }

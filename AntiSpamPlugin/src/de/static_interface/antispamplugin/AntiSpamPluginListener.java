@@ -17,9 +17,9 @@ public class AntiSpamPluginListener implements Listener
 {
     String[] blacklist = { "schlampe", "sex",
             "fresse", "fick", "trojana", "son of a bitch", "screw",
-            "goddamn", "anus", "nigger", "nigga", "suck", "damn", "cocksucker", "motherfucker", "cunt",
+            "goddamn", "anus", "nigger", "nigga", "suck", "cocksucker", "motherfucker", "cunt",
             "dick", "bastard", "hure", "asshole", "arschloch", "penis", "fotze",
-            "pussy", "bitch", "fuck", "hurensohn" };
+            "pussy", "bitch", "hurensohn" };
 
     String[] whiteListDomains = { "kepler-forum.de", "youtube.de", "youtube.com", "google.de", "adventuria.eu" };
 

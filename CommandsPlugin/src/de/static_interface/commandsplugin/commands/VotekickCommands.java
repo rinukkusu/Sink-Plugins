@@ -46,7 +46,7 @@ public class VotekickCommands
             }
 
             String reason = "";
-            if (Bukkit.getOnlinePlayers().length < 2)
+            if (Bukkit.getOnlinePlayers().length < 5)
             {
                 sender.sendMessage(PREFIX + "Es sind zu wenige Leute für einen Votekick online!");
                 return true;
@@ -77,13 +77,19 @@ public class VotekickCommands
             boolean voteable = false;
             if (! sender.hasPermission("commandsplugin.votekick.staff"))
             {
-                for (Player p : Bukkit.getOnlinePlayers())
+                int i = 0;
+                Player[] onlinePlayers = Bukkit.getOnlinePlayers();
+                for (Player p : onlinePlayers)
                 {
-                    if (p.hasPermission("commandsplugin.votekick.staff"))
+                    if (! p.hasPermission("commandsplugin.votekick.staff"))
                     {
-                        voteable = true;
+                        i++;
                         break;
                     }
+                }
+                if (i == onlinePlayers.length)
+                {
+                    voteable = true;
                 }
             }
             else
