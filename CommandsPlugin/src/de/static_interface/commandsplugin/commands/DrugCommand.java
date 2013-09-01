@@ -6,12 +6,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DrugCommand implements CommandExecutor
 {
     public static String PREFIX = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
+
+    public static Player killedByDrugs;
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -57,8 +63,8 @@ public class DrugCommand implements CommandExecutor
                 }
                 else if (amplifier >= 5)
                 {
-                    Bukkit.getServer().broadcastMessage(PREFIX + ChatColor.RED + player.getDisplayName() + ChatColor.WHITE + " nahm zu viele Drogen und ist deswegen gestorben.");
-                    player.setHealth(0.0); // Bug: Will send message "%player% died", needs to be fixed
+                    killedByDrugs = player;
+                    player.setHealth(0.0); // Bug: Will send message "%player% died", needs to be fixed // Fixed: See DrugDeadListener
                     return true;
                 }
                 player.removePotionEffect(PotionEffectType.BLINDNESS);

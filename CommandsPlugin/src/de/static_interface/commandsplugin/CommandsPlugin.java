@@ -155,6 +155,7 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new SpectateListener(), this);
         pm.registerEvents(new PlayerconfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
+        pm.registerEvents(new DrugDeadListener(), this);
     }
 
     private void registerCommands()
