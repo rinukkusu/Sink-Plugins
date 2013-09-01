@@ -69,11 +69,11 @@ public class FreezeCommands
                     {
                         if (args.length < 2)
                         {
-                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren.", "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " eingefroren.", "commandsplugin.freeze.message");
                         }
                         else
                         {
-                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von" + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
+                            CommandsPlugin.broadcast(PREFIX + p.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " eingefroren. Grund: " + reason, "commandsplugin.freeze.message");
                         }
                         return true;
                     }
