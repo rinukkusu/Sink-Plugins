@@ -7,14 +7,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class GlobalMuteListener implements Listener
+public class GlobalmuteListener implements Listener
 {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         if (CommandsPlugin.globalmuteEnabled && ! event.getPlayer().hasPermission("commandsplugin.globalmute.bypass"))
         {
-            event.getPlayer().sendMessage(GlobalmuteCommand.prefix + "Du kannst nicht schreiben wenn der globale Mute aktiviert ist.");
+            event.getPlayer().sendMessage(GlobalmuteCommand.PREFIX + "Du kannst nicht schreiben wenn der globale Mute aktiviert ist.");
             event.setCancelled(true);
         }
     }
