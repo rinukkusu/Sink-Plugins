@@ -33,7 +33,7 @@ public class CommandsPlugin extends JavaPlugin
     private static Logger log;
     private static CommandsTimer timer;
     private static File dataFolder;
-    //test
+    
     static IRCPlugin ircPlugin;
 
     public void onEnable()
