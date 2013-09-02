@@ -20,9 +20,7 @@ public class CommandsverCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        String tmp = ( (String) plugin.getDescription().getAuthors().toArray()[0] ).replace("[", "");
-        tmp = tmp.replace("]", "");
-        String[] authorsArray = tmp.split(",");
+        String[] authorsArray = (String[]) plugin.getDescription().getAuthors().toArray();
         String authors = "";
         int i = 0;
         for (String s : authorsArray)

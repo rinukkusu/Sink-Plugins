@@ -2,7 +2,8 @@ name: AntiSpamPlugin
 version: 1.1
 description: Anti Spam Plugin
 author: Trojaner
-website: http://static-interface.de
+authors: [Trojaner, Diar, _ShadowRaven_]
+website: http://adventuria.eu
 main: de.static_interface.antispamplugin.AntiSpamPlugin
 depend: [CommandsPlugin]
 permissions:

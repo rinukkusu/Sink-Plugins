@@ -15,15 +15,18 @@ import org.jibble.pircbot.User;
  * Copyright © 2013 Trojaner
  */
 
+
 public class IRCBot extends PircBot
 {
+    public static String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
     public static boolean disabled = false;
-    String BotName = "AdventuriaBot";
+
+    String botName = "AdventuriaBot";
 
     public IRCBot()
     {
-        this.setName(BotName);
-        this.setLogin(BotName);
+        this.setName(botName);
+        this.setLogin(botName);
         this.setVersion("Bukkit IRC Plugin, (c) 2013 Adventuria");
     }
 
@@ -101,26 +104,42 @@ public class IRCBot extends PircBot
             return;
         }
         sendMessage(channel, "Willkommen, " + sender + "!");
-        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " ist dem Kanal beigetreten.");
+        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " ist dem Kanal beigetreten.");
         super.onJoin(channel, sender, login, hostname);
     }
 
     @Override
     public void onPart(String channel, String sender, String login, String hostname)
     {
-        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
+        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
     }
 
     @Override
     public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
     {
-        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + recipientNick + ChatColor.WHITE + " wurde von " + kickerNick + " aus dem Kanal geworfen. Grund: " + reason + ".");
+        String formattedReason = "Grund: " + reason + ".";
+        if (reason.equals("") || reason.equals("\"\""))
+        {
+            formattedReason = "";
+        }
+        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + recipientNick + ChatColor.WHITE + " wurde von " + kickerNick + " aus dem Kanal geworfen. " + formattedReason);
     }
 
     @Override
     public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {
-        Bukkit.broadcastMessage(ChatColor.GRAY + "[IRC] " + "[" + "Server" + "] " + ChatColor.DARK_AQUA + sourceNick + ChatColor.WHITE + " hat den Server verlassen. (\"" + reason + "\")");
+        String formattedReason = "(" + reason + ")";
+        if (reason.equals("") || reason.equals("\"\""))
+        {
+            formattedReason = "";
+        }
+        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + sourceNick + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason);
+    }
+
+    @Override
+    public void onNickChange(String oldNick, String login, String hostname, String newNick)
+    {
+        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + oldNick + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + newNick + ChatColor.WHITE + " bekannt.");
     }
 
     @Override
@@ -133,7 +152,7 @@ public class IRCBot extends PircBot
                     || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
                     && ( message.toLowerCase().contains("adventuriabot") || message.toLowerCase().contains("bot") ))
             {
-                sendMessage(channel, "Hallo, " + sender); //Todo: Diffrent Welcomemessages
+                sendMessage(channel, "Hallo, " + sender); //Todo: Diffrent Welcome messages
                 return;
             }
             if (! message.toLowerCase().startsWith("!"))
@@ -175,7 +194,7 @@ public class IRCBot extends PircBot
                 {
                     sendCleanMessage(channel, "Usage: !say <text>");
                 }
-                String messageWithPrefix = ChatColor.GRAY + "[IRC] " + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
+                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
                 Bukkit.getServer().broadcastMessage(messageWithPrefix);
                 sendCleanMessage(channel, replaceColorCodes(messageWithPrefix));
             }
