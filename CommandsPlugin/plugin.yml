@@ -271,6 +271,6 @@ permissions:
      default: op
      description: Permission required for debugging
 
-  commandsplugin.rename
+  commandsplugin.rename:
     default: op
     description: Permission required for rename command
