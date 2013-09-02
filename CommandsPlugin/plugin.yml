@@ -2,7 +2,7 @@ name: CommandsPlugin
 version: 1.5
 description: General Commands Plugin
 author: Trojaner
-authors: [Trojaner, Diar, _ShadowRaven_]
+authors: [Diar, _ShadowRaven_, Scary_Block]
 website: http://adventuria.eu
 main: de.static_interface.commandsplugin.CommandsPlugin
 soft-depend: [IRCPlugin]

@@ -2,7 +2,7 @@ name: IRCPlugin
 version: 1.0
 description: Plugin that links Chat to IRC
 author: Trojaner
-authors: [Trojaner, Diar, _ShadowRaven_]
+authors: [Diar, _ShadowRaven_]
 website: http://adventuria.eu
 main: de.static_interface.ircplugin.IRCPlugin
 
