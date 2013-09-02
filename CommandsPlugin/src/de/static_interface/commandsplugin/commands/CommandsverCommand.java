@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
+import java.util.List;
+
 public class CommandsverCommand implements CommandExecutor
 {
     public static String PREFIX = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
@@ -20,10 +22,10 @@ public class CommandsverCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        String[] authorsArray = (String[]) plugin.getDescription().getAuthors().toArray();
+        List<String> authorsList = plugin.getDescription().getAuthors();
         String authors = "";
         int i = 0;
-        for (String s : authorsArray)
+        for (String s : authorsList)
         {
             i++;
             if (authors.equals(""))
@@ -31,7 +33,7 @@ public class CommandsverCommand implements CommandExecutor
                 authors = s;
                 continue;
             }
-            if (i == authorsArray.length)
+            if (i == authorsList.toArray().length)
             {
                 authors = authors + " and " + s;
                 continue;
