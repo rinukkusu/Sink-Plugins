@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings({ "FieldCanBeLocal" })
 public class IRCPlugin extends JavaPlugin implements Listener
 {
-    private String host = "irc.lolnein.de";
+    private String host = "irc.adventuria.eu";
     private static String channel = "#AdventuriaBot";
     private int port = 6667;
 
@@ -124,11 +124,6 @@ public class IRCPlugin extends JavaPlugin implements Listener
         if (message.length() < 2)
         {
             return;
-        }
-        if (message.startsWith("$"))
-        {
-            prefix = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] ";
-            message = message.replaceFirst("^" + Pattern.quote("$"), "");
         }
         else if (message.startsWith("!"))
         {

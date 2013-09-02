@@ -182,6 +182,7 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand(this));
         getCommand("votekickunban").setExecutor(new VotekickCommands.VotekickunbanCommand());
         getCommand("commandsdebug").setExecutor(new CommandsdebugCommand());
+        getCommand("rename").setExecutor(new RenameCommand());
     }
 
     public static String getSenderName(CommandSender sender)

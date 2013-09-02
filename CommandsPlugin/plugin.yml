@@ -112,6 +112,11 @@ commands:
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <option> <args>"
     aliases: cdebug
 
+  rename:
+    description: Rename an item
+    permission: commandsplugin.meta
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Item/Lore> <Neuer Name>
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -265,3 +270,7 @@ permissions:
   commandsplugin.debug:
      default: op
      description: Permission required for debugging
+
+  commandsplugin.rename
+    default: op
+    description: Permission required for rename command

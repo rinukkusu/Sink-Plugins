@@ -14,7 +14,7 @@ public class TradechatListener implements Listener
     {
         if (event.getMessage().startsWith("$"))
         {
-            String message = event.getMessage().replaceFirst("$", "");
+            String message = event.getMessage().replaceFirst("$(.*)", "$1");
             String formattedMessage = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
             formattedMessage = formattedMessage.replace("%2$s", message);
             CommandsPlugin.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] " + formattedMessage);
