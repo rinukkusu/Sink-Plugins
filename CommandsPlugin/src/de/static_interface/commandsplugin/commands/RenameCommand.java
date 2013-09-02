@@ -14,7 +14,7 @@ import java.util.List;
 public class RenameCommand implements CommandExecutor
 {
 
-    public static String PREFIX = ChatColor.AQUA + "[Meta] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.AQUA + "[Rename] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)

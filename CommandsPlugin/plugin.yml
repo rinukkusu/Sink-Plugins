@@ -115,7 +115,7 @@ commands:
   rename:
     description: Rename an item
     permission: commandsplugin.meta
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Item/Lore> <Neuer Name>
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Item/Lore> <Neuer Name>"
 
 permissions:
   commandsplugin.*:
