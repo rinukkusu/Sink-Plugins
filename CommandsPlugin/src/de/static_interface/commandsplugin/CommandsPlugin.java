@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  * Author: Trojaner
  * Date: 27.07.13
  * Description: Main Class for plugin
- * Copyright Â© Adventuria 2013
+ * Copyright © Adventuria 2013
  */
 
 public class CommandsPlugin extends JavaPlugin
@@ -33,7 +33,7 @@ public class CommandsPlugin extends JavaPlugin
     private static Logger log;
     private static CommandsTimer timer;
     private static File dataFolder;
-
+    //test
     static IRCPlugin ircPlugin;
 
     public void onEnable()
