@@ -51,13 +51,13 @@ public class RenameCommand implements CommandExecutor
         {
             case "item":
                 meta.setDisplayName(text);
-                sender.sendMessage(PREFIX + ChatColor.GRAY + "Name von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbennant.");
+                sender.sendMessage(PREFIX + ChatColor.GRAY + "Name von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbenannt.");
                 break;
             case "lore":
                 List<String> lore = new ArrayList<>();
                 lore.add(text);
                 meta.setLore(lore);
-                sender.sendMessage(PREFIX + ChatColor.GRAY + "Die Lore von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbennant.");
+                sender.sendMessage(PREFIX + ChatColor.GRAY + "Die Lore von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbenannt.");
                 break;
 
             default:
