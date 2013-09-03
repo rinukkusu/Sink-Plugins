@@ -6,7 +6,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jibble.pircbot.IrcException;
 
@@ -14,12 +17,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 /**
  * IRCPluginMain
  * Description: Main Class
- * Date: 21.07.13
+ * Date: 21.07.2013
  * Author: Trojaner
  * Copyright © 2013 Trojaner
  */
@@ -108,6 +110,7 @@ public class IRCPlugin extends JavaPlugin implements Listener
         ircBot.sendCleanMessage(channel, event.getDeathMessage());
     }
 
+    /*
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
@@ -142,6 +145,7 @@ public class IRCPlugin extends JavaPlugin implements Listener
         String formattedMessage = prefix + event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
         ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(formattedMessage));
     }
+    */
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)

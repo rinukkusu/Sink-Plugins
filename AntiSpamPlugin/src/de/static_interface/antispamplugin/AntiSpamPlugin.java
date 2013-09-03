@@ -12,7 +12,7 @@ import java.util.logging.Level;
 /**
  * AntiSpamPluginMain
  * Auhtor: Trojaner
- * Date: 27.07.13
+ * Date: 27.07.2013
  * Description: Main Class
  * Copyright © Adventuria 2013
  */

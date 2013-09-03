@@ -20,9 +20,9 @@ import java.util.logging.Logger;
 /**
  * CommandsPlugin Class
  * Author: Trojaner
- * Date: 27.07.13
+ * Date: 27.07.2013
  * Description: Main Class for plugin
- * Copyright © Adventuria 2013
+ * Copyright Â© Adventuria 2013
  */
 
 public class CommandsPlugin extends JavaPlugin
@@ -33,7 +33,7 @@ public class CommandsPlugin extends JavaPlugin
     private static Logger log;
     private static CommandsTimer timer;
     private static File dataFolder;
-    
+
     static IRCPlugin ircPlugin;
 
     public void onEnable()
@@ -150,10 +150,10 @@ public class CommandsPlugin extends JavaPlugin
     {
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new FreezeListener(), this);
-        pm.registerEvents(new GlobalmuteListener(), this);
-        pm.registerEvents(new TradechatListener(), this);
+        pm.registerEvents(new GlobalMuteListener(), this);
+        pm.registerEvents(new TradeChatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
-        pm.registerEvents(new PlayerconfigurationListener(), this);
+        pm.registerEvents(new PlayerConfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
         pm.registerEvents(new DrugDeadListener(), this);
     }
