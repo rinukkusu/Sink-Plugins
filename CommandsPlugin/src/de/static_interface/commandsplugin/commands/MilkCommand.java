@@ -47,7 +47,7 @@ public class MilkCommand implements CommandExecutor
             return true;
         }
         //Remove from specified player
-        Player target = ( Bukkit.getServer().getPlayer(args[0]) );
+        Player target = Bukkit.getServer().getPlayer(args[0]);
         if (target == null)
         {
             sender.sendMessage(PREFIX + args[0] + " ist nicht online!");

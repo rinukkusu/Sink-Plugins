@@ -22,6 +22,7 @@ public class PlayerConfiguration
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
+     *
      * @param playerName Player name. Do not use Displayname or Customname!
      */
     public PlayerConfiguration(String playerName)
@@ -34,6 +35,7 @@ public class PlayerConfiguration
 
     /**
      * Get Player YAML Configuration
+     *
      * @return playerYAMLConfiguration
      */
     public YamlConfiguration getPlayerConfiguration()
@@ -100,12 +102,18 @@ public class PlayerConfiguration
 
     public void set(String path, Object value)
     {
-        playerYamlConfig.set(path, value);
+        playerYamlConfig.set(playerName + "." + path, value);
         save();
+    }
+
+    public Object get(String path)
+    {
+        return playerYamlConfig.get(playerName + "." + path);
     }
 
     /**
      * Get freeze value
+     *
      * @return true if player is freezed
      */
     public boolean getFreezed()

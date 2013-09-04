@@ -4,7 +4,13 @@ description: General Chat Plugin
 author: Trojaner
 website: http://adventuria.eu
 main: de.static_interface.chatplugin.ChatPlugin
-depend: [Vault,CommandsPlugin]
+depend: [CommandsPlugin, PermissionsEx]
+
+commands:
+  nick:
+    description: Change your or other users nickname!
+    permission: chatplugin.nick
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> [Spieler] <Neuer Name|off>"
 
 permissions:
   chatplugin.*:
@@ -14,6 +20,7 @@ permissions:
       chatplugin.spynewbie: true
       chatplugin.shout: true
       chatplugin.color: true
+      chatplugin.nick: true
 
   chatplugin.spy:
     description: Allows to read local chat
@@ -38,3 +45,11 @@ permissions:
   chatplugin.color:
     description: Allows to use color chat
     default: true
+
+  chatplugin.nick:
+    description: Allows to use nick command
+    default: op
+
+  chatplugin.nick.others:
+    description: Allows to set other players nickname
+    default: op
