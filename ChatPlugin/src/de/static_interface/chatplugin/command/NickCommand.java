@@ -22,7 +22,6 @@ public class NickCommand implements CommandExecutor
         {
             return false;
         }
-        newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
         if (args.length > 2)
         {
             if (! sender.hasPermission("chatplugin.nick.others"))
@@ -32,6 +31,7 @@ public class NickCommand implements CommandExecutor
             }
             String playerName = args[0];
             Player target = Bukkit.getServer().getPlayer(playerName);
+            newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             if (target == null)
             {
                 sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
@@ -49,7 +49,7 @@ public class NickCommand implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "Dieser Befehl funktioniert nur Ingame.");
             return true;
         }
-        newDisplayName = args[0];
+        newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[0]) + ChatColor.RESET;
         Player player = (Player) sender;
         if (setDisplayName(player, newDisplayName))
         {
