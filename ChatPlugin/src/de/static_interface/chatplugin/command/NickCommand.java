@@ -71,7 +71,7 @@ public class NickCommand implements CommandExecutor
             player.sendMessage(PREFIX + "Nickname ist zu lang!");
             return false;
         }
-        if (newDisplayName.equals("off"))
+        if (cleanDisplayName.equals("off"))
         {
             newDisplayName = ChatPlugin.getDefaultDisplayName(player);
         }
