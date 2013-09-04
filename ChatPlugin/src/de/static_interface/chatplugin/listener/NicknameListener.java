@@ -14,10 +14,10 @@ public class NicknameListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         PlayerConfiguration config = new PlayerConfiguration(event.getPlayer().getName());
-        String nick = (String) config.get(NICKNAME_PATH);
+        String nick = config.getString(NICKNAME_PATH);
         if (nick == null || nick.equals("null") || nick.equals(""))
         {
-            config.set(NICKNAME_PATH, ChatPlugin.getDefaultNickName(event.getPlayer()));
+            config.set(NICKNAME_PATH, ChatPlugin.getDefaultDisplayName(event.getPlayer()));
         }
     }
 }

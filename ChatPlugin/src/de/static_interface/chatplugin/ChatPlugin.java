@@ -77,13 +77,13 @@ public class ChatPlugin extends JavaPlugin
         config.set(NICKNAME_PATH, newNickname);
     }
 
-    public static String getNickname(Player player)
+    public static String getDisplayName(Player player)
     {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
-        return config.get(NICKNAME_PATH).toString(); //NoSuchMethodException
+        return config.getString(NICKNAME_PATH);
     }
 
-    public static String getDefaultNickName(Player player)
+    public static String getDefaultDisplayName(Player player)
     {
         PermissionUser user = PermissionsEx.getUser(player);
         String playerPrefix = ChatColor.translateAlternateColorCodes('&', user.getPrefix());
@@ -92,8 +92,8 @@ public class ChatPlugin extends JavaPlugin
 
     public static void refreshDisplayName(Player player)
     {
-        player.setDisplayName(getNickname(player));
-        player.setCustomName(getNickname(player));
+        player.setDisplayName(getDisplayName(player));
+        player.setCustomName(getDisplayName(player));
     }
 
     private void registerEvents(PluginManager pm)

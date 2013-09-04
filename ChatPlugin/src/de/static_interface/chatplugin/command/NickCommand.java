@@ -9,8 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Locale;
-
 public class NickCommand implements CommandExecutor
 {
     public static String PREFIX = ChatColor.DARK_GREEN + "[Nick] " + ChatColor.RESET;
@@ -19,11 +17,12 @@ public class NickCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        String newNickname;
+        String newDisplayName;
         if (args.length < 1)
         {
             return false;
         }
+        newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
         if (args.length > 2)
         {
             if (! sender.hasPermission("chatplugin.nick.others"))
@@ -32,7 +31,6 @@ public class NickCommand implements CommandExecutor
                 return true;
             }
             String playerName = args[0];
-            newNickname = ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             Player target = Bukkit.getServer().getPlayer(playerName);
             if (target == null)
             {
@@ -40,9 +38,9 @@ public class NickCommand implements CommandExecutor
                 return true;
             }
 
-            if (setNickname(target, newNickname))
+            if (setDisplayName(target, newDisplayName))
             {
-                sender.sendMessage(PREFIX + playerName + " heisst nun " + newNickname + ".");
+                sender.sendMessage(PREFIX + playerName + " heisst nun " + ChatPlugin.getDisplayName(target) + ".");
             }
             return true;
         }
@@ -51,46 +49,49 @@ public class NickCommand implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "Dieser Befehl funktioniert nur Ingame.");
             return true;
         }
-        newNickname = args[0];
-        if (setNickname((Player) sender, newNickname))
+        newDisplayName = args[0];
+        Player player = (Player) sender;
+        if (setDisplayName(player, newDisplayName))
         {
-            sender.sendMessage(PREFIX + "Du heisst nun " + newNickname + ".");
+            sender.sendMessage(PREFIX + "Du heisst nun " + ChatPlugin.getDisplayName(player) + ".");
         }
         return true;
     }
 
-    private boolean setNickname(Player player, String newNickname)
+    private boolean setDisplayName(Player player, String newDisplayName)
     {
-        if (! newNickname.matches("^[a-zA-Z_0-9\u00a7]+$"))
+        String cleanDisplayName = ChatColor.stripColor(newDisplayName);
+        if (! cleanDisplayName.matches("^[a-zA-Z_0-9\u00a7]+$"))
         {
             player.sendMessage(PREFIX + "Ungültiger Nickname!");
             return false;
         }
-        if (newNickname.length() > 16)
+        if (cleanDisplayName.length() > 16)
         {
             player.sendMessage(PREFIX + "Nickname ist zu lang!");
             return false;
         }
-        if (newNickname.equals("off"))
+        if (newDisplayName.equals("off"))
         {
-            newNickname = ChatPlugin.getDefaultNickName(player);
+            newDisplayName = ChatPlugin.getDefaultDisplayName(player);
         }
+
         for (Player onlinePlayer : Bukkit.getOnlinePlayers())
         {
             if (player == onlinePlayer)
             {
                 continue;
             }
-            String displayName = onlinePlayer.getDisplayName().toLowerCase(Locale.ENGLISH);
-            String name = onlinePlayer.getName().toLowerCase(Locale.ENGLISH);
-            String lowerNick = newNickname.toLowerCase(Locale.ENGLISH);
+            String displayName = onlinePlayer.getDisplayName().toLowerCase();
+            String name = onlinePlayer.getName().toLowerCase();
+            String lowerNick = newDisplayName.toLowerCase();
             if (lowerNick.equals(displayName) || lowerNick.equals(name))
             {
-                player.sendMessage(PREFIX + "Nickname wird bereits verwendet");
+                player.sendMessage(PREFIX + "Der Nickname wird bereits verwendet");
                 return false;
             }
         }
-        ChatPlugin.setDisplayName(player, newNickname);
+        ChatPlugin.setDisplayName(player, newDisplayName);
         return true;
     }
 }

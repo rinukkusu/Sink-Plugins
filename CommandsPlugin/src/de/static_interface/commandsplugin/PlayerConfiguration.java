@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 
-/**
- * Currenty unused
- */
-
 @SuppressWarnings("UnusedDeclaration")
 public class PlayerConfiguration
 {
@@ -106,9 +102,9 @@ public class PlayerConfiguration
         save();
     }
 
-    public Object get(String path)
+    public String getString(String path)
     {
-        return playerYamlConfig.get(playerName + "." + path);
+        return playerYamlConfig.getString(playerName + "." + path);
     }
 
     /**
