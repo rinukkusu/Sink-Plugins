@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CommandsverCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.BLUE + "[CommandsPlugin] " + ChatColor.RESET;
 
     Plugin plugin;
 

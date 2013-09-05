@@ -1,20 +1,16 @@
 package de.static_interface.commandsplugin.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class DrugCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
 
     public static Player killedByDrugs;
 

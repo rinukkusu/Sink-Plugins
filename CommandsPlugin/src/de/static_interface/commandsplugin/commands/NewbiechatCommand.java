@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class NewbiechatCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

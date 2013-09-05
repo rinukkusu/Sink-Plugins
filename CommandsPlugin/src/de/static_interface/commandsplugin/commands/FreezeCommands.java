@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 public class FreezeCommands
 {
-    public static String PREFIX = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
 
     public static Set<String> toFreeze = new HashSet<>();
     private static ArrayList<String[]> toTmpFreeze = new ArrayList<>();

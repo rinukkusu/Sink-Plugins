@@ -14,7 +14,7 @@ import java.util.List;
 
 public class VotekickCommands
 {
-    public static String PREFIX = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
 
     private static double votesYes = 0;
     private static double votesNo = 0;

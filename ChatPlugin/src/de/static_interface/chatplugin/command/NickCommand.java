@@ -11,8 +11,9 @@ import org.bukkit.entity.Player;
 
 public class NickCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.DARK_GREEN + "[Nick] " + ChatColor.RESET;
-    public static String NICKNAME_PATH = "General.Nickname";
+    public static final String PREFIX = ChatColor.DARK_GREEN + "[Nick] " + ChatColor.RESET;
+    public static final String NICKNAME_PATH = "General.Nickname";
+    public static final String HAS_NICKNAME_PATH = "General.HasNickname";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

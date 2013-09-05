@@ -1,5 +1,5 @@
 name: CommandsPlugin
-version: 1.6
+version: 1.6.1
 description: General Commands Plugin
 author: Trojaner
 authors: [Diar, _ShadowRaven_, Scary_Block]
@@ -117,6 +117,11 @@ commands:
     permission: commandsplugin.rename
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Item/Lore> <Neuer Name>"
 
+  clear:
+    description: Clear your or an other players inventory
+    permission: commandsplugin.clear
+    aliases: [ci,invclear]
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -136,6 +141,8 @@ permissions:
       commandsplugin.votekick.bypass: true
       commandsplugin.debug: true
       commandsplugin.rename: true
+      commandsplugin.clear: true
+      commandsplugin.clear.others: true
 
   commandsplugin.drug:
     description: Allows to use the drug command
@@ -276,3 +283,13 @@ permissions:
   commandsplugin.rename:
     default: op
     description: Permission required for rename command
+
+  commandsplugin.clear:
+    default: op
+    description: Permission required for clear command
+
+  commmandsplugin.clear.others:
+    default: op
+    descriptopn: Allows to clear other players inventory
+    children:
+       commandsplugin.clear: true

@@ -17,7 +17,8 @@ public class NicknameListener implements Listener
         String nick = config.getString(NICKNAME_PATH);
         if (nick == null || nick.equals("null") || nick.equals(""))
         {
-            config.set(NICKNAME_PATH, ChatPlugin.getDefaultDisplayName(event.getPlayer()));
+            ChatPlugin.setDisplayName(event.getPlayer(), ChatPlugin.getDefaultDisplayName(event.getPlayer()));
+            ChatPlugin.setHasDisplayName(event.getPlayer(), false);
         }
     }
 }

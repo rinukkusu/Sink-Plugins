@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class GlobalmuteCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

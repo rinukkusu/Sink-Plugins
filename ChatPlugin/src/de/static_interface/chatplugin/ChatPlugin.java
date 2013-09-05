@@ -16,6 +16,7 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.util.logging.Level;
 
+import static de.static_interface.chatplugin.command.NickCommand.HAS_NICKNAME_PATH;
 import static de.static_interface.chatplugin.command.NickCommand.NICKNAME_PATH;
 
 /**
@@ -75,6 +76,14 @@ public class ChatPlugin extends JavaPlugin
         player.setCustomName(newNickname);
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
         config.set(NICKNAME_PATH, newNickname);
+        if (newNickname.equals(getDefaultDisplayName(player)))
+        {
+            setHasDisplayName(player, false);
+        }
+        else
+        {
+            setHasDisplayName(player, true);
+        }
     }
 
     public static String getDisplayName(Player player)
@@ -92,8 +101,33 @@ public class ChatPlugin extends JavaPlugin
 
     public static void refreshDisplayName(Player player)
     {
-        player.setDisplayName(getDisplayName(player));
-        player.setCustomName(getDisplayName(player));
+        String nickname;
+        if (getHasDisplayName(player))
+        {
+            nickname = getDisplayName(player);
+            if (nickname.equals(getDefaultDisplayName(player)))
+            {
+                setHasDisplayName(player, false);
+            }
+        }
+        else
+        {
+            nickname = getDefaultDisplayName(player);
+        }
+        player.setDisplayName(nickname);
+        player.setCustomName(nickname);
+    }
+
+    public static boolean getHasDisplayName(Player player)
+    {
+        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        return config.getBoolean(HAS_NICKNAME_PATH);
+    }
+
+    public static void setHasDisplayName(Player player, boolean value)
+    {
+        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        config.set(HAS_NICKNAME_PATH, value);
     }
 
     private void registerEvents(PluginManager pm)

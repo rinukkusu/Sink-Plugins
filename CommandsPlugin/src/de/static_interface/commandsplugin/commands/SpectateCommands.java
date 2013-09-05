@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class SpectateCommands
 {
     public static HashMap<Player, Player> specedPlayers = new HashMap<>();
-    public static String PREFIX = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.DARK_PURPLE + "[Spec] " + ChatColor.RESET;
 
     public static class SpectateCommand implements CommandExecutor
     {

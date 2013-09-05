@@ -9,7 +9,7 @@ import org.jibble.pircbot.User;
 
 public class IrclistCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.YELLOW + "[IRC] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.YELLOW + "[IRC] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

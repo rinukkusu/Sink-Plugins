@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 public class MilkCommand implements CommandExecutor
 {
 
-    public static String PREFIX = ChatColor.BLUE + "[Milk] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.BLUE + "[Milk] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

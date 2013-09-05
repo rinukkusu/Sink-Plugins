@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 public class LagCommand implements CommandExecutor
 {
-    public static String PREFIX = ChatColor.DARK_PURPLE + "[Lag] " + ChatColor.RESET;
+    public static final String PREFIX = ChatColor.DARK_PURPLE + "[Lag] " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

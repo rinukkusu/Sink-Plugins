@@ -107,6 +107,11 @@ public class PlayerConfiguration
         return playerYamlConfig.getString(playerName + "." + path);
     }
 
+    public boolean getBoolean(String path)
+    {
+        return playerYamlConfig.getBoolean(playerName + "." + path);
+    }
+
     /**
      * Get freeze value
      *
