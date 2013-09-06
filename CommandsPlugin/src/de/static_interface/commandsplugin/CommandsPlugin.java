@@ -130,10 +130,10 @@ public class CommandsPlugin extends JavaPlugin
         }
         Bukkit.getConsoleSender().sendMessage(message);
         Permission perm = new Permission(permission);
-     //   if (perm.getDefault() == PermissionDefault.TRUE && ircPlugin != null)
-     //   {
-     //       IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
-     //  }
+        if (perm.getDefault() == PermissionDefault.TRUE && ircPlugin != null)
+        {
+            IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
+        }
     }
 
     /**
@@ -151,7 +151,6 @@ public class CommandsPlugin extends JavaPlugin
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new FreezeListener(), this);
         pm.registerEvents(new GlobalMuteListener(), this);
-        pm.registerEvents(new TradeChatListener(), this);
         pm.registerEvents(new SpectateListener(), this);
         pm.registerEvents(new PlayerConfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
