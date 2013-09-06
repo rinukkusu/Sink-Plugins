@@ -4,6 +4,7 @@ import de.static_interface.chatplugin.command.NickCommand;
 import de.static_interface.chatplugin.listener.ChatListenerLowest;
 import de.static_interface.chatplugin.listener.ChatListenerNormal;
 import de.static_interface.chatplugin.listener.NicknameListener;
+import de.static_interface.chatplugin.listener.QuestionMarkListener;
 import de.static_interface.commandsplugin.CommandsPlugin;
 import de.static_interface.commandsplugin.PlayerConfiguration;
 import org.bukkit.Bukkit;
@@ -135,5 +136,6 @@ public class ChatPlugin extends JavaPlugin
         pm.registerEvents(new ChatListenerLowest(), this);
         pm.registerEvents(new ChatListenerNormal(), this);
         pm.registerEvents(new NicknameListener(), this);
+        pm.registerEvents(new QuestionMarkListener(), this);
     }
 }
