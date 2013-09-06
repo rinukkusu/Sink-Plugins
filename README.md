@@ -2,7 +2,7 @@ Bukkit_Plugins
 ==============
 
 Bukkit Plugins for <a href="http://adventuria.eu">Adventuria Minecraft</a>.
-(AntiSpamPlugin, CommandsPlugin and IRCPlugin)
+(AntiSpamPlugin, CommandsPlugin, IRCPlugin and ChatPlugin)
 
 License
 ==============
