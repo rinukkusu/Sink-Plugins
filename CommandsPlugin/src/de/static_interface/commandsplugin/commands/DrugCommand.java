@@ -30,6 +30,7 @@ public class DrugCommand implements CommandExecutor
         {
             player.sendMessage(PREFIX + ChatColor.BLUE + "Du hast Drogen genommen...");
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 20, 1), true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 20, 1), true);
         }
         else
         {
@@ -60,11 +61,13 @@ public class DrugCommand implements CommandExecutor
                 else if (amplifier >= 5)
                 {
                     killedByDrugs = player;
-                    player.setHealth(0.0); // Bug: Will send message "%player% died", needs to be fixed // Fixed: See DrugDeadListener
+                    player.setHealth(0.0);
                     return true;
                 }
                 player.removePotionEffect(PotionEffectType.BLINDNESS);
+                player.removePotionEffect(PotionEffectType.CONFUSION);
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + ( 20 * 30 ), amplifier + 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration + ( 20 * 30 ), amplifier + 1), true);
             }
         }
         return true;
