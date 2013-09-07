@@ -1,12 +1,16 @@
 package de.static_interface.commandsplugin.commands;
 
 import de.static_interface.commandsplugin.CommandsPlugin;
+import de.static_interface.commandsplugin.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WarnCommand implements CommandExecutor
 {
@@ -37,22 +41,24 @@ public class WarnCommand implements CommandExecutor
             sender.sendMessage(PREFIX + "Du musst einen Grund angeben!");
             return false;
         }
-        String reason = "";
+
+        String reason;
+
+        List<String> tmp = new ArrayList<>();
+
         int i = - 1;
         for (String s : args)
         {
             i++;
-            if (i == 0)
+            if (i <= 1)
             {
                 continue;
             }
-            if (reason.equals(""))
-            {
-                reason = s;
-                continue;
-            }
-            reason = reason + " " + s;
+            tmp.add(s);
         }
+
+        reason = Util.formatArrayToString((String[]) tmp.toArray(), " ");
+
         target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason);
         CommandsPlugin.broadcast(PREFIX + target.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason, "commandsplugin.warn.message");
         return true;

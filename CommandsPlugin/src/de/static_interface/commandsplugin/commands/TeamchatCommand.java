@@ -18,20 +18,7 @@ public class TeamchatCommand implements CommandExecutor
         {
             return false;
         }
-        String message = "";
-        for (String s : args)
-        {
-            if (message.equals(""))
-            {
-                message = s;
-                continue;
-            }
-            message = message + " " + s;
-        }
-        if (sender.hasPermission("commandsplugin.teamchat.color"))
-        {
-            message = Util.ReplaceFormattingAndColorCodes(message);
-        }
+        String message = Util.formatArrayToString(args, " ");
         CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.teamchat");
         return true;
     }

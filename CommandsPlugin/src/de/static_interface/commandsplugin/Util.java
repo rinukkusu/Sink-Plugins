@@ -14,58 +14,41 @@ import java.util.Scanner;
 @SuppressWarnings("UnusedDeclaration")
 public class Util
 {
-    public static String ReplaceFormattingAndColorCodes(String input)
+    public static String formatArrayToString(String[] input, String Char)
     {
-        input = input.replace("&0", "§0");
-        input = input.replace("&1", "§1");
-        input = input.replace("&2", "§2");
-        input = input.replace("&3", "§3");
-        input = input.replace("&4", "§4");
-        input = input.replace("&5", "§5");
-        input = input.replace("&6", "§6");
-        input = input.replace("&7", "§7");
-        input = input.replace("&8", "§8");
-        input = input.replace("&9", "§9");
-        input = input.replace("&a", "§a");
-        input = input.replace("&b", "§b");
-        input = input.replace("&c", "§c");
-        input = input.replace("&d", "§d");
-        input = input.replace("&e", "§e");
-        input = input.replace("&f", "§f");
-        input = input.replace("&k", "§k");
-        input = input.replace("&l", "§l");
-        input = input.replace("&m", "§m");
-        input = input.replace("&n", "§n");
-        input = input.replace("&o", "§o");
-        input = input.replace("&r", "§r");
-        return input;
+        String tmp = "";
+        for (String s : input)
+        {
+            if (tmp.equals(""))
+            {
+                tmp = s;
+                continue;
+            }
+            tmp = tmp + Char + s;
+        }
+        return tmp;
     }
 
-    public static String RemoveFormattingAndColorCodes(String input)
+    public static String formatPlayerListToString(List<String> players)
     {
-        input = input.replace("§0", "");
-        input = input.replace("§1", "");
-        input = input.replace("§2", "");
-        input = input.replace("§3", "");
-        input = input.replace("§4", "");
-        input = input.replace("§5", "");
-        input = input.replace("§6", "");
-        input = input.replace("§7", "");
-        input = input.replace("§8", "");
-        input = input.replace("§9", "");
-        input = input.replace("§a", "");
-        input = input.replace("§b", "");
-        input = input.replace("§c", "");
-        input = input.replace("§d", "");
-        input = input.replace("§e", "");
-        input = input.replace("§f", "");
-        input = input.replace("§k", "");
-        input = input.replace("§l", "");
-        input = input.replace("§m", "");
-        input = input.replace("§n", "");
-        input = input.replace("§o", "");
-        input = input.replace("§r", "");
-        return input;
+        String tmp = "";
+        int i = 0;
+        for (String s : players)
+        {
+            i++;
+            if (tmp.equals(""))
+            {
+                tmp = s;
+                continue;
+            }
+            if (i == players.toArray().length)
+            {
+                tmp = tmp + " and " + s;
+                continue;
+            }
+            tmp = tmp + ", " + s;
+        }
+        return tmp;
     }
 
     public static boolean isNumber(String input)
@@ -132,8 +115,9 @@ public class Util
 
     /**
      * Write large text files. Uses buffering
+     *
      * @param lines Lines to write
-     * @param file Path to file
+     * @param file  Path to file
      * @throws IOException
      */
     public static void writeLargerTextFile(String file, List<String> lines) throws IOException
@@ -148,4 +132,6 @@ public class Util
             }
         }
     }
+
+
 }

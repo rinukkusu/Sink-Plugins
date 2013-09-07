@@ -21,13 +21,7 @@ public class ClearCommand implements CommandExecutor
     {
         List<String> args = Arrays.asList(argsArr);
 
-        if (sender instanceof Player)
-        {
-            sender.sendMessage("This command is only ingame available!");
-            return true;
-        }
-
-        Player player = (Player) sender;
+        Player player = null;
 
         int i = 0;
         boolean clearInvetory = false;
@@ -78,11 +72,14 @@ public class ClearCommand implements CommandExecutor
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur ingame verfügbar.");
         }
+        if (player == null)
+        {
+            player = (Player) sender;
+        }
 
         if (clearInvetory)
         {
             player.getInventory().clear();
-            player.sendMessage(PREFIX + "Du hast dein Inventar gelöscht.");
         }
 
         if (clearEffects)
@@ -110,7 +107,6 @@ public class ClearCommand implements CommandExecutor
             player.removePotionEffect(PotionEffectType.WEAKNESS);
             player.removePotionEffect(PotionEffectType.WITHER);
             player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
-            player.sendMessage(PREFIX + "Deine Effecte wurden entfernt.");
         }
         if (clearArmor)
         {
@@ -118,7 +114,10 @@ public class ClearCommand implements CommandExecutor
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
-            player.sendMessage(PREFIX + "Deine Rüstung wurde entfernt.");
+        }
+        if (player != sender)
+        {
+            sender.sendMessage(PREFIX + player.getDisplayName() + " wurde gecleart.");
         }
         player.sendMessage(PREFIX + "Du wurdest gecleart.");
         return true;

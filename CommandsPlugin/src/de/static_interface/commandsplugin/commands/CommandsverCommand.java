@@ -1,5 +1,6 @@
 package de.static_interface.commandsplugin.commands;
 
+import de.static_interface.commandsplugin.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -23,23 +24,7 @@ public class CommandsverCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         List<String> authorsList = plugin.getDescription().getAuthors();
-        String authors = "";
-        int i = 0;
-        for (String s : authorsList)
-        {
-            i++;
-            if (authors.equals(""))
-            {
-                authors = s;
-                continue;
-            }
-            if (i == authorsList.toArray().length)
-            {
-                authors = authors + " and " + s;
-                continue;
-            }
-            authors = authors + ", " + s;
-        }
+        String authors = Util.formatPlayerListToString(authorsList);
         sender.sendMessage(PREFIX + plugin.getDescription().getName() + " by " + authors);
         sender.sendMessage(PREFIX + "Version: " + plugin.getDescription().getVersion());
         sender.sendMessage(PREFIX + "Copyright © 2013 Adventuria");

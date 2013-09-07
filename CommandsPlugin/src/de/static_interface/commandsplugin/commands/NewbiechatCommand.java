@@ -18,20 +18,8 @@ public class NewbiechatCommand implements CommandExecutor
         {
             return false;
         }
-        String message = "";
-        for (String s : args)
-        {
-            if (message.equals(""))
-            {
-                message = s;
-                continue;
-            }
-            message = message + " " + s;
-        }
-        if (sender.hasPermission("commandsplugin.newbiechat.color"))
-        {
-            message = Util.ReplaceFormattingAndColorCodes(message);
-        }
+        String message = Util.formatArrayToString(args, " ");
+
         CommandsPlugin.broadcast(PREFIX + CommandsPlugin.getSenderName(sender) + ChatColor.WHITE + ": " + message, "commandsplugin.newbiechat");
         return true;
     }

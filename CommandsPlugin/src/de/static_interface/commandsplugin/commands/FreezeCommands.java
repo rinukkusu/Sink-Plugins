@@ -15,6 +15,7 @@ import org.bukkit.plugin.Plugin;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,24 +38,23 @@ public class FreezeCommands
             {
                 return false;
             }
-            String reason = "";
+
+            String reason;
+
+            List<String> tmp = new ArrayList<>();
+
             int i = - 1;
             for (String s : args)
             {
                 i++;
-                if (i <= 0)
+                if (i <= 1)
                 {
                     continue;
                 }
-                if (reason.equals(""))
-                {
-                    reason = s;
-                }
-                else
-                {
-                    reason = reason + " " + s;
-                }
+                tmp.add(s);
             }
+
+            reason = Util.formatArrayToString((String[]) tmp.toArray(), " ");
 
             for (Player p : Bukkit.getOnlinePlayers())
             {
@@ -103,7 +103,10 @@ public class FreezeCommands
             {
                 return false;
             }
-            String reason = "";
+            String reason;
+
+            List<String> tmp = new ArrayList<>();
+
             int i = - 1;
             for (String s : args)
             {
@@ -112,15 +115,11 @@ public class FreezeCommands
                 {
                     continue;
                 }
-                if (reason.equals(""))
-                {
-                    reason = s;
-                }
-                else
-                {
-                    reason = reason + " " + s;
-                }
+                tmp.add(s);
             }
+
+            reason = Util.formatArrayToString((String[]) tmp.toArray(), " ");
+
             int seconds = 0;
             if (! Util.isNumber(args[1]) || Integer.parseInt(args[1]) <= 0)
             {
@@ -193,18 +192,7 @@ public class FreezeCommands
                 return false;
             }
 
-            String reason = "";
-            for (String s : args)
-            {
-                if (reason.equals(""))
-                {
-                    reason = s;
-                }
-                else
-                {
-                    reason = reason + " " + s;
-                }
-            }
+            String reason = Util.formatArrayToString(args, " ");
 
             if (toggleFreezeAll())
             {
@@ -250,6 +238,7 @@ public class FreezeCommands
                     }
                 }
             }
+
 
             if (frozenList.length() > 0)
             {
