@@ -21,6 +21,12 @@ public class ClearCommand implements CommandExecutor
     {
         List<String> args = Arrays.asList(argsArr);
 
+        if (sender instanceof Player)
+        {
+            sender.sendMessage("This command is only ingame available!");
+            return true;
+        }
+
         Player player = (Player) sender;
 
         int i = 0;
