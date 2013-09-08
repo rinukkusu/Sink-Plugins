@@ -3,6 +3,9 @@ package de.static_interface.commandsplugin;
 import de.static_interface.commandsplugin.commands.*;
 import de.static_interface.commandsplugin.listener.*;
 import de.static_interface.ircplugin.IRCPlugin;
+import net.milkbowl.vault.Vault;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -10,12 +13,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.*;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * CommandsPlugin Class
@@ -30,32 +35,64 @@ public class CommandsPlugin extends JavaPlugin
     public static boolean globalmuteEnabled;
     public static List<String> tmpBannedPlayers;
 
-    private static Logger log;
     private static CommandsTimer timer;
+    private static IRCPlugin ircPlugin;
+    private static Economy econ;
     private static File dataFolder;
-
-    static IRCPlugin ircPlugin;
-
     public void onEnable()
     {
-        timer = new CommandsTimer();
-        LagTimer lagTimer = new LagTimer();
         PluginManager pm = Bukkit.getPluginManager();
         ircPlugin = (IRCPlugin) pm.getPlugin("IRCPlugin");
+        Vault vault = (Vault) pm.getPlugin("Vault");
+        if (vault == null || ircPlugin == null)
+        {
+            getLogger().log(Level.WARNING, "This plugin needs IRCPlugin and Vault to work correctly, disabling.");
+            pm.disablePlugin(this);
+            return;
+        }
+        setupEcononmy();
+        timer = new CommandsTimer();
+        LagTimer lagTimer = new LagTimer();
         dataFolder = getDataFolder();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
-        log = getLogger();
         if (! getDataFolder().exists())
         {
             getDataFolder().mkdirs();
         }
         registerEvents();
         registerCommands();
-        log.info("Loading frozen players...");
-        FreezeCommands.loadFreezedPlayers(log, getDataFolder(), this);
-        log.info("Done!");
+        getLogger().info("Loading frozen players...");
+        FreezeCommands.loadFreezedPlayers(getLogger(), getDataFolder(), this);
+        getLogger().info("Done!");
         tmpBannedPlayers = new ArrayList<>();
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                refreshScoreboard();
+            }
+        }, 0, 20 * 30); //Update every 30 seconds
+
+    }
+
+    public boolean setupEcononmy()
+    {
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null)
+        {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+
+    private static int getMoney(Player p)
+    {
+        EconomyResponse response = econ.bankBalance(p.getName());
+        return (int) response.amount;
     }
 
     public void onDisable()
@@ -68,15 +105,40 @@ public class CommandsPlugin extends JavaPlugin
             SpectateCommands.specedPlayers.remove(p);
             p.sendMessage(SpectateCommands.PREFIX + "Du wurdest durch einen Reload gezwungen den Spectate Modus zu verlassen.");
         }
-        log.info("Unloading frozen players...");
-        FreezeCommands.unloadFreezedPlayers(log, getDataFolder());
-        log.info("Saving player configurations...");
+        getLogger().info("Unloading frozen players...");
+        FreezeCommands.unloadFreezedPlayers(getLogger(), getDataFolder());
+        getLogger().info("Saving player configurations...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
             PlayerConfiguration config = new PlayerConfiguration(p.getName());
             config.save();
         }
-        log.info("Disabled.");
+        getLogger().info("Disabled.");
+    }
+
+    public static void refreshScoreboard()
+    {
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
+            if (! p.hasPermission("commandsplugin.stats"))
+            {
+                continue;
+            }
+            ScoreboardManager manager = Bukkit.getScoreboardManager();
+            Scoreboard board = manager.getNewScoreboard();
+            Team team = board.registerNewTeam(p.getName());
+            Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+            Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
+            money.setScore(getMoney(p));
+            Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
+            onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+            Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
+            date.setScore((int) p.getHealth());
+            team.setAllowFriendlyFire(true);
+            team.setCanSeeFriendlyInvisibles(false);
+            p.setScoreboard(board);
+        }
     }
 
     /**
@@ -105,10 +167,10 @@ public class CommandsPlugin extends JavaPlugin
         }
         Bukkit.getConsoleSender().sendMessage(message);
 
-       // if (ircPlugin != null)
-       // {
-       //     IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
-       // }
+        if (ircPlugin != null)
+        {
+            IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
+        }
     }
 
     /**
