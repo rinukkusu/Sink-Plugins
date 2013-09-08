@@ -84,7 +84,7 @@ public class AntiSpamPluginListener implements Listener
             }
             else
             {
-                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "127.0.0.1"));
+                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, " 127.0.0.1"));
             }
         }
         pattern = Pattern.compile(" [a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S)? ");
@@ -107,7 +107,7 @@ public class AntiSpamPluginListener implements Listener
             }
             else
             {
-                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, "adventuria.eu"));
+                ( (PlayerCommandPreprocessEvent) event ).setMessage(message.replace(match, " adventuria.eu "));
             }
         }
     }
