@@ -132,11 +132,13 @@ public class CommandsPlugin extends JavaPlugin
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            if (! p.hasPermission("commandsplugin.stats"))
-            {
-                continue;
-            }
+            PlayerConfiguration config = new PlayerConfiguration(p.getName());
             ScoreboardManager manager = Bukkit.getScoreboardManager();
+            if (! p.hasPermission("commandsplugin.stats") || ! config.getStatsEnabled())
+            {
+                p.setScoreboard(manager.getNewScoreboard());
+                return;
+            }
             Scoreboard board = manager.getNewScoreboard();
             Team team = board.registerNewTeam(p.getName());
             Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
@@ -169,11 +171,13 @@ public class CommandsPlugin extends JavaPlugin
      */
     public static void refreshScoreboard(Player player)
     {
-        if (! player.hasPermission("commandsplugin.stats"))
+        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        if (! player.hasPermission("commandsplugin.stats") || ! config.getStatsEnabled())
         {
+            player.setScoreboard(manager.getNewScoreboard());
             return;
         }
-        ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         Team team = board.registerNewTeam(player.getName());
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
@@ -297,6 +301,8 @@ public class CommandsPlugin extends JavaPlugin
         getCommand("commandsdebug").setExecutor(new CommandsdebugCommand());
         getCommand("rename").setExecutor(new RenameCommand());
         getCommand("clear").setExecutor(new ClearCommand());
+        getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());
+        getCommand("disablestats").setExecutor(new StatsCommands.DisableStatsCommand());
     }
 
     public static String getSenderName(CommandSender sender)

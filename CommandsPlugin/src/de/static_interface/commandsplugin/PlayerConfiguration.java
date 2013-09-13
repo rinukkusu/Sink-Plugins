@@ -59,6 +59,7 @@ public class PlayerConfiguration
             //playerYamlConfig.createSection(FREEZEPATH);
             playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
             playerYamlConfig.addDefault(playerName + ".Freeze.freezedtime", 0);
+            playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
             playerYamlConfig.options().copyDefaults(true);
             save();
         }
@@ -137,7 +138,17 @@ public class PlayerConfiguration
      */
     public boolean getFreezed()
     {
-        return playerYamlConfig.getBoolean(playerName + ".Freeze.freezed");
+        return getBoolean(playerName + "Freeze.freezed");
+    }
+
+    /**
+     * Set freeze value
+     *
+     * @param value Set value, true will freeze player
+     */
+    public void setFreezed(boolean value)
+    {
+        set("Freeze.freezed", value);
     }
 
     /**
@@ -151,22 +162,22 @@ public class PlayerConfiguration
     }
 
     /**
-     * Set freeze value
-     *
-     * @param value Set value, true will freeze player
-     */
-    public void setFreezed(boolean value)
-    {
-        playerYamlConfig.set(playerName + ".Freeze.freezed", value);
-    }
-
-    /**
      * Set Freeze Time
      *
      * @param time If it is equal or below than 0, it will freeze for ever, anything else is tempfreeze (seconds).
      */
     public void setFreezeTime(int time)
     {
-        playerYamlConfig.set(playerName + ".Freeze.freezedtime", time);
+        set("Freeze.freezedtime", time);
+    }
+
+    public boolean getStatsEnabled()
+    {
+        return getBoolean("General.StatsEnabled");
+    }
+
+    public void setStatsEnabled(boolean value)
+    {
+        set(playerName + "General.StatsEnabled", value);
     }
 }

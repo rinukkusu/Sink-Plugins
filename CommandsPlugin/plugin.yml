@@ -122,6 +122,14 @@ commands:
     permission: commandsplugin.clear
     aliases: [ci,invclear]
 
+  enablestats:
+    description: Enable stats scoreboard
+    permission: commandsplugin.stats
+
+  disablestats:
+    description: Disable stats scoreboard
+    permission: commandsplugin.stats
+
 permissions:
   commandsplugin.*:
     description: Gives access to all commands
@@ -143,6 +151,7 @@ permissions:
       commandsplugin.rename: true
       commandsplugin.clear: true
       commandsplugin.clear.others: true
+      commandsplugin.stats: true
 
   commandsplugin.drug:
     description: Allows to use the drug command
