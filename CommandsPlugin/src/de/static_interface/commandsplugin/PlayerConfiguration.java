@@ -104,12 +104,30 @@ public class PlayerConfiguration
 
     public String getString(String path)
     {
-        return playerYamlConfig.getString(playerName + "." + path);
+        try
+        {
+            return playerYamlConfig.getString(playerName + "." + path);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return "";
+        }
+
     }
 
     public boolean getBoolean(String path)
     {
-        return playerYamlConfig.getBoolean(playerName + "." + path);
+        try
+        {
+            return playerYamlConfig.getBoolean(playerName + "." + path);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     /**

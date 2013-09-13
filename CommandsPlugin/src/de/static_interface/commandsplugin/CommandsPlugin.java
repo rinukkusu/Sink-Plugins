@@ -214,10 +214,13 @@ public class CommandsPlugin extends JavaPlugin
             p.sendMessage(message);
         }
         Bukkit.getConsoleSender().sendMessage(message);
-
-        if (ircPlugin != null)
+        try
         {
             IRCPlugin.getIRCBot().sendCleanMessage(IRCPlugin.getChannel(), message);
+        }
+        catch (NullPointerException | LinkageError e)
+        {
+            e.printStackTrace();
         }
     }
 
