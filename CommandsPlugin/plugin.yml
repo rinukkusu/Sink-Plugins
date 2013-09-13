@@ -290,6 +290,10 @@ permissions:
 
   commmandsplugin.clear.others:
     default: op
-    descriptopn: Allows to clear other players inventory
+    description: Allows to clear other players inventory
     children:
        commandsplugin.clear: true
+
+  commandsplugin.stats:
+    default: true
+    description: Allows player to see scoreboard statistics
