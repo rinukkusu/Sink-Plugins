@@ -6,7 +6,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -14,8 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jibble.pircbot.IrcException;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -111,41 +108,6 @@ public class IRCPlugin extends JavaPlugin implements Listener
     }
 
     /*
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChat(AsyncPlayerChatEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        String message = event.getMessage();
-        if (ircBot == null)
-        {
-            return;
-        }
-        String prefix;
-        if (message.length() < 2)
-        {
-            return;
-        }
-        else if (message.startsWith("!"))
-        {
-            prefix = ChatColor.GRAY + "[Schrei] ";
-            message = message.replaceFirst("!", "");
-        }
-        else if (message.startsWith("?"))
-        {
-            prefix = ChatColor.GRAY + "[" + ChatColor.GREEN + "FRAGE" + ChatColor.GRAY + "] ";
-            message = message.replaceFirst("^" + Pattern.quote("?"), "");
-        }
-        else
-        {
-            return; // Local Chat
-        }
-        String formattedMessage = prefix + event.getPlayer().getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + message;
-        ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(formattedMessage));
-    }
-    */
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
@@ -183,8 +145,10 @@ public class IRCPlugin extends JavaPlugin implements Listener
                 ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(IRCBot.replaceAmpersandColorCodes(ChatColor.DARK_PURPLE + "[Server] " + message)));
             }
         }
+
     }
 
+    */
     public static IRCBot getIRCBot()
     {
         return ircBot;

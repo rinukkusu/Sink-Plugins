@@ -92,7 +92,7 @@ public class CommandsPlugin extends JavaPlugin
     private static int getMoney(Player p)
     {
         EconomyResponse response = econ.bankBalance(p.getName());
-        return (int) response.amount;
+        return (int) response.balance;
     }
 
     public void onDisable()
@@ -116,7 +116,19 @@ public class CommandsPlugin extends JavaPlugin
         getLogger().info("Disabled.");
     }
 
+    /**
+     * Refresh Scoarboard for all players
+     */
     public static void refreshScoreboard()
+    {
+        refreshScoreboard(- 1);
+    }
+
+    /**
+     * Refresh Scoreboard for all players
+     * @param players Online Players
+     */
+    public static void refreshScoreboard(int players)
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
@@ -132,7 +144,15 @@ public class CommandsPlugin extends JavaPlugin
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
             money.setScore(getMoney(p));
             Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
-            onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+            if (players >= 0)
+            {
+                onlinePlayers.setScore(players);
+            }
+            else
+            {
+                onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+            }
+
             Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
             date.setScore((int) p.getHealth());
             team.setAllowFriendlyFire(true);
@@ -217,6 +237,7 @@ public class CommandsPlugin extends JavaPlugin
         pm.registerEvents(new PlayerConfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
         pm.registerEvents(new DrugDeadListener(), this);
+        pm.registerEvents(new ScoreboardListener(), this);
     }
 
     private void registerCommands()

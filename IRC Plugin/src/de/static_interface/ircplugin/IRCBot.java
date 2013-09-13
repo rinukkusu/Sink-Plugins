@@ -42,11 +42,6 @@ public class IRCBot extends PircBot
 
     String[] Whitelist = { "Trojaner", "Trojaner_" }; //Very, very poorly written
 
-    public static String replaceAmpersandColorCodes(String input)
-    {
-        return ChatColor.translateAlternateColorCodes('&', input);
-    }
-
     public static String replaceColorCodes(String input)
     {
         input = input.replace(ChatColor.BLACK.toString(), Colors.BLACK);
@@ -236,7 +231,7 @@ public class IRCBot extends PircBot
 
             if (cmd.equals("permissions") || cmd.equals("perms"))
             {
-                if (isOp | isWhitelist)
+                if (isOp || isWhitelist)
                 {
                     sendCleanMessage(channel, "You are allowed to use administrator commands");
                 }
