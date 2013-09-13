@@ -14,6 +14,10 @@ public class TradeChatListener implements Listener
     {
         if (event.getMessage().startsWith("$"))
         {
+            if (event.getMessage().equals("$"))
+            {
+                return;
+            }
             String message = event.getMessage().replaceFirst("\\$", ""); //Nun �ffnest du github und f�llst
             String formattedMessage = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
             formattedMessage = formattedMessage.replace("%2$s", message);

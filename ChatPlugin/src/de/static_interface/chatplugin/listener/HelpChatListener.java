@@ -10,13 +10,17 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class HelpChatListener implements Listener
 {
 
-    public String PREFIX = "[" + ChatColor.RED + "Hilfe" + ChatColor.RESET + "] ";
+    public String PREFIX = ChatColor.GRAY + "[" + ChatColor.GREEN + "Hilfe" + ChatColor.GRAY + "] " + ChatColor.RESET;
 
     @EventHandler(priority = EventPriority.LOW)
     public void onChatMessage(AsyncPlayerChatEvent event)
     {
-        if (event.getMessage().toCharArray()[0] == '?')
+        if (event.getMessage().startsWith("?"))
         {
+            if (event.getMessage().equals("?"))
+            {
+                return;
+            }
             String message = event.getMessage().substring(1);
             event.setMessage("");
             if (event.getPlayer().hasPermission("chatplugin.color"))
