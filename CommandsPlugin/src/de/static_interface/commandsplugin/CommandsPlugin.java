@@ -161,6 +161,34 @@ public class CommandsPlugin extends JavaPlugin
         }
     }
 
+
+    /**
+     * Refresh scoreboard for specified player
+     *
+     * @param player Refresh scoreboard for this player
+     */
+    public static void refreshScoreboard(Player player)
+    {
+        if (! player.hasPermission("commandsplugin.stats"))
+        {
+            return;
+        }
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Team team = board.registerNewTeam(player.getName());
+        Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
+        money.setScore(getMoney(player));
+        Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
+        onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+        Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
+        date.setScore((int) player.getHealth());
+        team.setAllowFriendlyFire(true);
+        team.setCanSeeFriendlyInvisibles(false);
+        player.setScoreboard(board);
+    }
+
     /**
      * Get Data Folder
      *

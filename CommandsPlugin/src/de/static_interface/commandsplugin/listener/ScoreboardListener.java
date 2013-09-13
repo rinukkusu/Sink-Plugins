@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -24,5 +25,11 @@ public class ScoreboardListener implements Listener
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         CommandsPlugin.refreshScoreboard(Bukkit.getOnlinePlayers().length - 1);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+    {
+        CommandsPlugin.refreshScoreboard(event.getPlayer());
     }
 }
