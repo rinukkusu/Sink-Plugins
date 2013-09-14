@@ -8,10 +8,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/**
- * Author: Trojaner
- * Date: 13.09.13
- */
 public class StatsCommands
 {
     public static String PREFIX = ChatColor.DARK_GREEN + "[Statistiken] ";
@@ -21,9 +17,10 @@ public class StatsCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof Player)
+            if (sender instanceof CommandSender)
             {
                 sender.sendMessage("This command is only ingame available.");
+                return true;
             }
             Player player = (Player) sender;
 
@@ -48,9 +45,10 @@ public class StatsCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof Player)
+            if (sender instanceof CommandSender)
             {
                 sender.sendMessage("This command is only ingame available.");
+                return true;
             }
             Player player = (Player) sender;
 

@@ -50,7 +50,7 @@ public class WarnCommand implements CommandExecutor
             reason = reason + " " + args[i];
         }
 
-        target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason);
+        target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + CommandsPlugin.getSenderName(sender) + ChatColor.RED + " verwarnt. Grund: " + reason);
         CommandsPlugin.broadcast(PREFIX + target.getDisplayName() + " wurde von " + CommandsPlugin.getSenderName(sender) + " verwarnt. Grund: " + reason, "commandsplugin.warn.message");
         return true;
     }

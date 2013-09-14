@@ -178,6 +178,6 @@ public class PlayerConfiguration
 
     public void setStatsEnabled(boolean value)
     {
-        set(playerName + "General.StatsEnabled", value);
+        set("General.StatsEnabled", value);
     }
 }
