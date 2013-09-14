@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 
 public class StatsCommands
 {
-    public static String PREFIX = ChatColor.DARK_GREEN + "[Statistiken] ";
+    public static String PREFIX = ChatColor.DARK_GREEN + "[Statistiken] " + ChatColor.RESET;
 
     public static class EnableStatsCommand implements CommandExecutor
     {
@@ -29,13 +29,12 @@ public class StatsCommands
 
             if (config.getStatsEnabled())
             {
-                player.sendMessage(PREFIX + "Die Statistiken sind schon aktiviert!");
+                player.sendMessage(PREFIX  + ChatColor.GREEN + "Die Statistiken sind schon aktiviert!");
                 return true;
             }
 
             config.setStatsEnabled(true);
-            sender.sendMessage(PREFIX + "Du hast die Statistiken aktiviert!");
-            sender.sendMessage(PREFIX + "Falls sie immer noch nicht aktiviert sind, muss du einen Relog machen.");
+            sender.sendMessage(PREFIX + ChatColor.GREEN + "Du hast die Statistiken aktiviert!");
             CommandsPlugin.refreshScoreboard(player);
             return true;
         }
@@ -57,13 +56,12 @@ public class StatsCommands
 
             if (! config.getStatsEnabled())
             {
-                player.sendMessage(PREFIX + "Die Statistiken sind schon deaktiviert!");
+                player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon deaktiviert!");
                 return true;
             }
 
             config.setStatsEnabled(false);
-            sender.sendMessage(PREFIX + "Du hast die Statistiken deaktiviert!");
-            sender.sendMessage(PREFIX + "Falls sie immer noch deaktiviert sind, muss du einen Relog machen.");
+            sender.sendMessage(PREFIX + ChatColor.RED + "Du hast die Statistiken deaktiviert!");
             CommandsPlugin.refreshScoreboard(player);
             return true;
         }
