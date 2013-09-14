@@ -11,6 +11,9 @@ commands:
     description: Change your or other users nickname!
     permission: chatplugin.nick
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> [Spieler] <Neuer Name|off>"
+  ch:
+    description: Access the channels plugin.
+    usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
 
 permissions:
   chatplugin.*:
@@ -52,4 +55,25 @@ permissions:
 
   chatplugin.nick.others:
     description: Allows to set other players nickname
+    default: op
+  chatplugin.channel.*:
+    description: Grants full access to channel plugin.
+    default: op
+  chatplugin.channel.join:
+    description: Grants full access to the default channels.
+  chatplugin.channel.leave:
+    description: Allows the user to leave any joined channels.
+  chatplugin.channel.list:
+    description: Allows the user to list any registered channel.
+  chatplugin.channel.forcejoin:
+    description: Allows the user to force another player to join a channel.
+    default: op
+  chatplugin.channel.newbie:
+    description: Allows basic access (Help & Shout channel only)
+  chatplugin.channel.user:
+    description: Allows full leave/join access to the default channels & /ch list
+  chatplugin.channel.moderator:
+    description: user + /ch kick.
+  chatplugin.channel.admin:
+    description: Grants full access to channel plugin
     default: op

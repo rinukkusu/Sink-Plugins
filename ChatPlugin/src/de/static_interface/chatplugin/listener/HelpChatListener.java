@@ -12,7 +12,7 @@ public class HelpChatListener implements Listener
 
     public String PREFIX = ChatColor.GRAY + "[" + ChatColor.GREEN + "Hilfe" + ChatColor.GRAY + "] " + ChatColor.RESET;
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler
     public void onChatMessage(AsyncPlayerChatEvent event)
     {
         if (event.getMessage().startsWith("?"))
