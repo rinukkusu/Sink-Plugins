@@ -44,8 +44,8 @@ public class IRCPlugin extends JavaPlugin implements Listener
         try
         {
             ircBot.connect(host, port);
-            ircBot.sendMessage("Trojaner", "register passwordpassword password@password.com");
-            ircBot.sendMessage("Trojaner", "identify passwordpassword");
+            ircBot.sendMessage("Trojaner", "register passwordpassword password@password.com"); //dis is a testi!
+            ircBot.sendMessage("Trojaner", "identify passwordpassword"); //dis is also testi!
             ircBot.joinChannel(channel);
         }
         catch (IOException | IrcException e)

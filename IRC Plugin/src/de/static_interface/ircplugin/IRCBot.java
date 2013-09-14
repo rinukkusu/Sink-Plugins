@@ -102,7 +102,7 @@ public class IRCBot extends PircBot
     @Override
     public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {
-        String formattedReason = "(" + reason + ")";
+        String formattedReason = " (" + reason + ")";
         if (reason.equals("") || reason.equals("\"\""))
         {
             formattedReason = "";
