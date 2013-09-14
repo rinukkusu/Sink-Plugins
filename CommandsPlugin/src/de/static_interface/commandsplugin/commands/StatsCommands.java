@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class StatsCommands
@@ -17,7 +18,7 @@ public class StatsCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof CommandSender)
+            if (sender instanceof ConsoleCommandSender)
             {
                 sender.sendMessage("This command is only ingame available.");
                 return true;
@@ -45,7 +46,7 @@ public class StatsCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof CommandSender)
+            if (sender instanceof ConsoleCommandSender)
             {
                 sender.sendMessage("This command is only ingame available.");
                 return true;
