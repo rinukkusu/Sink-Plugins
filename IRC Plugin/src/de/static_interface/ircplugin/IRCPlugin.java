@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- * IRCPluginMain
+ * IRCPlugin
  * Description: Main Class
  * Date: 21.07.2013
  * Author: Trojaner
