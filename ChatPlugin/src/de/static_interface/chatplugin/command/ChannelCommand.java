@@ -50,7 +50,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
                 }
 
                 try{
-                    registeredChannels.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
+                    registeredChannels.getRegisteredChannel(args[1]).removeExceptedPlayer((Player) sender);
                 }catch ( NullPointerException e )
                 {   //Note: Do this more clean...
                     message = PREFIX+LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$",args[1]);
@@ -58,9 +58,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
                     return true;
                 }
 
-                registeredChannels.getRegisteredChannel(args[1]).removeExceptedPlayer((Player) sender);
-
-                message = PREFIX+LanguageHandler.getString("message.playerJoins").replace("$CHANNEL$", args[1]);
+                message = PREFIX+LanguageHandler.getString("messages.playerJoins").replace("$CHANNEL$", args[1]);
                 ChatColor.translateAlternateColorCodes('&', message);
                 sender.sendMessage(message);
 
@@ -70,7 +68,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
 
                 if ( args.length < 2 )
                 {
-                    sender.sendMessage(PREFIX+LanguageHandler.getString("message.noChannelGiven"));
+                    sender.sendMessage(PREFIX+LanguageHandler.getString("messages.noChannelGiven"));
                     return true;
                 }
 
@@ -90,7 +88,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
                 return true;
             case "list":
                 message = PREFIX+LanguageHandler.getString("messages.list").replace("$CHANNELS$", registeredChannels.getChannelNames());
-                sender.sendMessage(PREFIX+message);
+                sender.sendMessage(message);
                 return true;
             case "participating":
                 sender.sendMessage(PREFIX+LanguageHandler.getString("messages.part"));
