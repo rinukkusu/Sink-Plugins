@@ -22,7 +22,7 @@ public class ShoutChat extends JavaPlugin implements Channel, Listener
 
     public ShoutChat(char callChar)
     {
-        registeredChannels.registerChannel(this, "Handel", PREFIX, callChar);
+        registeredChannels.registerChannel(this, "Shout", PREFIX, callChar);
         callByChar = callChar;
 
     }
@@ -30,14 +30,14 @@ public class ShoutChat extends JavaPlugin implements Channel, Listener
     public ShoutChat(char callChar, String prefix)
     {
         PREFIX = prefix;
-        registeredChannels.registerChannel(this, "Handel", prefix, callChar);
+        registeredChannels.registerChannel(this, "Shout", prefix, callChar);
         callByChar = callChar;
     }
 
     public ShoutChat(char callChar, String prefix, String permissionNode)
     {
         PREFIX = prefix;
-        registeredChannels.registerChannel(this, "Handel", prefix, callChar);
+        registeredChannels.registerChannel(this, "Shout", prefix, callChar);
         permission = permissionNode;
 
     }

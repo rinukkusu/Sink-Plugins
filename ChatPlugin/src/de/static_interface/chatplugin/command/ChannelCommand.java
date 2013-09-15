@@ -49,10 +49,12 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
                     return true;
                 }
 
-
-                if (registeredChannels.getRegisteredChannel(args[1]) == null) {
-                    message = LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$",args[1]);
-                    sender.sendMessage(PREFIX + message);
+                try{
+                    registeredChannels.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
+                }catch ( NullPointerException e )
+                {   //Note: Do this more clean...
+                    message = PREFIX+LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$",args[1]);
+                    sender.sendMessage(message);
                     return true;
                 }
 
@@ -72,15 +74,14 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
                     return true;
                 }
 
-                if (registeredChannels.getRegisteredChannel(args[1]) == null)
-                {
-                    message = LanguageHandler.getString("message.channelUnknown");
-                    message.replace("$CHANNEL$", args[1]);
-                    ChatColor.translateAlternateColorCodes('&', message);
-                    sender.sendMessage(PREFIX + message);
+                try{
+                registeredChannels.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
+                }catch ( NullPointerException e )
+                {   //Note: Do this more clean...
+                    message = PREFIX+LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$",args[1]);
+                    sender.sendMessage(message);
                     return true;
                 }
-                registeredChannels.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
 
                 message = PREFIX+LanguageHandler.getString("messages.playerLeaves").replace("$CHANNEL$", args[1]);
                 sender.sendMessage(message);

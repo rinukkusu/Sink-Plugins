@@ -21,22 +21,22 @@ public class FrageChat extends JavaPlugin implements Channel
 
     public FrageChat(char callChar)
     {
-        registeredChannels.registerChannel(this, "Handel", PREFIX, callChar);
+        registeredChannels.registerChannel(this, "Frage", PREFIX, callChar);
         callByChar = callChar;
 
     }
 
-    public FrageChat(char callChar, String prefix)
+    public FrageChat(char callChar, String prefix, String channelName)
     {
         PREFIX = prefix;
-        registeredChannels.registerChannel(this, "Handel", prefix, callChar);
+        registeredChannels.registerChannel(this, channelName, prefix, callChar);
         callByChar = callChar;
     }
 
-    public FrageChat(char callChar, String prefix, String permissionNode)
+    public FrageChat(char callChar, String prefix, String permissionNode, String channelName)
     {
         PREFIX = prefix;
-        registeredChannels.registerChannel(this, "Handel", prefix, callChar);
+        registeredChannels.registerChannel(this, channelName, prefix, callChar);
         permission = permissionNode;
 
     }
