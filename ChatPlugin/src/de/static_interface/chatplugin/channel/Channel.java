@@ -34,6 +34,7 @@ public interface Channel
      *         by the plugin.
      */
     public Vector<Player> getExceptedPlayers();
+    public void sendMessage(Player player, String message);
 
 
     /**

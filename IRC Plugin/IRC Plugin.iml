@@ -19,6 +19,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="bukkit" level="application" />
+    <orderEntry type="library" name="bukkit-1.6.2-R0.1" level="project" />
   </component>
 </module>
 

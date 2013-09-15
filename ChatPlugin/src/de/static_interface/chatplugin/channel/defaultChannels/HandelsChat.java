@@ -1,6 +1,8 @@
 package de.static_interface.chatplugin.channel.defaultChannels;
 
+import de.static_interface.chatplugin.ChatPlugin;
 import de.static_interface.chatplugin.channel.Channel;
+import de.static_interface.chatplugin.channel.configuration.LanguageHandler;
 import de.static_interface.chatplugin.channel.registeredChannels;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +18,7 @@ public class HandelsChat extends JavaPlugin implements Channel
     Vector<Player> exceptedPlayers = new Vector<>();
     private char callByChar = '$';
     String PREFIX = ChatColor.GRAY+"["+ChatColor.GOLD+"§6Handel"+ChatColor.GRAY+"]"+ChatColor.RESET;
+    String permission = "chatplugin.handel";
 
     public HandelsChat(char callChar)
     {
@@ -29,6 +32,14 @@ public class HandelsChat extends JavaPlugin implements Channel
         PREFIX = prefix;
         registeredChannels.registerChannel(this, "Handel", prefix, callChar);
         callByChar = callChar;
+    }
+
+    public HandelsChat(char callChar, String prefix, String permissionNode)
+    {
+        PREFIX = prefix;
+        registeredChannels.registerChannel(this, "Handel", prefix, callChar);
+        permission = permissionNode;
+
     }
 
     @Override
@@ -72,24 +83,26 @@ public class HandelsChat extends JavaPlugin implements Channel
         return "Handel";
     }
 
+    @Override
     public void onPlayerJoinsChannel(Channel channel, Player player)
     {
-        if ( !(channel.equals(this)) )
-        {
-            return;
-        }
-
+        if ( !(channel.equals(this)) ) return;
 
         if (player.hasPermission(getPermission()) && channel.equals(this))
         {
-            addExceptedPlayer(player);
+            removeExceptedPlayer(player);
         }
+
+        String message = PREFIX+ LanguageHandler.getString("message.playerJoined");
+        message = message.replace("$PLAYER$", player.getDisplayName());
+        message = message.replace("$CHANNEL$", channel.getChannelName());
+        message = ChatColor.translateAlternateColorCodes('$', message);
 
         for ( Player target : getServer().getOnlinePlayers() )
         {
             if ( !(channel.getExceptedPlayers().contains(target)) )
             {
-                target.sendMessage(PREFIX+player.getDisplayName()+" ist dem Channel "+channel.getChannelName()+" beigetreten !");
+                target.sendMessage(message);
             }
         }
     }
@@ -101,14 +114,21 @@ public class HandelsChat extends JavaPlugin implements Channel
 
         this.addExceptedPlayer(player);
 
+        String message = PREFIX+LanguageHandler.getString("message.playerLeft");
+        message = message.replace("$PLAYER$", player.getName());
+        message = message.replace("$CHANNEL$", channel.getChannelName());
+        message = ChatColor.translateAlternateColorCodes('$', message);
+
+
         for ( Player target : getServer().getOnlinePlayers() )
         {
             if ( !(channel.getExceptedPlayers().contains(target)) )
             {
-                target.sendMessage(PREFIX+player.getDisplayName()+" verließ den Channel "+channel.getChannelName()+".");
+                target.sendMessage(message);
             }
         }
     }
+
 
     @Override
     public String getPrefix()
@@ -118,7 +138,7 @@ public class HandelsChat extends JavaPlugin implements Channel
 
     public String getPermission()
     {
-        return "chatplugin.handel";
+        return permission;
     }
 
     @Override
@@ -127,4 +147,19 @@ public class HandelsChat extends JavaPlugin implements Channel
         return callByChar;
     }
 
+    @Override
+    public void sendMessage(Player player, String message)
+    {
+        String formattedMessage = message.substring(1);
+        formattedMessage = this.PREFIX+" ["+ChatPlugin.getGroup(player)+ ChatColor.RESET +"] "+ChatPlugin.getDisplayName(player)+": "+formattedMessage;
+        formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
+
+        for ( Player target : Bukkit.getOnlinePlayers() )
+        {
+            if ( !(this.contains(target)) )
+            {
+                target.sendMessage(formattedMessage);
+            }
+        }
+    }
 }

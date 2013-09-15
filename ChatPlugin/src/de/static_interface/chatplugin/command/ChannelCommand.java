@@ -1,6 +1,7 @@
 package de.static_interface.chatplugin.command;
 
 import de.static_interface.chatplugin.channel.Channel;
+import de.static_interface.chatplugin.channel.configuration.LanguageHandler;
 import de.static_interface.chatplugin.channel.registeredChannels;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -26,7 +27,7 @@ Permission nodes:
 
 public class ChannelCommand extends JavaPlugin implements CommandExecutor {
     public static final String PREFIX = ChatColor.GREEN + "[ChanMan] " + ChatColor.RESET;
-    public static final String permissionsError = ChatColor.RED+"Keine ausreichenden Permissions. Wende dich an einen Moderator wenn du glaubst, dass dies ein Fehler ist.";
+    public static final String permissionsError = ChatColor.translateAlternateColorCodes('&',LanguageHandler.getString("messages.permissions.general"));
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -36,59 +37,68 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
             return true;
         }
 
+        String message;
+
+
         switch (args[0]) {
             case "join":
 
                 if ( args.length < 2 )
                 {
-                    sender.sendMessage(PREFIX+"Du musst einen Channelnamen angeben !");
+                    sender.sendMessage(PREFIX+LanguageHandler.getString("messages.noChannelGiven"));
                     return true;
                 }
 
 
                 if (registeredChannels.getRegisteredChannel(args[1]) == null) {
-                    sender.sendMessage(PREFIX + " Channel existiert nicht !");
-                    return true;
-                }
-
-
-                if ((args.length == 3) && !(getServer().getPlayer(args[2]) == null)) {
-                    registeredChannels.getRegisteredChannel(args[1]).removeExceptedPlayer(args[2]);
+                    message = LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$",args[1]);
+                    sender.sendMessage(PREFIX + message);
                     return true;
                 }
 
                 registeredChannels.getRegisteredChannel(args[1]).removeExceptedPlayer((Player) sender);
 
-                sender.sendMessage(PREFIX+"Du bist dem Channel "+args[1]+" beigetreten !");
+                message = PREFIX+LanguageHandler.getString("message.playerJoins").replace("$CHANNEL$", args[1]);
+                ChatColor.translateAlternateColorCodes('&', message);
+                sender.sendMessage(message);
+
 
                 return true;
             case "leave":
 
                 if ( args.length < 2 )
                 {
-                    sender.sendMessage(PREFIX+"Du musst einen Channelnamen angeben !");
+                    sender.sendMessage(PREFIX+LanguageHandler.getString("message.noChannelGiven"));
                     return true;
                 }
 
-
-                if (registeredChannels.getRegisteredChannel(args[1]) == null) sender.sendMessage(PREFIX + " Channel existiert nicht !");
+                if (registeredChannels.getRegisteredChannel(args[1]) == null)
+                {
+                    message = LanguageHandler.getString("message.channelUnknown");
+                    message.replace("$CHANNEL$", args[1]);
+                    ChatColor.translateAlternateColorCodes('&', message);
+                    sender.sendMessage(PREFIX + message);
+                    return true;
+                }
                 registeredChannels.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
 
-                sender.sendMessage(PREFIX+"Du hast den Channel "+args[1]+" verlassen.");
+                message = PREFIX+LanguageHandler.getString("messages.playerLeaves").replace("$CHANNEL$", args[1]);
+                sender.sendMessage(message);
+
 
                 return true;
             case "list":
-                sender.sendMessage(PREFIX + " Bekannte Kanäle:");
-                sender.sendMessage(PREFIX+registeredChannels.getChannelNames());
+                message = PREFIX+LanguageHandler.getString("messages.list").replace("$CHANNELS$", registeredChannels.getChannelNames());
+                sender.sendMessage(PREFIX+message);
                 return true;
             case "participating":
-                sender.sendMessage(PREFIX+"Du bist in folgenden Channels:");
+                sender.sendMessage(PREFIX+LanguageHandler.getString("messages.part"));
                 for ( Channel target : registeredChannels.getRegisteredChannels() )
                 {
-                    if ( !(target.contains((Player) sender)) )
-                    {
-                        sender.sendMessage(PREFIX+target.getChannelName());
-                    }
+                    if (target.contains((Player) sender)) continue;
+
+                    sender.sendMessage(PREFIX+target.getChannelName());
+
                 }
                 return true;
             default:
@@ -98,7 +108,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor {
     }
 
     private static void sendHelp(CommandSender sender) {
-        sender.sendMessage(PREFIX + "Das Channelsystem hat folgende Commands:");
+        sender.sendMessage(PREFIX + LanguageHandler.getString("messages.help"));
         sender.sendMessage(PREFIX + "/ch join <channel>");
         sender.sendMessage(PREFIX + "/ch leave <channel>");
         sender.sendMessage(PREFIX + "/ch list");

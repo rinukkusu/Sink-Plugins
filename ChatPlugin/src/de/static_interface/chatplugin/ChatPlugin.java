@@ -1,5 +1,7 @@
 package de.static_interface.chatplugin;
 
+import de.static_interface.chatplugin.channel.ChatListenerLOW;
+import de.static_interface.chatplugin.channel.configuration.LanguageHandler;
 import de.static_interface.chatplugin.channel.defaultChannels.FrageChat;
 import de.static_interface.chatplugin.channel.defaultChannels.HandelsChat;
 import de.static_interface.chatplugin.channel.defaultChannels.ShoutChat;
@@ -29,9 +31,12 @@ import static de.static_interface.chatplugin.command.NickCommand.NICKNAME_PATH;
  * Copyright © Adventuria 2013
  */
 
-public class ChatPlugin extends JavaPlugin {
-    public void onEnable() {
-        for (Player p : Bukkit.getOnlinePlayers()) {
+public class ChatPlugin extends JavaPlugin
+{
+    public void onEnable()
+    {
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
             refreshDisplayName(p);
         }
         PluginManager pm = Bukkit.getPluginManager();
@@ -47,52 +52,70 @@ public class ChatPlugin extends JavaPlugin {
             return;
         }
 
+        //Registering channels. Important: argument is a char, not a String !
         ShoutChat sc = new ShoutChat('!');
         HandelsChat hc = new HandelsChat('$');
         FrageChat fc = new FrageChat('?');
+
+        if ( !(LanguageHandler.init()) )
+        {
+            getLogger().severe("I/O-Exception occured. Could not load language file ");
+        }else
+        {
+            getLogger().info("Loading language files succeeded. Proceeding.");
+        }
+
 
         registerEvents(pm);
         registerCommands();
     }
 
-    public void onDisable() {
+    public void onDisable()
+    {
         Bukkit.getLogger().log(Level.INFO, "Disabled.");
     }
 
-    public static String getGroup(Player player) {
+    public static String getGroup(Player player)
+    {
         PermissionUser user = PermissionsEx.getUser(player);
         return user.getGroupsNames()[0];
     }
 
 
-    public static void setDisplayName(Player player, String newNickname) {
+    public static void setDisplayName(Player player, String newNickname)
+    {
         player.setDisplayName(newNickname);
         player.setCustomName(newNickname);
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
         config.set(NICKNAME_PATH, newNickname);
-        if (newNickname.equals(getDefaultDisplayName(player))) {
+        if (newNickname.equals(getDefaultDisplayName(player)))
+        {
             setHasDisplayName(player, false);
         } else {
             setHasDisplayName(player, true);
         }
     }
 
-    public static String getDisplayName(Player player) {
+    public static String getDisplayName(Player player)
+    {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
         return config.getString(NICKNAME_PATH);
     }
 
-    public static String getDefaultDisplayName(Player player) {
+    public static String getDefaultDisplayName(Player player)
+    {
         PermissionUser user = PermissionsEx.getUser(player);
         String playerPrefix = ChatColor.translateAlternateColorCodes('&', user.getPrefix());
         return playerPrefix + player.getPlayerListName() + ChatColor.RESET;
     }
 
-    public static void refreshDisplayName(Player player) {
+    public static void refreshDisplayName(Player player)
+    {
         String nickname;
         if (getHasDisplayName(player)) {
             nickname = getDisplayName(player);
-            if (nickname.equals(getDefaultDisplayName(player))) {
+            if (nickname.equals(getDefaultDisplayName(player)))
+            {
                 setHasDisplayName(player, false);
             }
         } else {
@@ -102,25 +125,26 @@ public class ChatPlugin extends JavaPlugin {
         player.setCustomName(nickname);
     }
 
-    public static boolean getHasDisplayName(Player player) {
+    public static boolean getHasDisplayName(Player player)
+    {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
         return config.getBoolean(HAS_NICKNAME_PATH);
     }
 
-    public static void setHasDisplayName(Player player, boolean value) {
+    public static void setHasDisplayName(Player player, boolean value)
+    {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
         config.set(HAS_NICKNAME_PATH, value);
     }
 
-    private void registerEvents(PluginManager pm) {
-        pm.registerEvents(new ChatListenerLowest(), this);
-        pm.registerEvents(new ChatListenerNormal(), this);
+    private void registerEvents(PluginManager pm)
+    {
         pm.registerEvents(new NicknameListener(), this);
-        pm.registerEvents(new HelpChatListener(), this);
-        pm.registerEvents(new TradeChatListener(), this);
+        pm.registerEvents(new ChatListenerLOW(), this);
     }
 
-    private void registerCommands() {
+    private void registerCommands()
+    {
         getCommand("nick").setExecutor(new NickCommand());
         getCommand("ch").setExecutor(new ChannelCommand());
     }

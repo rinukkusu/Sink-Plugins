@@ -8,7 +8,7 @@ public class registeredChannels {
     private static String registeredChannelNames = "";
 
     private static TreeMap<String, Channel> registeredChannelsMap = new TreeMap<>();
-    private static TreeMap<Character, Channel> callStrings = new TreeMap<>();
+    private static TreeMap<Character, Channel> callChars = new TreeMap<>();
     private static TreeMap<Character, String> prefixes = new TreeMap<>();
 
     /**
@@ -26,9 +26,9 @@ public class registeredChannels {
         if (registeredChannelsMap.containsValue(name)) return;
 
         registeredChannelsMap.put(name, channel);
-        callStrings.put(callChar, channel);
+        callChars.put(callChar, channel);
         prefixes.put(callChar, prefix);
-
+        registeredChannelNames = registeredChannelNames + name + " ";
 
 
     }
@@ -65,7 +65,7 @@ public class registeredChannels {
 
     public static Channel getRegisteredChannel(char callByChar)
     {
-        return callStrings.get(callByChar);
+        return callChars.get(callByChar);
     }
 
     /**
@@ -88,6 +88,16 @@ public class registeredChannels {
     public static String getChannelPrefix(char callChar)
     {
         return prefixes.get(callChar);
+    }
+
+    /**
+     * @return
+     * Returns the registered callChars.
+     */
+
+    public static TreeMap<Character, Channel> getRegisteredCallChars()
+    {
+        return callChars;
     }
 
 }
