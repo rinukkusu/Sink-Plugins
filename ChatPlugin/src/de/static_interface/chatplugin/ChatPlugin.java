@@ -1,13 +1,15 @@
 package de.static_interface.chatplugin;
 
-import de.static_interface.chatplugin.channel.ChatListenerLOW;
+import de.static_interface.chatplugin.channel.Channel;
+import de.static_interface.chatplugin.channel.channels.HelpChannel;
+import de.static_interface.chatplugin.channel.channels.ShoutChannel;
+import de.static_interface.chatplugin.channel.channels.TradeChannel;
 import de.static_interface.chatplugin.channel.configuration.LanguageHandler;
-import de.static_interface.chatplugin.channel.defaultChannels.FrageChat;
-import de.static_interface.chatplugin.channel.defaultChannels.HandelsChat;
-import de.static_interface.chatplugin.channel.defaultChannels.ShoutChat;
 import de.static_interface.chatplugin.command.ChannelCommand;
 import de.static_interface.chatplugin.command.NickCommand;
-import de.static_interface.chatplugin.listener.*;
+import de.static_interface.chatplugin.listener.ChatListenerLowest;
+import de.static_interface.chatplugin.listener.ChatListenerNormal;
+import de.static_interface.chatplugin.listener.NicknameListener;
 import de.static_interface.commandsplugin.CommandsPlugin;
 import de.static_interface.commandsplugin.PlayerConfiguration;
 import org.bukkit.Bukkit;
@@ -53,9 +55,13 @@ public class ChatPlugin extends JavaPlugin
         }
 
         //Registering channels. Important: argument is a char, not a String !
-        ShoutChat sc = new ShoutChat('!');
-        HandelsChat hc = new HandelsChat('$');
-        FrageChat fc = new FrageChat('?');
+        Channel sc = new ShoutChannel('!');
+        Channel hc = new TradeChannel('$');
+        Channel fc = new HelpChannel('?');
+
+        sc.registerChannel();
+        hc.registerChannel();
+        fc.registerChannel();
 
         if ( !(LanguageHandler.init()) )
         {
@@ -140,7 +146,8 @@ public class ChatPlugin extends JavaPlugin
     private void registerEvents(PluginManager pm)
     {
         pm.registerEvents(new NicknameListener(), this);
-        pm.registerEvents(new ChatListenerLOW(), this);
+        pm.registerEvents(new ChatListenerLowest(), this);
+        pm.registerEvents(new ChatListenerNormal(), this);
     }
 
     private void registerCommands()

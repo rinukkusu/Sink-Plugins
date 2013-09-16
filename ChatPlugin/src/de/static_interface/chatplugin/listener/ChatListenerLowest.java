@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
  */
 public class ChatListenerLowest implements Listener
 {
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
         ChatPlugin.refreshDisplayName(event.getPlayer());

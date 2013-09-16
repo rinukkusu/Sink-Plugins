@@ -2,8 +2,6 @@ package de.static_interface.chatplugin.channel;
 
 import org.bukkit.entity.Player;
 
-import java.util.Vector;
-
 public interface Channel
 {
     /**
@@ -12,9 +10,7 @@ public interface Channel
      */
 
     /**
-     * @param player Given player will be added to the excepted players
-     *               list.
-     * @method addExceptedPlayer
+     * @param player Given player will be added to the excepted players list.
      * Will add the player to the excepted players list   <br>
      * so he will be excepted from the messages sent.     <br>
      */
@@ -22,20 +18,18 @@ public interface Channel
 
     /**
      * @param player Player to remove from the excepted players list.
-     * @method removeExceptedPlayer
      * Removes player from the excepted players list.
      */
     public void removeExceptedPlayer(Player player);
 
-    public void removeExceptedPlayer(String playername);
 
-    /**
-     * @return Returns a Vector of players not getting messages   <br>
-     *         by the plugin.
-     */
-    public Vector<Player> getExceptedPlayers();
     public void sendMessage(Player player, String message);
 
+
+    /**
+     * Register Channel
+     */
+    public void registerChannel();
 
     /**
      * @param player Player to check for.
@@ -44,10 +38,5 @@ public interface Channel
     public boolean contains(Player player);
 
     public String getChannelName();
-
-    public void onPlayerLeavesChannel(Channel channel, Player player);
-    public void onPlayerJoinsChannel(Channel channel, Player player);
-    public String getPrefix();
-    public char getCharForCall();
 
 }

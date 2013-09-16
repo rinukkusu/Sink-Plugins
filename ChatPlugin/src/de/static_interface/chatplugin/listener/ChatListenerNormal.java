@@ -1,6 +1,6 @@
 package de.static_interface.chatplugin.listener;
 
-import de.static_interface.commandsplugin.CommandsPlugin;
+import de.static_interface.chatplugin.channel.ChannelHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,23 +19,19 @@ public class ChatListenerNormal implements Listener
         {
             return;
         }
-        String message = event.getMessage();
-        String shoutPrefix = "";
-        boolean isShout = false;
-        int range = 50;
-        if (message.startsWith("!"))
+
+        for (char callChar : ChannelHandler.getRegisteredCallChars().keySet())
         {
-            if (! event.getPlayer().hasPermission("chatplugin.shout"))
+            if (callChar == ( event.getMessage().toCharArray()[0] ))
             {
-                event.getPlayer().sendMessage(ChatColor.RED + "Du hast nicht genügend Rechte um zu schreien!");
+                ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage());
+                event.setCancelled(true);
                 return;
             }
-            message = message.replaceFirst("!", "");
-            event.setMessage(message);
-            shoutPrefix = ChatColor.RESET.toString() + ChatColor.GRAY + "[Schrei] ";
-            isShout = true;
         }
-        event.setFormat(shoutPrefix + event.getFormat());
+
+        String message = event.getMessage();
+        int range = 50;
         String formattedMessage = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
         formattedMessage = formattedMessage.replace("%2$s", message);
         if (event.getPlayer().hasPermission("chatplugin.color"))
@@ -43,30 +39,23 @@ public class ChatListenerNormal implements Listener
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }
         String spyPrefix = ChatColor.GRAY + "[Spy] ";
-        if (isShout)
+        double x = event.getPlayer().getLocation().getX();
+        double y = event.getPlayer().getLocation().getY();
+        double z = event.getPlayer().getLocation().getZ();
+        for (Player p : Bukkit.getOnlinePlayers())
         {
-            CommandsPlugin.broadcastMessage(formattedMessage);
-        }
-        else
-        {
-            double x = event.getPlayer().getLocation().getX();
-            double y = event.getPlayer().getLocation().getY();
-            double z = event.getPlayer().getLocation().getZ();
-            for (Player p : Bukkit.getOnlinePlayers())
+            Location loc = p.getLocation();
+            boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
+
+            if (isInRange)
             {
-                Location loc = p.getLocation();
-                boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
-
-                if (isInRange)
-                {
-                    p.sendMessage(formattedMessage);
-                }
-                else if (( ( p.hasPermission("chatplugin.spynewbie") ) && ! event.getPlayer().hasPermission("chatplugin.spynewbie.bypass") ) || p.hasPermission("chatplugin.spy"))
-                {
-                    p.sendMessage(spyPrefix + formattedMessage);
-                }
-
+                p.sendMessage(formattedMessage);
             }
+            else if (( ( p.hasPermission("chatplugin.spynewbie") ) && ! event.getPlayer().hasPermission("chatplugin.spynewbie.bypass") ) || p.hasPermission("chatplugin.spy"))
+            {
+                p.sendMessage(spyPrefix + formattedMessage);
+            }
+
         }
         event.setCancelled(true);
     }
