@@ -1,6 +1,6 @@
 package de.static_interface.chatplugin;
 
-import de.static_interface.chatplugin.channel.Channel;
+import de.static_interface.chatplugin.channel.IChannel;
 import de.static_interface.chatplugin.channel.channels.HelpChannel;
 import de.static_interface.chatplugin.channel.channels.ShoutChannel;
 import de.static_interface.chatplugin.channel.channels.TradeChannel;
@@ -55,9 +55,9 @@ public class ChatPlugin extends JavaPlugin
         }
 
         //Registering channels. Important: argument is a char, not a String !
-        Channel sc = new ShoutChannel('!');
-        Channel hc = new TradeChannel('$');
-        Channel fc = new HelpChannel('?');
+        IChannel sc = new ShoutChannel('!');
+        IChannel hc = new TradeChannel('$');
+        IChannel fc = new HelpChannel('?');
 
         sc.registerChannel();
         hc.registerChannel();

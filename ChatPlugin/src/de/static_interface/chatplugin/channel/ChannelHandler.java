@@ -8,8 +8,8 @@ public class ChannelHandler
 
     private static String registeredChannelNames = "";
 
-    private static TreeMap<String, Channel> registeredChannelsMap = new TreeMap<>();
-    private static TreeMap<Character, Channel> callChars = new TreeMap<>();
+    private static TreeMap<String, IChannel> registeredChannelsMap = new TreeMap<>();
+    private static TreeMap<Character, IChannel> callChars = new TreeMap<>();
     private static TreeMap<Character, String> prefixes = new TreeMap<>();
 
     /**
@@ -18,7 +18,7 @@ public class ChannelHandler
      * @param prefix   Prefix of given instance to be registered.
      * @param callChar Char you use to call the channel in game.
      */
-    public static void registerChannel(Channel channel, String name, String prefix, char callChar)
+    public static void registerChannel(IChannel channel, String name, String prefix, char callChar)
     {
         if (registeredChannelsMap.containsValue(name))
         {
@@ -39,7 +39,7 @@ public class ChannelHandler
      * @return Returns the instance of Channel with the given name.
      */
 
-    public static Channel getRegisteredChannel(String name)
+    public static IChannel getRegisteredChannel(String name)
     {
         return registeredChannelsMap.get(name);
     }
@@ -58,7 +58,7 @@ public class ChannelHandler
      * @return Returns the instance of Channel with given callByChar
      */
 
-    public static Channel getRegisteredChannel(char callByChar)
+    public static IChannel getRegisteredChannel(char callByChar)
     {
         return callChars.get(callByChar);
     }
@@ -67,7 +67,7 @@ public class ChannelHandler
      * @return Returns a collection containing all registered channels.
      */
 
-    public static Collection<Channel> getRegisteredChannels()
+    public static Collection<IChannel> getRegisteredChannels()
     {
         return registeredChannelsMap.values();
     }
@@ -76,7 +76,7 @@ public class ChannelHandler
      * @return Returns the registered callChars.
      */
 
-    public static TreeMap<Character, Channel> getRegisteredCallChars()
+    public static TreeMap<Character, IChannel> getRegisteredCallChars()
     {
         return callChars;
     }

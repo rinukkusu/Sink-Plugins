@@ -2,7 +2,7 @@ package de.static_interface.chatplugin.channel;
 
 import org.bukkit.entity.Player;
 
-public interface Channel
+public interface IChannel
 {
     /**
      * Joining a Channel will remove you from the list<br>

@@ -1,8 +1,8 @@
 package de.static_interface.chatplugin.channel.channels;
 
 import de.static_interface.chatplugin.ChatPlugin;
-import de.static_interface.chatplugin.channel.Channel;
 import de.static_interface.chatplugin.channel.ChannelHandler;
+import de.static_interface.chatplugin.channel.IChannel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Vector;
 
-public class ShoutChannel extends JavaPlugin implements Channel, Listener
+public class ShoutChannel extends JavaPlugin implements IChannel, Listener
 {
 
     Vector<Player> exceptedPlayers = new Vector<>();

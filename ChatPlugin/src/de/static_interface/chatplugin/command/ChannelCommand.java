@@ -1,7 +1,7 @@
 package de.static_interface.chatplugin.command;
 
-import de.static_interface.chatplugin.channel.Channel;
 import de.static_interface.chatplugin.channel.ChannelHandler;
+import de.static_interface.chatplugin.channel.IChannel;
 import de.static_interface.chatplugin.channel.configuration.LanguageHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -100,7 +100,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
             case "participating":
                 sender.sendMessage(PREFIX + LanguageHandler.getString("messages.part"));
-                for (Channel target : ChannelHandler.getRegisteredChannels())
+                for (IChannel target : ChannelHandler.getRegisteredChannels())
                 {
                     if (target.contains((Player) sender))
                     {
