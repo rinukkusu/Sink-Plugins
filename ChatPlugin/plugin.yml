@@ -56,24 +56,26 @@ permissions:
   chatplugin.nick.others:
     description: Allows to set other players nickname
     default: op
+    children:
+       chatplugin.nick: true
+
   chatplugin.channel.*:
     description: Grants full access to channel plugin.
     default: op
+    children:
+       chatplugin.channel.join: true
+       chatplugin.channel.leave: true
+       chatplugin.channel.list: true
+       chatplugin.channel.user: true
+
   chatplugin.channel.join:
     description: Grants full access to the default channels.
+
   chatplugin.channel.leave:
     description: Allows the user to leave any joined channels.
+
   chatplugin.channel.list:
     description: Allows the user to list any registered channel.
-  chatplugin.channel.forcejoin:
-    description: Allows the user to force another player to join a channel.
-    default: op
-  chatplugin.channel.newbie:
-    description: Allows basic access (Help & Shout channel only)
+
   chatplugin.channel.user:
     description: Allows full leave/join access to the default channels & /ch list
-  chatplugin.channel.moderator:
-    description: user + /ch kick.
-  chatplugin.channel.admin:
-    description: Grants full access to channel plugin
-    default: op
