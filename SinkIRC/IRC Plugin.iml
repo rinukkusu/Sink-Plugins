@@ -7,19 +7,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="PROVIDED">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/pircbot.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/pircbot.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="bukkit" level="application" />
-    <orderEntry type="library" name="bukkit-1.6.2-R0.1" level="project" />
+    <orderEntry type="library" name="pircbot" level="project" />
   </component>
 </module>
 
