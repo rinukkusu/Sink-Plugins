@@ -1,0 +1,27 @@
+name: SinkIRC
+version: 1.7
+description: Plugin that links Chat to IRC
+author: Trojaner
+authors: [_ShadowRaven_]
+website: http://static-interface.de
+main: de.static_interface.sinkirc.SinkIRC
+
+commands:
+  irclist:
+    description: Shows online Users in IRC
+    permission: sinkirc.irclist
+
+permissions:
+  sinkirc.*:
+    description: Gives access to all IRC commands
+    children:
+      sinkirc.irc: true
+      sinkirc.irclist: true
+
+  sinkirc.irc:
+    description: Shows information about the IRC
+    default: true
+
+  sinkirc.irclist:
+    description: Shows online users in IRC
+    permission: sinkirc.irclist

@@ -1,8 +1,8 @@
 Bukkit_Plugins
 ==============
 
-Bukkit Plugins for <a href="http://adventuria.eu">Adventuria Minecraft</a>.
-(AntiSpamPlugin, CommandsPlugin, IRCPlugin and ChatPlugin)
+Sink Plugins for <a href="http://adventuria.eu">Adventuria Minecraft</a>.
+(SinkAntiSpam, SinkCommands, SinkIRC, SinkLibrary and SinkChat)
 
 License
 ==============

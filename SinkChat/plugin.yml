@@ -1,0 +1,93 @@
+name: SinkChat
+version: 1.7
+description: General Chat Plugin
+author: Trojaner
+website: http://static-interface.de
+main: de.static_interface.sinkchat.SinkChat
+depend: [SinkCommands, PermissionsEx]
+
+commands:
+  nick:
+    description: Change your or other users nickname!
+    permission: sinkchat.nick
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> [Spieler] <Neuer Name|off>"
+  ch:
+    description: Access the channels plugin.
+    usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
+
+permissions:
+  sinkchat.*:
+    description: Gives access to all commands
+    children:
+      sinkchat.spy: true
+      sinkchat.spynewbie: true
+      sinkchat.shout: true
+      sinkchat.color: true
+      sinkchat.nick: true
+      sinkchat.channel.*: true
+
+  sinkchat.spy:
+    description: Allows to read local chat
+    default: op
+    children:
+       sinkchat.spynewbie: true
+
+  sinkchat.spynewbie:
+    description: Allows to read local chat of newbies
+    default: false
+    children:
+       sinkchat.spynewbie.bypass: true
+
+  sinkchat.spynewbie.bypass:
+      description: Marks a player as not newbie
+      default: false
+
+  sinkchat.color:
+    description: Allows to use color chat
+    default: true
+
+  sinkchat.nick:
+    description: Allows to use nick command
+    default: op
+
+  sinkchat.nick.others:
+    description: Allows to set other players nickname
+    default: op
+    children:
+       sinkchat.nick: true
+
+  sinkchat.channel.*:
+    description: Grants full access to channel plugin.
+    default: op
+    children:
+       sinkchat.channel.join: true
+       sinkchat.channel.leave: true
+       sinkchat.channel.list: true
+       sinkchat.channel.user: true
+       sinkchat.channel.shout: true
+       sinkchat.channel.trade: true
+       sinkchat.channel.help: true
+
+  sinkchat.channel.join:
+    description: Grants full access to the default channels.
+
+  sinkchat.channel.leave:
+    description: Allows the user to leave any joined channels.
+
+  sinkchat.channel.list:
+    description: Allows the user to list any registered channel.
+
+  sinkchat.channel.user:
+    description: Allows full leave/join access to the default channels & /ch list
+
+  sinkchat.channel.shout:
+    description: Allows to shout
+    default: true
+
+  sinkchat.channel.trade:
+    description: Allows to use trade chat
+    default: true
+
+  sinkchat.channel.help:
+    description: Allows to use help chat
+    default: true
