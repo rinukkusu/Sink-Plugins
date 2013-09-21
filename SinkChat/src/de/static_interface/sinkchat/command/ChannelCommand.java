@@ -57,7 +57,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                     ChannelHandler.getRegisteredChannel(args[1]).removeExceptedPlayer((Player) sender);
                 }
                 catch (NullPointerException e)
-                {   //Note: Do this more clean...
+                {
                     message = PREFIX + LanguageHandler.getString("messages.channelUnknown").replace("$CHANNEL$", args[1]);
                     sender.sendMessage(message);
                     return true;

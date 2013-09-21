@@ -22,8 +22,14 @@ public interface IChannel
      */
     public void removeExceptedPlayer(Player player);
 
-
-    public void sendMessage(Player player, String message);
+    /**
+     * Send message to all players in channel
+     *
+     * @param player  Sender
+     * @param message Message
+     * @return True if message was send successfully
+     */
+    public boolean sendMessage(Player player, String message);
 
 
     /**

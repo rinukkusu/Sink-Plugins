@@ -22,9 +22,9 @@ public class ChatListenerNormal implements Listener
 
         for (char callChar : ChannelHandler.getRegisteredCallChars().keySet())
         {
-            if (callChar == ( event.getMessage().toCharArray()[0] ))
+            if (callChar == ( event.getMessage().toCharArray()[0] )
+                    && ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()))
             {
-                ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage());
                 event.setCancelled(true);
                 return;
             }

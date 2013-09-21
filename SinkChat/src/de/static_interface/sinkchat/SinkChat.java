@@ -192,6 +192,6 @@ public class SinkChat extends JavaPlugin
     private void registerCommands()
     {
         getCommand("nick").setExecutor(new NickCommand());
-        getCommand("ch").setExecutor(new ChannelCommand());
+        getCommand("channel").setExecutor(new ChannelCommand());
     }
 }

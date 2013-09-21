@@ -49,23 +49,28 @@ public class TradeChannel extends JavaPlugin implements IChannel
     }
 
     @Override
-    public void sendMessage(Player player, String message)
+    public boolean sendMessage(Player player, String message)
     {
+        if (contains(player))
+        {
+            return false;
+        }
         String formattedMessage = message.substring(1);
+        formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
-            formattedMessage = this.PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+            formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
         }
-        formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
 
         for (Player target : Bukkit.getOnlinePlayers())
         {
-            if (! ( this.contains(target) ))
+            if (! ( contains(target) ))
             {
                 target.sendMessage(formattedMessage);
             }
         }
         SinkLibrary.sendIRCMessage(formattedMessage);
+        return true;
     }
 
     @Override

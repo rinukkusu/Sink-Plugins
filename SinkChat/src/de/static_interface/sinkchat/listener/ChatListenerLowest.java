@@ -23,7 +23,8 @@ public class ChatListenerLowest implements Listener
             return;
         }
 
-        String groupPrefix = ChatColor.RESET.toString() + ChatColor.GRAY + "[" + SinkChat.getGroup(event.getPlayer()) + ChatColor.RESET + ChatColor.GRAY + "]";
+        String groupPrefix = ChatColor.RESET.toString() + ChatColor.GRAY + "[" + SinkChat.getGroup(event.getPlayer())
+                + ChatColor.RESET + ChatColor.GRAY + "]";
         event.setFormat(groupPrefix + " %1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
     }
 

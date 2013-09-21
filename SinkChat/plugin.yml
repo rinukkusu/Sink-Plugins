@@ -11,9 +11,11 @@ commands:
     description: Change your or other users nickname!
     permission: sinkchat.nick
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> [Spieler] <Neuer Name|off>"
-  ch:
+
+  channel:
     description: Access the channels plugin.
     usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
+    aliases: ch
 
 permissions:
   sinkchat.*:

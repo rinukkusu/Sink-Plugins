@@ -16,7 +16,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
 {
 
     Vector<Player> exceptedPlayers = new Vector<>();
-    String PREFIX = ChatColor.GRAY + "[Shout] " + ChatColor.RESET;
+    String PREFIX = ChatColor.GRAY + getChannelName() + " " + ChatColor.RESET;
     private char callByChar = '!';
 
     public ShoutChannel(char callChar)
@@ -50,28 +50,33 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     }
 
     @Override
-    public void sendMessage(Player player, String message)
+    public boolean sendMessage(Player player, String message)
     {
+        if (contains(player))
+        {
+            return false;
+        }
         String formattedMessage = message.substring(1);
-        formattedMessage = this.PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+        formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
-            formattedMessage = this.PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+            formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
         }
 
         for (Player target : Bukkit.getOnlinePlayers())
         {
-            if (! ( this.contains(target) ))
+            if (! ( contains(target) ))
             {
                 target.sendMessage(formattedMessage);
             }
         }
         SinkLibrary.sendIRCMessage(formattedMessage);
+        return true;
     }
 
     @Override
     public void registerChannel()
     {
-        ChannelHandler.registerChannel(this, "Shout", callByChar);
+        ChannelHandler.registerChannel(this, getChannelName(), callByChar);
     }
 }
