@@ -1,4 +1,4 @@
-Bukkit_Plugins
+Sink-Plugins
 ==============
 
 Sink Plugins for <a href="http://adventuria.eu">Adventuria Minecraft</a>.
