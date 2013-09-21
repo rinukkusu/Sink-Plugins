@@ -13,10 +13,9 @@ import java.util.Vector;
 
 public class TradeChannel extends JavaPlugin implements IChannel
 {
-
     Vector<Player> exceptedPlayers = new Vector<>();
     private char callByChar = '$';
-    String PREFIX = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "]" + ChatColor.RESET;
+    String PREFIX = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] " + ChatColor.RESET;
 
     public TradeChannel(char callChar)
     {
@@ -55,8 +54,12 @@ public class TradeChannel extends JavaPlugin implements IChannel
         {
             return false;
         }
+        if (message.toCharArray().length == 1 && message.toCharArray()[0] == callByChar)
+        {
+            return false;
+        }
         String formattedMessage = message.substring(1);
-        formattedMessage = PREFIX + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+        formattedMessage = PREFIX + ChatColor.GRAY + "[" + SinkChat.getGroup(player) + ChatColor.GRAY + "] " + SinkChat.getDisplayName(player) + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);

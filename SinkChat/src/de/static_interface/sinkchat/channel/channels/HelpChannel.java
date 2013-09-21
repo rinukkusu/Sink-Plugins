@@ -54,8 +54,12 @@ public class HelpChannel extends JavaPlugin implements IChannel
         {
             return false;
         }
+        if (message.toCharArray().length == 1 && message.toCharArray()[0] == callByChar)
+        {
+            return false;
+        }
         String formattedMessage = message.substring(1);
-        formattedMessage = PREFIX + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+        formattedMessage = PREFIX + ChatColor.GRAY + "[" + SinkChat.getGroup(player) + ChatColor.GRAY + "] " + SinkChat.getDisplayName(player) + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
