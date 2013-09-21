@@ -15,13 +15,10 @@ import java.util.regex.Pattern;
 
 public class SinkAntiSpamListener implements Listener
 {
-    String[] blacklist = { "schlampe", "sex",
-            "fresse", "fick", "trojana", "son of a bitch", "screw",
-            "goddamn", "anus", "nigger", "nigga", "suck", "cocksucker", "motherfucker", "cunt",
-            "dick", "bastard", "hure", "asshole", "arschloch", "penis", "fotze",
-            "pussy", "bitch", "hurensohn" };
+    String[] blacklist = { "schlampe", "anus", "nigger", "nigga", "suck", "motherfucker", "bastard", "hure",
+            "asshole", "arschloch", "fotze", "bitch", "hurensohn" };
 
-    String[] whiteListDomains = { "kepler-forum.de", "youtube.de", "youtube.com", "google.de", "adventuria.eu" };
+    String[] whiteListDomains = { "youtube.de", "youtube.com", "google.de", "adventuria.eu" };
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)

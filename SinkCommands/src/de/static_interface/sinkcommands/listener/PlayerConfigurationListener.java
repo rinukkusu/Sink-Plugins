@@ -1,6 +1,6 @@
 package de.static_interface.sinkcommands.listener;
 
-import de.static_interface.sinkcommands.PlayerConfiguration;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

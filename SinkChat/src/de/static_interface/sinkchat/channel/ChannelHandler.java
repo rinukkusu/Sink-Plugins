@@ -10,15 +10,13 @@ public class ChannelHandler
 
     private static TreeMap<String, IChannel> registeredChannelsMap = new TreeMap<>();
     private static TreeMap<Character, IChannel> callChars = new TreeMap<>();
-    private static TreeMap<Character, String> prefixes = new TreeMap<>();
 
     /**
      * @param channel  Instance of Channel to be registered.
      * @param name     Name of given instance to be registered.
-     * @param prefix   Prefix of given instance to be registered.
      * @param callChar Char you use to call the channel in game.
      */
-    public static void registerChannel(IChannel channel, String name, String prefix, char callChar)
+    public static void registerChannel(IChannel channel, String name, char callChar)
     {
         if (registeredChannelsMap.containsValue(name))
         {
@@ -27,7 +25,6 @@ public class ChannelHandler
 
         registeredChannelsMap.put(name, channel);
         callChars.put(callChar, channel);
-        prefixes.put(callChar, prefix);
         registeredChannelNames = registeredChannelNames + name + " ";
 
 

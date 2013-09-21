@@ -8,6 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bukkit" level="project" />
+    <orderEntry type="library" name="Vault" level="project" />
+    <orderEntry type="module" module-name="SinkIRC" />
+    <orderEntry type="library" name="pircbot" level="project" />
   </component>
 </module>
 

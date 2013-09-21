@@ -1,4 +1,4 @@
-package de.static_interface.sinkcommands;
+package de.static_interface.sinklibrary;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

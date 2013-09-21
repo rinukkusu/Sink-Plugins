@@ -10,8 +10,8 @@ import de.static_interface.sinkchat.command.NickCommand;
 import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinkchat.listener.NicknameListener;
-import de.static_interface.sinkcommands.PlayerConfiguration;
-import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -44,15 +44,17 @@ public class SinkChat extends JavaPlugin
         PluginManager pm = Bukkit.getPluginManager();
         PermissionsEx pex = (PermissionsEx) pm.getPlugin("PermissionsEx");
 
-        SinkCommands sinkCommands = (SinkCommands) pm.getPlugin("SinkCommands");
+        SinkLibrary sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+
+        if (sinkLibrary == null)
+        {
+            getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
+            pm.disablePlugin(this);
+            return;
+        }
         if (pex == null)
         {
             Bukkit.getLogger().log(Level.WARNING, "This Plugin needs PermissionsEx to work correctly");
-            return;
-        }
-        if (sinkCommands == null)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "This Plugin needs SinkCommands to work correctly");
             return;
         }
 
@@ -110,7 +112,7 @@ public class SinkChat extends JavaPlugin
     public static String getDisplayName(Player player)
     {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
-        return config.getString(NICKNAME_PATH);
+        return (String) config.get(NICKNAME_PATH);
     }
 
     public static String getDefaultDisplayName(Player player)
@@ -142,7 +144,7 @@ public class SinkChat extends JavaPlugin
     public static boolean getHasDisplayName(Player player)
     {
         PlayerConfiguration config = new PlayerConfiguration(player.getName());
-        return config.getBoolean(HAS_NICKNAME_PATH);
+        return (boolean) config.get(HAS_NICKNAME_PATH);
     }
 
     public static void setHasDisplayName(Player player, boolean value)

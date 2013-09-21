@@ -1,7 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.SinkCommands;
-import de.static_interface.sinkcommands.Util;
+import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,7 +19,7 @@ public class TeamchatCommand implements CommandExecutor
             return false;
         }
         String message = Util.formatArrayToString(args, " ");
-        SinkCommands.broadcast(PREFIX + SinkCommands.getSenderName(sender) + ChatColor.WHITE + ": " + message, "sinkcommands.teamchat");
+        BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + ChatColor.WHITE + ": " + message, "sinkcommands.teamchat");
         return true;
     }
 }

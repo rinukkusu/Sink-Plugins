@@ -1,6 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.BukkitUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,18 +30,18 @@ public class GlobalmuteCommand implements CommandExecutor
                     }
                     reason = reason + " " + arg;
                 }
-                SinkCommands.broadcastMessage(PREFIX + "Der globale Mute wurde von " + SinkCommands.getSenderName(sender) + " aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
+                BukkitUtil.broadcastMessage(PREFIX + "Der globale Mute wurde von " + BukkitUtil.getSenderName(sender) + " aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
             }
             else
             {
-                SinkCommands.broadcastMessage(PREFIX + "Der global Mute wurde von " + SinkCommands.getSenderName(sender) + " aktiviert. Alle Spieler sind jetzt stumm.");
+                BukkitUtil.broadcastMessage(PREFIX + "Der global Mute wurde von " + BukkitUtil.getSenderName(sender) + " aktiviert. Alle Spieler sind jetzt stumm.");
             }
             SinkCommands.globalmuteEnabled = true;
             return true;
         }
         else
         {
-            SinkCommands.broadcastMessage(PREFIX + "Der global Mute wurde von " + SinkCommands.getSenderName(sender) + " deaktiviert.");
+            BukkitUtil.broadcastMessage(PREFIX + "Der global Mute wurde von " + BukkitUtil.getSenderName(sender) + " deaktiviert.");
         }
         return true;
     }

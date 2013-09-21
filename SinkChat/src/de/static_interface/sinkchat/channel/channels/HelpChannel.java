@@ -67,6 +67,6 @@ public class HelpChannel extends JavaPlugin implements IChannel
     @Override
     public void registerChannel()
     {
-        ChannelHandler.registerChannel(this, "Frage", PREFIX, callByChar);
+        ChannelHandler.registerChannel(this, "Frage", callByChar);
     }
 }

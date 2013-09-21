@@ -70,6 +70,6 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     @Override
     public void registerChannel()
     {
-        ChannelHandler.registerChannel(this, "Shout", PREFIX, callByChar);
+        ChannelHandler.registerChannel(this, "Shout", callByChar);
     }
 }

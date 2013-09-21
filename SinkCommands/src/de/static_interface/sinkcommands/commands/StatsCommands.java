@@ -1,7 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.PlayerConfiguration;
 import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

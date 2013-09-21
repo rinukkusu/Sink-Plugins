@@ -1,6 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.BukkitUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,9 +25,6 @@ public class VotekickCommands
     private static String target;
 
     public static List<CommandSender> votedPlayers = new ArrayList<>();
-
-    //ToDo: /voteadmin enable and disable with variable: voteEnabled
-    //ToDo: Add Timer to show remaining seconds...
 
     public static class VotekickCommand implements CommandExecutor
     {
@@ -120,11 +118,11 @@ public class VotekickCommands
             }
             if (reason.equals(""))
             {
-                SinkCommands.broadcast(PREFIX + SinkCommands.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
             else
             {
-                SinkCommands.broadcast(PREFIX + SinkCommands.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
             voteStarted = true;
             long time = 20 * 180; // 20 Ticks (= 1 second) * 180 = 3 Minutes
@@ -194,7 +192,7 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
         {
-            SinkCommands.broadcast(PREFIX + "Der Votekick gegen " + target + " wurde durch " + SinkCommands.getSenderName(commandSender) + " beendet.", "sinkcommands.votekick.vote");
+            BukkitUtil.broadcast(PREFIX + "Der Votekick gegen " + target + " wurde durch " + BukkitUtil.getSenderName(commandSender) + " beendet.", "sinkcommands.votekick.vote");
             voteStarted = false;
             endVoteKick(plugin);
             return true;
@@ -230,11 +228,11 @@ public class VotekickCommands
             int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
             if (( percentYes + percentNo ) <= 1)
             {
-                SinkCommands.broadcast(PREFIX + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "sinkcommands.votekick.vote");
             }
             if (percentYes > 50)
             {
-                SinkCommands.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
                 final String username = targetPlayer.getName();
                 targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
                 SinkCommands.addTempBan(username);
@@ -249,7 +247,7 @@ public class VotekickCommands
             }
             else
             {
-                SinkCommands.broadcast(PREFIX + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
             }
         }
         votesYes = 0;

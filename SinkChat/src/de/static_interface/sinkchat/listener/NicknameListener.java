@@ -1,7 +1,7 @@
 package de.static_interface.sinkchat.listener;
 
 import de.static_interface.sinkchat.SinkChat;
-import de.static_interface.sinkcommands.PlayerConfiguration;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -15,11 +15,11 @@ public class NicknameListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         PlayerConfiguration config = new PlayerConfiguration(event.getPlayer().getName());
-        String nick = config.getString(NICKNAME_PATH);
+        String nick = (String) config.get(NICKNAME_PATH);
         if (nick == null || nick.equals("null") || nick.equals(""))
         {
-            config.getPlayerConfiguration().addDefault(event.getPlayer().getName() + HAS_NICKNAME_PATH, false);
-            config.getPlayerConfiguration().addDefault(event.getPlayer().getName() + NICKNAME_PATH, "");
+            config.getYamlConfiguration().addDefault(event.getPlayer().getName() + HAS_NICKNAME_PATH, false);
+            config.getYamlConfiguration().addDefault(event.getPlayer().getName() + NICKNAME_PATH, "");
             SinkChat.setDisplayName(event.getPlayer(), SinkChat.getDefaultDisplayName(event.getPlayer()));
             SinkChat.setHasDisplayName(event.getPlayer(), false);
         }

@@ -1,6 +1,7 @@
 package de.static_interface.sinkantispam;
 
-import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -19,15 +20,15 @@ import java.util.logging.Level;
 
 public class SinkAntiSpam extends JavaPlugin
 {
-    SinkCommands sinkCommands;
+    SinkLibrary sinkLibrary;
 
     public static String prefix = ChatColor.RED + "[SinkAntiSpam] " + ChatColor.WHITE;
 
     public void onEnable()
     {
         PluginManager pm = Bukkit.getPluginManager();
-        sinkCommands = (SinkCommands) pm.getPlugin("SinkCommands");
-        if (sinkCommands == null)
+        sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        if (sinkLibrary == null)
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
             pm.disablePlugin(this);
@@ -39,6 +40,6 @@ public class SinkAntiSpam extends JavaPlugin
     public static void warnPlayer(Player player, String reason)
     {
         player.sendMessage(prefix + ChatColor.RED + "Du wurdest automatisch für den folgenden Grund verwarnt: " + ChatColor.RESET + reason);
-        SinkCommands.broadcast(prefix + player.getDisplayName() + " wurde automatisch verwarnt. Grund: " + reason, "sinkantispam.message");
+        BukkitUtil.broadcast(prefix + player.getDisplayName() + " wurde automatisch verwarnt. Grund: " + reason, "sinkantispam.message");
     }
 }

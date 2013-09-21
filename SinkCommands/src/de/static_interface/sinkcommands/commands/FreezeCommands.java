@@ -1,7 +1,8 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinkcommands.SinkCommands;
-import de.static_interface.sinkcommands.Util;
+import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -69,16 +70,16 @@ public class FreezeCommands
                     {
                         if (args.length < 2)
                         {
-                            SinkCommands.broadcast(PREFIX + p.getDisplayName() + " wurde von " + SinkCommands.getSenderName(sender) + " eingefroren.", "sinkcommands.freeze.message");
+                            BukkitUtil.broadcast(PREFIX + p.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " eingefroren.", "sinkcommands.freeze.message");
                         }
                         else
                         {
-                            SinkCommands.broadcast(PREFIX + p.getDisplayName() + " wurde von " + SinkCommands.getSenderName(sender) + " eingefroren. Grund: " + reason, "sinkcommands.freeze.message");
+                            BukkitUtil.broadcast(PREFIX + p.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " eingefroren. Grund: " + reason, "sinkcommands.freeze.message");
                         }
                         return true;
                     }
-                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + SinkCommands.getSenderName(sender) + " aufgetaut.");
-                    SinkCommands.broadcast(PREFIX + p.getDisplayName() + " wurde von " + SinkCommands.getSenderName(sender) + " wieder aufgetaut.", "sinkcommands.freeze.message");
+                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + BukkitUtil.getSenderName(sender) + " aufgetaut.");
+                    BukkitUtil.broadcast(PREFIX + p.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " wieder aufgetaut.", "sinkcommands.freeze.message");
                     return true;
                 }
             }
@@ -175,8 +176,8 @@ public class FreezeCommands
                         sender.sendMessage(PREFIX + "Dieser Spieler wurde schon eingefroren");
                         return true;
                     }
-                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + SinkCommands.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
-                    SinkCommands.broadcast(PREFIX + p.getDisplayName() + " wurde von " + SinkCommands.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "sinkcommands.freeze.message");
+                    p.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + BukkitUtil.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason);
+                    BukkitUtil.broadcast(PREFIX + p.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " für " + seconds + " Sekunden eingefroren. Grund: " + reason, "sinkcommands.freeze.message");
                 }
             }
             return true;
@@ -196,11 +197,11 @@ public class FreezeCommands
 
             if (toggleFreezeAll())
             {
-                SinkCommands.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + SinkCommands.getSenderName(sender) + " eingefroren. Grund: " + reason);
+                BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + BukkitUtil.getSenderName(sender) + " eingefroren. Grund: " + reason);
             }
             else
             {
-                SinkCommands.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + SinkCommands.getSenderName(sender) + " aufgetaut.");
+                BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + BukkitUtil.getSenderName(sender) + " aufgetaut.");
             }
             return true;
         }

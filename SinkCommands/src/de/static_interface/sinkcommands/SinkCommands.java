@@ -2,22 +2,16 @@ package de.static_interface.sinkcommands;
 
 import de.static_interface.sinkcommands.commands.*;
 import de.static_interface.sinkcommands.listener.*;
-import de.static_interface.sinkirc.SinkIRC;
-import net.milkbowl.vault.Vault;
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.*;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,25 +30,23 @@ public class SinkCommands extends JavaPlugin
     public static List<String> tmpBannedPlayers;
 
     private static CommandsTimer timer;
-    private static SinkIRC ircPlugin;
-    private static Economy econ;
-    private static File dataFolder;
+
+    SinkLibrary sinkLibrary;
 
     public void onEnable()
     {
+
         PluginManager pm = Bukkit.getPluginManager();
-        ircPlugin = (SinkIRC) pm.getPlugin("SinkIRC");
-        Vault vault = (Vault) pm.getPlugin("Vault");
-        if (vault == null || ircPlugin == null)
+        sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        if (sinkLibrary == null)
         {
-            getLogger().log(Level.WARNING, "This plugin needs SinkIRC and Vault to work correctly, disabling.");
+            getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
             pm.disablePlugin(this);
             return;
         }
-        setupEcononmy();
+
         timer = new CommandsTimer();
         LagTimer lagTimer = new LagTimer();
-        dataFolder = getDataFolder();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
         if (! getDataFolder().exists())
@@ -77,23 +69,6 @@ public class SinkCommands extends JavaPlugin
             }
         }, 0, 20 * 30); //Update every 30 seconds
 
-    }
-
-    public boolean setupEcononmy()
-    {
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null)
-        {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
-
-    private static int getMoney(Player p)
-    {
-        EconomyResponse response = econ.bankBalance(p.getName());
-        return (int) response.balance;
     }
 
     public void onDisable()
@@ -146,7 +121,8 @@ public class SinkCommands extends JavaPlugin
             Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-            money.setScore(getMoney(p));
+            User user = new User(p.getName());
+            money.setScore(user.getMoney());
             Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
             if (players >= 0)
             {
@@ -185,7 +161,8 @@ public class SinkCommands extends JavaPlugin
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-        money.setScore(getMoney(player));
+        User user = new User(player.getName());
+        money.setScore(user.getMoney());
         Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
         onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
         Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
@@ -193,66 +170,6 @@ public class SinkCommands extends JavaPlugin
         team.setAllowFriendlyFire(true);
         team.setCanSeeFriendlyInvisibles(false);
         player.setScoreboard(board);
-    }
-
-    /**
-     * Get Data Folder
-     *
-     * @return Data Folder of this plugin
-     */
-    public static File getDataFolderStatic()
-    {
-        return dataFolder;
-    }
-
-
-    /**
-     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
-     * Send message to all players with specified permission.
-     *
-     * @param message Message to send
-     */
-
-    public static void broadcastMessage(String message)
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            p.sendMessage(message);
-        }
-        Bukkit.getConsoleSender().sendMessage(message);
-        try
-        {
-            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
-        }
-        catch (NullPointerException | LinkageError e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
-     * Send message to all players with specified permission.
-     *
-     * @param message    Message to send
-     * @param permission Permission needed to receive the message
-     */
-    public static void broadcast(String message, String permission)
-    {
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            if (! p.hasPermission(permission))
-            {
-                continue;
-            }
-            p.sendMessage(message);
-        }
-        Bukkit.getConsoleSender().sendMessage(message);
-        Permission perm = new Permission(permission);
-        if (perm.getDefault() == PermissionDefault.TRUE && ircPlugin != null)
-        {
-            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
-        }
     }
 
     /**
@@ -305,20 +222,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("clear").setExecutor(new ClearCommand());
         getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());
         getCommand("disablestats").setExecutor(new StatsCommands.DisableStatsCommand());
-    }
-
-    public static String getSenderName(CommandSender sender)
-    {
-        String senderName;
-        if (sender instanceof Player)
-        {
-            senderName = ( (Player) sender ).getDisplayName();
-        }
-        else
-        {
-            senderName = ChatColor.RED + "Console";
-        }
-        return senderName;
     }
 
     /**

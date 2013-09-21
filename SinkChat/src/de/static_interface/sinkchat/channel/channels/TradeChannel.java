@@ -69,6 +69,6 @@ public class TradeChannel extends JavaPlugin implements IChannel
     @Override
     public void registerChannel()
     {
-        ChannelHandler.registerChannel(this, "Handel", PREFIX, callByChar);
+        ChannelHandler.registerChannel(this, "Handel", callByChar);
     }
 }

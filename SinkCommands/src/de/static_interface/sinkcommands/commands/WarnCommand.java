@@ -1,6 +1,6 @@
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.BukkitUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -27,7 +27,7 @@ public class WarnCommand implements CommandExecutor
             sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
             return true;
         }
-        if (target.getDisplayName().equals(SinkCommands.getSenderName(sender)))
+        if (target.getDisplayName().equals(BukkitUtil.getSenderName(sender)))
         {
             sender.sendMessage(PREFIX + "Du kannst dich nicht selbst verwarnen!");
             return true;
@@ -50,8 +50,8 @@ public class WarnCommand implements CommandExecutor
             reason = reason + " " + args[i];
         }
 
-        target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + SinkCommands.getSenderName(sender) + ChatColor.RED + " verwarnt. Grund: " + reason);
-        SinkCommands.broadcast(PREFIX + target.getDisplayName() + " wurde von " + SinkCommands.getSenderName(sender) + " verwarnt. Grund: " + reason, "sinkcommands.warn.message");
+        target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + BukkitUtil.getSenderName(sender) + ChatColor.RED + " verwarnt. Grund: " + reason);
+        BukkitUtil.broadcast(PREFIX + target.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " verwarnt. Grund: " + reason, "sinkcommands.warn.message");
         return true;
     }
 }

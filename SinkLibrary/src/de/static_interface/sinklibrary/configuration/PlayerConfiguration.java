@@ -1,5 +1,6 @@
-package de.static_interface.sinkcommands;
+package de.static_interface.sinklibrary.configuration;
 
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -9,7 +10,7 @@ import java.util.logging.Level;
 
 
 @SuppressWarnings("UnusedDeclaration")
-public class PlayerConfiguration
+public class PlayerConfiguration implements IConfiguration
 {
     private static String playerName;
     File playerConfigFile;
@@ -24,7 +25,7 @@ public class PlayerConfiguration
     public PlayerConfiguration(String playerName)
     {
         PlayerConfiguration.playerName = playerName;
-        playersPath = new File(SinkCommands.getDataFolderStatic() + File.separator + "Players");
+        playersPath = new File(SinkLibrary.getDataFolderStatic() + File.separator + "Players");
         playerConfigFile = new File(playersPath, playerName + ".yml");
         playerYamlConfig = ( exists() ) ? YamlConfiguration.loadConfiguration(playerConfigFile) : null;
     }
@@ -34,7 +35,7 @@ public class PlayerConfiguration
      *
      * @return playerYAMLConfiguration
      */
-    public YamlConfiguration getPlayerConfiguration()
+    public YamlConfiguration getYamlConfiguration()
     {
         playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
         return playerYamlConfig;
@@ -103,7 +104,7 @@ public class PlayerConfiguration
         save();
     }
 
-    public String getString(String path)
+    public Object get(String path)
     {
         try
         {
@@ -117,19 +118,6 @@ public class PlayerConfiguration
 
     }
 
-    public boolean getBoolean(String path)
-    {
-        try
-        {
-            return playerYamlConfig.getBoolean(playerName + "." + path);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-
-    }
 
     /**
      * Get freeze value
@@ -138,7 +126,7 @@ public class PlayerConfiguration
      */
     public boolean getFreezed()
     {
-        return getBoolean(playerName + "Freeze.freezed");
+        return (boolean) get(playerName + "Freeze.freezed");
     }
 
     /**
@@ -173,7 +161,7 @@ public class PlayerConfiguration
 
     public boolean getStatsEnabled()
     {
-        return getBoolean("General.StatsEnabled");
+        return (boolean) get("General.StatsEnabled");
     }
 
     public void setStatsEnabled(boolean value)

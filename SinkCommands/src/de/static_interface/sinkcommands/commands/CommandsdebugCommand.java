@@ -1,7 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.PlayerConfiguration;
-import de.static_interface.sinkcommands.Util;
+import de.static_interface.sinklibrary.Util;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,7 +31,7 @@ public class CommandsdebugCommand implements CommandExecutor
                 String player = args[1];
                 String path = player + "." + args[2];
                 PlayerConfiguration config = new PlayerConfiguration(player);
-                sender.sendMessage(PREFIX + "Output: " + config.getPlayerConfiguration().getString(path));
+                sender.sendMessage(PREFIX + "Output: " + config.getYamlConfiguration().getString(path));
                 break;
             }
             case "setvalue":
