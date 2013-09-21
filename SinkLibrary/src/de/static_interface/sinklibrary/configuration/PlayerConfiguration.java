@@ -108,7 +108,7 @@ public class PlayerConfiguration implements IConfiguration
     {
         try
         {
-            return playerYamlConfig.getString(playerName + "." + path);
+            return playerYamlConfig.get(playerName + "." + path);
         }
         catch (Exception e)
         {
