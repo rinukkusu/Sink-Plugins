@@ -6,8 +6,6 @@ authors: [_ShadowRaven_]
 website: http://static-interface.de
 main: de.static_interface.sinkirc.SinkIRC
 
-depend: [SinkLibrary]
-
 commands:
   irclist:
     description: Shows online Users in IRC

@@ -35,24 +35,22 @@ public class SinkCommands extends JavaPlugin
 
     public void onEnable()
     {
-
-        PluginManager pm = Bukkit.getPluginManager();
-        sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
-        if (sinkLibrary == null)
+        if (! checkDependencies())
         {
-            getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
-            pm.disablePlugin(this);
             return;
         }
 
         timer = new CommandsTimer();
         LagTimer lagTimer = new LagTimer();
+
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
+
         if (! getDataFolder().exists())
         {
             getDataFolder().mkdirs();
         }
+
         registerEvents();
         registerCommands();
         getLogger().info("Loading frozen players...");
@@ -69,6 +67,27 @@ public class SinkCommands extends JavaPlugin
             }
         }, 0, 20 * 30); //Update every 30 seconds
 
+    }
+
+    private boolean checkDependencies()
+    {
+
+        PluginManager pm = Bukkit.getPluginManager();
+        try
+        {
+            sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        }
+        catch (NoClassDefFoundError ignored)
+        {
+            sinkLibrary = null;
+        }
+        if (sinkLibrary == null)
+        {
+            getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
+            pm.disablePlugin(this);
+            return false;
+        }
+        return true;
     }
 
     public void onDisable()

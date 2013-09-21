@@ -3,6 +3,7 @@ package de.static_interface.sinkchat.channel.channels;
 import de.static_interface.sinkchat.SinkChat;
 import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IChannel;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -62,6 +63,7 @@ public class HelpChannel extends JavaPlugin implements IChannel
                 target.sendMessage(formattedMessage);
             }
         }
+        SinkLibrary.sendIRCMessage(formattedMessage);
     }
 
     @Override

@@ -26,20 +26,46 @@ public class SinkAntiSpam extends JavaPlugin
 
     public void onEnable()
     {
-        PluginManager pm = Bukkit.getPluginManager();
-        sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        if (! checkDependencies())
+        {
+            return;
+        }
+
+        sinkLibrary = (SinkLibrary) Bukkit.getPluginManager().getPlugin("SinkLibrary");
         if (sinkLibrary == null)
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
-            pm.disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-        pm.registerEvents(new SinkAntiSpamListener(), this);
+        Bukkit.getPluginManager().registerEvents(new SinkAntiSpamListener(), this);
     }
 
     public static void warnPlayer(Player player, String reason)
     {
         player.sendMessage(prefix + ChatColor.RED + "Du wurdest automatisch für den folgenden Grund verwarnt: " + ChatColor.RESET + reason);
         BukkitUtil.broadcast(prefix + player.getDisplayName() + " wurde automatisch verwarnt. Grund: " + reason, "sinkantispam.message");
+    }
+
+
+    private boolean checkDependencies()
+    {
+
+        PluginManager pm = Bukkit.getPluginManager();
+        try
+        {
+            sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        }
+        catch (NoClassDefFoundError ignored)
+        {
+            sinkLibrary = null;
+        }
+        if (sinkLibrary == null)
+        {
+            getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
+            pm.disablePlugin(this);
+            return false;
+        }
+        return true;
     }
 }

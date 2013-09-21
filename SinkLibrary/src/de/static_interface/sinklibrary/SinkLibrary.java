@@ -24,7 +24,7 @@ public class SinkLibrary extends JavaPlugin
     {
         if (! setupEcononmy())
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Sink plugins needs an economy plugin to work correctly, disabling.");
+            Bukkit.getLogger().log(Level.SEVERE, "Sink plugins needs an economy plugin and Vault to work correctly.");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -37,7 +37,7 @@ public class SinkLibrary extends JavaPlugin
 
     }
 
-    public boolean setupEcononmy()
+    private boolean setupEcononmy()
     {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null)
@@ -48,11 +48,20 @@ public class SinkLibrary extends JavaPlugin
         return econ != null;
     }
 
+    /**
+     * Get Economy instance
+     * @return Economy instace
+     */
     public static Economy getEconomy()
     {
         return econ;
     }
 
+
+    /**
+     * Get SinkIRC Instance
+     * @return SinkIRC Instance
+     */
     public static SinkIRC getSinkIRC()
     {
         return irc;
@@ -68,4 +77,16 @@ public class SinkLibrary extends JavaPlugin
         return dataFolder;
     }
 
+    /**
+     * Send Message to IRC
+     *
+     * @param message Message to send
+     */
+    public static void sendIRCMessage(String message)
+    {
+        if (irc != null)
+        {
+            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
+        }
+    }
 }

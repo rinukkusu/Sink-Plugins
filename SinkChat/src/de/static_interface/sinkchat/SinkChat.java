@@ -37,25 +37,14 @@ public class SinkChat extends JavaPlugin
 {
     public void onEnable()
     {
+        if (! checkDependencies())
+        {
+            return;
+        }
+
         for (Player p : Bukkit.getOnlinePlayers())
         {
             refreshDisplayName(p);
-        }
-        PluginManager pm = Bukkit.getPluginManager();
-        PermissionsEx pex = (PermissionsEx) pm.getPlugin("PermissionsEx");
-
-        SinkLibrary sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
-
-        if (sinkLibrary == null)
-        {
-            getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
-            pm.disablePlugin(this);
-            return;
-        }
-        if (pex == null)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "This Plugin needs PermissionsEx to work correctly");
-            return;
         }
 
         //Registering channels. Important: argument is a char, not a String !
@@ -77,8 +66,39 @@ public class SinkChat extends JavaPlugin
         }
 
 
-        registerEvents(pm);
+        registerEvents(Bukkit.getPluginManager());
         registerCommands();
+    }
+
+    private boolean checkDependencies()
+    {
+
+        PluginManager pm = Bukkit.getPluginManager();
+        SinkLibrary sinkLibrary;
+
+        try
+        {
+            sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
+        }
+        catch (NoClassDefFoundError ignored)
+        {
+            sinkLibrary = null;
+        }
+        if (sinkLibrary == null)
+        {
+            getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
+            pm.disablePlugin(this);
+            return false;
+        }
+
+        PermissionsEx pex = (PermissionsEx) pm.getPlugin("PermissionsEx");
+
+        if (pex == null)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "This Plugin needs PermissionsEx to work correctly");
+            return false;
+        }
+        return true;
     }
 
     public void onDisable()
