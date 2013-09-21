@@ -163,8 +163,17 @@ public class SinkChat extends JavaPlugin
 
     public static boolean getHasDisplayName(Player player)
     {
-        PlayerConfiguration config = new PlayerConfiguration(player.getName());
-        return (boolean) config.get(HAS_NICKNAME_PATH);
+        try
+        {
+            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            return (boolean) config.get(HAS_NICKNAME_PATH);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+
     }
 
     public static void setHasDisplayName(Player player, boolean value)
