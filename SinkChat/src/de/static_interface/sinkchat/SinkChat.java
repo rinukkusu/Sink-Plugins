@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
+import java.io.File;
 import java.util.logging.Level;
 
 import static de.static_interface.sinkchat.command.NickCommand.HAS_NICKNAME_PATH;
@@ -35,6 +36,8 @@ import static de.static_interface.sinkchat.command.NickCommand.NICKNAME_PATH;
 
 public class SinkChat extends JavaPlugin
 {
+    public static File dataFolder;
+
     public void onEnable()
     {
         if (! checkDependencies())
@@ -42,6 +45,8 @@ public class SinkChat extends JavaPlugin
             return;
         }
 
+
+        dataFolder = getDataFolder();
         for (Player p : Bukkit.getOnlinePlayers())
         {
             refreshDisplayName(p);
@@ -101,6 +106,12 @@ public class SinkChat extends JavaPlugin
         return true;
     }
 
+    public static String getDataFolderStatic()
+    {
+        return String.valueOf(dataFolder);
+    }
+
+
     public void onDisable()
     {
         Bukkit.getLogger().log(Level.INFO, "Disabled.");
@@ -131,8 +142,16 @@ public class SinkChat extends JavaPlugin
 
     public static String getDisplayName(Player player)
     {
-        PlayerConfiguration config = new PlayerConfiguration(player.getName());
-        return (String) config.get(NICKNAME_PATH);
+        try
+        {
+            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            return (String) config.get(NICKNAME_PATH);
+        }
+        catch (Exception e)
+        {
+            return getDefaultDisplayName(player);
+        }
+
     }
 
     public static String getDefaultDisplayName(Player player)
@@ -172,8 +191,6 @@ public class SinkChat extends JavaPlugin
         {
             return false;
         }
-
-
     }
 
     public static void setHasDisplayName(Player player, boolean value)

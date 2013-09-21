@@ -9,10 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.logging.Level;
 
-/**
- * Author: Trojaner
- * Date: 21.09.13
- */
 public class SinkLibrary extends JavaPlugin
 {
 
@@ -50,6 +46,7 @@ public class SinkLibrary extends JavaPlugin
 
     /**
      * Get Economy instance
+     *
      * @return Economy instace
      */
     public static Economy getEconomy()
@@ -60,6 +57,7 @@ public class SinkLibrary extends JavaPlugin
 
     /**
      * Get SinkIRC Instance
+     *
      * @return SinkIRC Instance
      */
     public static SinkIRC getSinkIRC()

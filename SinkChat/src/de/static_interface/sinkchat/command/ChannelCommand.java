@@ -10,21 +10,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/*
-Permission nodes:
-- sinkchat.channel.member:
--- Erlaubt /ch join/leave/fix/list
-
-- sinkchat.channel.kick:
--- Member += /ch kick
-
-- sinkchat.channel.admin;
--- Kick += /ch ban
-
-
- */
-
-
 public class ChannelCommand extends JavaPlugin implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.GREEN + "[Channel] " + ChatColor.RESET;

@@ -16,7 +16,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
 {
 
     Vector<Player> exceptedPlayers = new Vector<>();
-    String PREFIX = ChatColor.GRAY + getChannelName() + " " + ChatColor.RESET;
+    String PREFIX = ChatColor.GRAY + "[" + getChannelName() + "] " + ChatColor.RESET;
     private char callByChar = '!';
 
     public ShoutChannel(char callChar)
@@ -46,7 +46,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     @Override
     public String getChannelName()
     {
-        return "Shout";
+        return "Schrei";
     }
 
     @Override
@@ -57,10 +57,10 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
             return false;
         }
         String formattedMessage = message.substring(1);
-        formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+        formattedMessage = PREFIX + SinkChat.getDisplayName(player) + ": " + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
-            formattedMessage = PREFIX + " [" + SinkChat.getGroup(player) + ChatColor.RESET + "] " + SinkChat.getDisplayName(player) + ": " + formattedMessage;
+            formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }
 
         for (Player target : Bukkit.getOnlinePlayers())

@@ -16,7 +16,6 @@ import org.bukkit.plugin.Plugin;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,22 +39,17 @@ public class FreezeCommands
                 return false;
             }
 
-            String reason;
+            String reason = "";
 
-            List<String> tmp = new ArrayList<>();
-
-            int i = - 1;
-            for (String s : args)
+            for (int i = 1; i < args.length; i++)
             {
-                i++;
-                if (i <= 1)
+                if (reason.equals(""))
                 {
+                    reason = args[i];
                     continue;
                 }
-                tmp.add(s);
+                reason = reason + " " + args[i];
             }
-
-            reason = Util.formatArrayToString((String[]) tmp.toArray(), " ");
 
             for (Player p : Bukkit.getOnlinePlayers())
             {
@@ -90,6 +84,7 @@ public class FreezeCommands
     public static class TmpfreezeCommand implements CommandExecutor
     {
 
+
         private final SinkCommands plugin;
 
         public TmpfreezeCommand(SinkCommands plugin)
@@ -100,6 +95,9 @@ public class FreezeCommands
 
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
+            sender.sendMessage(ChatColor.RED + "Dieser Command wurde deaktiviert");
+            return true;
+            /*
             if (args.length < 3)
             {
                 return false;
@@ -181,6 +179,7 @@ public class FreezeCommands
                 }
             }
             return true;
+            */
         }
     }
 
@@ -359,6 +358,7 @@ public class FreezeCommands
         }
     }
 
+    /*
     public static boolean temporarilyFreeze(final Player player, final int seconds, Plugin plugin)
     {
         if (! toFreeze.contains(player.getName()) && ! toTmpFreeze.contains(player.getName()))
@@ -388,7 +388,7 @@ public class FreezeCommands
             return false;
         }
     }
-
+    */
     public static void loadFreezedPlayers(Logger log, File dataFolder, Plugin plugin)
     {
         File saveFile = new File(dataFolder, "freezedPlayers.txt");

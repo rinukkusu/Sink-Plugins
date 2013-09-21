@@ -8,10 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
-/**
- * Author: Trojaner
- * Date: 21.09.13
- */
 public class BukkitUtil
 {
 
@@ -28,7 +24,7 @@ public class BukkitUtil
         }
         else
         {
-            senderName = ChatColor.RED + "Console";
+            senderName = ChatColor.RED + "Console" + ChatColor.RESET;
         }
         return senderName;
     }

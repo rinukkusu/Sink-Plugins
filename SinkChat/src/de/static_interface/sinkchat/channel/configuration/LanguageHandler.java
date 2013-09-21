@@ -1,5 +1,6 @@
 package de.static_interface.sinkchat.channel.configuration;
 
+import de.static_interface.sinkchat.SinkChat;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +12,7 @@ public class LanguageHandler
 {
 
     private static YamlConfiguration language = new YamlConfiguration();
-    private static final File languageFilesPath = new File("plugins/SinkChat/lang.yml");
+    private static final File languageFilesPath = new File(SinkChat.getDataFolderStatic() + File.separator + ( "lang.yml" ));
 
     public static boolean init()
     {
@@ -22,22 +23,22 @@ public class LanguageHandler
         catch (IOException e)
         {
 
-            language.set("messages.playerJoins", "You have joined the channel $CHANNEL$");
-            language.set("messages.playerLeaves", "You have left the channel $CHANNEL$");
-            language.set("messages.noChannelGiven", "You have to put a channel !");
-            language.set("messages.channelUnknown", "$CHANNEL$ is not a known channel.");
-            language.set("messages.list", "The following channels are known: $CHANNELS$");
-            language.set("messages.part", "You take part in the following channels:");
-            language.set("messages.help", "There are the following commands for the channel plugin:");
+            language.set("messages.playerJoins", "Du bist dem $CHANNEL$ Channel gejoint.");
+            language.set("messages.playerLeaves", "Du hast den $CHANNEL$ Channel verlassen.");
+            language.set("messages.noChannelGiven", "Du musst einen Channel angeben!");
+            language.set("messages.channelUnknown", "$CHANNEL$ ist ein unbekannter Channel.");
+            language.set("messages.list", "Folgende Channels sind bekannt: $CHANNELS$");
+            language.set("messages.part", "Du bist in den folgenden Channels:");
+            language.set("messages.help", "Folgende Befehle sind verfuegbar:");
 
-            language.set("messages.permissions.general", "You don't have the permission to do that. Ask a moderator for help if you think that this is a mistake !");
-            language.set("messages.permissions.shout", "You don't have the permission to shout !");
-            language.set("messages.permissions.ask", "You don't have the permission to use the questions chat !");
-            language.set("messages.permissions.trade", "You don't have the permission to use the trade chat !");
+            language.set("messages.permissions.general", "Du hast nicht genuegend Rechte um das zu tun.");
+            language.set("messages.permissions.shout", "Du hast nicht genuegend Rechte um das zu tun.");
+            language.set("messages.permissions.ask", "Du hast nicht genuegend Rechte um das zu tun.");
+            language.set("messages.permissions.trade", "Du hast nicht genuegend Rechte um das zu tun.");
 
             try
             {
-                language.save("plugins/SinkChat/lang.yml");
+                language.save(languageFilesPath);
             }
             catch (IOException e1)
             {
