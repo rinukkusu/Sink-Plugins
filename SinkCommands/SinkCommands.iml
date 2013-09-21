@@ -7,10 +7,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="IRC Plugin" />
-    <orderEntry type="library" name="bukkit" level="application" />
+    <orderEntry type="module" module-name="SinkIRC" />
     <orderEntry type="library" name="pircbot" level="project" />
     <orderEntry type="library" name="Vault" level="project" />
+    <orderEntry type="library" name="bukkit" level="project" />
   </component>
 </module>
 
