@@ -15,15 +15,13 @@ public class SinkLibrary extends JavaPlugin
     private static SinkIRC irc;
     private static File dataFolder;
 
-    private static boolean economyAvailable = true;
-
+    private static boolean economyAvailable;
+    private static boolean permissionsAvailable;
 
     public void onEnable()
     {
-        if (! setupEcononmy())
-        {
-            economyAvailable = false;
-        }
+        economyAvailable = setupEcononmy();
+        permissionsAvailable = ! ( Bukkit.getPluginManager().getPlugin("PermissionsEx") == null );
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
         dataFolder = getDataFolder();
     }
@@ -44,9 +42,20 @@ public class SinkLibrary extends JavaPlugin
         return econ != null;
     }
 
+    /**
+     * @return True if economy is available
+     */
     public static boolean economyAvailable()
     {
         return economyAvailable;
+    }
+
+    /**
+     * @return True if permissions are available
+     */
+    public static boolean permissionsAvailable()
+    {
+        return permissionsAvailable;
     }
 
     /**

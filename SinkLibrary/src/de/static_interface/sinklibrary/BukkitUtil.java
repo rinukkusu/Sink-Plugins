@@ -13,7 +13,7 @@ public class BukkitUtil
 
     /**
      * @param sender Command Sender
-     * @return Sender Name
+     * @return If sender is Console, it will return "Console" in red, if sender is Player, it will return player's displayname
      */
     public static String getSenderName(CommandSender sender)
     {
@@ -35,7 +35,6 @@ public class BukkitUtil
      *
      * @param message Message to send
      */
-
     public static void broadcastMessage(String message)
     {
         for (Player p : Bukkit.getOnlinePlayers())

@@ -14,6 +14,13 @@ import java.util.Scanner;
 @SuppressWarnings("UnusedDeclaration")
 public class Util
 {
+    /**
+     * Format Array to String
+     *
+     * @param input Input String
+     * @param Char  Chat
+     * @return If Array = {"s1", "s2", "s3" } and Char = " & " it will return "s1 & s2 & s3"
+     */
     public static String formatArrayToString(String[] input, String Char)
     {
         String tmp = "";
@@ -29,11 +36,17 @@ public class Util
         return tmp;
     }
 
-    public static String formatPlayerListToString(List<String> players)
+    /**
+     * Formats a list with names to String.
+     *
+     * @param names Names
+     * @return If names contains "user1", "user2", "user3", it will return "user1, user2 and user3".
+     */
+    public static String formatPlayerListToString(List<String> names)
     {
         String tmp = "";
         int i = 0;
-        for (String s : players)
+        for (String s : names)
         {
             i++;
             if (tmp.equals(""))
@@ -41,7 +54,7 @@ public class Util
                 tmp = s;
                 continue;
             }
-            if (i == players.toArray().length)
+            if (i == names.toArray().length)
             {
                 tmp = tmp + " and " + s;
                 continue;
@@ -51,6 +64,10 @@ public class Util
         return tmp;
     }
 
+    /**
+     * @param input String Input
+     * @return True if input is a number
+     */
     public static boolean isNumber(String input)
     {
         try
@@ -67,7 +84,8 @@ public class Util
     final static Charset ENCODING = StandardCharsets.UTF_8;
 
     /**
-     * Read small text files. Doesn't use buffering
+     * Read small text files. Doesn't use buffering.
+     * Currently unused.
      *
      * @param file Path to file
      * @return Lines Lines of file
@@ -80,7 +98,8 @@ public class Util
     }
 
     /**
-     * Read large text files. Uses buffering
+     * Read large text files. Uses buffering.
+     * Currently unused.
      *
      * @param file Path to file
      * @return Lines Lines of file
@@ -101,7 +120,8 @@ public class Util
     }
 
     /**
-     * Write small text files. Doesn't use buffering
+     * Write small text files. Doesn't use buffering.
+     * Currently unused.
      *
      * @param lines Lines to write
      * @param file  Path to file
@@ -114,7 +134,8 @@ public class Util
     }
 
     /**
-     * Write large text files. Uses buffering
+     * Write large text files. Uses buffering.
+     * Currently unused.
      *
      * @param lines Lines to write
      * @param file  Path to file
@@ -132,6 +153,4 @@ public class Util
             }
         }
     }
-
-
 }

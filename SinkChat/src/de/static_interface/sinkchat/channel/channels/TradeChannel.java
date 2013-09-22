@@ -4,6 +4,8 @@ import de.static_interface.sinkchat.SinkChat;
 import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IChannel;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -59,7 +61,9 @@ public class TradeChannel extends JavaPlugin implements IChannel
             return false;
         }
         String formattedMessage = message.substring(1);
-        formattedMessage = PREFIX + ChatColor.GRAY + "[" + SinkChat.getGroup(player) + ChatColor.GRAY + "] " + SinkChat.getDisplayName(player) + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
+        formattedMessage = PREFIX + ChatColor.GRAY + "[" + SinkChat.getGroup(player) + ChatColor.GRAY + "] " + config.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         if (player.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);

@@ -14,18 +14,12 @@ import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.io.File;
 import java.util.logging.Level;
-
-import static de.static_interface.sinkchat.command.NickCommand.HAS_NICKNAME_PATH;
-import static de.static_interface.sinkchat.command.NickCommand.NICKNAME_PATH;
 
 /**
  * SinkChat Class
@@ -76,6 +70,11 @@ public class SinkChat extends JavaPlugin
         registerCommands();
     }
 
+    public void onDisable()
+    {
+        Bukkit.getLogger().log(Level.INFO, "Disabled.");
+    }
+
     private boolean checkDependencies()
     {
 
@@ -97,82 +96,47 @@ public class SinkChat extends JavaPlugin
             return false;
         }
 
-        PermissionsEx pex = (PermissionsEx) pm.getPlugin("PermissionsEx");
-
-        if (pex == null)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "This Plugin needs PermissionsEx to work correctly");
-            return false;
-        }
         return true;
     }
 
+    /**
+     * Get Data Folder
+     *
+     * @return Data Folder
+     */
     public static String getDataFolderStatic()
     {
         return String.valueOf(dataFolder);
     }
 
-
-    public void onDisable()
-    {
-        Bukkit.getLogger().log(Level.INFO, "Disabled.");
-    }
-
+    /**
+     * @param player Player
+     * @return Player's primary group
+     */
     public static String getGroup(Player player)
     {
-        PermissionUser user = PermissionsEx.getUser(player);
-        return user.getGroupsNames()[0];
-    }
-
-
-    public static void setDisplayName(Player player, String newNickname)
-    {
-        player.setDisplayName(newNickname);
-        player.setCustomName(newNickname);
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set(NICKNAME_PATH, newNickname);
-        if (newNickname.equals(getDefaultDisplayName(player)))
-        {
-            setHasDisplayName(player, false);
-        }
-        else
-        {
-            setHasDisplayName(player, true);
-        }
+        return config.getGroups()[0];
     }
 
-    public static String getDisplayName(Player player)
-    {
-        try
-        {
-            User user = new User(player);
-            PlayerConfiguration config = user.getPlayerConfiguration();
-            return (String) config.get(NICKNAME_PATH);
-        }
-        catch (Exception e)
-        {
-            return getDefaultDisplayName(player);
-        }
-
-    }
-
-    public static String getDefaultDisplayName(Player player)
-    {
-        PermissionUser user = PermissionsEx.getUser(player);
-        String playerPrefix = ChatColor.translateAlternateColorCodes('&', user.getPrefix());
-        return playerPrefix + player.getPlayerListName() + ChatColor.RESET;
-    }
-
+    /**
+     * Refresh Player DisplayName
+     *
+     * @param player Player
+     */
     public static void refreshDisplayName(Player player)
     {
         String nickname;
-        if (getHasDisplayName(player))
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
+
+        if (config.getHasDisplayName())
         {
-            nickname = getDisplayName(player);
+            nickname = config.getDisplayName();
             if (nickname.equals(getDefaultDisplayName(player)))
             {
-                setHasDisplayName(player, false);
+                config.setHasDisplayName(false);
             }
         }
         else
@@ -183,25 +147,15 @@ public class SinkChat extends JavaPlugin
         player.setCustomName(nickname);
     }
 
-    public static boolean getHasDisplayName(Player player)
-    {
-        try
-        {
-            User user = new User(player);
-            PlayerConfiguration config = user.getPlayerConfiguration();
-            return (boolean) config.get(HAS_NICKNAME_PATH);
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
-
-    public static void setHasDisplayName(Player player, boolean value)
+    /**
+     * @param player Player
+     * @return Default DisplayName of Player
+     */
+    public static String getDefaultDisplayName(Player player)
     {
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set(HAS_NICKNAME_PATH, value);
+        return config.getDefaultDisplayName();
     }
 
     private void registerEvents(PluginManager pm)

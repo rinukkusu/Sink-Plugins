@@ -1,6 +1,8 @@
 package de.static_interface.sinkchat.command;
 
 import de.static_interface.sinkchat.SinkChat;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,12 +14,11 @@ import org.bukkit.entity.Player;
 public class NickCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.DARK_GREEN + "[Nick] " + ChatColor.RESET;
-    public static final String NICKNAME_PATH = "General.Nickname";
-    public static final String HAS_NICKNAME_PATH = "General.HasNickname";
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        User user;
         String newDisplayName;
         if (args.length < 1)
         {
@@ -41,7 +42,9 @@ public class NickCommand implements CommandExecutor
 
             if (setDisplayName(target, newDisplayName))
             {
-                sender.sendMessage(PREFIX + playerName + " heisst nun " + SinkChat.getDisplayName(target) + ".");
+                user = new User(target);
+                PlayerConfiguration config = user.getPlayerConfiguration();
+                sender.sendMessage(PREFIX + playerName + " heisst nun " + config.getDisplayName() + ".");
             }
             return true;
         }
@@ -54,7 +57,9 @@ public class NickCommand implements CommandExecutor
         Player player = (Player) sender;
         if (setDisplayName(player, newDisplayName))
         {
-            sender.sendMessage(PREFIX + "Du heisst nun " + SinkChat.getDisplayName(player) + ".");
+            user = new User(player);
+            PlayerConfiguration config = user.getPlayerConfiguration();
+            sender.sendMessage(PREFIX + "Du heisst nun " + config.getDisplayName() + ".");
         }
         return true;
     }
@@ -92,7 +97,9 @@ public class NickCommand implements CommandExecutor
                 return false;
             }
         }
-        SinkChat.setDisplayName(player, newDisplayName);
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
+        config.setDisplayName(newDisplayName);
         return true;
     }
 }
