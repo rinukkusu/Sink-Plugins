@@ -48,6 +48,10 @@ public class SinkLibrary extends JavaPlugin
 
     private boolean setupEcononmy()
     {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null)
+        {
+            return false;
+        }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null)
         {

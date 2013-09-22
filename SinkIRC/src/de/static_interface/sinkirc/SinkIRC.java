@@ -1,9 +1,7 @@
 package de.static_interface.sinkirc;
 
 import de.static_interface.sinkirc.commands.IrclistCommand;
-import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -62,27 +60,27 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.quitServer("Plugin reload or plugin has been deactivated");
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         if (IRCBot.disabled)
         {
             return;
         }
-        ircBot.sendCleanMessage(channel, event.getJoinMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
+        ircBot.sendCleanMessage(channel, event.getJoinMessage());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if (IRCBot.disabled)
         {
             return;
         }
-        ircBot.sendCleanMessage(channel, event.getQuitMessage().replace(ChatColor.YELLOW.toString(), ChatColor.GRAY.toString()));
+        ircBot.sendCleanMessage(channel, event.getQuitMessage());
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onPlayerKick(PlayerKickEvent event)
     {
         if (IRCBot.disabled)
@@ -99,7 +97,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event)
     {
         if (IRCBot.disabled)

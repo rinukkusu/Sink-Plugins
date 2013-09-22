@@ -44,7 +44,6 @@ public class PlayerConfiguration implements IConfiguration
      */
     public YamlConfiguration getYamlConfiguration()
     {
-        playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
         return playerYamlConfig;
     }
 
