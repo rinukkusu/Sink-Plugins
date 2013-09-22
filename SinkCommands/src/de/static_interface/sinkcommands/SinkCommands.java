@@ -12,8 +12,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -27,7 +25,6 @@ import java.util.logging.Level;
 public class SinkCommands extends JavaPlugin
 {
     public static boolean globalmuteEnabled;
-    public static List<String> tmpBannedPlayers;
 
     private static CommandsTimer timer;
 
@@ -56,7 +53,6 @@ public class SinkCommands extends JavaPlugin
         getLogger().info("Loading frozen players...");
         FreezeCommands.loadFreezedPlayers(getLogger(), getDataFolder(), this);
         getLogger().info("Done!");
-        tmpBannedPlayers = new ArrayList<>();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
 
@@ -129,45 +125,16 @@ public class SinkCommands extends JavaPlugin
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            User user = new User(p);
-            PlayerConfiguration config = user.getPlayerConfiguration();
-            ScoreboardManager manager = Bukkit.getScoreboardManager();
-            if (! p.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
-            {
-                p.setScoreboard(manager.getNewScoreboard());
-                return;
-            }
-            Scoreboard board = manager.getNewScoreboard();
-            Team team = board.registerNewTeam(p.getName());
-            Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
-            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-            Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-            money.setScore(user.getMoney());
-            Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
-            if (players >= 0)
-            {
-                onlinePlayers.setScore(players);
-            }
-            else
-            {
-                onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
-            }
-
-            Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
-            date.setScore((int) p.getHealth());
-            team.setAllowFriendlyFire(true);
-            team.setCanSeeFriendlyInvisibles(false);
-            p.setScoreboard(board);
+            refreshScoreboard(p, players);
         }
     }
-
 
     /**
      * Refresh scoreboard for specified player
      *
      * @param player Refresh scoreboard for this player
      */
-    public static void refreshScoreboard(Player player)
+    public static void refreshScoreboard(Player player, int players)
     {
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
@@ -181,10 +148,20 @@ public class SinkCommands extends JavaPlugin
         Team team = board.registerNewTeam(player.getName());
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-        Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-        money.setScore(user.getMoney());
+        if (SinkLibrary.economyAvailable())
+        {
+            Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
+            money.setScore(user.getMoney());
+        }
         Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
-        onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+        if (players >= 0)
+        {
+            onlinePlayers.setScore(players);
+        }
+        else
+        {
+            onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
+        }
         Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
         date.setScore((int) player.getHealth());
         team.setAllowFriendlyFire(true);
@@ -242,25 +219,5 @@ public class SinkCommands extends JavaPlugin
         getCommand("clear").setExecutor(new ClearCommand());
         getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());
         getCommand("disablestats").setExecutor(new StatsCommands.DisableStatsCommand());
-    }
-
-    /**
-     * Add Temp Ban
-     *
-     * @param username Player to ban
-     */
-    public static void addTempBan(String username)
-    {
-        tmpBannedPlayers.add(username);
-    }
-
-    /**
-     * Remove Temp Ban
-     *
-     * @param username Player to unban
-     */
-    public static void removeTempBan(String username)
-    {
-        tmpBannedPlayers.remove(username);
     }
 }

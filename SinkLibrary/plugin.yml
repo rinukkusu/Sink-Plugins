@@ -4,4 +4,4 @@ description: Library required for Sink Plugins. This does nothing without a plug
 author: Trojaner
 website: http://static-interface.de
 main: de.static_interface.sinklibrary.SinkLibrary
-soft-depend: [Vault,PermissionsEx]
+soft-depend: [Vault,PermissionsEx,SinkIRC]

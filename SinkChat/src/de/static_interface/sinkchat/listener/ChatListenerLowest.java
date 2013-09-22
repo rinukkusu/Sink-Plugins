@@ -1,6 +1,7 @@
 package de.static_interface.sinkchat.listener;
 
 import de.static_interface.sinkchat.SinkChat;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -23,9 +24,11 @@ public class ChatListenerLowest implements Listener
             return;
         }
 
-        String groupPrefix = ChatColor.RESET.toString() + ChatColor.GRAY + "[" + SinkChat.getGroup(event.getPlayer())
-                + ChatColor.RESET + ChatColor.GRAY + "]";
-        event.setFormat(groupPrefix + " %1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
+
+        String groupPrefix = SinkLibrary.economyAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + "[" + SinkChat.getGroup(event.getPlayer())
+                + ChatColor.RESET + ChatColor.GRAY + "] " : "";
+
+        event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

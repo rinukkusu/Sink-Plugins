@@ -1,7 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.SinkCommands;
 import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -209,12 +209,12 @@ public class VotekickCommands
                 return false;
             }
             String username = args[0];
-            if (! SinkCommands.tmpBannedPlayers.contains(username))
+            if (! SinkLibrary.tmpBannedPlayers.contains(username))
             {
                 sender.sendMessage(PREFIX + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!");
                 return true;
             }
-            SinkCommands.removeTempBan(username);
+            SinkLibrary.removeTempBan(username);
             sender.sendMessage(PREFIX + ChatColor.BLUE + username + ChatColor.RESET + " wurde entbannt.");
             return true;
         }
@@ -235,13 +235,13 @@ public class VotekickCommands
                 BukkitUtil.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
                 final String username = targetPlayer.getName();
                 targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
-                SinkCommands.addTempBan(username);
+                SinkLibrary.addTempBan(username);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
                 {
                     @Override
                     public void run()
                     {
-                        SinkCommands.removeTempBan(username);
+                        SinkLibrary.removeTempBan(username);
                     }
                 }, 20 * 300); //Unban player after 5 minutes
             }

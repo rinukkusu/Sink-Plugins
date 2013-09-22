@@ -37,7 +37,7 @@ public class StatsCommands
 
             config.setStatsEnabled(true);
             sender.sendMessage(PREFIX + ChatColor.GREEN + "Du hast die Statistiken aktiviert!");
-            SinkCommands.refreshScoreboard(player);
+            SinkCommands.refreshScoreboard(player, - 1);
             return true;
         }
     }
@@ -65,7 +65,7 @@ public class StatsCommands
 
             config.setStatsEnabled(false);
             sender.sendMessage(PREFIX + ChatColor.RED + "Du hast die Statistiken deaktiviert!");
-            SinkCommands.refreshScoreboard(player);
+            SinkCommands.refreshScoreboard(player, - 1);
             return true;
         }
     }

@@ -7,23 +7,38 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
 
 public class SinkLibrary extends JavaPlugin
 {
+
+    public static List<String> tmpBannedPlayers;
 
     private static Economy econ;
     private static SinkIRC irc;
     private static File dataFolder;
 
-    private static boolean economyAvailable;
-    private static boolean permissionsAvailable;
+    private static boolean economyAvailable = true;
+    private static boolean permissionsAvailable = true;
 
     public void onEnable()
     {
-        economyAvailable = setupEcononmy();
-        permissionsAvailable = ! ( Bukkit.getPluginManager().getPlugin("PermissionsEx") == null );
+        if (! setupEcononmy())
+        {
+            Bukkit.getLogger().log(Level.WARNING, "Economy Plugin not found. Disabling economy features.");
+            economyAvailable = false;
+        }
+        if (Bukkit.getPluginManager().getPlugin("PermissionsEx") == null)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "Permissions Plugin not found. Disabling permissions and group features.");
+            permissionsAvailable = false;
+        }
+
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
         dataFolder = getDataFolder();
+        tmpBannedPlayers = new ArrayList<>();
     }
 
     public void onDisable()
@@ -100,5 +115,26 @@ public class SinkLibrary extends JavaPlugin
         {
             SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
         }
+    }
+
+
+    /**
+     * Add Temp Ban
+     *
+     * @param username Player to ban
+     */
+    public static void addTempBan(String username)
+    {
+        tmpBannedPlayers.add(username);
+    }
+
+    /**
+     * Remove Temp Ban
+     *
+     * @param username Player to unban
+     */
+    public static void removeTempBan(String username)
+    {
+        tmpBannedPlayers.remove(username);
     }
 }
