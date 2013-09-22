@@ -5,8 +5,7 @@ author: Trojaner
 authors: [Diar, _ShadowRaven_, Scary_Block]
 website: http://static-interface.de
 main: de.static_interface.sinkcommands.SinkCommands
-soft-depend: [SinkIRC]
-depend: [SinkLibrary]
+soft-depend: [SinkLibrary]
 
 commands:
   commandsver:

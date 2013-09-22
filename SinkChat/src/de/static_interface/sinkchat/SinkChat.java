@@ -48,7 +48,6 @@ public class SinkChat extends JavaPlugin
             refreshDisplayName(p);
         }
 
-        //Registering channels. Important: argument is a char, not a String !
         IChannel sc = new ShoutChannel('!');
         IChannel hc = new TradeChannel('$');
         IChannel fc = new HelpChannel('?');

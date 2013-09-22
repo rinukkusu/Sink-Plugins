@@ -40,6 +40,7 @@ public class ChatListenerNormal implements Listener
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }
+        formattedMessage = ChatColor.GRAY + "[Lokal] " + ChatColor.RESET + formattedMessage;
         String spyPrefix = ChatColor.GRAY + "[Spy] ";
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
