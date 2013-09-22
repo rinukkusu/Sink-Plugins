@@ -105,7 +105,8 @@ public class SinkCommands extends JavaPlugin
         getLogger().info("Saving player configurations...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            PlayerConfiguration config = new PlayerConfiguration(p.getName());
+            User user = new User(p);
+            PlayerConfiguration config = user.getPlayerConfiguration();
             config.save();
         }
         getLogger().info("Disabled.");
@@ -128,7 +129,8 @@ public class SinkCommands extends JavaPlugin
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            PlayerConfiguration config = new PlayerConfiguration(p.getName());
+            User user = new User(p);
+            PlayerConfiguration config = user.getPlayerConfiguration();
             ScoreboardManager manager = Bukkit.getScoreboardManager();
             if (! p.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
             {
@@ -140,7 +142,6 @@ public class SinkCommands extends JavaPlugin
             Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-            User user = new User(p.getName());
             money.setScore(user.getMoney());
             Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
             if (players >= 0)
@@ -168,7 +169,8 @@ public class SinkCommands extends JavaPlugin
      */
     public static void refreshScoreboard(Player player)
     {
-        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (! player.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
         {
@@ -180,7 +182,6 @@ public class SinkCommands extends JavaPlugin
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
-        User user = new User(player.getName());
         money.setScore(user.getMoney());
         Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
         onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);

@@ -1,6 +1,7 @@
 package de.static_interface.sinkchat.channel.configuration;
 
 import de.static_interface.sinkchat.SinkChat;
+import de.static_interface.sinklibrary.configuration.IConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,7 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 
-public class LanguageHandler
+public class LanguageHandler implements IConfiguration
 {
 
     private static YamlConfiguration language = new YamlConfiguration();
@@ -61,4 +62,21 @@ public class LanguageHandler
         return ( language.getRoot().getString(key) );
     }
 
+    @Override
+    public void set(String path, Object value)
+    {
+        language.set(path, value);
+    }
+
+    @Override
+    public Object get(String path)
+    {
+        return language.get(path);
+    }
+
+    @Override
+    public YamlConfiguration getYamlConfiguration()
+    {
+        return language;
+    }
 }

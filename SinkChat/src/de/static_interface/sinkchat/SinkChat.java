@@ -11,6 +11,7 @@ import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinkchat.listener.NicknameListener;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -128,7 +129,8 @@ public class SinkChat extends JavaPlugin
     {
         player.setDisplayName(newNickname);
         player.setCustomName(newNickname);
-        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
         config.set(NICKNAME_PATH, newNickname);
         if (newNickname.equals(getDefaultDisplayName(player)))
         {
@@ -144,7 +146,8 @@ public class SinkChat extends JavaPlugin
     {
         try
         {
-            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            User user = new User(player);
+            PlayerConfiguration config = user.getPlayerConfiguration();
             return (String) config.get(NICKNAME_PATH);
         }
         catch (Exception e)
@@ -184,7 +187,8 @@ public class SinkChat extends JavaPlugin
     {
         try
         {
-            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            User user = new User(player);
+            PlayerConfiguration config = user.getPlayerConfiguration();
             return (boolean) config.get(HAS_NICKNAME_PATH);
         }
         catch (Exception e)
@@ -195,7 +199,8 @@ public class SinkChat extends JavaPlugin
 
     public static void setHasDisplayName(Player player, boolean value)
     {
-        PlayerConfiguration config = new PlayerConfiguration(player.getName());
+        User user = new User(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
         config.set(HAS_NICKNAME_PATH, value);
     }
 

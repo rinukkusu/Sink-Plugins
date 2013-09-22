@@ -10,6 +10,7 @@
     <orderEntry type="library" name="PermissionsEx" level="project" />
     <orderEntry type="library" name="bukkit" level="project" />
     <orderEntry type="module" module-name="SinkLibrary" />
+    <orderEntry type="library" name="pircbot" level="project" />
   </component>
 </module>
 

@@ -7,7 +7,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.logging.Level;
 
 public class SinkLibrary extends JavaPlugin
 {
@@ -16,13 +15,14 @@ public class SinkLibrary extends JavaPlugin
     private static SinkIRC irc;
     private static File dataFolder;
 
+    private static boolean economyAvailable = true;
+
+
     public void onEnable()
     {
         if (! setupEcononmy())
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Sink plugins needs an economy plugin and Vault to work correctly.");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
+            economyAvailable = false;
         }
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
         dataFolder = getDataFolder();
@@ -42,6 +42,11 @@ public class SinkLibrary extends JavaPlugin
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    public static boolean economyAvailable()
+    {
+        return economyAvailable;
     }
 
     /**

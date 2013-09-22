@@ -1,6 +1,7 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -25,7 +26,8 @@ public class StatsCommands
             }
             Player player = (Player) sender;
 
-            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            User user = new User(player);
+            PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (config.getStatsEnabled())
             {
@@ -52,7 +54,8 @@ public class StatsCommands
             }
             Player player = (Player) sender;
 
-            PlayerConfiguration config = new PlayerConfiguration(player.getName());
+            User user = new User(player);
+            PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (! config.getStatsEnabled())
             {
