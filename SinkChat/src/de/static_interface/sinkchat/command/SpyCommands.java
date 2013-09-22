@@ -1,6 +1,5 @@
-package de.static_interface.sinkcommands.commands;
+package de.static_interface.sinkchat.command;
 
-import de.static_interface.sinkcommands.SinkCommands;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
@@ -10,11 +9,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class StatsCommands
+public class SpyCommands
 {
-    public static String PREFIX = ChatColor.DARK_GREEN + "[Statistiken] " + ChatColor.RESET;
+    public static String PREFIX = ChatColor.DARK_GRAY + "[Spy] " + ChatColor.RESET;
 
-    public static class EnableStatsCommand implements CommandExecutor
+    public static class EnableSpyCommand implements CommandExecutor
     {
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -29,20 +28,19 @@ public class StatsCommands
             User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (config.getStatsEnabled())
+            if (config.getSpyEnabled())
             {
-                player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon aktiviert!");
+                player.sendMessage(PREFIX + ChatColor.RED + "Der Spy ist schon aktiviert!");
                 return true;
             }
 
-            config.setStatsEnabled(true);
-            sender.sendMessage(PREFIX + ChatColor.GREEN + "Die Statistiken wurden aktiviert.");
-            SinkCommands.refreshScoreboard(player, - 1);
+            config.setSpyEnabled(true);
+            sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Spy wurde aktiviert!");
             return true;
         }
     }
 
-    public static class DisableStatsCommand implements CommandExecutor
+    public static class DisablSpyCommand implements CommandExecutor
     {
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -57,15 +55,14 @@ public class StatsCommands
             User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (! config.getStatsEnabled())
+            if (! config.getSpyEnabled())
             {
-                player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon deaktiviert!");
+                player.sendMessage(PREFIX + ChatColor.RED + "Der Spy ist schon deaktiviert!");
                 return true;
             }
 
-            config.setStatsEnabled(false);
-            sender.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken wurden deaktiviert.");
-            SinkCommands.refreshScoreboard(player, - 1);
+            config.setSpyEnabled(false);
+            sender.sendMessage(PREFIX + ChatColor.RED + "Der Spy wurde deaktiviert.");
             return true;
         }
     }

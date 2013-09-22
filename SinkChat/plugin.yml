@@ -17,6 +17,16 @@ commands:
     usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
     aliases: ch
 
+  enablespy:
+    description: Enable spy chat.
+    aliases: es
+    permission: sinkchat.spy
+
+  disablespy:
+    description: Disable spy chat.
+    aliases: ds
+    permission: sinkchat.spy
+
 permissions:
   sinkchat.*:
     description: Gives access to all commands

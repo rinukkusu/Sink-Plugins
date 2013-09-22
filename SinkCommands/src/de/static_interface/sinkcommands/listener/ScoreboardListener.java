@@ -9,10 +9,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-/**
- * Author: Trojaner
- * Date: 13.09.13
- */
 public class ScoreboardListener implements Listener
 {
     @EventHandler(priority = EventPriority.LOWEST)

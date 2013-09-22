@@ -72,11 +72,13 @@ public class NickCommand implements CommandExecutor
             player.sendMessage(PREFIX + "Ungültiger Nickname!");
             return false;
         }
+
         if (cleanDisplayName.length() > 16)
         {
             player.sendMessage(PREFIX + "Nickname ist zu lang!");
             return false;
         }
+
         if (cleanDisplayName.equals("off"))
         {
             newDisplayName = SinkChat.getDefaultDisplayName(player);

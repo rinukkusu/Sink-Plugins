@@ -7,6 +7,7 @@ import de.static_interface.sinkchat.channel.channels.TradeChannel;
 import de.static_interface.sinkchat.channel.configuration.LanguageHandler;
 import de.static_interface.sinkchat.command.ChannelCommand;
 import de.static_interface.sinkchat.command.NickCommand;
+import de.static_interface.sinkchat.command.SpyCommands;
 import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinkchat.listener.NicknameListener;
@@ -169,5 +170,7 @@ public class SinkChat extends JavaPlugin
     {
         getCommand("nick").setExecutor(new NickCommand());
         getCommand("channel").setExecutor(new ChannelCommand());
+        getCommand("enablespy").setExecutor(new SpyCommands.EnableSpyCommand());
+        getCommand("disablespy").setExecutor(new SpyCommands.DisablSpyCommand());
     }
 }

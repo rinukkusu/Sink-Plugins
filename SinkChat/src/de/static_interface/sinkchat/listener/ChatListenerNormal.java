@@ -1,6 +1,8 @@
 package de.static_interface.sinkchat.listener;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -47,11 +49,14 @@ public class ChatListenerNormal implements Listener
             Location loc = p.getLocation();
             boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
 
+            User user = new User(p);
+            PlayerConfiguration config = user.getPlayerConfiguration();
             if (isInRange)
             {
                 p.sendMessage(formattedMessage);
             }
-            else if (( ( p.hasPermission("sinkchat.spynewbie") ) && ! event.getPlayer().hasPermission("sinkchat.spynewbie.bypass") ) || p.hasPermission("sinkchat.spy"))
+            else if (( ( ( p.hasPermission("sinkchat.spynewbie") ) && ! event.getPlayer().hasPermission("sinkchat.spynewbie.bypass") )
+                    || p.hasPermission("sinkchat.spy") ) && config.getSpyEnabled())
             {
                 p.sendMessage(spyPrefix + formattedMessage);
             }

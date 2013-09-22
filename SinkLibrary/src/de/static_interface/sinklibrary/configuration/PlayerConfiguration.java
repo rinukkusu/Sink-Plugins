@@ -65,11 +65,12 @@ public class PlayerConfiguration implements IConfiguration
             }
             playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
             //playerYamlConfig.createSection(FREEZEPATH);
+            playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
+            playerYamlConfig.addDefault(playerName + ".Spy.Enabled", true);
+            playerYamlConfig.addDefault(playerName + ".Nick.HasNickname", false);
+            playerYamlConfig.addDefault(playerName + ".Nick.Nickname", getDefaultDisplayName());
             playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
             playerYamlConfig.addDefault(playerName + ".Freeze.freezedtime", 0);
-            playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
-            playerYamlConfig.addDefault(playerName + ".General.Nickname", getDefaultDisplayName());
-            playerYamlConfig.addDefault(playerName + ".General.HasNickname", false);
             playerYamlConfig.options().copyDefaults(true);
             save();
         }
@@ -108,7 +109,7 @@ public class PlayerConfiguration implements IConfiguration
     }
 
     /**
-     * @param path Path to value
+     * @param path  Path to value
      * @param value Value of path
      */
     public void set(String path, Object value)
@@ -120,6 +121,7 @@ public class PlayerConfiguration implements IConfiguration
 
     /**
      * Get value from config
+     *
      * @param path Path to value
      * @return Value of path
      */
@@ -141,6 +143,20 @@ public class PlayerConfiguration implements IConfiguration
     {
         PermissionUser user = PermissionsEx.getUser(player);
         return user.getGroupsNames();
+    }
+
+    public boolean getSpyEnabled()
+    {
+        return (boolean) get(playerName + "Spy.Enabled");
+    }
+
+
+    /**
+     *
+     */
+    public void setSpyEnabled(boolean value)
+    {
+        set("Spy.Enabled", value);
     }
 
     /**
@@ -193,6 +209,7 @@ public class PlayerConfiguration implements IConfiguration
 
     /**
      * Set stats Enabled
+     *
      * @param value Value
      */
     public void setStatsEnabled(boolean value)
@@ -211,7 +228,7 @@ public class PlayerConfiguration implements IConfiguration
         player.setCustomName(displayName);
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set("General.Nickname", displayName);
+        config.set("Nick.Nickname", displayName);
         if (displayName.equals(getDefaultDisplayName()))
         {
             setHasDisplayName(false);
@@ -231,7 +248,7 @@ public class PlayerConfiguration implements IConfiguration
         {
             User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
-            return (String) config.get("General.Nickname");
+            return (String) config.get("Nick.Nickname");
         }
         catch (Exception e)
         {
@@ -264,7 +281,7 @@ public class PlayerConfiguration implements IConfiguration
         {
             User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
-            return (boolean) config.get("General.HasNickname");
+            return (boolean) config.get("Nick.HasNickname");
         }
         catch (Exception e)
         {
@@ -279,6 +296,6 @@ public class PlayerConfiguration implements IConfiguration
     {
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set("General.HasNickname", value);
+        config.set("Nick.HasNickname", value);
     }
 }
