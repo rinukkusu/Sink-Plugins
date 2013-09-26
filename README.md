@@ -6,4 +6,5 @@ Sink Plugins for <a href="http://adventuria.eu">Adventuria Minecraft</a>.
 
 License
 ==============
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-nd/3.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/3.0/">Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported License</a>.
+This work is licensed under an Apache License Version 2.0. For more information, read the LICENSE file.
+
