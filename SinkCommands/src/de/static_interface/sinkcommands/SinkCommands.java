@@ -51,7 +51,7 @@ public class SinkCommands extends JavaPlugin
         registerEvents();
         registerCommands();
         getLogger().info("Loading frozen players...");
-        FreezeCommands.loadFreezedPlayers(getLogger(), getDataFolder(), this);
+        FreezeCommands.loadFreezedPlayers(getLogger(), getDataFolder());
         getLogger().info("Done!");
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
@@ -198,7 +198,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("milk").setExecutor(new MilkCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand());
-        getCommand("tmpfreeze").setExecutor(new FreezeCommands.TmpfreezeCommand(this));
         getCommand("freezeall").setExecutor(new FreezeCommands.FreezeallCommand());
         getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand());
         getCommand("globalmute").setExecutor(new GlobalmuteCommand());

@@ -13,7 +13,9 @@ public class BukkitUtil
 
     /**
      * @param sender Command Sender
-     * @return If sender is Console, it will return "Console" in red, if sender is Player, it will return player's displayname
+     * @return If {@link org.bukkit.command.CommandSender CommandSnder} is instance of {@link org.bukkit.command.ConsoleCommandSender ConsoleCommandSender},
+     * it will return "Console" in {@link org.bukkit.ChatColor#RED RED}, if sender is instance of
+     * {@link org.bukkit.entity.Player Player}, it will return player's {@link org.bukkit.entity.Player#getDisplayName() DisplayName}
      */
     public static String getSenderName(CommandSender sender)
     {
@@ -30,7 +32,7 @@ public class BukkitUtil
     }
 
     /**
-     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
+     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String, String)}.
      * Send message to all players with specified permission.
      *
      * @param message Message to send

@@ -1,7 +1,7 @@
 package de.static_interface.sinkchat.channel;
 
-import de.static_interface.sinkchat.SinkChat;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,9 +23,10 @@ public class ChannelUtil
             return false;
         }
         String formattedMessage = message.substring(1);
-        if (SinkLibrary.permissionsAvailable())
+        if (SinkLibrary.groupsAvailable())
         {
-            formattedMessage = prefix + ChatColor.GRAY + "[" + SinkChat.getGroup(player) + ChatColor.GRAY + "] " + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
+            User user = new User(player);
+            formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
         else
         {
@@ -43,6 +44,7 @@ public class ChannelUtil
                 target.sendMessage(formattedMessage);
             }
         }
+        Bukkit.getConsoleSender().sendMessage(formattedMessage);
         SinkLibrary.sendIRCMessage(formattedMessage);
         return true;
     }

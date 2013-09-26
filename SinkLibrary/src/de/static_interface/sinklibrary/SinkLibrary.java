@@ -1,7 +1,9 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
+import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,23 +19,46 @@ public class SinkLibrary extends JavaPlugin
     public static List<String> tmpBannedPlayers;
 
     private static Economy econ;
+    private static Permission perm;
+    private static Chat chat;
     private static SinkIRC irc;
     private static File dataFolder;
 
     private static boolean economyAvailable = true;
     private static boolean permissionsAvailable = true;
+    private static boolean chatAvailable = true;
 
     public void onEnable()
     {
-        if (! setupEcononmy())
+        if (! vaultAvailable())
         {
-            Bukkit.getLogger().log(Level.WARNING, "Economy Plugin not found. Disabling economy features.");
-            economyAvailable = false;
-        }
-        if (Bukkit.getPluginManager().getPlugin("PermissionsEx") == null)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "Permissions Plugin not found. Disabling permissions and group features.");
+            Bukkit.getLogger().log(Level.WARNING, "Vault Plugin not found. Disabling economy and some permission features.");
             permissionsAvailable = false;
+            economyAvailable = false;
+            chatAvailable = false;
+        }
+        else
+        {
+            if (! setupChat())
+            {
+                chatAvailable = false;
+            }
+
+            if (! setupEcononmy())
+            {
+                Bukkit.getLogger().log(Level.WARNING, "Economy Plugin not found. Disabling economy features.");
+                economyAvailable = false;
+            }
+            if (! setupPermissions())
+            {
+                Bukkit.getLogger().log(Level.WARNING, "Permissions Plugin not found. Disabling permissions features.");
+                permissionsAvailable = false;
+            }
+        }
+
+        if (chatAvailable && economyAvailable && permissionsAvailable)
+        {
+            Bukkit.getLogger().log(Level.INFO, "Successfully hooked into permissions, economy and chat.");
         }
 
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
@@ -46,12 +71,18 @@ public class SinkLibrary extends JavaPlugin
 
     }
 
+    private boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null)
+        {
+            chat = chatProvider.getProvider();
+        }
+        return ( chat != null );
+    }
+
     private boolean setupEcononmy()
     {
-        if (Bukkit.getPluginManager().getPlugin("Vault") == null)
-        {
-            return false;
-        }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null)
         {
@@ -59,6 +90,32 @@ public class SinkLibrary extends JavaPlugin
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    private boolean setupPermissions()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null)
+        {
+            perm = permissionProvider.getProvider();
+        }
+        return ( perm != null );
+    }
+
+    /**
+     * @return True if Vault available
+     */
+    public static boolean vaultAvailable()
+    {
+        return Bukkit.getPluginManager().getPlugin("Vault") != null;
+    }
+
+    /**
+     * @return True if chat is available
+     */
+    public static boolean chatAvailable()
+    {
+        return chatAvailable;
     }
 
     /**
@@ -78,20 +135,43 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * Get Economy instance
+     * Get Chat instance
+     *
+     * @return Chat instance
+     * @see Chat
+     */
+    public static Chat getChat()
+    {
+        return chat;
+    }
+
+    /**
+     * Get Economy instance from Vault
      *
      * @return Economy instace
+     * @see Economy
      */
     public static Economy getEconomy()
     {
         return econ;
     }
 
+    /**
+     * Get Permissions instance
+     *
+     * @return Permissions
+     * @see Permission
+     */
+    public static Permission getPermissions()
+    {
+        return perm;
+    }
 
     /**
      * Get SinkIRC Instance
      *
      * @return SinkIRC Instance
+     * @see SinkIRC
      */
     public static SinkIRC getSinkIRC()
     {
@@ -109,7 +189,7 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * Send Message to IRC
+     * Send Message to IRC via SinkIRC Plugin.
      *
      * @param message Message to send
      */
@@ -120,7 +200,6 @@ public class SinkLibrary extends JavaPlugin
             SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
         }
     }
-
 
     /**
      * Add Temp Ban
@@ -140,5 +219,10 @@ public class SinkLibrary extends JavaPlugin
     public static void removeTempBan(String username)
     {
         tmpBannedPlayers.remove(username);
+    }
+
+    public static boolean groupsAvailable()
+    {
+        return Bukkit.getPluginManager().getPlugin("PermissionsEx") != null;
     }
 }

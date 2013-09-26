@@ -29,11 +29,6 @@ commands:
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Grund>"
     permission: sinkcommands.freeze.freeze
 
-  tmpfreeze:
-    description: Temporarily freeze a player.
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Sekunden> <Grund>"
-    permission: sinkcommands.freeze.tmpfreeze
-
   freezeall:
     description: Freeze or unfreeze every players.
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Grund>"
@@ -183,17 +178,12 @@ permissions:
       sinkcommands.freeze.freeze: true
       sinkcommands.freeze.freezeall: true
       sinkcommands.freeze.unfreezeall: true
-      sinkcommands.freeze.tmpfreeze: true
       sinkcommands.freeze.list: true
       sinkcommands.freeze.message: true
       sinkcommands.freeze.bypass: true
 
   sinkcommands.freeze.freeze:
     description: Be able to freeze players.
-    default: op
-
-  sinkcommands.freeze.tmpfreeze:
-    description: Be able to temporarily freeze players.
     default: op
 
   sinkcommands.freeze.freezeall:

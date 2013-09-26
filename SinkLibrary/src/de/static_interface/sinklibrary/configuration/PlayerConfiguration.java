@@ -3,11 +3,8 @@ package de.static_interface.sinklibrary.configuration;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import ru.tehkode.permissions.PermissionUser;
-import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,18 +19,29 @@ public class PlayerConfiguration implements IConfiguration
     private File playerConfigFile;
     private YamlConfiguration playerYamlConfig;
     private File playersPath;
+    private User user;
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
      *
-     * @param playerName Player name. Do not use Displayname or Customname!
+     * @param user User
      */
-    public PlayerConfiguration(String playerName)
+    public PlayerConfiguration(User user)
     {
-        this.playerName = playerName;
-        player = Bukkit.getPlayer(playerName);
+        this.user = user;
+
+        player = user.getPlayer();
+        playerName = player.getName();
+
         playersPath = new File(SinkLibrary.getDataFolderStatic() + File.separator + "Players");
-        playerConfigFile = new File(playersPath, playerName + ".yml");
+        try
+        {
+            playerConfigFile = new File(playersPath, playerName + ".yml");
+        }
+        catch (NullPointerException ignored)
+        {
+            playerYamlConfig = null;
+        }
         playerYamlConfig = ( exists() ) ? YamlConfiguration.loadConfiguration(playerConfigFile) : null;
     }
 
@@ -67,7 +75,7 @@ public class PlayerConfiguration implements IConfiguration
             playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
             playerYamlConfig.addDefault(playerName + ".Spy.Enabled", true);
             playerYamlConfig.addDefault(playerName + ".Nick.HasNickname", false);
-            playerYamlConfig.addDefault(playerName + ".Nick.Nickname", getDefaultDisplayName());
+            playerYamlConfig.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
             playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
             playerYamlConfig.addDefault(playerName + ".Freeze.freezedtime", 0);
             playerYamlConfig.options().copyDefaults(true);
@@ -113,10 +121,17 @@ public class PlayerConfiguration implements IConfiguration
      */
     public void set(String path, Object value)
     {
-        playerYamlConfig.set(playerName + "." + path, value);
-        save();
+        try
+        {
+            playerYamlConfig.set(playerName + "." + path, value);
+            save();
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path);
+            throw e;
+        }
     }
-
 
     /**
      * Get value from config
@@ -132,26 +147,30 @@ public class PlayerConfiguration implements IConfiguration
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-            return "";
+            return null;
         }
 
     }
 
-    public String[] getGroups()
-    {
-        PermissionUser user = PermissionsEx.getUser(player);
-        return user.getGroupsNames();
-    }
-
+    /**
+     * @return True if spy is enabled
+     */
     public boolean getSpyEnabled()
     {
-        return (boolean) get(playerName + "Spy.Enabled");
+        try
+        {
+            return (boolean) get(playerName + "Spy.Enabled");
+        }
+        catch (Exception ignored)
+        {
+            return false;
+        }
     }
 
-
     /**
+     * Enable or disable Spy
      *
+     * @param value True will enable it, false disable
      */
     public void setSpyEnabled(boolean value)
     {
@@ -165,7 +184,14 @@ public class PlayerConfiguration implements IConfiguration
      */
     public boolean getFreezed()
     {
-        return (boolean) get(playerName + "Freeze.freezed");
+        try
+        {
+            return (boolean) get(playerName + "Freeze.freezed");
+        }
+        catch (Exception ignored)
+        {
+            return false;
+        }
     }
 
     /**
@@ -185,7 +211,14 @@ public class PlayerConfiguration implements IConfiguration
      */
     public int getFreezeTime()
     {
-        return playerYamlConfig.getInt(playerName + ".Freeze.freezedtime");
+        try
+        {
+            return playerYamlConfig.getInt(playerName + ".Freeze.freezedtime");
+        }
+        catch (Exception ignored)
+        {
+            return 0;
+        }
     }
 
     /**
@@ -203,7 +236,14 @@ public class PlayerConfiguration implements IConfiguration
      */
     public boolean getStatsEnabled()
     {
-        return (boolean) get("General.StatsEnabled");
+        try
+        {
+            return (boolean) get("General.StatsEnabled");
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 
     /**
@@ -225,10 +265,9 @@ public class PlayerConfiguration implements IConfiguration
     {
         player.setDisplayName(displayName);
         player.setCustomName(displayName);
-        User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.set("Nick.Nickname", displayName);
-        if (displayName.equals(getDefaultDisplayName()))
+        if (displayName.equals(user.getDefaultDisplayName()))
         {
             setHasDisplayName(false);
         }
@@ -245,30 +284,12 @@ public class PlayerConfiguration implements IConfiguration
     {
         try
         {
-            User user = new User(player);
-            PlayerConfiguration config = user.getPlayerConfiguration();
-            return (String) config.get("Nick.Nickname");
+            return (String) get("Nick.Nickname");
         }
         catch (Exception e)
         {
-            return getDefaultDisplayName();
+            return user.getDefaultDisplayName();
         }
-
-    }
-
-    /**
-     * @return Display Name with Permission Prefix or Op/non-Op Prefix
-     */
-    public String getDefaultDisplayName()
-    {
-        if (SinkLibrary.permissionsAvailable())
-        {
-            PermissionUser permsUser = PermissionsEx.getUser(player);
-            String playerPrefix = ChatColor.translateAlternateColorCodes('&', permsUser.getPrefix());
-            return playerPrefix + player.getName() + ChatColor.RESET;
-        }
-        String prefix = player.isOp() ? ChatColor.RED.toString() : ChatColor.WHITE.toString();
-        return prefix + player.getName() + ChatColor.RESET;
     }
 
     /**
@@ -278,9 +299,7 @@ public class PlayerConfiguration implements IConfiguration
     {
         try
         {
-            User user = new User(player);
-            PlayerConfiguration config = user.getPlayerConfiguration();
-            return (boolean) config.get("Nick.HasNickname");
+            return (boolean) get("Nick.HasNickname");
         }
         catch (Exception e)
         {
@@ -293,8 +312,6 @@ public class PlayerConfiguration implements IConfiguration
      */
     public void setHasDisplayName(boolean value)
     {
-        User user = new User(player);
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set("Nick.HasNickname", value);
+        set("Nick.HasNickname", value);
     }
 }

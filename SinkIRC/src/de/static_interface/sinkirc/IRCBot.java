@@ -197,14 +197,15 @@ public class IRCBot extends PircBot
                 }
                 String reason = message.replace(targetPlayerName + " ", "");
                 reason = reason.replace("kick ", "");
+                String formattedReason = "";
                 if (args.length >= 3)
                 {
-                    targetPlayer.kickPlayer("Kicked by " + sender + " (" + reason + ") !");
+                    formattedReason = " (" + reason + ")";
                 }
-                else
-                {
-                    targetPlayer.kickPlayer("Kicked by " + sender + "!");
-                }
+                reason = "Kicked by " + sender + formattedReason + "!";
+                targetPlayer.kickPlayer(reason);
+                sendCleanMessage(channel, reason);
+
             }
 
             if (cmd.equals("list"))

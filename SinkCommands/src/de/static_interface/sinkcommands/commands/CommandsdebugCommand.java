@@ -20,13 +20,13 @@ public class CommandsdebugCommand implements CommandExecutor
             return false;
         }
         String option = args[0];
-        switch (option)
+        switch (option.toLowerCase())
         {
             case "getvalue":
             {
                 if (args.length != 3)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /debug getvalue <player> <path.to.key>");
+                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug getvalue <player> <path.to.key>");
                     break;
                 }
                 String player = args[1];
@@ -36,11 +36,12 @@ public class CommandsdebugCommand implements CommandExecutor
                 sender.sendMessage(PREFIX + "Output: " + config.getYamlConfiguration().getString(path));
                 break;
             }
+
             case "setvalue":
             {
                 if (args.length != 4)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /debug setvalue <player> <path.to.key> <value>");
+                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug setvalue <player> <path.to.key> <value>");
                     break;
                 }
                 String player = args[1];
@@ -52,6 +53,21 @@ public class CommandsdebugCommand implements CommandExecutor
                 config.set(path, value);
                 sender.sendMessage(PREFIX + "Done");
                 break;
+            }
+
+            case "haspermission":
+            {
+                if (args.length != 3)
+                {
+                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug haspermission <player> <permission>");
+                    break;
+                }
+                String player = args[1];
+                String permission = args[2];
+                User user = new User(player);
+                sender.sendMessage(PREFIX + "Output: " + user.hasPermission(permission));
+                break;
+
             }
             default:
             {

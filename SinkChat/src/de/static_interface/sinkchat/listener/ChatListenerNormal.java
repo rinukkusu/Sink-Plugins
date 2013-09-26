@@ -1,6 +1,7 @@
 package de.static_interface.sinkchat.listener;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
+import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
@@ -14,7 +15,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 public class ChatListenerNormal implements Listener
 {
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
         if (event.isCancelled())
@@ -40,7 +41,11 @@ public class ChatListenerNormal implements Listener
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }
-        formattedMessage = ChatColor.GRAY + "[Lokal] " + ChatColor.RESET + formattedMessage;
+        if (! SinkLibrary.permissionsAvailable())
+        {
+            formattedMessage = ChatColor.GRAY + "[Lokal] " + ChatColor.RESET + formattedMessage;
+        }
+
         String spyPrefix = ChatColor.GRAY + "[Spy] ";
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
@@ -50,19 +55,21 @@ public class ChatListenerNormal implements Listener
             Location loc = p.getLocation();
             boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
 
+            boolean newbieSpy = ( p.hasPermission("sinkchat.spynewbie") ) && ! event.getPlayer().hasPermission("sinkchat.spynewbie.bypass");
+            boolean maySpy = p.hasPermission("sinkchat.spy");
+
             User user = new User(p);
             PlayerConfiguration config = user.getPlayerConfiguration();
             if (isInRange)
             {
                 p.sendMessage(formattedMessage);
             }
-            else if (( ( ( p.hasPermission("sinkchat.spynewbie") ) && ! event.getPlayer().hasPermission("sinkchat.spynewbie.bypass") )
-                    || p.hasPermission("sinkchat.spy") ) && config.getSpyEnabled())
+            else if (( newbieSpy || maySpy ) && config.getSpyEnabled())
             {
                 p.sendMessage(spyPrefix + formattedMessage);
             }
-
         }
+        Bukkit.getConsoleSender().sendMessage(spyPrefix + formattedMessage);
         event.setCancelled(true);
     }
 }

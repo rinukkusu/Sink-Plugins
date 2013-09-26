@@ -1,7 +1,9 @@
 package de.static_interface.sinkirc;
 
 import de.static_interface.sinkirc.commands.IrclistCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -11,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jibble.pircbot.IrcException;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -34,15 +37,23 @@ public class SinkIRC extends JavaPlugin implements Listener
     @Override
     public void onEnable()
     {
+        ircBot = new IRCBot();
+
+        if (Bukkit.getPluginManager().getPlugin("SinkChat") == null)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         getServer().getPluginManager().registerEvents(this, this);
 
         log = getLogger();
-        ircBot = new IRCBot();
 
         try
         {
             ircBot.connect(host, port);
-            ircBot.sendMessage("Trojaner", "register passwordpassword password@password.com"); //dis is a testi!
+            ircBot.sendMessage("Trojaner", "register passwordpassword password@password.com"); //dis is testi!
             ircBot.sendMessage("Trojaner", "identify passwordpassword"); //dis is also testi!
             ircBot.joinChannel(channel);
         }
@@ -60,7 +71,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.quitServer("Plugin reload or plugin has been deactivated");
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         if (IRCBot.disabled)
@@ -70,7 +81,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.sendCleanMessage(channel, event.getJoinMessage());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if (IRCBot.disabled)
@@ -80,7 +91,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.sendCleanMessage(channel, event.getQuitMessage());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKick(PlayerKickEvent event)
     {
         if (IRCBot.disabled)
@@ -97,7 +108,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
         if (IRCBot.disabled)

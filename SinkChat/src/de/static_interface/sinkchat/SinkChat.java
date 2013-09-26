@@ -110,17 +110,6 @@ public class SinkChat extends JavaPlugin
     }
 
     /**
-     * @param player Player
-     * @return Player's primary group
-     */
-    public static String getGroup(Player player)
-    {
-        User user = new User(player);
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        return config.getGroups()[0];
-    }
-
-    /**
      * Refresh Player DisplayName
      *
      * @param player Player
@@ -154,8 +143,7 @@ public class SinkChat extends JavaPlugin
     public static String getDefaultDisplayName(Player player)
     {
         User user = new User(player);
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        return config.getDefaultDisplayName();
+        return user.getDefaultDisplayName();
     }
 
     private void registerEvents(PluginManager pm)
