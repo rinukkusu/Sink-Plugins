@@ -29,11 +29,6 @@ commands:
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Grund>"
     permission: sinkcommands.freeze.freeze
 
-  freezeall:
-    description: Freeze or unfreeze every players.
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Grund>"
-    permission: sinkcommands.freeze.freezeall
-
   freezelist:
     description: List all the freezed or tmpfreezed players.
     permission: sinkcommands.freeze.list
@@ -176,7 +171,6 @@ permissions:
     description: Be able to use all freeze commands.
     children:
       sinkcommands.freeze.freeze: true
-      sinkcommands.freeze.freezeall: true
       sinkcommands.freeze.unfreezeall: true
       sinkcommands.freeze.list: true
       sinkcommands.freeze.message: true
@@ -184,10 +178,6 @@ permissions:
 
   sinkcommands.freeze.freeze:
     description: Be able to freeze players.
-    default: op
-
-  sinkcommands.freeze.freezeall:
-    description: Be able to freeze every players.
     default: op
 
   sinkcommands.freeze.bypass:

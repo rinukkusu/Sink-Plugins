@@ -16,7 +16,7 @@
 
 package de.static_interface.sinkchat.channel.configuration;
 
-import de.static_interface.sinkchat.SinkChat;
+import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.configuration.IConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -29,7 +29,7 @@ public class LanguageHandler implements IConfiguration
 {
 
     private static YamlConfiguration language = new YamlConfiguration();
-    private static final File languageFilesPath = new File(SinkChat.getDataFolderStatic() + File.separator + ( "lang.yml" ));
+    private static final File languageFilesPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + ( "lang.yml" ));
 
     public static boolean init()
     {

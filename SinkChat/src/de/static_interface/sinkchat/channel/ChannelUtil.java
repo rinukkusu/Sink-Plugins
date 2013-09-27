@@ -37,10 +37,10 @@ public class ChannelUtil
         }
 
         String formattedMessage = message.substring(1);
+        User user = new User(player);
 
-        if (SinkLibrary.chatAvailable())
+        if (SinkLibrary.permissionsAvailable())
         {
-            User user = new User(player);
             formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
         else
@@ -48,7 +48,7 @@ public class ChannelUtil
             formattedMessage = prefix + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
 
-        if (player.hasPermission("sinkchat.color"))
+        if (user.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }

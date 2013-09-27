@@ -17,28 +17,17 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinklibrary.BukkitUtil;
-import de.static_interface.sinklibrary.Util;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class FreezeCommands
 {
     public static final String PREFIX = ChatColor.RED + "[Freeze] " + ChatColor.RESET;
-
-    public static Set<String> toFreeze = new HashSet<>();
-    public static Set<String> freezeAll = new HashSet<>();
 
     public static class FreezeCommand implements CommandExecutor
     {
@@ -70,6 +59,7 @@ public class FreezeCommands
                         sender.sendMessage(PREFIX + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
                         return true;
                     }
+
                     if (toggleFreeze(p))
                     {
                         if (args.length < 2)
@@ -91,35 +81,13 @@ public class FreezeCommands
         }
     }
 
-    public static class FreezeallCommand implements CommandExecutor
-    {
-        public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
-        {
-            if (args.length < 1 && freezeAll.size() != Bukkit.getWorlds().size())
-            {
-                return false;
-            }
-
-            String reason = Util.formatArrayToString(args, " ");
-
-            if (toggleFreezeAll())
-            {
-                BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + BukkitUtil.getSenderName(sender) + " eingefroren. Grund: " + reason);
-            }
-            else
-            {
-                BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Alle Spieler wurden von " + BukkitUtil.getSenderName(sender) + " aufgetaut.");
-            }
-            return true;
-        }
-    }
-
     public static class FreezelistCommand implements CommandExecutor
     {
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             String frozenList = "";
             String tmpfrozenList = "";
+
             for (Player p : Bukkit.getOnlinePlayers())
             {
                 if (isFrozen(p))
@@ -134,7 +102,6 @@ public class FreezeCommands
                     }
                 }
             }
-
 
             if (frozenList.length() > 0)
             {
@@ -159,115 +126,35 @@ public class FreezeCommands
 
     public static boolean isFrozen(Player player)
     {
-        if (player == null)
-        {
-            return false;
-        }
-
-        if (freezeAll.contains(player.getWorld().getName()))
-        {
-            return canBeFrozen(player);
-        }
-
-        return toFreeze.contains(player.getName());
+        User user = new User(player);
+        return user.getPlayerConfiguration().getFreezed();
     }
 
     public static boolean canBeFrozen(Player player)
     {
-        return ! player.hasPermission("sinkcommands.freeze.never");
+        User user = new User(player);
+        return ! user.hasPermission("sinkcommands.freeze.never");
     }
 
-    public static boolean toggleFreezeAll()
-    {
-        if (freezeAll.size() == Bukkit.getWorlds().size())
-        {
-            freezeAll.clear();
-            return false;
-        }
-
-        for (World w : Bukkit.getWorlds())
-        {
-            if (! freezeAll.contains(w.getName()))
-            {
-                freezeAll.add(w.getName());
-            }
-        }
-        return true;
-    }
 
     public static boolean toggleFreeze(Player player)
     {
-        if (toFreeze.contains(player.getName()))
+        User user = new User(player);
+        if (user.getPlayerConfiguration().getFreezed())
         {
-            toFreeze.remove(player.getName());
+            user.getPlayerConfiguration().setFreezed(false);
             return false;
         }
         else
         {
-            toFreeze.add(player.getName());
+            user.getPlayerConfiguration().setFreezed(true);
             return true;
         }
     }
 
     public static void unfreeze(Player player)
     {
-        if (toFreeze.contains(player.getName()))
-        {
-            toFreeze.remove(player.getName());
-        }
-    }
-
-    public static void unfreeze(OfflinePlayer player)
-    {
-        if (toFreeze.contains(player.getName()))
-        {
-            toFreeze.remove(player.getName());
-        }
-    }
-
-    public static void loadFreezedPlayers(Logger log, File dataFolder)
-    {
-        File saveFile = new File(dataFolder, "freezedPlayers.txt");
-        if (saveFile.exists())
-        {
-            try
-            {
-                InputStream ips = new FileInputStream(saveFile);
-                InputStreamReader ipsr = new InputStreamReader(ips);
-                BufferedReader br = new BufferedReader(ipsr);
-                String line;
-                while (( line = br.readLine() ) != null)
-                {
-                    toFreeze.add(line.trim());
-                }
-            }
-            catch (Exception exc)
-            {
-                log.log(Level.SEVERE, "Fehler beim laden der freezedPlayers.txt ", exc);
-            }
-        }
-    }
-
-    public static void unloadFreezedPlayers(Logger log, File dataFolder)
-    {
-        if (! dataFolder.exists())
-        {
-            dataFolder.mkdirs();
-        }
-        File saveFile = new File(dataFolder, "freezedPlayers.txt");
-        if (saveFile.exists())
-        {
-            saveFile.delete();
-        }
-
-        try
-        {
-            BufferedWriter out = new BufferedWriter(new FileWriter(saveFile));
-            out.close();
-        }
-        catch (Exception e)
-        {
-            log.log(Level.SEVERE, "Fehler beim speichern der freezedPlayers.txt ", e);
-        }
+        User user = new User(player);
+        user.getPlayerConfiguration().setFreezed(false);
     }
 }

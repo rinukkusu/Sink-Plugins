@@ -45,6 +45,8 @@ public class SinkLibrary extends JavaPlugin
     private static boolean permissionsAvailable = true;
     private static boolean chatAvailable = true;
 
+    private static String pluginName;
+
     public void onEnable()
     {
         if (! vaultAvailable())
@@ -73,15 +75,30 @@ public class SinkLibrary extends JavaPlugin
             }
         }
 
+        dataFolder = getDataFolder();
+
+        if (! getCustomDataFolder().exists())
+        {
+            try
+            {
+                getCustomDataFolder().mkdirs();
+            }
+            catch (Exception e)
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create Data Folder!", e);
+            }
+        }
+
         if (chatAvailable && economyAvailable && permissionsAvailable)
         {
             Bukkit.getLogger().log(Level.INFO, "Successfully hooked into permissions, economy and chat.");
         }
 
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
-        dataFolder = getDataFolder();
+
         tmpBannedPlayers = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
+        pluginName = this.getDescription().getName();
     }
 
     public void onDisable()
@@ -197,13 +214,13 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * Get Data Folder
+     * Get custom data folder
      *
-     * @return Data Folder of this plugin
+     * @return Data Folder of Sink Plugins (.../plugins/SinkPlugins/)
      */
-    public static File getDataFolderStatic()
+    public static File getCustomDataFolder()
     {
-        return dataFolder;
+        return new File(dataFolder.getAbsolutePath().replace(pluginName, "SinkPlugins"));
     }
 
     /**

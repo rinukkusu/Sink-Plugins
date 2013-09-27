@@ -35,13 +35,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.logging.Level;
 
 public class SinkChat extends JavaPlugin
 {
-    public static File dataFolder;
-
     public void onEnable()
     {
         if (! checkDependencies())
@@ -49,8 +46,6 @@ public class SinkChat extends JavaPlugin
             return;
         }
 
-
-        dataFolder = getDataFolder();
         for (Player p : Bukkit.getOnlinePlayers())
         {
             refreshDisplayName(p);
@@ -78,11 +73,6 @@ public class SinkChat extends JavaPlugin
         registerCommands();
     }
 
-    public void onDisable()
-    {
-        Bukkit.getLogger().log(Level.INFO, "Disabled.");
-    }
-
     private boolean checkDependencies()
     {
 
@@ -108,19 +98,7 @@ public class SinkChat extends JavaPlugin
     }
 
     /**
-     * Get Data Folder
-     *
-     * @return Data Folder
-     */
-    public static String getDataFolderStatic()
-    {
-        return String.valueOf(dataFolder);
-    }
-
-    /**
      * Refresh Player DisplayName
-     *
-     * @param player Player
      */
     public static void refreshDisplayName(Player player)
     {
@@ -145,7 +123,6 @@ public class SinkChat extends JavaPlugin
     }
 
     /**
-     * @param player Player
      * @return Default DisplayName of Player
      */
     public static String getDefaultDisplayName(Player player)

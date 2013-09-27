@@ -50,17 +50,8 @@ public class SinkCommands extends JavaPlugin
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
-
-        if (! getDataFolder().exists())
-        {
-            getDataFolder().mkdirs();
-        }
-
         registerEvents();
         registerCommands();
-        getLogger().info("Loading frozen players...");
-        FreezeCommands.loadFreezedPlayers(getLogger(), getDataFolder());
-        getLogger().info("Done!");
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
 
@@ -104,8 +95,6 @@ public class SinkCommands extends JavaPlugin
             SpectateCommands.specedPlayers.remove(p);
             p.sendMessage(SpectateCommands.PREFIX + "Du wurdest durch einen Reload gezwungen den Spectate Modus zu verlassen.");
         }
-        getLogger().info("Unloading frozen players...");
-        FreezeCommands.unloadFreezedPlayers(getLogger(), getDataFolder());
         getLogger().info("Saving player configurations...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
@@ -113,7 +102,7 @@ public class SinkCommands extends JavaPlugin
             PlayerConfiguration config = user.getPlayerConfiguration();
             config.save();
         }
-        getLogger().info("Disabled.");
+        getLogger().info("Done, disabled.");
     }
 
     /**
@@ -205,7 +194,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("milk").setExecutor(new MilkCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand());
-        getCommand("freezeall").setExecutor(new FreezeCommands.FreezeallCommand());
         getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand());
         getCommand("globalmute").setExecutor(new GlobalmuteCommand());
         getCommand("teamchat").setExecutor(new TeamchatCommand());

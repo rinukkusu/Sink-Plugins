@@ -42,16 +42,26 @@ public class User
         econ = SinkLibrary.getEconomy();
     }
 
+    /**
+     * Get current money of player
+     *
+     * @return Money of player
+     * @throws de.static_interface.sinklibrary.exceptions.EconomyNotAvailableException if economy is not available.
+     */
     public int getMoney()
     {
         if (! SinkLibrary.economyAvailable())
         {
             throw new EconomyNotAvailableException();
         }
+
         EconomyResponse response = econ.bankBalance(base.getName());
         return (int) response.balance;
     }
 
+    /**
+     * @return The PlayerConfiguration of the Player
+     */
     public PlayerConfiguration getPlayerConfiguration()
     {
         return new PlayerConfiguration(this);
@@ -62,6 +72,10 @@ public class User
         return base;
     }
 
+    /**
+     * @param permission Permission required
+     * @return True if the player has the permission specified by parameter.
+     */
     public boolean hasPermission(String permission)
     {
         //if (SinkLibrary.permissionsAvailable())
@@ -78,6 +92,7 @@ public class User
      * Get user's primary group.
      *
      * @return Primary Group
+     * @throws de.static_interface.sinklibrary.exceptions.PermissionsNotAvailableException if permissions are not available
      */
     public String getPrimaryGroup()
     {

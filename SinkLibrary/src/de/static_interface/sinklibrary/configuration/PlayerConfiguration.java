@@ -26,8 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-
-@SuppressWarnings("UnusedDeclaration")
 public class PlayerConfiguration implements IConfiguration
 {
     private String playerName;
@@ -49,7 +47,7 @@ public class PlayerConfiguration implements IConfiguration
         player = user.getPlayer();
         playerName = player.getName();
 
-        playersPath = new File(SinkLibrary.getDataFolderStatic() + File.separator + "Players");
+        playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
         try
         {
             playerConfigFile = new File(playersPath, playerName + ".yml");
@@ -87,13 +85,11 @@ public class PlayerConfiguration implements IConfiguration
                 throw new IOException("Couldn't create player config: " + playerConfigFile);
             }
             playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
-            //playerYamlConfig.createSection(FREEZEPATH);
             playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
             playerYamlConfig.addDefault(playerName + ".Spy.Enabled", true);
             playerYamlConfig.addDefault(playerName + ".Nick.HasNickname", false);
             playerYamlConfig.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
             playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
-            playerYamlConfig.addDefault(playerName + ".Freeze.freezedtime", 0);
             playerYamlConfig.options().copyDefaults(true);
             save();
         }
@@ -144,7 +140,7 @@ public class PlayerConfiguration implements IConfiguration
         }
         catch (Exception e)
         {
-            Bukkit.getLogger().log(Level.SEVERE, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path);
+            Bukkit.getLogger().log(Level.WARNING, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path);
             throw e;
         }
     }
@@ -218,33 +214,6 @@ public class PlayerConfiguration implements IConfiguration
     public void setFreezed(boolean value)
     {
         set("Freeze.freezed", value);
-    }
-
-    /**
-     * Get freeze time
-     *
-     * @return Freeze time, if it is equal or below than 0, it will freeze for ever, anything else is tempfreeze (seconds).
-     */
-    public int getFreezeTime()
-    {
-        try
-        {
-            return playerYamlConfig.getInt(playerName + ".Freeze.freezedtime");
-        }
-        catch (Exception ignored)
-        {
-            return 0;
-        }
-    }
-
-    /**
-     * Set Freeze Time
-     *
-     * @param time If it is equal or below than 0, it will freeze for ever, anything else is tempfreeze (seconds).
-     */
-    public void setFreezeTime(int time)
-    {
-        set("Freeze.freezedtime", time);
     }
 
     /**
