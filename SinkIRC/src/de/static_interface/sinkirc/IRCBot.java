@@ -175,7 +175,8 @@ public class IRCBot extends PircBot
                 {
                     sendCleanMessage(channel, "Usage: !say <text>");
                 }
-                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
+                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
+                        + ": " + ChatColor.WHITE + message.replaceFirst("say", "");   //Todo: fix bug
                 Bukkit.getServer().broadcastMessage(messageWithPrefix);
                 sendCleanMessage(channel, replaceColorCodes(messageWithPrefix));
             }

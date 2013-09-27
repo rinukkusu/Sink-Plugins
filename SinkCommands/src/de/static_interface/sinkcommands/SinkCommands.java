@@ -193,7 +193,6 @@ public class SinkCommands extends JavaPlugin
         pm.registerEvents(new FreezeListener(), this);
         pm.registerEvents(new GlobalMuteListener(), this);
         pm.registerEvents(new SpectateListener(), this);
-        pm.registerEvents(new PlayerConfigurationListener(), this);
         pm.registerEvents(new VotekickListener(), this);
         pm.registerEvents(new DrugDeadListener(), this);
         pm.registerEvents(new ScoreboardListener(), this);

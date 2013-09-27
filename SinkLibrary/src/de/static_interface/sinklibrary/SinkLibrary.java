@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
+import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -80,6 +81,7 @@ public class SinkLibrary extends JavaPlugin
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
         dataFolder = getDataFolder();
         tmpBannedPlayers = new ArrayList<>();
+        Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
     }
 
     public void onDisable()

@@ -62,16 +62,16 @@ public class User
         return base;
     }
 
-    public Object hasPermission(String permission)
+    public boolean hasPermission(String permission)
     {
-        if (SinkLibrary.permissionsAvailable())
-        {
-            return SinkLibrary.getPermissions().has(base, permission);
-        }
-        else
-        {
-            return base.hasPermission(permission);
-        }
+        //if (SinkLibrary.permissionsAvailable())
+        //{
+        //    return SinkLibrary.getPermissions().has(base, permission);
+        //}
+        //else
+        //{
+        return base.hasPermission(permission);
+        //}
     }
 
     /**

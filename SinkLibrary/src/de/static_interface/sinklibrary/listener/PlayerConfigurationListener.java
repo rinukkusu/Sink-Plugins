@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package de.static_interface.sinkcommands.listener;
+package de.static_interface.sinklibrary.listener;
 
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;

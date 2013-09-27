@@ -126,48 +126,6 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.sendCleanMessage(channel, event.getDeathMessage());
     }
 
-    /*
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        String tmp = event.getMessage().replaceFirst("/", "");
-        String[] cmdwithargs = tmp.split(" ");
-        List<String> args = Arrays.asList(cmdwithargs);
-        String cmd = cmdwithargs[0];
-        switch (cmd.toLowerCase())
-        {
-            case "say":
-            {
-                String message = "";
-                boolean commandSkip = true;
-                for (String s : args)
-                {
-                    if (commandSkip)
-                    {
-                        commandSkip = false;
-                        continue;
-                    }
-                    if (message.equals(""))
-                    {
-                        message = s;
-                    }
-                    else
-                    {
-                        message = message + " " + s;
-                    }
-                }
-                ircBot.sendCleanMessage(channel, IRCBot.replaceColorCodes(IRCBot.replaceAmpersandColorCodes(ChatColor.DARK_PURPLE + "[Server] " + message)));
-            }
-        }
-
-    }
-
-    */
     public static IRCBot getIRCBot()
     {
         return ircBot;
