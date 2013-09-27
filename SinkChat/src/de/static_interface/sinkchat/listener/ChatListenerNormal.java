@@ -49,14 +49,18 @@ public class ChatListenerNormal implements Listener
             }
         }
 
+        User eventPlayer = new User(event.getPlayer());
+
         String message = event.getMessage();
         int range = 50;
-        String formattedMessage = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
+        String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getPlayer().getDisplayName());
         formattedMessage = formattedMessage.replace("%2$s", message);
-        if (event.getPlayer().hasPermission("sinkchat.color"))
+
+        if (eventPlayer.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
         }
+
         if (! SinkLibrary.permissionsAvailable())
         {
             formattedMessage = ChatColor.GRAY + "[Lokal] " + ChatColor.RESET + formattedMessage;
@@ -66,16 +70,18 @@ public class ChatListenerNormal implements Listener
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
         double z = event.getPlayer().getLocation().getZ();
+
         for (Player p : Bukkit.getOnlinePlayers())
         {
             Location loc = p.getLocation();
             boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
 
-            boolean newbieSpy = ( p.hasPermission("sinkchat.spynewbie") ) && ! event.getPlayer().hasPermission("sinkchat.spynewbie.bypass");
-            boolean maySpy = p.hasPermission("sinkchat.spy");
-
             User user = new User(p);
             PlayerConfiguration config = user.getPlayerConfiguration();
+
+            boolean newbieSpy = ( user.hasPermission("sinkchat.spynewbie") ) && ! eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
+            boolean maySpy = user.hasPermission("sinkchat.spy");
+
             if (isInRange)
             {
                 p.sendMessage(formattedMessage);

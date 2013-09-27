@@ -86,7 +86,7 @@ public class SinkLibrary extends JavaPlugin
 
     public void onDisable()
     {
-
+        getLogger().log(Level.INFO, "Disabled.");
     }
 
     private boolean setupChat()
@@ -220,7 +220,7 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * Add Temp Ban
+     * Add Temp Ban to Player. Will be cleared on next server restart or plugin reload.
      *
      * @param username Player to ban
      */
@@ -237,10 +237,5 @@ public class SinkLibrary extends JavaPlugin
     public static void removeTempBan(String username)
     {
         tmpBannedPlayers.remove(username);
-    }
-
-    public static boolean groupsAvailable()
-    {
-        return Bukkit.getPluginManager().getPlugin("PermissionsEx") != null;
     }
 }

@@ -48,8 +48,9 @@ public class BukkitUtil
     }
 
     /**
-     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String, String)}.
+     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String, String).}.
      * Send message to all players with specified permission.
+     * It will also send the message also to IRC
      *
      * @param message Message to send
      */
@@ -67,8 +68,9 @@ public class BukkitUtil
     }
 
     /**
-     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission)}.
+     * Use this instead of {@link org.bukkit.Bukkit#broadcast(String message, String permission).
      * Send message to all players with specified permission.
+     * It will also send the message to IRC if the default permission is true}.
      *
      * @param message    Message to send
      * @param permission Permission needed to receive the message

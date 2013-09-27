@@ -1,5 +1,5 @@
 name: SinkChat
-version: 1.7
+version: 1.7.5
 description: General Chat Plugin
 author: Trojaner
 website: http://static-interface.de
@@ -16,6 +16,7 @@ commands:
     description: Access the channels plugin.
     usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
     aliases: ch
+    permission: sinkchat.
 
   enablespy:
     description: Enable spy chat.

@@ -30,12 +30,15 @@ public class ChannelUtil
         {
             return false;
         }
+
         if (message.toCharArray().length == 1 && message.toCharArray()[0] == callByChar)
         {
             return false;
         }
+
         String formattedMessage = message.substring(1);
-        if (SinkLibrary.groupsAvailable())
+
+        if (SinkLibrary.chatAvailable())
         {
             User user = new User(player);
             formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
@@ -44,6 +47,7 @@ public class ChannelUtil
         {
             formattedMessage = prefix + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
+
         if (player.hasPermission("sinkchat.color"))
         {
             formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
@@ -56,6 +60,7 @@ public class ChannelUtil
                 target.sendMessage(formattedMessage);
             }
         }
+
         Bukkit.getConsoleSender().sendMessage(formattedMessage);
         SinkLibrary.sendIRCMessage(formattedMessage);
         return true;
