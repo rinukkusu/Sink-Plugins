@@ -20,9 +20,41 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public interface IConfiguration
 {
+    /**
+     * Create Configuration File
+     *
+     * @return True if it has been successfully created
+     */
+    public abstract boolean create();
+
+    /**
+     * Save config file
+     */
+    public abstract void save();
+
+    /**
+     * @param path  Path to value
+     * @param value Value of path
+     */
     public abstract void set(String path, Object value);
 
+
+    /**
+     * Get value from config
+     *
+     * @param path Path to value
+     * @return Value of path
+     */
     public abstract Object get(String path);
 
+    /**
+     * Get YAML Configuration
+     */
     public abstract YamlConfiguration getYamlConfiguration();
+
+
+    /**
+     * @return True if the config file exists
+     */
+    public abstract boolean exists();
 }

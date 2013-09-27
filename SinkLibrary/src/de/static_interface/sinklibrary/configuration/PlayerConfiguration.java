@@ -30,8 +30,8 @@ public class PlayerConfiguration implements IConfiguration
 {
     private String playerName;
     private Player player;
-    private File playerConfigFile;
-    private YamlConfiguration playerYamlConfig;
+    private File yamlFile;
+    private YamlConfiguration yamlConfiguration;
     private File playersPath;
     private User user;
 
@@ -50,112 +50,91 @@ public class PlayerConfiguration implements IConfiguration
         playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
         try
         {
-            playerConfigFile = new File(playersPath, playerName + ".yml");
+            yamlFile = new File(playersPath, playerName + ".yml");
         }
         catch (NullPointerException ignored)
         {
-            playerYamlConfig = null;
+            yamlConfiguration = null;
         }
-        playerYamlConfig = ( exists() ) ? YamlConfiguration.loadConfiguration(playerConfigFile) : null;
+        yamlConfiguration = ( exists() ) ? YamlConfiguration.loadConfiguration(yamlFile) : null;
     }
 
-    /**
-     * Get Player YAML Configuration
-     *
-     * @return playerYAMLConfiguration
-     */
     public YamlConfiguration getYamlConfiguration()
     {
-        return playerYamlConfig;
+        return yamlConfiguration;
     }
 
-    /**
-     * Create Configuration File
-     */
-    public void create()
+    public boolean create()
     {
         try
         {
             if (! playersPath.exists() && ! playersPath.mkdirs())
             {
-                throw new IOException("Couldn't create \"" + playersPath.getAbsolutePath() + "\" folder!");
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create \"" + playersPath.getAbsolutePath() + "\" folder!");
+                return false;
             }
-            if (! playerConfigFile.exists() && ! playerConfigFile.createNewFile())
+            if (! yamlFile.exists() && ! yamlFile.createNewFile())
             {
-                throw new IOException("Couldn't create player config: " + playerConfigFile);
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config: " + yamlFile);
+                return false;
             }
-            playerYamlConfig = YamlConfiguration.loadConfiguration(playerConfigFile);
-            playerYamlConfig.addDefault(playerName + ".General.StatsEnabled", true);
-            playerYamlConfig.addDefault(playerName + ".Spy.Enabled", true);
-            playerYamlConfig.addDefault(playerName + ".Nick.HasNickname", false);
-            playerYamlConfig.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
-            playerYamlConfig.addDefault(playerName + ".Freeze.freezed", false);
-            playerYamlConfig.options().copyDefaults(true);
+            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
+            yamlConfiguration.addDefault(playerName + ".General.StatsEnabled", true);
+            yamlConfiguration.addDefault(playerName + ".Spy.Enabled", true);
+            yamlConfiguration.addDefault(playerName + ".Nick.HasNickname", false);
+            yamlConfiguration.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
+            yamlConfiguration.addDefault(playerName + ".Freeze.freezed", false);
+            yamlConfiguration.options().copyDefaults(true);
             save();
+            return true;
         }
         catch (IOException e)
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + playerConfigFile);
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile);
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            return false;
         }
     }
 
-    /**
-     * @return True if the config file exists
-     */
     public boolean exists()
     {
-        return playerConfigFile.exists();
+        return yamlFile.exists();
     }
 
-    /**
-     * Save config file
-     */
     public void save()
     {
-        if (playerConfigFile == null)
+        if (yamlFile == null)
         {
             return;
         }
         try
         {
-            playerYamlConfig.save(playerConfigFile);
+            yamlConfiguration.save(yamlFile);
         }
         catch (IOException e)
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save player config file: " + playerConfigFile + "!");
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save player configuration file: " + yamlFile + "!");
         }
     }
 
-    /**
-     * @param path  Path to value
-     * @param value Value of path
-     */
     public void set(String path, Object value)
     {
         try
         {
-            playerYamlConfig.set(playerName + "." + path, value);
+            yamlConfiguration.set(playerName + "." + path, value);
             save();
         }
         catch (Exception e)
         {
-            Bukkit.getLogger().log(Level.WARNING, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path);
-            throw e;
+            Bukkit.getLogger().log(Level.WARNING, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path, e);
         }
     }
 
-    /**
-     * Get value from config
-     *
-     * @param path Path to value
-     * @return Value of path
-     */
     public Object get(String path)
     {
         try
         {
-            return playerYamlConfig.get(playerName + "." + path);
+            return yamlConfiguration.get(playerName + "." + path);
         }
         catch (Exception e)
         {

@@ -24,14 +24,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
-public class LanguageHandler implements IConfiguration
+public class LanguageConfiguration implements IConfiguration
 {
-
     private static YamlConfiguration language = new YamlConfiguration();
-    private static final File languageFilesPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + ( "lang.yml" ));
+    private static final File languageFilesPath = new File(SinkLibrary.getCustomDataFolder(), "lang.yml");
 
-    public static boolean init()
+    public boolean create()
     {
         try
         {
@@ -53,46 +53,51 @@ public class LanguageHandler implements IConfiguration
             language.set("messages.permissions.ask", "Du hast nicht genuegend Rechte um das zu tun.");
             language.set("messages.permissions.trade", "Du hast nicht genuegend Rechte um das zu tun.");
 
-            try
-            {
-                language.save(languageFilesPath);
-            }
-            catch (IOException e1)
-            {
-                return false;
-            }
-
-
+            save();
         }
         catch (InvalidConfigurationException e)
         {
             languageFilesPath.delete();
             Bukkit.getLogger().severe("Invalid configuration detected ! Restoring default configuration ...");
-            return init();
+            return create();
         }
         return true;
     }
 
-    public static String getString(String key)
+    public void save()
     {
-        return ( language.getRoot().getString(key) );
+        try
+        {
+            language.save(languageFilesPath);
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "WARNING: Couldn't save language configuration!", e);
+        }
     }
 
-    @Override
+    public static String getLanguageString(String key)
+    {
+        return language.getRoot().getString(key);
+    }
+
     public void set(String path, Object value)
     {
         language.set(path, value);
     }
 
-    @Override
     public Object get(String path)
     {
         return language.get(path);
     }
 
-    @Override
     public YamlConfiguration getYamlConfiguration()
     {
         return language;
+    }
+
+    public boolean exists()
+    {
+        return languageFilesPath.exists();
     }
 }

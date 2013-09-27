@@ -20,7 +20,7 @@ import de.static_interface.sinkchat.channel.IChannel;
 import de.static_interface.sinkchat.channel.channels.HelpChannel;
 import de.static_interface.sinkchat.channel.channels.ShoutChannel;
 import de.static_interface.sinkchat.channel.channels.TradeChannel;
-import de.static_interface.sinkchat.channel.configuration.LanguageHandler;
+import de.static_interface.sinkchat.channel.configuration.LanguageConfiguration;
 import de.static_interface.sinkchat.command.ChannelCommand;
 import de.static_interface.sinkchat.command.NickCommand;
 import de.static_interface.sinkchat.command.SpyCommands;
@@ -58,17 +58,12 @@ public class SinkChat extends JavaPlugin
         sc.registerChannel();
         hc.registerChannel();
         fc.registerChannel();
+        LanguageConfiguration config = new LanguageConfiguration();
 
-        if (! ( LanguageHandler.init() ))
+        if (! ( config.create() ))
         {
             getLogger().severe("I/O-Exception occured. Could not load language file ");
         }
-        else
-        {
-            getLogger().info("Loading language files succeeded. Proceeding.");
-        }
-
-
         registerEvents(Bukkit.getPluginManager());
         registerCommands();
     }
