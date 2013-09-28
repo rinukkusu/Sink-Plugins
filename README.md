@@ -10,12 +10,12 @@ This work is licensed under an Apache License Version 2.0. For more information,
 Coding Standards and Rules
 ==============
 * JavaDoc, comments, commit message etc. must be of course written in english.
-* Each { and } needs to be on a new line.
-* Each keyword like "if", "else", "for" etc. needs to be on a new line.
+* Every single "{" and "}" needs to start on a new line.
+* Each keyword like "if", "else", "for" etc. needs to start on a new line. Except "else if (...)" which is allowed.
 * Code must be easy readable.
 * The code is compiled in Java 7, so use the Java 7 Coding Standards.
 
-Example:
+Example:<p>
 Code like this:
 ```Java
 } else {
@@ -30,4 +30,4 @@ else
 
 ToDo List
 ==============
-- [ ] Add config files to plugins.
+- [ ] Add config files to plugins (partially implemented)
