@@ -26,6 +26,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Vector;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class ShoutChannel extends JavaPlugin implements IChannel, Listener
 {
 
@@ -60,7 +62,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     @Override
     public String getChannelName()
     {
-        return "Schrei";
+        return _("commands.channel.shout");
     }
 
     @Override

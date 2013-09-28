@@ -20,7 +20,6 @@ import de.static_interface.sinkchat.channel.IChannel;
 import de.static_interface.sinkchat.channel.channels.HelpChannel;
 import de.static_interface.sinkchat.channel.channels.ShoutChannel;
 import de.static_interface.sinkchat.channel.channels.TradeChannel;
-import de.static_interface.sinkchat.channel.configuration.LanguageConfiguration;
 import de.static_interface.sinkchat.command.ChannelCommand;
 import de.static_interface.sinkchat.command.NickCommand;
 import de.static_interface.sinkchat.command.SpyCommands;
@@ -29,6 +28,7 @@ import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinkchat.listener.NicknameListener;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -36,6 +36,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
+
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class SinkChat extends JavaPlugin
 {
@@ -51,9 +53,10 @@ public class SinkChat extends JavaPlugin
             refreshDisplayName(p);
         }
 
-        IChannel sc = new ShoutChannel('!');
-        IChannel hc = new TradeChannel('$');
-        IChannel fc = new HelpChannel('?');
+        IChannel fc = new HelpChannel(_("messages.channel.help.prefix").toCharArray()[0]);
+        IChannel sc = new ShoutChannel(_("messages.channel.shout.prefix").toCharArray()[0]);
+        IChannel hc = new TradeChannel(_("messages.channel.trade.prefix").toCharArray()[0]);
+
 
         sc.registerChannel();
         hc.registerChannel();

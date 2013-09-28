@@ -29,6 +29,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class ChatListenerNormal implements Listener
 {
     @EventHandler(priority = EventPriority.HIGH)
@@ -63,10 +65,11 @@ public class ChatListenerNormal implements Listener
 
         if (! SinkLibrary.permissionsAvailable())
         {
-            formattedMessage = ChatColor.GRAY + "[Lokal] " + ChatColor.RESET + formattedMessage;
+            formattedMessage = _("message.prefix.chatLocal") + ChatColor.RESET + formattedMessage;
         }
 
-        String spyPrefix = ChatColor.GRAY + "[Spy] ";
+        String spyPrefix = _("messages.prefix.spy") + " " + ChatColor.RESET;
+
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
         double z = event.getPlayer().getLocation().getZ();

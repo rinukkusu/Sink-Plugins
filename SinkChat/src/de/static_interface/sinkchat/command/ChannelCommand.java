@@ -18,7 +18,6 @@ package de.static_interface.sinkchat.command;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IChannel;
-import de.static_interface.sinkchat.channel.configuration.LanguageConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,9 +25,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class ChannelCommand extends JavaPlugin implements CommandExecutor
 {
-    public static final String PREFIX = ChatColor.GREEN + "[Channel] " + ChatColor.RESET;
+    public static final String PREFIX = _("message.prefix.channel") + " " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -49,7 +50,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 if (args.length < 2)
                 {
-                    sender.sendMessage(PREFIX + LanguageConfiguration.getLanguageString("messages.noChannelGiven"));
+                    sender.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
                     return true;
                 }
 
@@ -59,12 +60,12 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 }
                 catch (NullPointerException e)
                 {
-                    message = PREFIX + LanguageConfiguration.getLanguageString("messages.channelUnknown").replace("$CHANNEL$", args[1]);
+                    message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
                     sender.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + LanguageConfiguration.getLanguageString("messages.playerJoins").replace("$CHANNEL$", args[1]);
+                message = PREFIX + _("commands.channel.playerJoins").replace("%s", args[1]);
                 ChatColor.translateAlternateColorCodes('&', message);
                 sender.sendMessage(message);
 
@@ -74,7 +75,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 if (args.length < 2)
                 {
-                    sender.sendMessage(PREFIX + LanguageConfiguration.getLanguageString("messages.noChannelGiven"));
+                    sender.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
                     return true;
                 }
 
@@ -84,23 +85,23 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 }
                 catch (NullPointerException e)
                 {   //Note: Do this more clean...
-                    message = PREFIX + LanguageConfiguration.getLanguageString("messages.channelUnknown").replace("$CHANNEL$", args[1]);
+                    message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
                     sender.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + LanguageConfiguration.getLanguageString("messages.playerLeaves").replace("$CHANNEL$", args[1]);
+                message = PREFIX + _("commands.channel.playerLeaves").replace("%s", args[1]);
                 sender.sendMessage(message);
 
 
                 return true;
             case "list":
-                message = PREFIX + LanguageConfiguration.getLanguageString("messages.list").replace("$CHANNELS$", ChannelHandler.getChannelNames());
+                message = PREFIX + _("commands.channel.list").replace("%s", ChannelHandler.getChannelNames());
                 sender.sendMessage(message);
                 return true;
 
             case "participating":
-                sender.sendMessage(PREFIX + LanguageConfiguration.getLanguageString("messages.part"));
+                sender.sendMessage(PREFIX + _("commands.channel.part"));
                 for (IChannel target : ChannelHandler.getRegisteredChannels())
                 {
                     if (target.contains((Player) sender))
@@ -121,7 +122,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
     private static void sendHelp(CommandSender sender)
     {
-        sender.sendMessage(PREFIX + LanguageConfiguration.getLanguageString("messages.help"));
+        sender.sendMessage(PREFIX + _("commands.channel.help"));
         sender.sendMessage(PREFIX + "/ch join <channel>");
         sender.sendMessage(PREFIX + "/ch leave <channel>");
         sender.sendMessage(PREFIX + "/ch list");

@@ -25,9 +25,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class SpyCommands
 {
-    public static String PREFIX = ChatColor.DARK_GRAY + "[Spy] " + ChatColor.RESET;
+    public static final String PREFIX = _("message.prefix.spy") + " " + ChatColor.RESET;
 
     public static class EnableSpyCommand implements CommandExecutor
     {
@@ -36,7 +38,7 @@ public class SpyCommands
         {
             if (sender instanceof ConsoleCommandSender)
             {
-                sender.sendMessage("This command is only ingame available.");
+                sender.sendMessage(_("messages.general.consoleNotAvailabe"));
                 return true;
             }
             Player player = (Player) sender;
@@ -46,12 +48,12 @@ public class SpyCommands
 
             if (config.getSpyEnabled())
             {
-                player.sendMessage(PREFIX + ChatColor.RED + "Der Spy ist schon aktiviert!");
+                player.sendMessage(PREFIX + _("commands.spy.alreadyEnabled"));
                 return true;
             }
 
             config.setSpyEnabled(true);
-            sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Spy wurde aktiviert!");
+            sender.sendMessage(PREFIX + _("commands.spy.enabled"));
             return true;
         }
     }
@@ -63,7 +65,7 @@ public class SpyCommands
         {
             if (sender instanceof ConsoleCommandSender)
             {
-                sender.sendMessage("This command is only ingame available.");
+                sender.sendMessage(_("messages.general.consoleNotAvailabe"));
                 return true;
             }
             Player player = (Player) sender;
@@ -73,12 +75,12 @@ public class SpyCommands
 
             if (! config.getSpyEnabled())
             {
-                player.sendMessage(PREFIX + ChatColor.RED + "Der Spy ist schon deaktiviert!");
+                player.sendMessage(PREFIX + _("commands.spy.alreadyDisabled"));
                 return true;
             }
 
             config.setSpyEnabled(false);
-            sender.sendMessage(PREFIX + ChatColor.RED + "Der Spy wurde deaktiviert.");
+            player.sendMessage(PREFIX + _("commands.spy.disabled"));
             return true;
         }
     }

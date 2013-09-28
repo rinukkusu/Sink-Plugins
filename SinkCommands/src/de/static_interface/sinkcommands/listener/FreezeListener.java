@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class FreezeListener implements Listener
 {
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent event)
     {
         if (FreezeCommands.isFrozen(event.getPlayer()))
@@ -39,7 +39,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
@@ -48,7 +48,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
         if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
@@ -57,7 +57,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockIgnite(BlockIgniteEvent event)
     {
         if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
@@ -66,7 +66,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
         if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
@@ -75,7 +75,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
         if (FreezeCommands.isFrozen(event.getPlayer()))
@@ -84,7 +84,7 @@ public class FreezeListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
         if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))

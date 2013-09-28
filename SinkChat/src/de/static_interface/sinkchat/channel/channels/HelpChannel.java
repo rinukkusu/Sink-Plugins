@@ -25,6 +25,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Vector;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class HelpChannel extends JavaPlugin implements IChannel
 {
 
@@ -58,7 +60,7 @@ public class HelpChannel extends JavaPlugin implements IChannel
     @Override
     public String getChannelName()
     {
-        return "Frage";
+        return _("commands.channel.help");
     }
 
     @Override
