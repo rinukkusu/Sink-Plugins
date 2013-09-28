@@ -31,7 +31,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class NickCommand implements CommandExecutor
 {
-    public static final String PREFIX = _("message.prefix.nick") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("prefix.nick") + " " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -42,7 +42,7 @@ public class NickCommand implements CommandExecutor
         {
             return false;
         }
-        if (args.length > 2)
+        if (args.length > 1)
         {
             if (! sender.hasPermission("sinkchat.nick.others"))
             {

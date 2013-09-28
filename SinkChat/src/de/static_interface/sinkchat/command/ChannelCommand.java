@@ -29,7 +29,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class ChannelCommand extends JavaPlugin implements CommandExecutor
 {
-    public static final String PREFIX = _("message.prefix.channel") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("prefix.channel") + " " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)

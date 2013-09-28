@@ -60,7 +60,7 @@ public class HelpChannel extends JavaPlugin implements IChannel
     @Override
     public String getChannelName()
     {
-        return _("commands.channel.help");
+        return _("channels.help");
     }
 
     @Override

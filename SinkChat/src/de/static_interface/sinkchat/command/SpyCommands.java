@@ -29,7 +29,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class SpyCommands
 {
-    public static final String PREFIX = _("message.prefix.spy") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("prefix.spy") + " " + ChatColor.RESET;
 
     public static class EnableSpyCommand implements CommandExecutor
     {
@@ -38,7 +38,7 @@ public class SpyCommands
         {
             if (sender instanceof ConsoleCommandSender)
             {
-                sender.sendMessage(_("messages.general.consoleNotAvailabe"));
+                sender.sendMessage(_("general.consoleNotAvailabe"));
                 return true;
             }
             Player player = (Player) sender;
@@ -65,7 +65,7 @@ public class SpyCommands
         {
             if (sender instanceof ConsoleCommandSender)
             {
-                sender.sendMessage(_("messages.general.consoleNotAvailabe"));
+                sender.sendMessage(_("general.consoleNotAvailabe"));
                 return true;
             }
             Player player = (Player) sender;

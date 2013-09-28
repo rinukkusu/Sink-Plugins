@@ -62,7 +62,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     @Override
     public String getChannelName()
     {
-        return _("commands.channel.shout");
+        return _("channels.shout");
     }
 
     @Override

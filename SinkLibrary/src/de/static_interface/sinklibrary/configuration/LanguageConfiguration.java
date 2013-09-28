@@ -45,7 +45,7 @@ public class LanguageConfiguration implements IConfiguration
 
             language.set("messages.commands.nick.otherChanged", "%s's name is now %s!");
             language.set("messages.commands.nick.selfChanged", "Your name is now %s!");
-            language.set("messages.commands.nick.illegalNickname", "Illegal Nickname!");
+            language.set("messages.commands.nick.illegalNickname", "Illegal nickname!");
             language.set("messages.commands.nick.tooLong", "Nickname is too long!");
             language.set("messages.commands.nick.used", "Nickname is already used by someone other!");
 
@@ -77,10 +77,10 @@ public class LanguageConfiguration implements IConfiguration
             language.set("messages.permissions.channels.trade", "§4You may not use the trade channel.");
             language.set("messages.permissions.nick.other", "§4You may not change the nickname of other players!");
 
-            language.set("message.prefix.channel", ChatColor.GREEN + "[Channel]");
-            language.set("message.prefix.nick", ChatColor.DARK_GREEN + "[Nick]");
-            language.set("message.prefix.spy", ChatColor.DARK_GRAY + "[Spy]");
-            language.set("message.prefix.chatLocal", ChatColor.GRAY + "[Local]");
+            language.set("messages.prefix.channel", ChatColor.GREEN + "[Channel]");
+            language.set("messages.prefix.nick", ChatColor.DARK_GREEN + "[Nick]");
+            language.set("messages.prefix.spy", ChatColor.GRAY + "[Spy]");
+            language.set("messages.prefix.chatLocal", ChatColor.GRAY + "[Local]");
 
             save();
         }
@@ -107,7 +107,13 @@ public class LanguageConfiguration implements IConfiguration
 
     public static String _(String key)
     {
-        return language.getRoot().getString("messages." + key);
+        String path = "messages." + key;
+        String value = language.getRoot().getString(path);
+        if (value == null || value.equals("null"))
+        {
+            throw new NullPointerException("key returned null. (path: " + path + ")");
+        }
+        return value;
     }
 
     public void set(String path, Object value)

@@ -135,11 +135,11 @@ public class IRCBot extends PircBot
                 sendMessage(channel, "Hallo, " + sender);
                 return;
             }
-            if (! message.toLowerCase().startsWith("!"))
+            if (! message.toLowerCase().startsWith("."))
             {
                 return;
             }
-            message = message.replaceFirst("!", "");
+            message = message.replaceFirst(".", "");
             String[] args = message.split(" ");
             String cmd = args[0].toLowerCase();
 
@@ -258,6 +258,10 @@ public class IRCBot extends PircBot
         catch (UnauthorizedAccessException e)
         {
             sendMessage(channel, "You may not use that command");
+        }
+        catch (Exception e)
+        {
+            sendMessage(channel, "Uncaught Exception occured: " + e.getMessage());
         }
     }
 

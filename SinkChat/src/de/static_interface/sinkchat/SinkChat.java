@@ -53,20 +53,21 @@ public class SinkChat extends JavaPlugin
             refreshDisplayName(p);
         }
 
-        IChannel fc = new HelpChannel(_("messages.channel.help.prefix").toCharArray()[0]);
-        IChannel sc = new ShoutChannel(_("messages.channel.shout.prefix").toCharArray()[0]);
-        IChannel hc = new TradeChannel(_("messages.channel.trade.prefix").toCharArray()[0]);
-
-
-        sc.registerChannel();
-        hc.registerChannel();
-        fc.registerChannel();
         LanguageConfiguration config = new LanguageConfiguration();
 
         if (! ( config.create() ))
         {
             getLogger().severe("I/O-Exception occured. Could not load language file ");
         }
+
+        IChannel fc = new HelpChannel(_("channel.help.prefix").charAt(0));
+        IChannel sc = new ShoutChannel(_("channel.shout.prefix").charAt(0));
+        IChannel hc = new TradeChannel(_("channel.trade.prefix").charAt(0));
+
+        sc.registerChannel();
+        hc.registerChannel();
+        fc.registerChannel();
+
         registerEvents(Bukkit.getPluginManager());
         registerCommands();
     }

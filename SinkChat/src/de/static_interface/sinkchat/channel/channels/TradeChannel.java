@@ -60,7 +60,7 @@ public class TradeChannel extends JavaPlugin implements IChannel
     @Override
     public String getChannelName()
     {
-        return _("commands.channel.trade");
+        return _("channels.trade");
     }
 
     @Override
