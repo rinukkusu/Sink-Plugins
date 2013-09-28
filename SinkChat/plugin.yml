@@ -16,7 +16,7 @@ commands:
     description: Access the channels plugin.
     usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
     aliases: ch
-    permission: sinkchat.
+    permission: sinkchat.channel.use
 
   enablespy:
     description: Enable spy chat.
@@ -52,7 +52,7 @@ permissions:
        sinkchat.spynewbie.bypass: true
 
   sinkchat.spynewbie.bypass:
-      description: Marks a player as not newbie
+      description: Marks a player as not newbie (players with sinkchat.spynewbie cant read local messages of them)
       default: false
 
   sinkchat.color:
@@ -70,28 +70,19 @@ permissions:
        sinkchat.nick: true
 
   sinkchat.channel.*:
-    description: Grants full access to channel plugin.
+    description: Grants access to all channel commands and features.
     default: op
     children:
        sinkchat.channel.join: true
-       sinkchat.channel.leave: true
        sinkchat.channel.list: true
        sinkchat.channel.user: true
        sinkchat.channel.shout: true
        sinkchat.channel.trade: true
        sinkchat.channel.help: true
 
-  sinkchat.channel.join:
-    description: Grants full access to the default channels.
-
-  sinkchat.channel.leave:
-    description: Allows the user to leave any joined channels.
-
-  sinkchat.channel.list:
-    description: Allows the user to list any registered channel.
-
-  sinkchat.channel.user:
-    description: Allows full leave/join access to the default channels & /ch list
+  sinkchat.channel.use:
+    description: Allows to use /ch commands
+    default: true
 
   sinkchat.channel.shout:
     description: Allows to shout

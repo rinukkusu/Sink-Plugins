@@ -86,7 +86,6 @@ public class FreezeCommands
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             String frozenList = "";
-            String tmpfrozenList = "";
 
             for (Player p : Bukkit.getOnlinePlayers())
             {
@@ -110,15 +109,6 @@ public class FreezeCommands
             else
             {
                 sender.sendMessage(PREFIX + "Es gibt keine eingefrorenen Spieler.");
-            }
-
-            if (tmpfrozenList.length() > 0)
-            {
-                sender.sendMessage(PREFIX + "Temporär eingefrorene Spieler: " + tmpfrozenList);
-            }
-            else
-            {
-                sender.sendMessage(PREFIX + "Es gibt keine temporär eingefrorenen Spieler.");
             }
             return true;
         }

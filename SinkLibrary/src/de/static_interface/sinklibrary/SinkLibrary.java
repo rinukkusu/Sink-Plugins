@@ -75,6 +75,7 @@ public class SinkLibrary extends JavaPlugin
             }
         }
 
+        pluginName = this.getDescription().getName();
         dataFolder = getDataFolder();
 
         if (! getCustomDataFolder().exists())
@@ -98,7 +99,6 @@ public class SinkLibrary extends JavaPlugin
 
         tmpBannedPlayers = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
-        pluginName = this.getDescription().getName();
     }
 
     public void onDisable()
@@ -138,11 +138,11 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * @return True if Vault available
+     * @return True if economy is available
      */
-    public static boolean vaultAvailable()
+    public static boolean economyAvailable()
     {
-        return Bukkit.getPluginManager().getPlugin("Vault") != null;
+        return economyAvailable;
     }
 
     /**
@@ -154,19 +154,20 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * @return True if economy is available
-     */
-    public static boolean economyAvailable()
-    {
-        return economyAvailable;
-    }
-
-    /**
      * @return True if permissions are available
      */
     public static boolean permissionsAvailable()
     {
         return permissionsAvailable;
+    }
+
+
+    /**
+     * @return True if Vault available
+     */
+    public static boolean vaultAvailable()
+    {
+        return Bukkit.getPluginManager().getPlugin("Vault") != null;
     }
 
     /**

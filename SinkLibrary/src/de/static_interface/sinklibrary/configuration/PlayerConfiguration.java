@@ -150,7 +150,7 @@ public class PlayerConfiguration implements IConfiguration
     {
         try
         {
-            return (boolean) get(playerName + "Spy.Enabled");
+            return (boolean) get("Spy.Enabled");
         }
         catch (Exception ignored)
         {

@@ -18,5 +18,5 @@ permissions:
     default: op
 
  sinkantispam.message:
-    description: Allows to receive Messages
+    description: Allows to receive messages
     default: op

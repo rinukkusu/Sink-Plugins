@@ -60,8 +60,7 @@ public class SinkIRC extends JavaPlugin implements Listener
             String host = "irc.adventuria.eu";
             int port = 6667;
             ircBot.connect(host, port);
-            ircBot.sendMessage("Trojaner", "register passwordpassword password@password.com"); //dis is testi!
-            ircBot.sendMessage("Trojaner", "identify passwordpassword"); //dis is also testi!
+            //Todo: Add NickServ identification support
             ircBot.joinChannel(channel);
         }
         catch (IOException | IrcException e)
