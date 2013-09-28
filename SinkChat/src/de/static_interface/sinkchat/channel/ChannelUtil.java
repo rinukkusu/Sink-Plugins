@@ -55,7 +55,7 @@ public class ChannelUtil
 
         for (Player target : Bukkit.getOnlinePlayers())
         {
-            if (! ( channel.contains(target) ))
+            if (! ( channel.contains(target) ) && target.hasPermission(channel.getPermission()))
             {
                 target.sendMessage(formattedMessage);
             }

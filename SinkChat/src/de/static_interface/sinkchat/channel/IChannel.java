@@ -61,4 +61,8 @@ public interface IChannel
 
     public String getChannelName();
 
+    /**
+     * @return Permission required to join channel
+     */
+    public String getPermission();
 }

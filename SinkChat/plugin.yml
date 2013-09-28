@@ -10,11 +10,11 @@ commands:
   nick:
     description: Change your or other users nickname!
     permission: sinkchat.nick
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> [Spieler] <Neuer Name|off>"
+    usage: "§4Usage: /<command> [Player] <New Name|off>"
 
   channel:
     description: Access the channels plugin.
-    usage: "Falsche Anwendung! Für Hilfe siehe /<command>"
+    usage: "§4Usage: /<command> help"
     aliases: ch
     permission: sinkchat.channel.use
 
@@ -73,9 +73,8 @@ permissions:
     description: Grants access to all channel commands and features.
     default: op
     children:
-       sinkchat.channel.join: true
+       sinkchat.channel.use: true
        sinkchat.channel.list: true
-       sinkchat.channel.user: true
        sinkchat.channel.shout: true
        sinkchat.channel.trade: true
        sinkchat.channel.help: true

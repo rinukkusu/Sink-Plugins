@@ -66,6 +66,12 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     }
 
     @Override
+    public String getPermission()
+    {
+        return "sinkchat.channel.shout";
+    }
+
+    @Override
     public boolean sendMessage(Player player, String message)
     {
         return ChannelUtil.sendMessage(player, message, this, PREFIX, callByChar);

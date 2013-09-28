@@ -64,6 +64,12 @@ public class TradeChannel extends JavaPlugin implements IChannel
     }
 
     @Override
+    public String getPermission()
+    {
+        return "sinkchat.channel.trade";
+    }
+
+    @Override
     public boolean sendMessage(Player player, String message)
     {
         return ChannelUtil.sendMessage(player, message, this, PREFIX, callByChar);

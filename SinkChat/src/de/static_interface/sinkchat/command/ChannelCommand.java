@@ -22,6 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,6 +35,17 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        if (sender instanceof ConsoleCommandSender)
+        {
+            sender.sendMessage(_("general.consoleNotAvailabe"));
+            return true;
+        }
+
+        if (! sender.hasPermission("sinkchat.channel.use"))
+        {
+            sender.sendMessage(_("permissions.general"));
+            return true;
+        }
 
         if (args.length == 0)
         {
@@ -47,7 +59,6 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
         switch (args[0])
         {
             case "join":
-
                 if (args.length < 2)
                 {
                     sender.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
@@ -56,7 +67,12 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 try
                 {
-                    ChannelHandler.getRegisteredChannel(args[1]).removeExceptedPlayer((Player) sender);
+                    IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
+                    if (! sender.hasPermission(channel.getPermission()))
+                    {
+                        sender.sendMessage(_("permissions.general"));
+                    }
+                    channel.removeExceptedPlayer((Player) sender);
                 }
                 catch (NullPointerException e)
                 {
@@ -71,6 +87,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
 
                 return true;
+
             case "leave":
 
                 if (args.length < 2)
@@ -81,7 +98,12 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 try
                 {
-                    ChannelHandler.getRegisteredChannel(args[1]).addExceptedPlayer((Player) sender);
+                    IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
+                    if (! sender.hasPermission(channel.getPermission()))
+                    {
+                        sender.sendMessage(_("permissions.general"));
+                    }
+                    channel.addExceptedPlayer((Player) sender);
                 }
                 catch (NullPointerException e)
                 {   //Note: Do this more clean...
