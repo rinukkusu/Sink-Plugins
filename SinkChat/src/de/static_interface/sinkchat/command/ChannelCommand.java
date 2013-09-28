@@ -41,12 +41,6 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
             return true;
         }
 
-        if (! sender.hasPermission("sinkchat.channel.use"))
-        {
-            sender.sendMessage(_("permissions.general"));
-            return true;
-        }
-
         if (args.length == 0)
         {
             sendHelp(sender);
