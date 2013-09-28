@@ -40,8 +40,8 @@ public class LanguageConfiguration implements IConfiguration
         catch (IOException e)
         {
 
-            language.set("messages.general.notOnline", "§c%s is not online!");
-            language.set("messages.general.consoleNotAvailabe", "§cThis command is only ingame available");
+            language.set("messages.general.notOnline", "&c%s is not online!");
+            language.set("messages.general.consoleNotAvailabe", "&cThis command is only ingame available");
 
             language.set("messages.commands.nick.otherChanged", "%s's name is now %s!");
             language.set("messages.commands.nick.selfChanged", "Your name is now %s!");
@@ -55,13 +55,13 @@ public class LanguageConfiguration implements IConfiguration
             language.set("messages.commands.channel.channelUnknown", "%s is an unknown channel.");
             language.set("messages.commands.channel.list", "These channels are available: %s");
             language.set("messages.commands.channel.part", "You have the following channels enabled:");
-            language.set("messages.commands.channel.help", "These commands are: available");
+            language.set("messages.commands.channel.help", "These commands are available:");
 
-            language.set("messages.commands.spy.enabled", "§aSpy chat has been enabled!");
-            language.set("messages.commands.spy.alreadyEnabled", "§cSpy chat has been already enabled!");
+            language.set("messages.commands.spy.enabled", "&aSpy chat has been enabled!");
+            language.set("messages.commands.spy.alreadyEnabled", "&cSpy chat has been already enabled!");
 
-            language.set("messages.commands.spy.disabled", "§cSpy chat has been disabled!");
-            language.set("messages.commands.spy.alreadyDisabled", "§cSpy chat has been already disabled!");
+            language.set("messages.commands.spy.disabled", "&cSpy chat has been disabled!");
+            language.set("messages.commands.spy.alreadyDisabled", "&cSpy chat has been already disabled!");
 
             language.set("messages.channels.help", "Help");
             language.set("messages.channels.shout", "Shout");
@@ -71,16 +71,16 @@ public class LanguageConfiguration implements IConfiguration
             language.set("messages.channel.shout.prefix", "!");
             language.set("messages.channel.trade.prefix", "$");
 
-            language.set("messages.permissions.general", "§4You dont have permissions to do that.");
-            language.set("messages.permissions.channels.shout", "§4You may not use the shout channel.");
-            language.set("messages.permissions.channels.help", "§4You may not use the help channel.");
-            language.set("messages.permissions.channels.trade", "§4You may not use the trade channel.");
-            language.set("messages.permissions.nick.other", "§4You may not change the nickname of other players!");
+            language.set("messages.permissions.general", "&4You dont have permissions to do that.");
+            language.set("messages.permissions.channels.shout", "&4You may not use the shout channel.");
+            language.set("messages.permissions.channels.help", "&4You may not use the help channel.");
+            language.set("messages.permissions.channels.trade", "&4You may not use the trade channel.");
+            language.set("messages.permissions.nick.other", "&4You may not change the nickname of other players!");
 
-            language.set("messages.prefix.channel", ChatColor.GREEN + "[Channel]");
-            language.set("messages.prefix.nick", ChatColor.DARK_GREEN + "[Nick]");
-            language.set("messages.prefix.spy", ChatColor.GRAY + "[Spy]");
-            language.set("messages.prefix.chatLocal", ChatColor.GRAY + "[Local]");
+            language.set("messages.prefix.channel", "&a[Channel]");
+            language.set("messages.prefix.nick", "&2[Nick]");
+            language.set("messages.prefix.spy", "&7[Spy]");
+            language.set("messages.prefix.chatLocal", "&7[Local]");
 
             save();
         }
@@ -113,7 +113,7 @@ public class LanguageConfiguration implements IConfiguration
         {
             throw new NullPointerException("key returned null. (path: " + path + ")");
         }
-        return value;
+        return ChatColor.translateAlternateColorCodes('&', value);
     }
 
     public void set(String path, Object value)

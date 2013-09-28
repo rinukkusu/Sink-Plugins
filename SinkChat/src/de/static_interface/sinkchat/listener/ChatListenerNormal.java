@@ -65,10 +65,10 @@ public class ChatListenerNormal implements Listener
 
         if (! SinkLibrary.permissionsAvailable())
         {
-            formattedMessage = _("prefix.chatLocal") + ChatColor.RESET + formattedMessage;
+            formattedMessage = ChatColor.GRAY + ChatColor.stripColor(_("prefix.chatLocal")) + ChatColor.RESET + formattedMessage;
         }
 
-        String spyPrefix = _("prefix.spy") + " " + ChatColor.RESET;
+        String spyPrefix = ChatColor.GRAY + ChatColor.stripColor(_("prefix.spy")) + " " + ChatColor.RESET;
 
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
