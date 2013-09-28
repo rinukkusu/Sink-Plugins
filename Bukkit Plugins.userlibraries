@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="bukkit">
+    <archive path="H:/Users/Trojaner/IdeaProjects/Sink-Plugins/lib/bukkit.jar" />
+  </library>
+  <library name="Vault">
+    <archive path="H:/Users/Trojaner/IdeaProjects/Sink-Plugins/lib/Vault.jar" />
+  </library>
+  <library name="pircbot">
+    <archive path="H:/Users/Trojaner/IdeaProjects/Sink-Plugins/lib/pircbot.jar" />
+  </library>
+</eclipse-userlibraries>
+
