@@ -79,7 +79,6 @@ public class IRCBot extends PircBot
     @Override
     public void onJoin(String channel, String sender, String login, String hostname)
     {
-        //Todo: Diffrent Welcomemessages
         if (sender.equals(getNick()))
         {
             return;
@@ -131,9 +130,9 @@ public class IRCBot extends PircBot
             if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
                     || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
                     || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
-                    && ( message.toLowerCase().contains("adventuriabot") || message.toLowerCase().contains("bot") ))
+                    && ( message.toLowerCase().contains(" adventuriabot ") || message.toLowerCase().contains(" bot ") ))
             {
-                sendMessage(channel, "Hallo, " + sender); //Todo: Diffrent Welcome messages
+                sendMessage(channel, "Hallo, " + sender);
                 return;
             }
             if (! message.toLowerCase().startsWith("!"))
@@ -169,14 +168,14 @@ public class IRCBot extends PircBot
                 return;
             }
 
-            if (cmd.equals("say"))
+            if (cmd.toLowerCase().equals("say"))
             {
                 if (args.length < 2)
                 {
                     sendCleanMessage(channel, "Usage: !say <text>");
                 }
                 String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
-                        + ": " + ChatColor.WHITE + message.replaceFirst("say", "");   //Todo: fix bug
+                        + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
                 Bukkit.getServer().broadcastMessage(messageWithPrefix);
                 sendCleanMessage(channel, replaceColorCodes(messageWithPrefix));
             }
