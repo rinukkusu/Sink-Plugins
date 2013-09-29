@@ -144,7 +144,7 @@ public class IRCBot extends PircBot
             }
             message = message.replaceFirst("~", "");
             String[] args = message.split(" ");
-            String cmd = args[0].toLowerCase();
+            String cmd = args[0];
 
             boolean isOp = isOp(channel, sender);
             boolean isWhitelist = EqualsArrayItem(sender, Whitelist);
@@ -171,11 +171,12 @@ public class IRCBot extends PircBot
                 return;
             }
 
-            if (cmd.toLowerCase().equals("say"))
+            if (cmd.equals("say"))
             {
                 if (args.length < 2)
                 {
                     sendCleanMessage(channel, "Usage: !say <text>");
+                    return;
                 }
                 String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
                         + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
