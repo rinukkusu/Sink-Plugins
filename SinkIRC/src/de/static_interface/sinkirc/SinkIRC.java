@@ -42,7 +42,7 @@ public class SinkIRC extends JavaPlugin implements Listener
     @Override
     public void onEnable()
     {
-        ircBot = new IRCBot();
+        ircBot = new IRCBot(this);
 
         if (Bukkit.getPluginManager().getPlugin("SinkChat") == null)
         {

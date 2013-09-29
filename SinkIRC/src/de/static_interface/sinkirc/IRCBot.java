@@ -19,6 +19,7 @@ package de.static_interface.sinkirc;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
@@ -29,12 +30,14 @@ public class IRCBot extends PircBot
     public static boolean disabled = false;
 
     String botName = "AdventuriaBot";
+    private Plugin plugin;
 
-    public IRCBot()
+    public IRCBot(Plugin plugin)
     {
         this.setName(botName);
         this.setLogin(botName);
         this.setVersion("Bukkit IRC Plugin, (c) 2013 Adventuria");
+        this.plugin = plugin;
     }
 
     public void sendCleanMessage(String target, String message)
@@ -135,11 +138,11 @@ public class IRCBot extends PircBot
                 sendMessage(channel, "Hallo, " + sender);
                 return;
             }
-            if (! message.toLowerCase().startsWith("\\."))
+            if (! message.toLowerCase().startsWith("~"))
             {
                 return;
             }
-            message = message.replaceFirst("\\.", "");
+            message = message.replaceFirst("~", "");
             String[] args = message.split(" ");
             String cmd = args[0].toLowerCase();
 
@@ -196,7 +199,7 @@ public class IRCBot extends PircBot
                     sendCleanMessage(channel, "Usage: !kick <player> <reason>");
                     return;
                 }
-                Player targetPlayer = Bukkit.getServer().getPlayer(targetPlayerName);
+                final Player targetPlayer = Bukkit.getServer().getPlayer(targetPlayerName);
                 if (targetPlayer == null)
                 {
                     sendCleanMessage(channel, "Player \"" + targetPlayerName + "\" is not online!");
@@ -210,6 +213,15 @@ public class IRCBot extends PircBot
                     formattedReason = " (" + reason + ")";
                 }
                 reason = "Kicked by " + sender + formattedReason + "!";
+                final String finalReason = reason;
+                Bukkit.getScheduler().runTask(plugin, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        targetPlayer.kickPlayer(finalReason);
+                    }
+                });
                 targetPlayer.kickPlayer(reason);
                 sendCleanMessage(channel, reason);
 
