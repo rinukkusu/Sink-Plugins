@@ -50,8 +50,6 @@ public class IRCBot extends PircBot
         sendMessage(target, message);
     }
 
-    String[] Whitelist = { "Trojaner", "Trojaner_" }; //Very, very poorly written
-
     public static String replaceColorCodes(String input)
     {
         input = input.replace(ChatColor.BLACK.toString(), Colors.BLACK);
@@ -147,11 +145,10 @@ public class IRCBot extends PircBot
             String cmd = args[0];
 
             boolean isOp = isOp(channel, sender);
-            boolean isWhitelist = EqualsArrayItem(sender, Whitelist);
 
             if (cmd.equals("toggle"))
             {
-                if (! isOp && ! isWhitelist)
+                if (! isOp)
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -186,7 +183,7 @@ public class IRCBot extends PircBot
 
             if (cmd.equals("kick"))
             {
-                if (! isOp && ! isWhitelist)
+                if (! isOp)
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -211,9 +208,9 @@ public class IRCBot extends PircBot
                 String formattedReason = "";
                 if (args.length >= 3)
                 {
-                    formattedReason = " (" + reason + ")";
+                    formattedReason = " (Reason: " + reason + ")";
                 }
-                reason = "Kicked by " + sender + formattedReason + "!";
+                reason = "Kicked by " + sender + "from IRC" + formattedReason + "!";
                 final String finalReason = reason;
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
@@ -223,7 +220,6 @@ public class IRCBot extends PircBot
                         targetPlayer.kickPlayer(finalReason);
                     }
                 });
-                targetPlayer.kickPlayer(reason);
                 sendCleanMessage(channel, reason);
 
             }
@@ -252,7 +248,7 @@ public class IRCBot extends PircBot
 
             if (cmd.equals("permissions") || cmd.equals("perms"))
             {
-                if (isOp || isWhitelist)
+                if (isOp)
                 {
                     sendCleanMessage(channel, "You are allowed to use administrator commands");
                 }
@@ -283,18 +279,6 @@ public class IRCBot extends PircBot
         for (User u : getUsers(channel))
         {
             if (u.isOp() && u.getNick().equals(user))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean EqualsArrayItem(String input, String[] array)
-    {
-        for (String s : array)
-        {
-            if (s.equals(input))
             {
                 return true;
             }

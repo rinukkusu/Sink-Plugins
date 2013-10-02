@@ -39,13 +39,6 @@ public class SinkAntiSpam extends JavaPlugin
             return;
         }
 
-        sinkLibrary = (SinkLibrary) Bukkit.getPluginManager().getPlugin("SinkLibrary");
-        if (sinkLibrary == null)
-        {
-            getLogger().log(Level.WARNING, "This Plugin requires SinkCommands!");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
         Bukkit.getPluginManager().registerEvents(new SinkAntiSpamListener(), this);
     }
 
