@@ -28,7 +28,7 @@ public class PlayerConfigurationListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        User user = new User(event.getPlayer().getName());
+        User user = new User(event.getPlayer());
         PlayerConfiguration config = user.getPlayerConfiguration();
 
         if (! config.exists())
@@ -40,7 +40,7 @@ public class PlayerConfigurationListener implements Listener
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        User user = new User(event.getPlayer().getName());
+        User user = new User(event.getPlayer());
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.save();
     }

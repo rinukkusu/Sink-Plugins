@@ -60,7 +60,7 @@ public class NickCommand implements CommandExecutor
 
             if (setDisplayName(target, newDisplayName))
             {
-                user = new User(target.getName());
+                user = new User(target);
                 PlayerConfiguration config = user.getPlayerConfiguration();
                 sender.sendMessage(PREFIX + _("commands.nick.otherChanged").replaceFirst("%s", playerName).replaceFirst("%s", config.getDisplayName()));
             }
@@ -115,7 +115,7 @@ public class NickCommand implements CommandExecutor
                 return false;
             }
         }
-        User user = new User(player.getName());
+        User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.setDisplayName(newDisplayName);
         return true;

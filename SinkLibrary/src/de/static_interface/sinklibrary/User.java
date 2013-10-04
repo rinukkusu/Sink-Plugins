@@ -31,6 +31,23 @@ public class User
     private static Economy econ;
     private String playerName;
 
+    /**
+     * Should be used for online players only. Use {@link #User(String)} for offline players.
+     *
+     * @param player Online Player
+     */
+    public User(Player player)
+    {
+        base = player;
+        econ = SinkLibrary.getEconomy();
+        this.playerName = player.getName();
+    }
+
+    /**
+     * Should be used for offline players. Use {@link #User(org.bukkit.entity.Player)} for online players.
+     *
+     * @param playerName Name of offline player
+     */
     public User(String playerName)
     {
         base = Bukkit.getPlayer(playerName);

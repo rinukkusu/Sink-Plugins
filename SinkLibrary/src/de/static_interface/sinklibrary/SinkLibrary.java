@@ -100,6 +100,8 @@ public class SinkLibrary extends JavaPlugin
 
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
 
+        settings = new Settings();
+
         tmpBannedPlayers = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
     }
@@ -109,7 +111,7 @@ public class SinkLibrary extends JavaPlugin
         getLogger().log(Level.INFO, "Saving players...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            User user = new User(p.getName());
+            User user = new User(p);
             if (user.getPlayerConfiguration().exists())
             {
                 user.getPlayerConfiguration().save();
@@ -186,7 +188,6 @@ public class SinkLibrary extends JavaPlugin
      * Get Chat instance
      *
      * @return Chat instance
-     *
      * @see Chat
      */
     public static Chat getChat()
@@ -198,7 +199,6 @@ public class SinkLibrary extends JavaPlugin
      * Get Economy instance from Vault
      *
      * @return Economy instace
-     *
      * @see Economy
      */
     public static Economy getEconomy()
@@ -210,7 +210,6 @@ public class SinkLibrary extends JavaPlugin
      * Get Permissions instance
      *
      * @return Permissions
-     *
      * @see Permission
      */
     public static Permission getPermissions()
@@ -222,7 +221,6 @@ public class SinkLibrary extends JavaPlugin
      * Get SinkIRC Instance
      *
      * @return SinkIRC Instance
-     *
      * @see SinkIRC
      */
     public static SinkIRC getSinkIRC()

@@ -37,7 +37,7 @@ public class ChannelUtil
         }
 
         String formattedMessage = message.substring(1);
-        User user = new User(player.getName());
+        User user = new User(player);
 
         if (SinkLibrary.permissionsAvailable())
         {

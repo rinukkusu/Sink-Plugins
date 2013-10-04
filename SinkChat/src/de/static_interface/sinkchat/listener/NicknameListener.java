@@ -28,7 +28,7 @@ public class NicknameListener implements Listener
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        User user = new User(event.getPlayer().getName());
+        User user = new User(event.getPlayer());
         PlayerConfiguration config = user.getPlayerConfiguration();
         String nick = config.getDisplayName();
         if (nick == null || nick.equals("null") || nick.equals(""))

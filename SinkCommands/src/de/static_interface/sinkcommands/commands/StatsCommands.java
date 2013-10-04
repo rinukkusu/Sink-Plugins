@@ -42,7 +42,7 @@ public class StatsCommands
             }
             Player player = (Player) sender;
 
-            User user = new User(player.getName());
+            User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (config.getStatsEnabled())
@@ -70,7 +70,7 @@ public class StatsCommands
             }
             Player player = (Player) sender;
 
-            User user = new User(player.getName());
+            User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (! config.getStatsEnabled())

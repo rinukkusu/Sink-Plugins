@@ -102,7 +102,7 @@ public class SinkChat extends JavaPlugin
     public static void refreshDisplayName(Player player)
     {
         String nickname;
-        User user = new User(player.getName());
+        User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
         if (config.getHasDisplayName())
@@ -126,7 +126,7 @@ public class SinkChat extends JavaPlugin
      */
     public static String getDefaultDisplayName(Player player)
     {
-        User user = new User(player.getName());
+        User user = new User(player);
         return user.getDefaultDisplayName();
     }
 

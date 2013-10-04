@@ -16,7 +16,6 @@
 
 package de.static_interface.sinklibrary.configuration;
 
-import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,16 +35,18 @@ public class Settings extends ConfigurationBase
 
     public Settings()
     {
-        try
-        {
-            yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
-        }
-        catch (NullPointerException ignored)
-        {
-            yamlConfiguration = null;
-        }
-        yamlConfiguration = new YamlConfiguration();
-        load();
+        /**  Dont initialize because its not done.... */
+        /*  try
+            {
+                yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
+            }
+            catch (NullPointerException ignored)
+            {
+                yamlConfiguration = null;
+            }
+            yamlConfiguration = new YamlConfiguration();
+            load();
+        */
     }
 
     @Override
