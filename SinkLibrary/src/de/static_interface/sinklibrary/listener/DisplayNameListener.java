@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-package de.static_interface.sinkchat.listener;
+package de.static_interface.sinklibrary.listener;
 
-import de.static_interface.sinkchat.SinkChat;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-public class NicknameListener implements Listener
+public class DisplayNameListener implements Listener
 {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
@@ -33,7 +32,7 @@ public class NicknameListener implements Listener
         String nick = config.getDisplayName();
         if (nick == null || nick.equals("null") || nick.equals(""))
         {
-            config.setDisplayName(SinkChat.getDefaultDisplayName(event.getPlayer()));
+            config.setDisplayName(user.getDefaultDisplayName());
             config.setHasDisplayName(false);
         }
     }

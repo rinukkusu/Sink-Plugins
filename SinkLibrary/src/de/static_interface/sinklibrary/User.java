@@ -59,7 +59,6 @@ public class User
      * Get current money of player
      *
      * @return Money of player
-     *
      * @throws de.static_interface.sinklibrary.exceptions.EconomyNotAvailableException if economy is not available.
      */
     public int getMoney()
@@ -81,6 +80,11 @@ public class User
         return new PlayerConfiguration(this);
     }
 
+    /**
+     * Get Player instance
+     *
+     * @return Player
+     */
     public Player getPlayer()
     {
         return base;
@@ -88,11 +92,15 @@ public class User
 
     /**
      * @param permission Permission required
-     *
      * @return True if the player has the permission specified by parameter.
      */
     public boolean hasPermission(String permission)
     {
+        //Todo: fix this for offline usage
+        if (! isOnline())
+        {
+            throw new RuntimeException("This may be only used for online players!");
+        }
         //if (SinkLibrary.permissionsAvailable())
         //{
         //    return SinkLibrary.getPermissions().has(base, permission);
@@ -107,7 +115,6 @@ public class User
      * Get user's primary group.
      *
      * @return Primary Group
-     *
      * @throws de.static_interface.sinklibrary.exceptions.PermissionsNotAvailableException if permissions are not available
      */
     public String getPrimaryGroup()
@@ -151,7 +158,6 @@ public class User
         return playerName;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
     public boolean isOnline()
     {
         base = Bukkit.getPlayerExact(playerName);

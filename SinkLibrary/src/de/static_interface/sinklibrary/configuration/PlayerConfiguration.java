@@ -25,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 public class PlayerConfiguration extends ConfigurationBase
@@ -36,8 +37,12 @@ public class PlayerConfiguration extends ConfigurationBase
     private File playersPath;
     private User user;
 
+    HashMap<String, Object> defaultValues;
+
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
+     * Should be accessed via {@link de.static_interface.sinklibrary.User#getPlayerConfiguration()}
+     *
      * @param user User
      */
     public PlayerConfiguration(User user)
@@ -76,18 +81,24 @@ public class PlayerConfiguration extends ConfigurationBase
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create \"" + playersPath.getAbsolutePath() + "\" folder!");
                 return false;
             }
+
             if (! yamlFile.exists() && ! yamlFile.createNewFile())
             {
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config: " + yamlFile);
                 return false;
             }
             yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
-            yamlConfiguration.addDefault(playerName + ".General.StatsEnabled", true);
-            yamlConfiguration.addDefault(playerName + ".Spy.Enabled", true);
-            yamlConfiguration.addDefault(playerName + ".Nick.HasDisplayName", false);
-            yamlConfiguration.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
-            yamlConfiguration.addDefault(playerName + ".Freeze.frozen", false);
+
+            defaultValues = new HashMap<>();
+
+            addDefault("General.StatsEnabled", true);
+            addDefault("Spy.Enabled", true);
+            addDefault("Nick.HasDisplayName", false);
+            addDefault("Nick.DisplayName", user.getDefaultDisplayName());
+            addDefault("Freeze.Frozen", false);
+
             yamlConfiguration.options().copyDefaults(true);
+
             save();
             Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
             return true;
@@ -127,10 +138,18 @@ public class PlayerConfiguration extends ConfigurationBase
     }
 
     @Override
+    public HashMap<String, Object> getDefaults()
+    {
+        return defaultValues;
+    }
+
+    @Override
     public void save()
     {
         if (yamlFile == null)
+        {
             return;
+        }
 
         try
         {
@@ -147,7 +166,7 @@ public class PlayerConfiguration extends ConfigurationBase
     {
         try
         {
-            yamlConfiguration.set(playerName + "." + path, value);
+            yamlConfiguration.set(path, value);
         }
         catch (Exception e)
         {
@@ -160,12 +179,17 @@ public class PlayerConfiguration extends ConfigurationBase
     {
         try
         {
-            return yamlConfiguration.get(playerName + "." + path);
+            return yamlConfiguration.get(path);
         }
         catch (Exception ignored)
         {
             Bukkit.getLogger().log(Level.WARNING, playerName + "'s configuration file: Couldn't load value from path: " + path);
-            return yamlConfiguration.getDefaults().get(playerName + "." + path);
+            Object def = getDefault(path);
+            if (def == null)
+            {
+                throw new NullPointerException("Default value is null!");
+            }
+            return def;
         }
     }
 
@@ -194,7 +218,7 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public boolean getFrozen()
     {
-        return (boolean) get("Freeze.frozen");
+        return (boolean) get("Freeze.Frozen");
     }
 
     /**
@@ -204,7 +228,7 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public void setFrozen(boolean value)
     {
-        set("Freeze.frozen", value);
+        set("Freeze.Frozen", value);
     }
 
     /**
@@ -234,8 +258,7 @@ public class PlayerConfiguration extends ConfigurationBase
     {
         player.setDisplayName(displayName);
         player.setCustomName(displayName);
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set("Nick.DisplayName", displayName);
+        set("Nick.DisplayName", displayName);
         if (displayName.equals(user.getDefaultDisplayName()))
         {
             setHasDisplayName(false);

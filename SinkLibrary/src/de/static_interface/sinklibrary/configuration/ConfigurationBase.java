@@ -18,13 +18,10 @@ package de.static_interface.sinklibrary.configuration;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.util.HashMap;
+
 public abstract class ConfigurationBase
 {
-    public ConfigurationBase()
-    {
-        load();
-    }
-
     /**
      * Create Configuration File
      *
@@ -43,12 +40,10 @@ public abstract class ConfigurationBase
      */
     public abstract void set(String path, Object value);
 
-
     /**
      * Get value from config
      *
      * @param path Path to value
-     *
      * @return Value of path
      */
     public abstract Object get(String path);
@@ -70,4 +65,40 @@ public abstract class ConfigurationBase
      */
     public abstract boolean load();
 
+    /**
+     * Get default value for path
+     *
+     * @param path Path to value
+     */
+    public Object getDefault(String path)
+    {
+        if (getDefaults() == null)
+        {
+            throw new RuntimeException("defaultValues are null! Couldn't read value from path: " + path);
+        }
+        return getDefaults().get(path);
+    }
+
+    /**
+     * Add a default value
+     *
+     * @param path  Path to value
+     * @param value Value of path
+     */
+    public void addDefault(String path, Object value)
+    {
+        if (getDefaults() == null)
+        {
+            throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
+        }
+        getDefaults().put(path, value);
+        getYamlConfiguration().addDefault(path, value);
+    }
+
+    /**
+     * Get Defaults
+     *
+     * @return Default values
+     */
+    public abstract HashMap<String, Object> getDefaults();
 }

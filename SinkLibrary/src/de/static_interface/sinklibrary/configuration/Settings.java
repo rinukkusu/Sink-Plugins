@@ -22,6 +22,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 /**
@@ -32,10 +33,11 @@ public class Settings extends ConfigurationBase
 {
     YamlConfiguration yamlConfiguration;
     File yamlFile;
+    HashMap<String, Object> defaultValues;
 
     public Settings()
     {
-        /**  Dont initialize because its not done.... */
+        /**  Dont initialize because its not done... */
         /*  try
             {
                 yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
@@ -45,6 +47,7 @@ public class Settings extends ConfigurationBase
                 yamlConfiguration = null;
             }
             yamlConfiguration = new YamlConfiguration();
+            defaultValues = new HashMap<>();
             load();
         */
     }
@@ -80,7 +83,7 @@ public class Settings extends ConfigurationBase
         catch (Exception ignored)
         {
             Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path);
-            return yamlConfiguration.getDefaults().get(path);
+            return getDefault(path);
         }
     }
 
@@ -117,6 +120,12 @@ public class Settings extends ConfigurationBase
     }
 
     @Override
+    public HashMap<String, Object> getDefaults()
+    {
+        return defaultValues;
+    }
+
+    @Override
     public boolean create()
     {
         try
@@ -127,21 +136,23 @@ public class Settings extends ConfigurationBase
                 return false;
             }
             yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
-            /***********
-             * SinkIRC *
-             ***********/
-            yamlConfiguration.addDefault("SinkIRC.Enabled", false);
-            yamlConfiguration.addDefault("SinkIRC.Username", "SinkIRCBot");
-            yamlConfiguration.addDefault("SinkIRC.Server.Address", "irc.example.com");
-            yamlConfiguration.addDefault("SinkIRC.Server.Password", "");
-            yamlConfiguration.addDefault("SinkIRC.Server.Port", 6667);
-            yamlConfiguration.addDefault("SinkIRC.Channel", "#ChatBot");
-            // Auth Service Part. See (TODO): http://www.deaded.com/staticpages/index.php/pircbotdemos
-            yamlConfiguration.addDefault("SinkIRC.Authentification.Enabled", false);
-            yamlConfiguration.addDefault("SinkIRC.Authentification.AuthBot", "NickServ");
-            yamlConfiguration.addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
-            yamlConfiguration.addDefault("SinkIRC.Authentification.Password", "");
+            addDefault("SinkIRC.Enabled", false);
+            addDefault("SinkIRC.Username", "SinkIRCBot");
+            addDefault("SinkIRC.Server.Address", "irc.example.com");
+            addDefault("SinkIRC.Server.Password", "");
+            addDefault("SinkIRC.Server.Port", 6667);
+            addDefault("SinkIRC.Channel", "#ChatBot");
+            addDefault("SinkIRC.Authentification.Enabled", false); //ToDo: http://www.deaded.com/staticpages/index.php/pircbotdemos
+            addDefault("SinkIRC.Authentification.AuthBot", "NickServ");
+            addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
+            addDefault("SinkIRC.Authentification.Password", "");
+
+            addDefault("SinkChat.channel.help.prefix", "?");
+            addDefault("SinkChat.channel.shout.prefix", "!");
+            addDefault("SinkChat.channel.trade.prefix", "$");
+
             yamlConfiguration.options().copyDefaults(true);
+
             save();
             Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
             return true;

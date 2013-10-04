@@ -25,7 +25,6 @@ import de.static_interface.sinkchat.command.NickCommand;
 import de.static_interface.sinkchat.command.SpyCommands;
 import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
-import de.static_interface.sinkchat.listener.NicknameListener;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
@@ -105,34 +104,29 @@ public class SinkChat extends JavaPlugin
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
+        if (! config.exists())
+        {
+            return;
+        }
+
         if (config.getHasDisplayName())
         {
             nickname = config.getDisplayName();
-            if (nickname.equals(getDefaultDisplayName(player)))
+            if (nickname.equals(user.getDefaultDisplayName()))
             {
                 config.setHasDisplayName(false);
             }
         }
         else
         {
-            nickname = getDefaultDisplayName(player);
+            nickname = user.getDefaultDisplayName();
         }
         player.setDisplayName(nickname);
         player.setCustomName(nickname);
     }
 
-    /**
-     * @return Default DisplayName of Player
-     */
-    public static String getDefaultDisplayName(Player player)
-    {
-        User user = new User(player);
-        return user.getDefaultDisplayName();
-    }
-
     private void registerEvents(PluginManager pm)
     {
-        pm.registerEvents(new NicknameListener(), this);
         pm.registerEvents(new ChatListenerLowest(), this);
         pm.registerEvents(new ChatListenerNormal(), this);
     }

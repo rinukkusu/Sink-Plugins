@@ -16,7 +16,6 @@
 
 package de.static_interface.sinkchat.command;
 
-import de.static_interface.sinkchat.SinkChat;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
@@ -82,6 +81,7 @@ public class NickCommand implements CommandExecutor
 
     private boolean setDisplayName(Player player, String newDisplayName)
     {
+        User user = new User(player);
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
         if (! cleanDisplayName.matches("^[a-zA-Z_0-9\u00a7]+$"))
         {
@@ -97,7 +97,7 @@ public class NickCommand implements CommandExecutor
 
         if (cleanDisplayName.equals("off"))
         {
-            newDisplayName = SinkChat.getDefaultDisplayName(player);
+            newDisplayName = user.getDefaultDisplayName();
         }
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers())
@@ -115,7 +115,6 @@ public class NickCommand implements CommandExecutor
                 return false;
             }
         }
-        User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.setDisplayName(newDisplayName);
         return true;

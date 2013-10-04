@@ -135,22 +135,33 @@ public class SinkCommands extends JavaPlugin
     {
         User user = new User(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
+
+        if (! config.exists())
+        {
+            return;
+        }
+
         ScoreboardManager manager = Bukkit.getScoreboardManager();
+
         if (! player.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
         {
             player.setScoreboard(manager.getNewScoreboard());
             return;
         }
+
         Scoreboard board = manager.getNewScoreboard();
         Team team = board.registerNewTeam(player.getName());
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
         if (SinkLibrary.economyAvailable())
         {
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
             money.setScore(user.getMoney());
         }
+
         Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
+
         if (players >= 0)
         {
             onlinePlayers.setScore(players);
@@ -159,6 +170,7 @@ public class SinkCommands extends JavaPlugin
         {
             onlinePlayers.setScore(Bukkit.getOnlinePlayers().length);
         }
+
         Score date = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Leben: "));
         date.setScore((int) player.getHealth());
         team.setAllowFriendlyFire(true);
