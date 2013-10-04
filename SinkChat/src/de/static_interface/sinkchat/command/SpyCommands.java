@@ -43,7 +43,7 @@ public class SpyCommands
             }
             Player player = (Player) sender;
 
-            User user = new User(player);
+            User user = new User(player.getName());
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (config.getSpyEnabled())
@@ -70,7 +70,7 @@ public class SpyCommands
             }
             Player player = (Player) sender;
 
-            User user = new User(player);
+            User user = new User(player.getName());
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (! config.getSpyEnabled())

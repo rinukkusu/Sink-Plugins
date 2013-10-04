@@ -18,8 +18,13 @@ package de.static_interface.sinklibrary.configuration;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public interface IConfiguration
+public abstract class ConfigurationBase
 {
+    public ConfigurationBase()
+    {
+        load();
+    }
+
     /**
      * Create Configuration File
      *
@@ -43,6 +48,7 @@ public interface IConfiguration
      * Get value from config
      *
      * @param path Path to value
+     *
      * @return Value of path
      */
     public abstract Object get(String path);
@@ -52,9 +58,16 @@ public interface IConfiguration
      */
     public abstract YamlConfiguration getYamlConfiguration();
 
-
     /**
      * @return True if the config file exists
      */
     public abstract boolean exists();
+
+    /**
+     * Load Configuration
+     *
+     * @return True if successfully loaded, false if file doesnt exists.
+     */
+    public abstract boolean load();
+
 }

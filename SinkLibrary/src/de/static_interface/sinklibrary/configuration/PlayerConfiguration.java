@@ -19,6 +19,7 @@ package de.static_interface.sinklibrary.configuration;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -26,7 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class PlayerConfiguration implements IConfiguration
+public class PlayerConfiguration extends ConfigurationBase
 {
     private String playerName;
     private Player player;
@@ -37,7 +38,6 @@ public class PlayerConfiguration implements IConfiguration
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
-     *
      * @param user User
      */
     public PlayerConfiguration(User user)
@@ -45,7 +45,7 @@ public class PlayerConfiguration implements IConfiguration
         this.user = user;
 
         player = user.getPlayer();
-        playerName = player.getName();
+        playerName = user.getName();
 
         playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
         try
@@ -56,14 +56,17 @@ public class PlayerConfiguration implements IConfiguration
         {
             yamlConfiguration = null;
         }
-        yamlConfiguration = ( exists() ) ? YamlConfiguration.loadConfiguration(yamlFile) : null;
+        yamlConfiguration = new YamlConfiguration();
+        load();
     }
 
+    @Override
     public YamlConfiguration getYamlConfiguration()
     {
         return yamlConfiguration;
     }
 
+    @Override
     public boolean create()
     {
         try
@@ -81,32 +84,54 @@ public class PlayerConfiguration implements IConfiguration
             yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
             yamlConfiguration.addDefault(playerName + ".General.StatsEnabled", true);
             yamlConfiguration.addDefault(playerName + ".Spy.Enabled", true);
-            yamlConfiguration.addDefault(playerName + ".Nick.HasNickname", false);
+            yamlConfiguration.addDefault(playerName + ".Nick.HasDisplayName", false);
             yamlConfiguration.addDefault(playerName + ".Nick.Nickname", user.getDefaultDisplayName());
-            yamlConfiguration.addDefault(playerName + ".Freeze.freezed", false);
+            yamlConfiguration.addDefault(playerName + ".Freeze.frozen", false);
             yamlConfiguration.options().copyDefaults(true);
             save();
+            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
             return true;
         }
         catch (IOException e)
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile);
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getName());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
             return false;
         }
     }
 
+    @Override
     public boolean exists()
     {
         return yamlFile.exists();
     }
 
+    @Override
+    public boolean load()
+    {
+        try
+        {
+            yamlConfiguration.load(yamlFile);
+        }
+        catch (InvalidConfigurationException ignored)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
+            yamlFile.delete();
+            return create();
+        }
+        catch (Exception ignored)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void save()
     {
         if (yamlFile == null)
-        {
             return;
-        }
+
         try
         {
             yamlConfiguration.save(yamlFile);
@@ -117,30 +142,31 @@ public class PlayerConfiguration implements IConfiguration
         }
     }
 
+    @Override
     public void set(String path, Object value)
     {
         try
         {
             yamlConfiguration.set(playerName + "." + path, value);
-            save();
         }
         catch (Exception e)
         {
-            Bukkit.getLogger().log(Level.WARNING, "WARNING: " + playerName + ": Couldn't save " + value + " to path " + path, e);
+            Bukkit.getLogger().log(Level.WARNING, playerName + "'s configuration file: Couldn't save " + value + " to path " + path, e);
         }
     }
 
+    @Override
     public Object get(String path)
     {
         try
         {
             return yamlConfiguration.get(playerName + "." + path);
         }
-        catch (Exception e)
+        catch (Exception ignored)
         {
-            return null;
+            Bukkit.getLogger().log(Level.WARNING, playerName + "'s configuration file: Couldn't load value from path: " + path);
+            return yamlConfiguration.getDefaults().get(playerName + "." + path);
         }
-
     }
 
     /**
@@ -148,14 +174,7 @@ public class PlayerConfiguration implements IConfiguration
      */
     public boolean getSpyEnabled()
     {
-        try
-        {
-            return (boolean) get("Spy.Enabled");
-        }
-        catch (Exception ignored)
-        {
-            return false;
-        }
+        return (boolean) get("Spy.Enabled");
     }
 
     /**
@@ -173,16 +192,9 @@ public class PlayerConfiguration implements IConfiguration
      *
      * @return true if player is freezed
      */
-    public boolean getFreezed()
+    public boolean getFrozen()
     {
-        try
-        {
-            return (boolean) get(playerName + "Freeze.freezed");
-        }
-        catch (Exception ignored)
-        {
-            return false;
-        }
+        return (boolean) get("Freeze.frozen");
     }
 
     /**
@@ -190,9 +202,9 @@ public class PlayerConfiguration implements IConfiguration
      *
      * @param value Set value, true will freeze player
      */
-    public void setFreezed(boolean value)
+    public void setFrozen(boolean value)
     {
-        set("Freeze.freezed", value);
+        set("Freeze.frozen", value);
     }
 
     /**
@@ -200,14 +212,7 @@ public class PlayerConfiguration implements IConfiguration
      */
     public boolean getStatsEnabled()
     {
-        try
-        {
-            return (boolean) get("General.StatsEnabled");
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+        return (boolean) get("General.StatsEnabled");
     }
 
     /**
@@ -230,7 +235,7 @@ public class PlayerConfiguration implements IConfiguration
         player.setDisplayName(displayName);
         player.setCustomName(displayName);
         PlayerConfiguration config = user.getPlayerConfiguration();
-        config.set("Nick.Nickname", displayName);
+        config.set("Nick.DisplayName", displayName);
         if (displayName.equals(user.getDefaultDisplayName()))
         {
             setHasDisplayName(false);
@@ -246,14 +251,7 @@ public class PlayerConfiguration implements IConfiguration
      */
     public String getDisplayName()
     {
-        try
-        {
-            return (String) get("Nick.Nickname");
-        }
-        catch (Exception e)
-        {
-            return user.getDefaultDisplayName();
-        }
+        return (String) get("Nick.DisplayName");
     }
 
     /**
@@ -261,21 +259,14 @@ public class PlayerConfiguration implements IConfiguration
      */
     public boolean getHasDisplayName()
     {
-        try
-        {
-            return (boolean) get("Nick.HasNickname");
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
+        return (boolean) get("Nick.HasDisplayName");
     }
 
     /**
-     * @param value If set to true, player will use custom displayname
+     * @param value If set to true, player will use custom displayname instead of default
      */
     public void setHasDisplayName(boolean value)
     {
-        set("Nick.HasNickname", value);
+        set("Nick.HasDisplayName", value);
     }
 }

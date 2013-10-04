@@ -18,6 +18,7 @@ package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
@@ -28,7 +29,7 @@ import java.util.logging.Level;
  * Currently unused
  */
 
-public class Settings implements IConfiguration
+public class Settings extends ConfigurationBase
 {
     YamlConfiguration yamlConfiguration;
     File yamlFile;
@@ -44,47 +45,115 @@ public class Settings implements IConfiguration
             yamlConfiguration = null;
         }
         yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration = ( exists() ) ? YamlConfiguration.loadConfiguration(yamlFile) : null;
+        load();
     }
 
+    @Override
     public void set(String path, Object value)
     {
-        yamlConfiguration.set(path, value);
+        if (! exists())
+        {
+            create();
+        }
+        try
+        {
+            yamlConfiguration.set(path, value);
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't save " + value + " to path " + path, e);
+        }
     }
 
+    @Override
     public Object get(String path)
     {
-        return yamlConfiguration.get(path);
+        if (! exists())
+        {
+            create();
+        }
+        try
+        {
+            return yamlConfiguration.get(path);
+        }
+        catch (Exception ignored)
+        {
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path);
+            return yamlConfiguration.getDefaults().get(path);
+        }
     }
 
+    @Override
     public YamlConfiguration getYamlConfiguration()
     {
         return yamlConfiguration;
     }
 
+    @Override
     public boolean exists()
     {
         return yamlFile.exists();
     }
 
-    public boolean create()
+    @Override
+    public boolean load()
     {
-        if (! yamlFile.exists())
+        try
         {
-            try
-            {
-                yamlFile.createNewFile();
-            }
-            catch (Exception e)
-            {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create settings file", e);
-                return false;
-            }
+            yamlConfiguration.load(yamlFile);
         }
-        yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
+        catch (InvalidConfigurationException ignored)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
+            yamlFile.delete();
+            return create();
+        }
+        catch (Exception ignored)
+        {
+            return false;
+        }
         return true;
     }
 
+    @Override
+    public boolean create()
+    {
+        try
+        {
+            if (! yamlFile.exists() && ! yamlFile.createNewFile())
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create settings file");
+                return false;
+            }
+            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
+            /***********
+             * SinkIRC *
+             ***********/
+            yamlConfiguration.addDefault("SinkIRC.Enabled", false);
+            yamlConfiguration.addDefault("SinkIRC.Username", "SinkIRCBot");
+            yamlConfiguration.addDefault("SinkIRC.Server.Address", "irc.example.com");
+            yamlConfiguration.addDefault("SinkIRC.Server.Password", "");
+            yamlConfiguration.addDefault("SinkIRC.Server.Port", 6667);
+            yamlConfiguration.addDefault("SinkIRC.Channel", "#ChatBot");
+            // Auth Service Part. See (TODO): http://www.deaded.com/staticpages/index.php/pircbotdemos
+            yamlConfiguration.addDefault("SinkIRC.Authentification.Enabled", false);
+            yamlConfiguration.addDefault("SinkIRC.Authentification.AuthBot", "NickServ");
+            yamlConfiguration.addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
+            yamlConfiguration.addDefault("SinkIRC.Authentification.Password", "");
+            yamlConfiguration.options().copyDefaults(true);
+            save();
+            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
+            return true;
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            return false;
+        }
+    }
+
+    @Override
     public void save()
     {
         try

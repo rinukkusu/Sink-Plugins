@@ -17,11 +17,13 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
+import de.static_interface.sinklibrary.configuration.Settings;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -46,6 +48,7 @@ public class SinkLibrary extends JavaPlugin
     private static boolean chatAvailable = true;
 
     private static String pluginName;
+    private static Settings settings;
 
     public void onEnable()
     {
@@ -103,6 +106,15 @@ public class SinkLibrary extends JavaPlugin
 
     public void onDisable()
     {
+        getLogger().log(Level.INFO, "Saving players...");
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
+            User user = new User(p.getName());
+            if (user.getPlayerConfiguration().exists())
+            {
+                user.getPlayerConfiguration().save();
+            }
+        }
         getLogger().log(Level.INFO, "Disabled.");
     }
 
@@ -174,6 +186,7 @@ public class SinkLibrary extends JavaPlugin
      * Get Chat instance
      *
      * @return Chat instance
+     *
      * @see Chat
      */
     public static Chat getChat()
@@ -185,6 +198,7 @@ public class SinkLibrary extends JavaPlugin
      * Get Economy instance from Vault
      *
      * @return Economy instace
+     *
      * @see Economy
      */
     public static Economy getEconomy()
@@ -196,6 +210,7 @@ public class SinkLibrary extends JavaPlugin
      * Get Permissions instance
      *
      * @return Permissions
+     *
      * @see Permission
      */
     public static Permission getPermissions()
@@ -207,6 +222,7 @@ public class SinkLibrary extends JavaPlugin
      * Get SinkIRC Instance
      *
      * @return SinkIRC Instance
+     *
      * @see SinkIRC
      */
     public static SinkIRC getSinkIRC()
@@ -255,5 +271,15 @@ public class SinkLibrary extends JavaPlugin
     public static void removeTempBan(String username)
     {
         tmpBannedPlayers.remove(username);
+    }
+
+    /**
+     * Get SinkPlugins Settings.
+     *
+     * @return Settings
+     */
+    public static Settings getSettings()
+    {
+        return settings;
     }
 }

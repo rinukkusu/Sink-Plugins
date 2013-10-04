@@ -98,7 +98,7 @@ public class SinkCommands extends JavaPlugin
         getLogger().info("Saving player configurations...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            User user = new User(p);
+            User user = new User(p.getName());
             PlayerConfiguration config = user.getPlayerConfiguration();
             config.save();
         }
@@ -133,7 +133,7 @@ public class SinkCommands extends JavaPlugin
      */
     public static void refreshScoreboard(Player player, int players)
     {
-        User user = new User(player);
+        User user = new User(player.getName());
         PlayerConfiguration config = user.getPlayerConfiguration();
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         if (! player.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())

@@ -29,23 +29,20 @@ public class User
 {
     private static Player base;
     private static Economy econ;
+    private String playerName;
 
-    public User(String name)
+    public User(String playerName)
     {
-        base = Bukkit.getPlayer(name);
+        base = Bukkit.getPlayer(playerName);
         econ = SinkLibrary.getEconomy();
-    }
-
-    public User(Player player)
-    {
-        base = player;
-        econ = SinkLibrary.getEconomy();
+        this.playerName = playerName;
     }
 
     /**
      * Get current money of player
      *
      * @return Money of player
+     *
      * @throws de.static_interface.sinklibrary.exceptions.EconomyNotAvailableException if economy is not available.
      */
     public int getMoney()
@@ -74,6 +71,7 @@ public class User
 
     /**
      * @param permission Permission required
+     *
      * @return True if the player has the permission specified by parameter.
      */
     public boolean hasPermission(String permission)
@@ -92,6 +90,7 @@ public class User
      * Get user's primary group.
      *
      * @return Primary Group
+     *
      * @throws de.static_interface.sinklibrary.exceptions.PermissionsNotAvailableException if permissions are not available
      */
     public String getPrimaryGroup()
@@ -123,5 +122,22 @@ public class User
 
         String prefix = base.isOp() ? ChatColor.RED.toString() : ChatColor.WHITE.toString();
         return prefix + base.getName() + ChatColor.RESET;
+    }
+
+    /**
+     * Get players name (useful for offline player usage)
+     *
+     * @return Players name
+     */
+    public String getName()
+    {
+        return playerName;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public boolean isOnline()
+    {
+        base = Bukkit.getPlayerExact(playerName);
+        return base != null;
     }
 }

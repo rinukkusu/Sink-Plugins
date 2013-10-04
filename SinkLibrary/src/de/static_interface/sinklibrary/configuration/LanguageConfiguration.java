@@ -26,113 +26,176 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class LanguageConfiguration implements IConfiguration
+public class LanguageConfiguration extends ConfigurationBase
 {
-    private static YamlConfiguration language = new YamlConfiguration();
-    private static final File languageFilesPath = new File(SinkLibrary.getCustomDataFolder(), "language.yml");
+    private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
+    private static final File yamlFile = new File(SinkLibrary.getCustomDataFolder(), "language.yml");
 
+    @Override
     public boolean create()
     {
         try
         {
-            language.load(languageFilesPath);
+            if (! yamlFile.exists() && ! yamlFile.createNewFile())
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config: " + yamlFile);
+                return false;
+            }
+            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
+            yamlConfiguration.addDefault("messages.general.notOnline", "&c%s is not online!");
+            yamlConfiguration.addDefault("messages.general.consoleNotAvailabe", "&cThis command is only ingame available");
+
+            yamlConfiguration.addDefault("messages.commands.nick.otherChanged", "%s's name is now %s!");
+            yamlConfiguration.addDefault("messages.commands.nick.selfChanged", "Your name is now %s!");
+            yamlConfiguration.addDefault("messages.commands.nick.illegalNickname", "Illegal nickname!");
+            yamlConfiguration.addDefault("messages.commands.nick.tooLong", "Nickname is too long!");
+            yamlConfiguration.addDefault("messages.commands.nick.used", "Nickname is already used by someone other!");
+
+            yamlConfiguration.addDefault("messages.commands.channel.playerJoins", "You joined the %s channel.");
+            yamlConfiguration.addDefault("messages.commands.channel.playerLeaves", "You left the %s channel.");
+            yamlConfiguration.addDefault("messages.commands.channel.noChannelGiven", "You must write the name of the channel!");
+            yamlConfiguration.addDefault("messages.commands.channel.channelUnknown", "%s is an unknown channel.");
+            yamlConfiguration.addDefault("messages.commands.channel.list", "These channels are available: %s");
+            yamlConfiguration.addDefault("messages.commands.channel.part", "You have the following channels enabled:");
+            yamlConfiguration.addDefault("messages.commands.channel.help", "These commands are available:");
+
+            yamlConfiguration.addDefault("messages.commands.spy.enabled", "&aSpy chat has been enabled!");
+            yamlConfiguration.addDefault("messages.commands.spy.alreadyEnabled", "&cSpy chat has been already enabled!");
+
+            yamlConfiguration.addDefault("messages.commands.spy.disabled", "&cSpy chat has been disabled!");
+            yamlConfiguration.addDefault("messages.commands.spy.alreadyDisabled", "&cSpy chat has been already disabled!");
+
+            yamlConfiguration.addDefault("messages.channels.help", "Help");
+            yamlConfiguration.addDefault("messages.channels.shout", "Shout");
+            yamlConfiguration.addDefault("messages.channels.trade", "Trade");
+
+            yamlConfiguration.addDefault("messages.channel.help.prefix", "?"); //Todo: move these to Settings
+            yamlConfiguration.addDefault("messages.channel.shout.prefix", "!");
+            yamlConfiguration.addDefault("messages.channel.trade.prefix", "$");
+
+            yamlConfiguration.addDefault("messages.permissions.general", "&4You dont have permissions to do that.");
+            yamlConfiguration.addDefault("messages.permissions.channels.shout", "&4You may not use the shout channel.");
+            yamlConfiguration.addDefault("messages.permissions.channels.help", "&4You may not use the help channel.");
+            yamlConfiguration.addDefault("messages.permissions.channels.trade", "&4You may not use the trade channel.");
+            yamlConfiguration.addDefault("messages.permissions.nick.other", "&4You may not change the nickname of other players!");
+
+            yamlConfiguration.addDefault("messages.prefix.channel", "&a[Channel]");
+            yamlConfiguration.addDefault("messages.prefix.nick", "&2[Nick]");
+            yamlConfiguration.addDefault("messages.prefix.spy", "&7[Spy]");
+            yamlConfiguration.addDefault("messages.prefix.chatLocal", "&7[Local]");
+            save();
+            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
+            return true;
         }
         catch (IOException e)
         {
-
-            language.set("messages.general.notOnline", "&c%s is not online!");
-            language.set("messages.general.consoleNotAvailabe", "&cThis command is only ingame available");
-
-            language.set("messages.commands.nick.otherChanged", "%s's name is now %s!");
-            language.set("messages.commands.nick.selfChanged", "Your name is now %s!");
-            language.set("messages.commands.nick.illegalNickname", "Illegal nickname!");
-            language.set("messages.commands.nick.tooLong", "Nickname is too long!");
-            language.set("messages.commands.nick.used", "Nickname is already used by someone other!");
-
-            language.set("messages.commands.channel.playerJoins", "You joined the %s channel.");
-            language.set("messages.commands.channel.playerLeaves", "You left the %s channel.");
-            language.set("messages.commands.channel.noChannelGiven", "You must write the name of the channel!");
-            language.set("messages.commands.channel.channelUnknown", "%s is an unknown channel.");
-            language.set("messages.commands.channel.list", "These channels are available: %s");
-            language.set("messages.commands.channel.part", "You have the following channels enabled:");
-            language.set("messages.commands.channel.help", "These commands are available:");
-
-            language.set("messages.commands.spy.enabled", "&aSpy chat has been enabled!");
-            language.set("messages.commands.spy.alreadyEnabled", "&cSpy chat has been already enabled!");
-
-            language.set("messages.commands.spy.disabled", "&cSpy chat has been disabled!");
-            language.set("messages.commands.spy.alreadyDisabled", "&cSpy chat has been already disabled!");
-
-            language.set("messages.channels.help", "Help");
-            language.set("messages.channels.shout", "Shout");
-            language.set("messages.channels.trade", "Trade");
-
-            language.set("messages.channel.help.prefix", "?"); //Todo: move these to Settings?
-            language.set("messages.channel.shout.prefix", "!");
-            language.set("messages.channel.trade.prefix", "$");
-
-            language.set("messages.permissions.general", "&4You dont have permissions to do that.");
-            language.set("messages.permissions.channels.shout", "&4You may not use the shout channel.");
-            language.set("messages.permissions.channels.help", "&4You may not use the help channel.");
-            language.set("messages.permissions.channels.trade", "&4You may not use the trade channel.");
-            language.set("messages.permissions.nick.other", "&4You may not change the nickname of other players!");
-
-            language.set("messages.prefix.channel", "&a[Channel]");
-            language.set("messages.prefix.nick", "&2[Nick]");
-            language.set("messages.prefix.spy", "&7[Spy]");
-            language.set("messages.prefix.chatLocal", "&7[Local]");
-
-            save();
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            return false;
         }
-        catch (InvalidConfigurationException e)
+
+    }
+
+    @Override
+    public void save()
+    {
+        if (yamlFile == null)
         {
-            languageFilesPath.delete();
-            Bukkit.getLogger().severe("Invalid configuration detected ! Restoring default configuration ...");
+            return;
+        }
+
+        try
+        {
+            yamlConfiguration.save(yamlFile);
+        }
+        catch (IOException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save configuration file: " + yamlFile + "!");
+        }
+    }
+
+    @Override
+    public void set(String path, Object value)
+    {
+        try
+        {
+            yamlConfiguration.set(path, value);
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't save " + value + " to path " + path, e);
+        }
+    }
+
+    @Override
+    public Object get(String path)
+    {
+        try
+        {
+            return yamlConfiguration.get(path);
+        }
+        catch (Exception ignored)
+        {
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path);
+            return yamlConfiguration.getDefaults().get(path);
+        }
+    }
+
+    @Override
+    public YamlConfiguration getYamlConfiguration()
+    {
+        return yamlConfiguration;
+    }
+
+    @Override
+    public boolean exists()
+    {
+        return yamlFile.exists();
+    }
+
+    @Override
+    public boolean load()
+    {
+        try
+        {
+            yamlConfiguration.load(yamlFile);
+        }
+        catch (InvalidConfigurationException ignored)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
+            yamlFile.delete();
             return create();
+        }
+        catch (Exception ignored)
+        {
+            return false;
         }
         return true;
     }
 
-    public void save()
-    {
-        try
-        {
-            language.save(languageFilesPath);
-        }
-        catch (Exception e)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "WARNING: Couldn't save language configuration!", e);
-        }
-    }
-
+    /**
+     * Get language as String from key
+     *
+     * @param key Key of language without "message" root
+     *
+     * @return Language String
+     */
     public static String _(String key)
     {
         String path = "messages." + key;
-        String value = language.getRoot().getString(path);
-        if (value == null || value.equals("null"))
+        try
         {
-            throw new NullPointerException("key returned null. (path: " + path + ")");
+            String value = yamlConfiguration.getRoot().getString(path);
+            if (value == null || value.equals("null"))
+            {
+                throw new NullPointerException("key returned null. (path: " + path + ")");
+            }
+            return ChatColor.translateAlternateColorCodes('&', value);
         }
-        return ChatColor.translateAlternateColorCodes('&', value);
-    }
-
-    public void set(String path, Object value)
-    {
-        language.set(path, value);
-    }
-
-    public Object get(String path)
-    {
-        return language.get(path);
-    }
-
-    public YamlConfiguration getYamlConfiguration()
-    {
-        return language;
-    }
-
-    public boolean exists()
-    {
-        return languageFilesPath.exists();
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path, e);
+            return (String) yamlConfiguration.getDefaults().get(path);
+        }
     }
 }

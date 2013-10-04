@@ -116,35 +116,35 @@ public class FreezeCommands
 
     public static boolean isFrozen(Player player)
     {
-        User user = new User(player);
-        return user.getPlayerConfiguration().getFreezed();
+        User user = new User(player.getName());
+        return user.getPlayerConfiguration().getFrozen();
     }
 
     public static boolean canBeFrozen(Player player)
     {
-        User user = new User(player);
-        return ! user.hasPermission("sinkcommands.freeze.never");
+        User user = new User(player.getName());
+        return ! user.hasPermission("sinkcommands.freeze.bypass");
     }
 
 
     public static boolean toggleFreeze(Player player)
     {
-        User user = new User(player);
-        if (user.getPlayerConfiguration().getFreezed())
+        User user = new User(player.getName());
+        if (user.getPlayerConfiguration().getFrozen())
         {
-            user.getPlayerConfiguration().setFreezed(false);
+            user.getPlayerConfiguration().setFrozen(false);
             return false;
         }
         else
         {
-            user.getPlayerConfiguration().setFreezed(true);
+            user.getPlayerConfiguration().setFrozen(true);
             return true;
         }
     }
 
     public static void unfreeze(Player player)
     {
-        User user = new User(player);
-        user.getPlayerConfiguration().setFreezed(false);
+        User user = new User(player.getName());
+        user.getPlayerConfiguration().setFrozen(false);
     }
 }
