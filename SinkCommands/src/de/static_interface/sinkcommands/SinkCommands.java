@@ -44,6 +44,7 @@ public class SinkCommands extends JavaPlugin
         {
             return;
         }
+        SinkLibrary.registerPlugin(this);
 
         timer = new CommandsTimer();
         LagTimer lagTimer = new LagTimer();
@@ -98,7 +99,7 @@ public class SinkCommands extends JavaPlugin
         getLogger().info("Saving player configurations...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            User user = new User(p);
+            User user = SinkLibrary.getUser(p);
             PlayerConfiguration config = user.getPlayerConfiguration();
             config.save();
         }
@@ -133,7 +134,7 @@ public class SinkCommands extends JavaPlugin
      */
     public static void refreshScoreboard(Player player, int players)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
         if (! config.exists())
@@ -143,7 +144,7 @@ public class SinkCommands extends JavaPlugin
 
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-        if (! player.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
+        if (! user.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
         {
             player.setScoreboard(manager.getNewScoreboard());
             return;

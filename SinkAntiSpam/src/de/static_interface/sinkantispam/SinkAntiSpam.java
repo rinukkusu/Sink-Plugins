@@ -38,7 +38,7 @@ public class SinkAntiSpam extends JavaPlugin
         {
             return;
         }
-
+        SinkLibrary.registerPlugin(this);
         Bukkit.getPluginManager().registerEvents(new SinkAntiSpamListener(), this);
     }
 

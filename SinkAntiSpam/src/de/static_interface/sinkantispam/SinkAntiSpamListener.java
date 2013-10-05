@@ -17,6 +17,8 @@
 package de.static_interface.sinkantispam;
 
 
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -67,7 +69,10 @@ public class SinkAntiSpamListener implements Listener
         {
             throw new IllegalArgumentException("Event muss be an instance of AsyncPlayerChatEvent or PlayerCommandPreprocessEvent!");
         }
-        if (player.hasPermission("sinkcommands.bypass"))
+
+        User user = SinkLibrary.getUser(player);
+
+        if (user.hasPermission("sinkcommands.bypass"))
         {
             return;
         }

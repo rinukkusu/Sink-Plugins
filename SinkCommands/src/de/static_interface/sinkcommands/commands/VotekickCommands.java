@@ -18,6 +18,7 @@ package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -88,28 +89,27 @@ public class VotekickCommands
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten während ein anderer Votekick läuft!");
                 return true;
             }
-            boolean voteable = false;
-            if (! sender.hasPermission("sinkcommands.votekick.staff"))
+            boolean voteable = true;
+            User user = SinkLibrary.getUser(sender);
+            if (! user.hasPermission("sinkcommands.votekick.staff"))
             {
                 int i = 0;
                 Player[] onlinePlayers = Bukkit.getOnlinePlayers();
                 for (Player p : onlinePlayers)
                 {
-                    if (! p.hasPermission("sinkcommands.votekick.staff"))
+                    User onlinePlayer = SinkLibrary.getUser(p);
+                    if (! onlinePlayer.hasPermission("sinkcommands.votekick.staff"))
                     {
                         i++;
                         break;
                     }
                 }
-                if (i == onlinePlayers.length)
+                if (i != onlinePlayers.length)
                 {
-                    voteable = true;
+                    voteable = false;
                 }
             }
-            else
-            {
-                voteable = true;
-            }
+
             if (! voteable)
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten wenn ein Teammitglied online ist!");
@@ -122,16 +122,26 @@ public class VotekickCommands
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen dich selbst starten!");
                 return true;
             }
-            if (targetPlayer.hasPermission("sinkcommands.votekick.bypass") && ! sender.hasPermission("sinkcommands.votekick.bypass"))
+
+            if (! user.hasPermission("sinkcommands.votekick.bypass"))
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");
                 return true;
             }
+
+            User targetUser = SinkLibrary.getUser(targetPlayer);
+            if (targetUser.hasPermission("sinkcommands.votekick.bypass"))
+            {
+                sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");
+                return true;
+            }
+
             if (target == null)
             {
                 sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
                 return true;
             }
+
             if (reason.equals(""))
             {
                 BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
@@ -140,6 +150,7 @@ public class VotekickCommands
             {
                 BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
+
             voteStarted = true;
             long time = 20 * 180; // 20 Ticks (= 1 second) * 180 = 3 Minutes
 

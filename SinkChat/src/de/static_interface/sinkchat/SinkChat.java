@@ -47,6 +47,8 @@ public class SinkChat extends JavaPlugin
             return;
         }
 
+        SinkLibrary.registerPlugin(this);
+
         for (Player p : Bukkit.getOnlinePlayers())
         {
             refreshDisplayName(p);
@@ -101,7 +103,7 @@ public class SinkChat extends JavaPlugin
     public static void refreshDisplayName(Player player)
     {
         String nickname;
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
         if (! config.exists())

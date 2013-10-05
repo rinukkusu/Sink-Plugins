@@ -17,6 +17,7 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +38,7 @@ public class FreezeCommands
             {
                 return false;
             }
-
+            User user = SinkLibrary.getUser(sender);
             String reason = "";
 
             for (int i = 1; i < args.length; i++)
@@ -54,7 +55,7 @@ public class FreezeCommands
             {
                 if (p.getName().toLowerCase().contains(args[0].toLowerCase()) || p.getName().equalsIgnoreCase(args[0]))
                 {
-                    if (! canBeFrozen(p) && sender instanceof Player)
+                    if (! canBeFrozen(p) && ! user.isConsole())
                     {
                         sender.sendMessage(PREFIX + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
                         return true;
@@ -116,20 +117,20 @@ public class FreezeCommands
 
     public static boolean isFrozen(Player player)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         return user.getPlayerConfiguration().getFrozen();
     }
 
     public static boolean canBeFrozen(Player player)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         return ! user.hasPermission("sinkcommands.freeze.bypass");
     }
 
 
     public static boolean toggleFreeze(Player player)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         if (user.getPlayerConfiguration().getFrozen())
         {
             user.getPlayerConfiguration().setFrozen(false);
@@ -144,7 +145,7 @@ public class FreezeCommands
 
     public static void unfreeze(Player player)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(player);
         user.getPlayerConfiguration().setFrozen(false);
     }
 }

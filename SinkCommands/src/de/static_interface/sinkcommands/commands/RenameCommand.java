@@ -16,6 +16,9 @@
 
 package de.static_interface.sinkcommands.commands;
 
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -25,9 +28,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class RenameCommand implements CommandExecutor
 {
 
@@ -36,12 +36,13 @@ public class RenameCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        if (! ( sender instanceof Player ))
+        User user = SinkLibrary.getUser(sender);
+        if (user.isConsole())
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur Ingame ausführbar.");
             return true;
         }
-        Player p = (Player) sender;
+        Player p = user.getPlayer();
 
         if (args.length < 2)
         {
@@ -52,34 +53,13 @@ public class RenameCommand implements CommandExecutor
             sender.sendMessage(PREFIX + "Nimm ein Item in die Hand bevor du diesen Befehl ausführst.");
             return true;
         }
-        String text = "";
-        for (int x = 1; x < args.length; x++)
-        {
-            text += args[x];
-            if (x + 1 < args.length)
-            {
-                text += " ";
-            }
-        }
+        String text = Util.formatArrayToString(args, "");
+
         text = ChatColor.translateAlternateColorCodes('&', text);
         ItemStack item = p.getItemInHand();
         ItemMeta meta = item.getItemMeta();
-        switch (args[0].toLowerCase())
-        {
-            case "item":
-                meta.setDisplayName(text);
-                sender.sendMessage(PREFIX + ChatColor.GRAY + "Name von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbenannt.");
-                break;
-            case "lore":
-                List<String> lore = new ArrayList<>();
-                lore.add(text);
-                meta.setLore(lore);
-                sender.sendMessage(PREFIX + ChatColor.GRAY + "Die Lore von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbenannt.");
-                break;
-
-            default:
-                return false;
-        }
+        meta.setDisplayName(text);
+        sender.sendMessage(PREFIX + ChatColor.GRAY + "Name von Item wurde zu: " + ChatColor.GREEN + text + ChatColor.GRAY + " umbenannt.");
         item.setItemMeta(meta);
         return true;
     }

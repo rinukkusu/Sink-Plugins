@@ -23,6 +23,8 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class User
@@ -30,29 +32,48 @@ public class User
     private static Player base;
     private static Economy econ;
     private String playerName;
+    private CommandSender sender;
 
     /**
      * Should be used for online players only. Use {@link #User(String)} for offline players.
      *
      * @param player Online Player
      */
-    public User(Player player)
+    User(Player player)
     {
         base = player;
         econ = SinkLibrary.getEconomy();
-        this.playerName = player.getName();
+        playerName = base.getName();
+        sender = base;
     }
 
     /**
      * Should be used for offline players. Use {@link #User(org.bukkit.entity.Player)} for online players.
      *
-     * @param playerName Name of offline player
+     * @param player Name of offline player
      */
-    public User(String playerName)
+    User(String player)
     {
-        base = Bukkit.getPlayer(playerName);
+        base = Bukkit.getPlayer(player);
         econ = SinkLibrary.getEconomy();
-        this.playerName = playerName;
+        playerName = player;
+        sender = base;
+    }
+
+    User(CommandSender sender)
+    {
+        if (sender instanceof Player)
+        {
+            base = (Player) sender;
+            econ = SinkLibrary.getEconomy();
+            playerName = base.getName();
+            this.sender = base;
+            return;
+        }
+        this.sender = sender;
+        base = null;
+        econ = SinkLibrary.getEconomy();
+        playerName = "Console";
     }
 
     /**
@@ -63,6 +84,11 @@ public class User
      */
     public int getMoney()
     {
+        if (isConsole())
+        {
+            throw new NullPointerException("User is console!");
+        }
+
         if (! SinkLibrary.economyAvailable())
         {
             throw new EconomyNotAvailableException();
@@ -87,6 +113,10 @@ public class User
      */
     public Player getPlayer()
     {
+        if (isConsole())
+        {
+            throw new NullPointerException("User is console!");
+        }
         return base;
     }
 
@@ -97,6 +127,11 @@ public class User
     public boolean hasPermission(String permission)
     {
         //Todo: fix this for offline usage
+        if (isConsole())
+        {
+            return true;
+        }
+
         if (! isOnline())
         {
             throw new RuntimeException("This may be only used for online players!");
@@ -119,6 +154,11 @@ public class User
      */
     public String getPrimaryGroup()
     {
+        if (isConsole())
+        {
+            throw new NullPointerException("User is console!");
+        }
+
         if (! SinkLibrary.permissionsAvailable())
         {
             throw new PermissionsNotAvailableException();
@@ -132,6 +172,10 @@ public class User
      */
     public String getDefaultDisplayName()
     {
+        if (isConsole())
+        {
+            return playerName;
+        }
         try
         {
             if (SinkLibrary.chatAvailable())
@@ -158,9 +202,49 @@ public class User
         return playerName;
     }
 
+    /**
+     * @return True if player is online and does not equals null
+     */
     public boolean isOnline()
     {
+        if (isConsole())
+        {
+            return true;
+        }
         base = Bukkit.getPlayerExact(playerName);
-        return base != null;
+        if (base != null)
+        {
+            if (base.isOnline())
+            {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    /**
+     * @return True if User is Console
+     */
+    public boolean isConsole()
+    {
+        return sender instanceof ConsoleCommandSender;
+    }
+
+    /**
+     * @return If {@link org.bukkit.command.CommandSender CommandSnder} is instance of {@link org.bukkit.command.ConsoleCommandSender ConsoleCommandSender},
+     * it will return "Console" in {@link org.bukkit.ChatColor#RED RED}, if sender is instance of
+     * {@link org.bukkit.entity.Player Player}, it will return player's {@link org.bukkit.entity.Player#getDisplayName() DisplayName}
+     */
+    public String getDisplayName()
+    {
+        if (isConsole())
+        {
+            return ChatColor.RED + "Console" + ChatColor.RESET;
+        }
+        else
+        {
+            return base.getDisplayName();
+        }
     }
 }

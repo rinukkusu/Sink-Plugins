@@ -18,7 +18,6 @@ package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -35,16 +34,8 @@ public class BukkitUtil
      */
     public static String getSenderName(CommandSender sender)
     {
-        String senderName;
-        if (sender instanceof Player)
-        {
-            senderName = ( (Player) sender ).getDisplayName();
-        }
-        else
-        {
-            senderName = ChatColor.RED + "Console" + ChatColor.RESET;
-        }
-        return senderName;
+        User user = SinkLibrary.getUser(sender);
+        return user.getDisplayName();
     }
 
     /**
@@ -61,7 +52,7 @@ public class BukkitUtil
             p.sendMessage(message);
         }
         Bukkit.getConsoleSender().sendMessage(message);
-        if (SinkLibrary.getSinkIRC() != null)
+        if (SinkLibrary.sinkIRCAvailable())
         {
             SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
         }
@@ -79,7 +70,8 @@ public class BukkitUtil
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            if (! p.hasPermission(permission))
+            User user = SinkLibrary.getUser(p);
+            if (! user.hasPermission(permission))
             {
                 continue;
             }
@@ -87,7 +79,7 @@ public class BukkitUtil
         }
         Bukkit.getConsoleSender().sendMessage(message);
         Permission perm = new Permission(permission);
-        if (perm.getDefault() == PermissionDefault.TRUE && SinkLibrary.getSinkIRC() != null)
+        if (perm.getDefault() == PermissionDefault.TRUE && SinkLibrary.sinkIRCAvailable())
         {
             SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
         }

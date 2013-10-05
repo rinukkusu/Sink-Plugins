@@ -16,6 +16,8 @@
 
 package de.static_interface.sinkcommands.commands;
 
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -35,12 +37,13 @@ public class SpectateCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (! ( sender instanceof Player ))
+            User user = SinkLibrary.getUser(sender);
+            if (user.isConsole())
             {
                 sender.sendMessage("Dieser Befehl kann nur von einem Spieler ausgeführt werden!");
                 return true;
             }
-            Player player = (Player) sender;
+            Player player = user.getPlayer();
             if (specedPlayers.containsKey(player))
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit /unspec bevor du einen anderen Spieler beobachtest..");
@@ -81,13 +84,14 @@ public class SpectateCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (! ( sender instanceof Player ))
+            User user = SinkLibrary.getUser(sender);
+            if (user.isConsole())
             {
                 sender.sendMessage("This command can only be run by a player.");
                 return true;
             }
 
-            Player player = (Player) sender;
+            Player player = user.getPlayer();
             if (! specedPlayers.containsKey(player))
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich nicht im Spectate Modus!");
@@ -144,7 +148,8 @@ public class SpectateCommands
     {
         for (Player p : Bukkit.getOnlinePlayers())
         {
-            if (p.hasPermission(permission))
+            User user = SinkLibrary.getUser(p);
+            if (user.hasPermission(permission))
             {
                 continue;
             }

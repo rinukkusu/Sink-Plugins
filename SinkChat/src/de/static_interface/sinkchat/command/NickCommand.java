@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkchat.command;
 
+import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
@@ -23,7 +24,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
@@ -35,21 +35,25 @@ public class NickCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        User user;
+        User user = SinkLibrary.getUser(sender);
         String newDisplayName;
+
         if (args.length < 1)
         {
             return false;
         }
+
         if (args.length > 1)
         {
-            if (! sender.hasPermission("sinkchat.nick.others"))
+            if (! user.hasPermission("sinkchat.nick.others"))
             {
                 sender.sendMessage(_("permissions.nick.other"));
                 return true;
             }
+
             String playerName = args[0];
             Player target = Bukkit.getServer().getPlayer(playerName);
+
             newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             if (target == null)
             {
@@ -57,41 +61,41 @@ public class NickCommand implements CommandExecutor
                 return true;
             }
 
-            if (setDisplayName(target, newDisplayName))
+            if (setDisplayName(target, newDisplayName, sender))
             {
-                user = new User(target);
+                user = SinkLibrary.getUser(target);
                 PlayerConfiguration config = user.getPlayerConfiguration();
                 sender.sendMessage(PREFIX + _("commands.nick.otherChanged").replaceFirst("%s", playerName).replaceFirst("%s", config.getDisplayName()));
             }
             return true;
         }
-        if (sender instanceof ConsoleCommandSender)
+        if (user.isConsole())
         {
             sender.sendMessage(_("general.consoleNotAvailabe"));
             return true;
         }
         newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[0]) + ChatColor.RESET;
-        Player player = (Player) sender;
-        if (setDisplayName(player, newDisplayName))
+        Player player = user.getPlayer();
+        if (setDisplayName(player, newDisplayName, sender))
         {
             sender.sendMessage(PREFIX + _("commands.nick.selfChanged").replaceFirst("%s", newDisplayName));
         }
         return true;
     }
 
-    private boolean setDisplayName(Player player, String newDisplayName)
+    private boolean setDisplayName(Player target, String newDisplayName, CommandSender sender)
     {
-        User user = new User(player);
+        User user = SinkLibrary.getUser(target);
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
         if (! cleanDisplayName.matches("^[a-zA-Z_0-9\u00a7]+$"))
         {
-            player.sendMessage(PREFIX + _("commands.nick.illegalNickname"));
+            sender.sendMessage(PREFIX + _("commands.nick.illegalNickname"));
             return false;
         }
 
         if (cleanDisplayName.length() > 16)
         {
-            player.sendMessage(PREFIX + _("commands.nick.tooLong"));
+            sender.sendMessage(PREFIX + _("commands.nick.tooLong"));
             return false;
         }
 
@@ -102,7 +106,7 @@ public class NickCommand implements CommandExecutor
 
         for (Player onlinePlayer : Bukkit.getOnlinePlayers())
         {
-            if (player == onlinePlayer)
+            if (target == onlinePlayer)
             {
                 continue;
             }
@@ -111,7 +115,7 @@ public class NickCommand implements CommandExecutor
             String lowerNick = newDisplayName.toLowerCase();
             if (lowerNick.equals(displayName) || lowerNick.equals(name))
             {
-                player.sendMessage(PREFIX + _("commands.nick.used"));
+                target.sendMessage(PREFIX + _("commands.nick.used"));
                 return false;
             }
         }

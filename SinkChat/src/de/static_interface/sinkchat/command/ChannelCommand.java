@@ -18,11 +18,12 @@ package de.static_interface.sinkchat.command;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IChannel;
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,49 +36,51 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (sender instanceof ConsoleCommandSender)
+        User user = SinkLibrary.getUser(sender);
+        if (user.isConsole())
         {
             sender.sendMessage(_("general.consoleNotAvailabe"));
             return true;
         }
 
+        Player player = user.getPlayer();
+
         if (args.length == 0)
         {
-            sendHelp(sender);
+            sendHelp(player);
             return true;
         }
 
         String message;
-
 
         switch (args[0])
         {
             case "join":
                 if (args.length < 2)
                 {
-                    sender.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
+                    player.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
                     return true;
                 }
 
                 try
                 {
                     IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
-                    if (! sender.hasPermission(channel.getPermission()))
+                    if (! user.hasPermission(channel.getPermission()))
                     {
-                        sender.sendMessage(_("permissions.general"));
+                        player.sendMessage(_("permissions.general"));
                     }
-                    channel.removeExceptedPlayer((Player) sender);
+                    channel.removeExceptedPlayer(player);
                 }
                 catch (NullPointerException e)
                 {
                     message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
-                    sender.sendMessage(message);
+                    player.sendMessage(message);
                     return true;
                 }
 
                 message = PREFIX + _("commands.channel.playerJoins").replace("%s", args[1]);
                 ChatColor.translateAlternateColorCodes('&', message);
-                sender.sendMessage(message);
+                player.sendMessage(message);
 
 
                 return true;
@@ -86,62 +89,62 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 if (args.length < 2)
                 {
-                    sender.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
+                    player.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
                     return true;
                 }
 
                 try
                 {
                     IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
-                    if (! sender.hasPermission(channel.getPermission()))
+                    if (! user.hasPermission(channel.getPermission()))
                     {
-                        sender.sendMessage(_("permissions.general"));
+                        player.sendMessage(_("permissions.general"));
                     }
-                    channel.addExceptedPlayer((Player) sender);
+                    channel.addExceptedPlayer(player);
                 }
                 catch (NullPointerException e)
-                {   //Note: Do this more clean...
+                {
                     message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
-                    sender.sendMessage(message);
+                    player.sendMessage(message);
                     return true;
                 }
 
                 message = PREFIX + _("commands.channel.playerLeaves").replace("%s", args[1]);
-                sender.sendMessage(message);
+                player.sendMessage(message);
 
 
                 return true;
             case "list":
                 message = PREFIX + _("commands.channel.list").replace("%s", ChannelHandler.getChannelNames());
-                sender.sendMessage(message);
+                player.sendMessage(message);
                 return true;
 
             case "participating":
-                sender.sendMessage(PREFIX + _("commands.channel.part"));
+                player.sendMessage(PREFIX + _("commands.channel.part"));
                 for (IChannel target : ChannelHandler.getRegisteredChannels())
                 {
-                    if (target.contains((Player) sender))
+                    if (target.contains(player))
                     {
                         continue;
                     }
 
-                    sender.sendMessage(PREFIX + target.getChannelName());
+                    player.sendMessage(PREFIX + target.getChannelName());
 
                 }
                 return true;
 
             default:
-                sendHelp(sender);
+                sendHelp(player);
                 return true;
         }
     }
 
-    private static void sendHelp(CommandSender sender)
+    private static void sendHelp(Player player)
     {
-        sender.sendMessage(PREFIX + _("commands.channel.help"));
-        sender.sendMessage(PREFIX + "/ch join <channel>");
-        sender.sendMessage(PREFIX + "/ch leave <channel>");
-        sender.sendMessage(PREFIX + "/ch list");
-        sender.sendMessage(PREFIX + "/ch participating");
+        player.sendMessage(PREFIX + _("commands.channel.help"));
+        player.sendMessage(PREFIX + "/ch join <channel>");
+        player.sendMessage(PREFIX + "/ch leave <channel>");
+        player.sendMessage(PREFIX + "/ch list");
+        player.sendMessage(PREFIX + "/ch participating");
     }
 }

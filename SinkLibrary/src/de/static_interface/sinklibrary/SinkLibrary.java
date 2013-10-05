@@ -24,7 +24,9 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -50,6 +52,8 @@ public class SinkLibrary extends JavaPlugin
 
     private static String pluginName;
     private static Settings settings;
+
+    private static List<Plugin> registeredPlugins;
 
     public void onEnable()
     {
@@ -81,6 +85,7 @@ public class SinkLibrary extends JavaPlugin
 
         pluginName = this.getDescription().getName();
         dataFolder = getDataFolder();
+        registeredPlugins = new ArrayList<>();
 
         if (! getCustomDataFolder().exists())
         {
@@ -154,6 +159,14 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
+     * @return True if chat is available
+     */
+    public static boolean chatAvailable()
+    {
+        return chatAvailable;
+    }
+
+    /**
      * @return True if economy is available
      */
     public static boolean economyAvailable()
@@ -162,11 +175,11 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * @return True if chat is available
+     * @return True if SinkIRC is available
      */
-    public static boolean chatAvailable()
+    public static boolean sinkIRCAvailable()
     {
-        return chatAvailable;
+        return getSinkIRC() != null;
     }
 
     /**
@@ -176,7 +189,6 @@ public class SinkLibrary extends JavaPlugin
     {
         return permissionsAvailable;
     }
-
 
     /**
      * @return True if Vault available
@@ -282,5 +294,42 @@ public class SinkLibrary extends JavaPlugin
     public static Settings getSettings()
     {
         return settings;
+    }
+
+    /**
+     * Register a plugin
+     *
+     * @param plugin Plugin
+     */
+    public static void registerPlugin(Plugin plugin)
+    {
+        registeredPlugins.add(plugin);
+    }
+
+    /**
+     * @param player Player
+     * @return User instance of player
+     */
+    public static User getUser(Player player)
+    {
+        return new User(player);
+    }
+
+    /**
+     * @param playerName Name of Player
+     * @return User instance
+     */
+    public static User getUser(String playerName)
+    {
+        return new User(playerName);
+    }
+
+    /**
+     * @param sender Command Sender
+     * @return User instance
+     */
+    public static User getUser(CommandSender sender)
+    {
+        return new User(sender);
     }
 }

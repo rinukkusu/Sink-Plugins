@@ -51,7 +51,7 @@ public class ChatListenerNormal implements Listener
             }
         }
 
-        User eventPlayer = new User(event.getPlayer());
+        User eventPlayer = SinkLibrary.getUser(event.getPlayer());
 
         String message = event.getMessage();
         int range = 50;
@@ -79,11 +79,12 @@ public class ChatListenerNormal implements Listener
             Location loc = p.getLocation();
             boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
 
-            User user = new User(p);
-            PlayerConfiguration config = user.getPlayerConfiguration();
+            User onlineUser = SinkLibrary.getUser(p);
 
-            boolean newbieSpy = ( user.hasPermission("sinkchat.spynewbie") ) && ! eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
-            boolean maySpy = user.hasPermission("sinkchat.spy");
+            boolean newbieSpy = ( onlineUser.hasPermission("sinkchat.spynewbie") ) && ! eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
+            boolean maySpy = onlineUser.hasPermission("sinkchat.spy");
+
+            PlayerConfiguration config = onlineUser.getPlayerConfiguration();
 
             if (isInRange)
             {

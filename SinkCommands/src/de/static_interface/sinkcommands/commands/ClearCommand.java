@@ -16,6 +16,8 @@
 
 package de.static_interface.sinkcommands.commands;
 
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -38,6 +40,7 @@ public class ClearCommand implements CommandExecutor
         List<String> args = Arrays.asList(argsArr);
 
         Player player = null;
+        User user = SinkLibrary.getUser(sender);
 
         int i = 0;
         boolean clearInvetory = false;
@@ -73,9 +76,10 @@ public class ClearCommand implements CommandExecutor
         if (argsArr.length == i + 1)
         {
             String name = argsArr[0];
-            if (! sender.hasPermission("sinkcommands.clear.others"))
+            if (! user.hasPermission("sinkcommands.clear.others"))
             {
                 sender.sendMessage(PREFIX + "Du hast nicht genügend Rechte um das Inventar von anderen Spielern zu leeren!");
+                return true;
             }
             player = Bukkit.getPlayer(name);
             if (player == null)
@@ -84,14 +88,12 @@ public class ClearCommand implements CommandExecutor
                 return true;
             }
         }
-        else if (! ( sender instanceof Player ))
+        else if (user.isConsole())
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur ingame verfügbar.");
         }
-        if (player == null)
-        {
-            player = (Player) sender;
-        }
+
+        player = user.getPlayer();
 
         if (clearInvetory)
         {

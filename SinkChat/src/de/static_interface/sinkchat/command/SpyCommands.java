@@ -16,13 +16,13 @@
 
 package de.static_interface.sinkchat.command;
 
+import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
@@ -36,14 +36,15 @@ public class SpyCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof ConsoleCommandSender)
+            User user = SinkLibrary.getUser(sender);
+
+            if (user.isConsole())
             {
                 sender.sendMessage(_("general.consoleNotAvailabe"));
                 return true;
             }
-            Player player = (Player) sender;
+            Player player = user.getPlayer();
 
-            User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (config.getSpyEnabled())
@@ -63,14 +64,14 @@ public class SpyCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (sender instanceof ConsoleCommandSender)
+            User user = SinkLibrary.getUser(sender);
+            if (user.isConsole())
             {
                 sender.sendMessage(_("general.consoleNotAvailabe"));
                 return true;
             }
-            Player player = (Player) sender;
+            Player player = user.getPlayer();
 
-            User user = new User(player);
             PlayerConfiguration config = user.getPlayerConfiguration();
 
             if (! config.getSpyEnabled())

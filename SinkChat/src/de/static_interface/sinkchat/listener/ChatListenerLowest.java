@@ -41,7 +41,7 @@ public class ChatListenerLowest implements Listener
             return;
         }
 
-        User user = new User(event.getPlayer());
+        User user = SinkLibrary.getUser(event.getPlayer());
 
         String groupPrefix = SinkLibrary.permissionsAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + "[" + user.getPrimaryGroup()
                 + ChatColor.RESET + ChatColor.GRAY + "] " : "";
