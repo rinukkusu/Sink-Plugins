@@ -19,6 +19,7 @@ package de.static_interface.sinklibrary.configuration;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -167,6 +168,8 @@ public class PlayerConfiguration extends ConfigurationBase
         try
         {
             yamlConfiguration.set(path, value);
+            //Bukkit.getLogger().log(Level.INFO, playerName + ": settings value " + value + " to path: " + path);
+            save();
         }
         catch (Exception e)
         {
@@ -259,13 +262,9 @@ public class PlayerConfiguration extends ConfigurationBase
         player.setDisplayName(displayName);
         player.setCustomName(displayName);
         set("Nick.DisplayName", displayName);
-        if (displayName.equals(user.getDefaultDisplayName()))
+        if (ChatColor.stripColor(displayName).equals(ChatColor.stripColor(user.getDefaultDisplayName())))
         {
             setHasDisplayName(false);
-        }
-        else
-        {
-            setHasDisplayName(true);
         }
     }
 

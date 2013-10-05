@@ -87,7 +87,7 @@ public class NickCommand implements CommandExecutor
     {
         User user = SinkLibrary.getUser(target);
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
-        if (! cleanDisplayName.matches("^[a-zA-Z_0-9\u00a7]+$"))
+        if (! cleanDisplayName.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$"))
         {
             sender.sendMessage(PREFIX + _("commands.nick.illegalNickname"));
             return false;
@@ -110,17 +110,21 @@ public class NickCommand implements CommandExecutor
             {
                 continue;
             }
-            String displayName = onlinePlayer.getDisplayName().toLowerCase();
-            String name = onlinePlayer.getName().toLowerCase();
-            String lowerNick = newDisplayName.toLowerCase();
-            if (lowerNick.equals(displayName) || lowerNick.equals(name))
+            String onlinePlayerDisplayName = ChatColor.stripColor(onlinePlayer.getDisplayName().toLowerCase());
+            String onlinePlayerName = ChatColor.stripColor(onlinePlayer.getName().toLowerCase());
+            String displayName = ChatColor.stripColor(newDisplayName.toLowerCase());
+            if (displayName.equals(onlinePlayerDisplayName) || displayName.equals(onlinePlayerName))
             {
                 target.sendMessage(PREFIX + _("commands.nick.used"));
                 return false;
             }
         }
+
+        newDisplayName = user.getPrefix() + newDisplayName;
+
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.setDisplayName(newDisplayName);
+        config.setHasDisplayName(true);
         return true;
     }
 }

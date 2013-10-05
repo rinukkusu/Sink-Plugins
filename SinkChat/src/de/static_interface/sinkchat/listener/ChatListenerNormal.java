@@ -81,7 +81,7 @@ public class ChatListenerNormal implements Listener
 
             User onlineUser = SinkLibrary.getUser(p);
 
-            boolean newbieSpy = ( onlineUser.hasPermission("sinkchat.spynewbie") ) && ! eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
+            boolean newbieSpy = ( onlineUser.hasPermission("sinkchat.spynewbie") ) && ! onlineUser.hasPermission("sinkchat.spynewbie.bypass");
             boolean maySpy = onlineUser.hasPermission("sinkchat.spy");
 
             PlayerConfiguration config = onlineUser.getPlayerConfiguration();

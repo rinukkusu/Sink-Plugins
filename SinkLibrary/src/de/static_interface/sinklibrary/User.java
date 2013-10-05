@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
+import de.static_interface.sinklibrary.exceptions.ChatNotAvailabeException;
 import de.static_interface.sinklibrary.exceptions.EconomyNotAvailableException;
 import de.static_interface.sinklibrary.exceptions.PermissionsNotAvailableException;
 import net.milkbowl.vault.economy.Economy;
@@ -180,7 +181,7 @@ public class User
         {
             if (SinkLibrary.chatAvailable())
             {
-                String playerPrefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
+                String playerPrefix = getPrefix();
                 return playerPrefix + base.getName() + ChatColor.RESET;
             }
         }
@@ -190,6 +191,21 @@ public class User
 
         String prefix = base.isOp() ? ChatColor.RED.toString() : ChatColor.WHITE.toString();
         return prefix + base.getName() + ChatColor.RESET;
+    }
+
+    /**
+     * Get Prefix
+     *
+     * @return Player prefix
+     * @throws de.static_interface.sinklibrary.exceptions.ChatNotAvailabeException if chat is not available
+     */
+    public String getPrefix()
+    {
+        if (! SinkLibrary.chatAvailable())
+        {
+            throw new ChatNotAvailabeException();
+        }
+        return ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
     }
 
     /**

@@ -16,7 +16,7 @@
 
 package de.static_interface.sinkirc;
 
-import de.static_interface.sinkirc.commands.IrclistCommand;
+import de.static_interface.sinkirc.commands.IRCListCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,7 +69,7 @@ public class SinkIRC extends JavaPlugin implements Listener
             log.severe("An Exception occurred while trying to connect to " + host + ":");
             log.severe(e.toString());
         }
-        getCommand("irclist").setExecutor(new IrclistCommand());
+        getCommand("irclist").setExecutor(new IRCListCommand());
     }
 
     @Override

@@ -47,7 +47,7 @@ public class CommandsdebugCommand implements CommandExecutor
                     break;
                 }
                 String player = args[1];
-                String path = player + "." + args[2];
+                String path = args[2];
                 User user = SinkLibrary.getUser(player);
                 PlayerConfiguration config = user.getPlayerConfiguration();
                 sender.sendMessage(PREFIX + "Output: " + config.getYamlConfiguration().getString(path));
@@ -62,7 +62,7 @@ public class CommandsdebugCommand implements CommandExecutor
                     break;
                 }
                 String player = args[1];
-                String path = player + "." + args[2];
+                String path = args[2];
                 Object value = replaceValue(args[3]);
 
                 User user = SinkLibrary.getUser(player);

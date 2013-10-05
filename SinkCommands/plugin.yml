@@ -105,7 +105,7 @@ commands:
   rename:
     description: Rename an item
     permission: sinkcommands.rename
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Item/Lore> <Neuer Name>"
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Neuer Name>"
 
   clear:
     description: Clear your or an other players inventory

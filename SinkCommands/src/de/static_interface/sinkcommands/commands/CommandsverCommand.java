@@ -25,13 +25,13 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-public class CommandsverCommand implements CommandExecutor
+public class CommandsVerCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.BLUE + "[SinkCommands] " + ChatColor.RESET;
 
     Plugin plugin;
 
-    public CommandsverCommand(Plugin plugin)
+    public CommandsVerCommand(Plugin plugin)
     {
         this.plugin = plugin;
     }
