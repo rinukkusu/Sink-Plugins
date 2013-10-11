@@ -32,9 +32,9 @@ public class HelpChannel extends JavaPlugin implements IChannel
 
     Vector<Player> exceptedPlayers = new Vector<>();
     String PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
-    private char callByChar = '?';
+    private String callByChar = "?";
 
-    public HelpChannel(char callChar)
+    public HelpChannel(String callChar)
     {
         callByChar = callChar;
     }
@@ -60,7 +60,7 @@ public class HelpChannel extends JavaPlugin implements IChannel
     @Override
     public String getChannelName()
     {
-        return _("channels.help");
+        return ChatColor.DARK_GREEN + _("SinkChat.Channels.Help");
     }
 
     @Override

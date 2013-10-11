@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -27,87 +28,140 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-public class LanguageConfiguration extends ConfigurationBase
+public class LanguageConfiguration
 {
-    private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
-    private static final File yamlFile = new File(SinkLibrary.getCustomDataFolder(), "language.yml");
-    HashMap<String, Object> defaultValues;
+    public static final int CURRENT_VERSION = 1;
 
-    public LanguageConfiguration()
+    private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
+    private static HashMap<String, Object> defaultValues;
+    private static File yamlFile;
+
+    /**
+     * Initialize
+     */
+    public static void init()
     {
         defaultValues = new HashMap<>();
-        load();
+        create();
     }
 
-    @Override
-    public boolean create()
+    /**
+     * Create Configuration
+     */
+    public static void create()
     {
         try
         {
-            if (! yamlFile.exists() && ! yamlFile.createNewFile())
+            yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Language.yml");
+
+            boolean createNewConfiguration = ! exists();
+
+            if (createNewConfiguration)
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config: " + yamlFile);
-                return false;
+                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
-            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
-            addDefault("messages.general.notOnline", "&c%s is not online!");
-            addDefault("messages.general.consoleNotAvailabe", "&cThis command is only ingame available");
 
-            addDefault("messages.commands.nick.otherChanged", "%s's name is now %s!");
-            addDefault("messages.commands.nick.selfChanged", "Your name is now %s!");
-            addDefault("messages.commands.nick.illegalNickname", "Illegal nickname!");
-            addDefault("messages.commands.nick.tooLong", "Nickname is too long!");
-            addDefault("messages.commands.nick.used", "Nickname is already used by someone other!");
+            if (createNewConfiguration && ! yamlFile.createNewFile())
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
+                return;
+            }
 
-            addDefault("messages.commands.channel.playerJoins", "You joined the %s channel.");
-            addDefault("messages.commands.channel.playerLeaves", "You left the %s channel.");
-            addDefault("messages.commands.channel.noChannelGiven", "You must write the name of the channel!");
-            addDefault("messages.commands.channel.channelUnknown", "%s is an unknown channel.");
-            addDefault("messages.commands.channel.list", "These channels are available: %s");
-            addDefault("messages.commands.channel.part", "You have the following channels enabled:");
-            addDefault("messages.commands.channel.help", "These commands are available:");
+            yamlConfiguration = new YamlConfiguration();
+            yamlConfiguration.load(yamlFile);
 
-            addDefault("messages.commands.spy.enabled", "&aSpy chat has been enabled!");
-            addDefault("messages.commands.spy.alreadyEnabled", "&cSpy chat has been already enabled!");
+            if (! createNewConfiguration)
+            {
+                int version = (int) get("Main.ConfigVersion");
+                if (version < CURRENT_VERSION)
+                {
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    recreate();
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    return;
+                }
+            }
 
-            addDefault("messages.commands.spy.disabled", "&cSpy chat has been disabled!");
-            addDefault("messages.commands.spy.alreadyDisabled", "&cSpy chat has been already disabled!");
+            if (createNewConfiguration)
+            {
+                yamlConfiguration.options().copyDefaults(true);
+            }
+            else
+            {
+                yamlConfiguration.options().copyDefaults(false);
+            }
 
-            addDefault("messages.channels.help", "Help");
-            addDefault("messages.channels.shout", "Shout");
-            addDefault("messages.channels.trade", "Trade");
+            addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("General.NotOnline", "&c%s is not online!");
+            addDefault("General.ConsoleNotAvailabe", "&cThis command is only ingame available");
 
-            addDefault("messages.channel.help.prefix", "?"); //Todo: move these to Settings
-            addDefault("messages.channel.shout.prefix", "!");
-            addDefault("messages.channel.trade.prefix", "$");
+            addDefault("SinkChat.Commands.Nick.OtherChanged", "%s's name is now %s!");
+            addDefault("SinkChat.Commands.Nick.SelfChanged", "Your name is now %s!");
+            addDefault("SinkChat.Commands.Nick.IllegalNickname", "Illegal nickname!");
+            addDefault("SinkChat.Commands.Nick.TooLong", "Nickname is too long!");
+            addDefault("SinkChat.Commands.Nick.Used", "Nickname is already used by someone other!");
 
-            addDefault("messages.permissions.general", "&4You dont have permissions to do that.");
-            addDefault("messages.permissions.channels.shout", "&4You may not use the shout channel.");
-            addDefault("messages.permissions.channels.help", "&4You may not use the help channel.");
-            addDefault("messages.permissions.channels.trade", "&4You may not use the trade channel.");
-            addDefault("messages.permissions.nick.other", "&4You may not change the nickname of other players!");
+            addDefault("SinkChat.Commands.Channel.PlayerJoins", "You joined the %s channel.");
+            addDefault("SinkChat.Commands.Channel.PlayerLeaves", "You left the %s channel.");
+            addDefault("SinkChat.Commands.Channel.NoChannelGiven", "You must write the name of the channel!");
+            addDefault("SinkChat.Commands.Channel.ChannelUnknown", "%s is an unknown channel.");
+            addDefault("SinkChat.Commands.Channel.List", "These channels are available: %s");
+            addDefault("SinkChat.Commands.Channel.Part", "You have the following channels enabled:");
+            addDefault("SinkChat.Commands.Channel.Help", "These commands are available:");
 
-            addDefault("messages.prefix.channel", "&a[Channel]");
-            addDefault("messages.prefix.nick", "&2[Nick]");
-            addDefault("messages.prefix.spy", "&7[Spy]");
-            addDefault("messages.prefix.chatLocal", "&7[Local]");
+            addDefault("SinkChat.Commands.Spy.Enabled", "&aSpy chat has been enabled!");
+            addDefault("SinkChat.Commands.Spy.AlreadyEnabled", "&cSpy chat has been already enabled!");
+
+            addDefault("SinkChat.Commands.Spy.Disabled", "&cSpy chat has been disabled!");
+            addDefault("SinkChat.Commands.Spy.AlreadyDisabled", "&cSpy chat has been already disabled!");
+
+            addDefault("SinkChat.Channels.Help", "Help");
+            addDefault("SinkChat.Channels.Shout", "Shout");
+            addDefault("SinkChat.Channels.Trade", "Trade");
+
+            addDefault("SinkChat.Channel.Help.Prefix", "?"); //Todo: move these to Settings
+            addDefault("SinkChat.Channel.Shout.Prefix", "!");
+            addDefault("SinkChat.Channel.Trade.Prefix", "$");
+
+            addDefault("Permissions.General", "&4You dont have permissions to do that.");
+            addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
+            addDefault("Permissions.SinkChat.Channels.Help", "&4You may not use the help channel.");
+            addDefault("Permissions.SinkChat.Channels.Trade", "&4You may not use the trade channel.");
+            addDefault("Permissions.SinkChat.Nick.Other", "&4You may not change the nickname of other players!");
+
+            addDefault("SinkChat.Prefix.Channel", "&a[Channel]");
+            addDefault("SinkChat.Prefix.Nick", "&2[Nick]");
+            addDefault("SinkChat.Prefix.Spy", "&7[Spy]");
+            addDefault("SinkChat.Prefix.Local", "&7[Local]");
 
             save();
-            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
-            return true;
         }
         catch (IOException e)
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
-            return false;
+        }
+        catch (InvalidConfigurationException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            recreate();
         }
     }
 
-    @Override
-    public void save()
+    /**
+     * Save configuration
+     */
+    public static void save()
     {
         if (yamlFile == null)
+        {
+            return;
+        }
+        if (! exists())
         {
             return;
         }
@@ -122,67 +176,61 @@ public class LanguageConfiguration extends ConfigurationBase
         }
     }
 
-    @Override
-    public void set(String path, Object value)
+    /**
+     * Get Value from path
+     *
+     * @param path Path to value
+     * @return Value of Path
+     */
+    public static Object get(String path)
     {
         try
         {
-            yamlConfiguration.set(path, value);
+            Object value = yamlConfiguration.get(path);
+            if (value == null || value == "")
+            {
+                throw new NullPointerException("Path returned null!");
+            }
+            return value;
         }
         catch (Exception e)
         {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't save " + value + " to path " + path, e);
-        }
-    }
-
-    @Override
-    public Object get(String path)
-    {
-        try
-        {
-            return yamlConfiguration.get(path);
-        }
-        catch (Exception ignored)
-        {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path);
+            if (path.equals("Main.ConfigVersion")) return 0;
+            Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return getDefault(path);
         }
     }
 
-    @Override
-    public YamlConfiguration getYamlConfiguration()
-    {
-        return yamlConfiguration;
-    }
-
-    @Override
-    public boolean exists()
+    /**
+     * @return True if file exists
+     */
+    public static boolean exists()
     {
         return yamlFile.exists();
     }
 
-    @Override
-    public boolean load()
+    /**
+     * Delete configuration
+     */
+    public static void delete()
     {
-        try
-        {
-            yamlConfiguration.load(yamlFile);
-        }
-        catch (InvalidConfigurationException ignored)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
-            yamlFile.delete();
-            return create();
-        }
-        catch (Exception ignored)
-        {
-            return false;
-        }
-        return true;
+        yamlFile.delete();
     }
 
-    @Override
-    public HashMap<String, Object> getDefaults()
+    /**
+     * Backup configuration
+     */
+    public static void backup() throws IOException
+    {
+        Util.backupFile(getFile(), true);
+    }
+
+    /**
+     * Get default values
+     *
+     * @return Default Values
+     */
+    public static HashMap<String, Object> getDefaults()
     {
         return defaultValues;
     }
@@ -190,25 +238,85 @@ public class LanguageConfiguration extends ConfigurationBase
     /**
      * Get language as String from key
      *
-     * @param key Key of language without "message" root
+     * @param path Path to language variable
      * @return Language String
      */
-    public static String _(String key)
+    public static String _(String path)
     {
-        String path = "messages." + key;
         try
         {
             String value = yamlConfiguration.getRoot().getString(path);
             if (value == null || value.equals("null"))
             {
-                throw new NullPointerException("key returned null. (path: " + path + ")");
+                throw new NullPointerException("Path returned null.");
             }
             return ChatColor.translateAlternateColorCodes('&', value);
         }
         catch (Exception e)
         {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path, e);
-            return (String) yamlConfiguration.getDefaults().get(path);
+            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
+            return (String) getDefault(path);
         }
+    }
+
+    /**
+     * Get Default
+     *
+     * @param path Path to default value
+     * @return Default value
+     */
+    public static Object getDefault(String path)
+    {
+        return getDefaults().get(path);
+    }
+
+    /**
+     * Add default value
+     *
+     * @param path  Path to default value
+     * @param value Value of Path
+     */
+    public static void addDefault(String path, Object value)
+    {
+        getDefaults().put(path, value);
+        getYamlConfiguration().addDefault(path, value);
+    }
+
+    /**
+     * Get YAML Configuration
+     *
+     * @return YamlConfiguration
+     */
+    public static YamlConfiguration getYamlConfiguration()
+    {
+        return yamlConfiguration;
+    }
+
+    /**
+     * Get File
+     *
+     * @return Configuration File
+     */
+    public static File getFile()
+    {
+        return yamlFile;
+    }
+
+    /**
+     * Recreate configuration
+     */
+    public static void recreate()
+    {
+        Bukkit.getLogger().log(Level.WARNING, "Recreating Configuration: " + getFile());
+        try
+        {
+            backup();
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+        delete();
+        create();
     }
 }

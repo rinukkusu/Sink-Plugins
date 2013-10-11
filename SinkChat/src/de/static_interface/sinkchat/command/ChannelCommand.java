@@ -31,7 +31,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class ChannelCommand extends JavaPlugin implements CommandExecutor
 {
-    public static final String PREFIX = _("prefix.channel") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("SinkChat.Prefix.Channel") + " " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -39,7 +39,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
         User user = SinkLibrary.getUser(sender);
         if (user.isConsole())
         {
-            sender.sendMessage(_("general.consoleNotAvailabe"));
+            sender.sendMessage(_("General.ConsoleNotAvailabe"));
             return true;
         }
 
@@ -58,7 +58,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
             case "join":
                 if (args.length < 2)
                 {
-                    player.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
+                    player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.NoChannelGiven"));
                     return true;
                 }
 
@@ -67,29 +67,27 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                     IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
                     if (! user.hasPermission(channel.getPermission()))
                     {
-                        player.sendMessage(_("permissions.general"));
+                        player.sendMessage(_("Permissions.General"));
                     }
                     channel.removeExceptedPlayer(player);
                 }
                 catch (NullPointerException e)
                 {
-                    message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
+                    message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
                     player.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + _("commands.channel.playerJoins").replace("%s", args[1]);
+                message = PREFIX + _("SinkChat.Commands.Channel.PlayerJoins").replace("%s", args[1]);
                 ChatColor.translateAlternateColorCodes('&', message);
                 player.sendMessage(message);
-
-
                 return true;
 
             case "leave":
 
                 if (args.length < 2)
                 {
-                    player.sendMessage(PREFIX + _("commands.channel.noChannelGiven"));
+                    player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.NoChannelGiven"));
                     return true;
                 }
 
@@ -98,29 +96,29 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                     IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
                     if (! user.hasPermission(channel.getPermission()))
                     {
-                        player.sendMessage(_("permissions.general"));
+                        player.sendMessage(_("Permissions.General"));
                     }
                     channel.addExceptedPlayer(player);
                 }
                 catch (NullPointerException e)
                 {
-                    message = PREFIX + _("commands.channel.channelUnknown").replace("%s", args[1]);
+                    message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
                     player.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + _("commands.channel.playerLeaves").replace("%s", args[1]);
+                message = PREFIX + _("SinkChat.Commands.Channel.PlayerLeaves").replace("%s", args[1]);
                 player.sendMessage(message);
 
 
                 return true;
             case "list":
-                message = PREFIX + _("commands.channel.list").replace("%s", ChannelHandler.getChannelNames());
+                message = PREFIX + _("SinkChat.Commands.Channel.List").replace("%s", ChannelHandler.getChannelNames());
                 player.sendMessage(message);
                 return true;
 
             case "participating":
-                player.sendMessage(PREFIX + _("commands.channel.part"));
+                player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.Part"));
                 for (IChannel target : ChannelHandler.getRegisteredChannels())
                 {
                     if (target.contains(player))
@@ -141,7 +139,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
     private static void sendHelp(Player player)
     {
-        player.sendMessage(PREFIX + _("commands.channel.help"));
+        player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.Help"));
         player.sendMessage(PREFIX + "/ch join <channel>");
         player.sendMessage(PREFIX + "/ch leave <channel>");
         player.sendMessage(PREFIX + "/ch list");

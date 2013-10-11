@@ -30,7 +30,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class NickCommand implements CommandExecutor
 {
-    public static final String PREFIX = _("prefix.nick") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("SinkChat.Prefix.Nick") + " " + ChatColor.RESET;
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -47,7 +47,7 @@ public class NickCommand implements CommandExecutor
         {
             if (! user.hasPermission("sinkchat.nick.others"))
             {
-                sender.sendMessage(_("permissions.nick.other"));
+                sender.sendMessage(_("Permissions.SinkChat.Nick.Other"));
                 return true;
             }
 
@@ -57,7 +57,7 @@ public class NickCommand implements CommandExecutor
             newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             if (target == null)
             {
-                sender.sendMessage(PREFIX + _("general.notOnline").replace("%s", args[0]));
+                sender.sendMessage(PREFIX + _("General.NotOnline").replace("%s", args[0]));
                 return true;
             }
 
@@ -65,20 +65,20 @@ public class NickCommand implements CommandExecutor
             {
                 user = SinkLibrary.getUser(target);
                 PlayerConfiguration config = user.getPlayerConfiguration();
-                sender.sendMessage(PREFIX + _("commands.nick.otherChanged").replaceFirst("%s", playerName).replaceFirst("%s", config.getDisplayName()));
+                sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.OtherChanged").replaceFirst("%s", playerName).replaceFirst("%s", config.getDisplayName()));
             }
             return true;
         }
         if (user.isConsole())
         {
-            sender.sendMessage(_("general.consoleNotAvailabe"));
+            sender.sendMessage(_("General.ConsoleNotAvailabe"));
             return true;
         }
         newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[0]) + ChatColor.RESET;
         Player player = user.getPlayer();
         if (setDisplayName(player, newDisplayName, sender))
         {
-            sender.sendMessage(PREFIX + _("commands.nick.selfChanged").replaceFirst("%s", newDisplayName));
+            sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.SelfChanged").replaceFirst("%s", newDisplayName));
         }
         return true;
     }
@@ -89,13 +89,13 @@ public class NickCommand implements CommandExecutor
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
         if (! cleanDisplayName.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$"))
         {
-            sender.sendMessage(PREFIX + _("commands.nick.illegalNickname"));
+            sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.IllegalNickname"));
             return false;
         }
 
         if (cleanDisplayName.length() > 16)
         {
-            sender.sendMessage(PREFIX + _("commands.nick.tooLong"));
+            sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.TooLong"));
             return false;
         }
 
@@ -115,12 +115,15 @@ public class NickCommand implements CommandExecutor
             String displayName = ChatColor.stripColor(newDisplayName.toLowerCase());
             if (displayName.equals(onlinePlayerDisplayName) || displayName.equals(onlinePlayerName))
             {
-                target.sendMessage(PREFIX + _("commands.nick.used"));
+                target.sendMessage(PREFIX + _("SinkChat.Commands.Nick.Used"));
                 return false;
             }
         }
 
-        newDisplayName = user.getPrefix() + newDisplayName;
+        if (SinkLibrary.chatAvailable())
+        {
+            newDisplayName = user.getPrefix() + newDisplayName;
+        }
 
         PlayerConfiguration config = user.getPlayerConfiguration();
         config.setDisplayName(newDisplayName);

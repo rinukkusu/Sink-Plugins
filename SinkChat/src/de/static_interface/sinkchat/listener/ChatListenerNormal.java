@@ -41,9 +41,9 @@ public class ChatListenerNormal implements Listener
             return;
         }
 
-        for (char callChar : ChannelHandler.getRegisteredCallChars().keySet())
+        for (String callChar : ChannelHandler.getRegisteredCallChars().keySet())
         {
-            if (callChar == ( event.getMessage().toCharArray()[0] )
+            if (event.getMessage().startsWith(callChar)
                     && ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()))
             {
                 event.setCancelled(true);
@@ -55,7 +55,7 @@ public class ChatListenerNormal implements Listener
 
         String message = event.getMessage();
         int range = 50;
-        String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getPlayer().getDisplayName());
+        String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getDisplayName());
         formattedMessage = formattedMessage.replace("%2$s", message);
 
         if (eventPlayer.hasPermission("sinkchat.color"))
@@ -65,10 +65,10 @@ public class ChatListenerNormal implements Listener
 
         if (! SinkLibrary.permissionsAvailable())
         {
-            formattedMessage = ChatColor.GRAY + ChatColor.stripColor(_("prefix.chatLocal")) + ChatColor.RESET + formattedMessage;
+            formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.ChatLocal") + ChatColor.RESET + " " + formattedMessage;
         }
 
-        String spyPrefix = ChatColor.GRAY + ChatColor.stripColor(_("prefix.spy")) + " " + ChatColor.RESET;
+        String spyPrefix = ChatColor.GRAY + _("SinkChat.Prefix.Spy") + " " + ChatColor.RESET;
 
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();

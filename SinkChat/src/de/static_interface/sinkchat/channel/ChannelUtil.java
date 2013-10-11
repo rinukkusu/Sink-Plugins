@@ -24,14 +24,14 @@ import org.bukkit.entity.Player;
 
 public class ChannelUtil
 {
-    public static boolean sendMessage(Player player, String message, IChannel channel, String prefix, Character callByChar)
+    public static boolean sendMessage(Player player, String message, IChannel channel, String prefix, String callByChar)
     {
         if (channel.contains(player))
         {
             return false;
         }
 
-        if (message.toCharArray().length == 1 && message.toCharArray()[0] == callByChar)
+        if (message.equals(callByChar))
         {
             return false;
         }
@@ -41,11 +41,11 @@ public class ChannelUtil
 
         if (SinkLibrary.permissionsAvailable())
         {
-            formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
+            formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
         else
         {
-            formattedMessage = prefix + player.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
+            formattedMessage = prefix + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
 
         if (user.hasPermission("sinkchat.color"))

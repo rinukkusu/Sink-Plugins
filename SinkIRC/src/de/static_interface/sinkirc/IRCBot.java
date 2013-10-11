@@ -28,7 +28,6 @@ public class IRCBot extends PircBot
 {
     public static String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
     public static boolean disabled = false;
-
     String botName = "AdventuriaBot";
     private Plugin plugin;
 
@@ -131,11 +130,12 @@ public class IRCBot extends PircBot
             if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
                     || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
                     || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
-                    && ( message.toLowerCase().contains(" adventuriabot ") || message.toLowerCase().contains(" bot ") ))
+                    && ( message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ") ))
             {
                 sendMessage(channel, "Hallo, " + sender);
                 return;
             }
+
             if (! message.toLowerCase().startsWith("~"))
             {
                 return;
@@ -210,7 +210,7 @@ public class IRCBot extends PircBot
                 {
                     formattedReason = " (Reason: " + reason + ")";
                 }
-                reason = "Kicked by " + sender + "from IRC" + formattedReason + "!";
+                reason = "Kicked by " + sender + " from IRC" + formattedReason + "!";
                 final String finalReason = reason;
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {

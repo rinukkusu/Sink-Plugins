@@ -47,6 +47,7 @@ public class ChatListenerLowest implements Listener
                 + ChatColor.RESET + ChatColor.GRAY + "] " : "";
 
         event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
+        SinkChat.refreshDisplayName(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

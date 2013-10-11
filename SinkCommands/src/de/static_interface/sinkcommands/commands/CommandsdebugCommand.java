@@ -19,11 +19,14 @@ package de.static_interface.sinkcommands.commands;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.Util;
+import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import java.io.IOException;
 
 public class CommandsdebugCommand implements CommandExecutor
 {
@@ -39,11 +42,11 @@ public class CommandsdebugCommand implements CommandExecutor
         String option = args[0];
         switch (option.toLowerCase())
         {
-            case "getvalue":
+            case "getplayervalue":
             {
                 if (args.length != 3)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug getvalue <player> <path.to.key>");
+                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug getplayervalue <player> <path.to.key>");
                     break;
                 }
                 String player = args[1];
@@ -54,11 +57,11 @@ public class CommandsdebugCommand implements CommandExecutor
                 break;
             }
 
-            case "setvalue":
+            case "setplayervalue":
             {
                 if (args.length != 4)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug setvalue <player> <path.to.key> <value>");
+                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug setplayervalue <player> <path.to.key> <value>");
                     break;
                 }
                 String player = args[1];
@@ -86,9 +89,25 @@ public class CommandsdebugCommand implements CommandExecutor
                 break;
 
             }
+
+            case "backuplanguage":
+            {
+                try
+                {
+                    LanguageConfiguration.backup();
+                    sender.sendMessage(PREFIX + ChatColor.GREEN + "Done");
+                }
+                catch (IOException e)
+                {
+                    sender.sendMessage(PREFIX + ChatColor.RED + "Failed: ");
+                    sender.sendMessage(PREFIX + ChatColor.RED + e.getMessage());
+                }
+                break;
+            }
+
             default:
             {
-                sender.sendMessage(PREFIX + "Unknown option! Valid options are: getvalue, setvalue");
+                sender.sendMessage(PREFIX + "Unknown option! Valid options are: getplayervalue, setplayervalue, backuplanguage");
             }
         }
         return true;

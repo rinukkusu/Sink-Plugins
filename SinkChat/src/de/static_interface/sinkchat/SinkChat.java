@@ -27,7 +27,6 @@ import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
-import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -54,16 +53,9 @@ public class SinkChat extends JavaPlugin
             refreshDisplayName(p);
         }
 
-        LanguageConfiguration config = new LanguageConfiguration();
-
-        if (! ( config.create() ))
-        {
-            getLogger().severe("I/O-Exception occured. Could not load language file ");
-        }
-
-        IChannel fc = new HelpChannel(_("channel.help.prefix").charAt(0));
-        IChannel sc = new ShoutChannel(_("channel.shout.prefix").charAt(0));
-        IChannel hc = new TradeChannel(_("channel.trade.prefix").charAt(0));
+        IChannel fc = new HelpChannel(_("SinkChat.Channel.Help.Prefix"));
+        IChannel sc = new ShoutChannel(_("SinkChat.Channel.Shout.Prefix"));
+        IChannel hc = new TradeChannel(_("SinkChat.Channel.Trade.Prefix"));
 
         sc.registerChannel();
         hc.registerChannel();

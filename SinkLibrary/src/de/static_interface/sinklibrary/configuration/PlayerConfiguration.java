@@ -16,6 +16,7 @@
 
 package de.static_interface.sinklibrary.configuration;
 
+import com.google.common.io.Files;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
@@ -31,7 +32,8 @@ import java.util.logging.Level;
 
 public class PlayerConfiguration extends ConfigurationBase
 {
-    private String playerName;
+    public static final int CURRENT_VERSION = 1;
+
     private Player player;
     private File yamlFile;
     private YamlConfiguration yamlConfiguration;
@@ -48,21 +50,14 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public PlayerConfiguration(User user)
     {
+        if (user.isConsole())
+        {
+            throw new RuntimeException("User is Console, cannot create PlayerConfiguration.");
+        }
+
         this.user = user;
-
         player = user.getPlayer();
-        playerName = user.getName();
 
-        playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
-        try
-        {
-            yamlFile = new File(playersPath, playerName + ".yml");
-        }
-        catch (NullPointerException ignored)
-        {
-            yamlConfiguration = null;
-        }
-        yamlConfiguration = new YamlConfiguration();
         load();
     }
 
@@ -73,69 +68,82 @@ public class PlayerConfiguration extends ConfigurationBase
     }
 
     @Override
-    public boolean create()
+    public void create()
     {
         try
         {
-            if (! playersPath.exists() && ! playersPath.mkdirs())
+            playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
+            yamlFile = new File(playersPath, player.getName() + ".yml");
+
+            boolean createNewConfiguration = ! exists();
+
+            if (createNewConfiguration)
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create \"" + playersPath.getAbsolutePath() + "\" folder!");
-                return false;
+                Bukkit.getLogger().log(Level.INFO, "Creating new player configuration: " + yamlFile);
             }
 
-            if (! yamlFile.exists() && ! yamlFile.createNewFile())
+            Files.createParentDirs(yamlFile);
+
+            if (createNewConfiguration && ! yamlFile.createNewFile())
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config: " + yamlFile);
-                return false;
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player configuration: " + yamlFile);
+                return;
             }
-            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
 
-            defaultValues = new HashMap<>();
+            yamlConfiguration = new YamlConfiguration();
+            yamlConfiguration.load(yamlFile);
 
+            if (! createNewConfiguration)
+            {
+                int version = (int) get("Main.ConfigVersion");
+                if (version < CURRENT_VERSION)
+                {
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    recreate();
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    return;
+                }
+            }
+
+            if (createNewConfiguration)
+            {
+                yamlConfiguration.options().copyDefaults(true);
+            }
+            else
+            {
+                yamlConfiguration.options().copyDefaults(false);
+            }
+
+            addDefault("Main.ConfigVersion", CURRENT_VERSION);
             addDefault("General.StatsEnabled", true);
             addDefault("Spy.Enabled", true);
             addDefault("Nick.HasDisplayName", false);
             addDefault("Nick.DisplayName", user.getDefaultDisplayName());
             addDefault("Freeze.Frozen", false);
 
-            yamlConfiguration.options().copyDefaults(true);
-
             save();
-            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
-            return true;
         }
         catch (IOException e)
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getAbsolutePath());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
-            return false;
+        }
+        catch (InvalidConfigurationException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            recreate();
         }
     }
 
     @Override
-    public boolean exists()
+    public void load()
     {
-        return yamlFile.exists();
-    }
-
-    @Override
-    public boolean load()
-    {
-        try
-        {
-            yamlConfiguration.load(yamlFile);
-        }
-        catch (InvalidConfigurationException ignored)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
-            yamlFile.delete();
-            return create();
-        }
-        catch (Exception ignored)
-        {
-            return false;
-        }
-        return true;
+        defaultValues = new HashMap<>();
+        create();
     }
 
     @Override
@@ -145,55 +153,9 @@ public class PlayerConfiguration extends ConfigurationBase
     }
 
     @Override
-    public void save()
+    public File getFile()
     {
-        if (yamlFile == null)
-        {
-            return;
-        }
-
-        try
-        {
-            yamlConfiguration.save(yamlFile);
-        }
-        catch (IOException e)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save player configuration file: " + yamlFile + "!");
-        }
-    }
-
-    @Override
-    public void set(String path, Object value)
-    {
-        try
-        {
-            yamlConfiguration.set(path, value);
-            //Bukkit.getLogger().log(Level.INFO, playerName + ": settings value " + value + " to path: " + path);
-            save();
-        }
-        catch (Exception e)
-        {
-            Bukkit.getLogger().log(Level.WARNING, playerName + "'s configuration file: Couldn't save " + value + " to path " + path, e);
-        }
-    }
-
-    @Override
-    public Object get(String path)
-    {
-        try
-        {
-            return yamlConfiguration.get(path);
-        }
-        catch (Exception ignored)
-        {
-            Bukkit.getLogger().log(Level.WARNING, playerName + "'s configuration file: Couldn't load value from path: " + path);
-            Object def = getDefault(path);
-            if (def == null)
-            {
-                throw new NullPointerException("Default value is null!");
-            }
-            return def;
-        }
+        return yamlFile;
     }
 
     /**
@@ -273,6 +235,10 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public String getDisplayName()
     {
+        if (! getHasDisplayName())
+        {
+            return user.getDefaultDisplayName();
+        }
         return (String) get("Nick.DisplayName");
     }
 

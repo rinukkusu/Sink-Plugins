@@ -260,7 +260,7 @@ public class User
         }
         else
         {
-            return base.getDisplayName();
+            return getPlayerConfiguration().getDisplayName();
         }
     }
 }

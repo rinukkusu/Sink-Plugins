@@ -33,9 +33,10 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
 
     Vector<Player> exceptedPlayers = new Vector<>();
     String PREFIX = ChatColor.GRAY + "[" + getChannelName() + "] " + ChatColor.RESET;
-    private char callByChar = '!';
 
-    public ShoutChannel(char callChar)
+    private String callByChar = "!";
+
+    public ShoutChannel(String callChar)
     {
         callByChar = callChar;
     }
@@ -62,7 +63,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     @Override
     public String getChannelName()
     {
-        return _("channels.shout");
+        return ChatColor.GRAY + _("SinkChat.Channels.Shout");
     }
 
     @Override

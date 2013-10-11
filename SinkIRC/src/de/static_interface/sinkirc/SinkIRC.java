@@ -67,7 +67,7 @@ public class SinkIRC extends JavaPlugin implements Listener
         {
             String host = "irc.adventuria.eu";
             log.severe("An Exception occurred while trying to connect to " + host + ":");
-            log.severe(e.toString());
+            log.severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IRCListCommand());
     }

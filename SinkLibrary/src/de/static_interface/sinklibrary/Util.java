@@ -16,10 +16,78 @@
 
 package de.static_interface.sinklibrary;
 
+import org.bukkit.Bukkit;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class Util
 {
+
+    /**
+     * Backup a file
+     *
+     * @param file   File to backup
+     * @param notify Send message to Console?
+     * @throws java.lang.RuntimeException When backup fails
+     */
+    public static void backupFile(File file, boolean notify) throws IOException
+    {
+        if (notify) Bukkit.getLogger().log(Level.INFO, "Creating backup of " + file + "...");
+
+        Calendar calender = new GregorianCalendar();
+        String month = String.valueOf(calender.get(Calendar.MONTH));
+        String day = String.valueOf(calender.get(Calendar.DAY_OF_MONTH));
+        String year = String.valueOf(calender.get(Calendar.YEAR));
+        String hour = String.valueOf(calender.get(Calendar.HOUR));
+        String minute = String.valueOf(calender.get(Calendar.MINUTE));
+        if (calender.get(Calendar.DAY_OF_MONTH) < 10)
+        {
+            day = "0" + day;
+        }
+
+        if (calender.get(Calendar.MONTH) < 10)
+        {
+            month = "0" + month;
+        }
+
+        if (calender.get(Calendar.HOUR) < 10)
+        {
+            hour = "0" + hour;
+        }
+
+        if (calender.get(Calendar.MINUTE) < 10)
+        {
+            minute = "0" + minute;
+        }
+
+        String seperator = ".";
+
+        String date = day + seperator + month + seperator + year + "-" + hour + seperator + minute;
+
+        Path sourcePath = Paths.get(file.getAbsolutePath());
+        Path targetPath = Paths.get(file.getPath() + "." + date + ".backup");
+        try
+        {
+            Files.copy(sourcePath, targetPath, REPLACE_EXISTING);
+        }
+        catch (IOException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't backup file: " + file.getAbsolutePath());
+            throw e;
+        }
+        if (notify) Bukkit.getLogger().log(Level.INFO, "Successfully created backup: " + targetPath);
+    }
+
     /**
      * Format Array to String
      *

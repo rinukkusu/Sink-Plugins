@@ -30,10 +30,11 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 public class TradeChannel extends JavaPlugin implements IChannel
 {
     Vector<Player> exceptedPlayers = new Vector<>();
-    private char callByChar = '$';
-    String PREFIX = ChatColor.GRAY + "[" + ChatColor.GOLD + "Handel" + ChatColor.GRAY + "] " + ChatColor.RESET;
+    String PREFIX = ChatColor.GRAY + "[" + ChatColor.GOLD + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
 
-    public TradeChannel(char callChar)
+    private String callByChar = "$";
+
+    public TradeChannel(String callChar)
     {
         callByChar = callChar;
     }
@@ -60,7 +61,7 @@ public class TradeChannel extends JavaPlugin implements IChannel
     @Override
     public String getChannelName()
     {
-        return _("channels.trade");
+        return ChatColor.GOLD + _("SinkChat.Channels.Trade");
     }
 
     @Override

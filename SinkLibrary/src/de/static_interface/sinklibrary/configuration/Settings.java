@@ -32,59 +32,14 @@ import java.util.logging.Level;
 
 public class Settings extends ConfigurationBase
 {
-    YamlConfiguration yamlConfiguration;
-    File yamlFile;
-    HashMap<String, Object> defaultValues;
+    public static final int CURRENT_VERSION = 1;
+    private YamlConfiguration yamlConfiguration;
+    private File yamlFile;
+    private HashMap<String, Object> defaultValues;
 
     public Settings()
     {
-        /**  Dont initialize because its not done... */
-        try
-        {
-            yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
-        }
-        catch (NullPointerException ignored)
-        {
-            yamlConfiguration = null;
-        }
-        yamlConfiguration = new YamlConfiguration();
-        defaultValues = new HashMap<>();
-        load();
-    }
-
-    @Override
-    public void set(String path, Object value)
-    {
-        if (! exists())
-        {
-            create();
-        }
-        try
-        {
-            yamlConfiguration.set(path, value);
-        }
-        catch (Exception e)
-        {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't save " + value + " to path " + path, e);
-        }
-    }
-
-    @Override
-    public Object get(String path)
-    {
-        if (! exists())
-        {
-            create();
-        }
-        try
-        {
-            return yamlConfiguration.get(path);
-        }
-        catch (Exception ignored)
-        {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path);
-            return getDefault(path);
-        }
+        //load(); Dont init
     }
 
     @Override
@@ -94,29 +49,10 @@ public class Settings extends ConfigurationBase
     }
 
     @Override
-    public boolean exists()
+    public void load()
     {
-        return yamlFile.exists();
-    }
-
-    @Override
-    public boolean load()
-    {
-        try
-        {
-            yamlConfiguration.load(yamlFile);
-        }
-        catch (InvalidConfigurationException ignored)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid player YAML: " + yamlFile.getName() + ", recreating...");
-            yamlFile.delete();
-            return create();
-        }
-        catch (Exception ignored)
-        {
-            return false;
-        }
-        return true;
+        defaultValues = new HashMap<>();
+        create();
     }
 
     @Override
@@ -126,17 +62,49 @@ public class Settings extends ConfigurationBase
     }
 
     @Override
-    public boolean create()
+    public File getFile()
+    {
+        return yamlFile;
+    }
+
+    @Override
+    public void create()
     {
         try
         {
-            if (! yamlFile.exists() && ! yamlFile.createNewFile())
+            yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
+
+            boolean createNewConfiguration = ! exists();
+
+            if (createNewConfiguration)
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create settings file");
-                return false;
+                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
-            yamlConfiguration = YamlConfiguration.loadConfiguration(yamlFile);
-            addDefault("SinkIRC.Enabled", false);
+
+            if (createNewConfiguration && ! yamlFile.createNewFile())
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
+                return;
+            }
+
+            yamlConfiguration = new YamlConfiguration();
+            yamlConfiguration.load(yamlFile);
+
+            if (! createNewConfiguration)
+            {
+                int version = (int) get("Main.ConfigVersion");
+                if (version < CURRENT_VERSION)
+                {
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    recreate();
+                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    return;
+                }
+            }
+
+            addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("SinkIRC.BotEnabled", false);
             addDefault("SinkIRC.Username", "SinkIRCBot");
             addDefault("SinkIRC.Server.Address", "irc.example.com");
             addDefault("SinkIRC.Server.Password", "");
@@ -147,34 +115,35 @@ public class Settings extends ConfigurationBase
             addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
             addDefault("SinkIRC.Authentification.Password", "");
 
-            addDefault("SinkChat.channel.help.prefix", "?");
-            addDefault("SinkChat.channel.shout.prefix", "!");
-            addDefault("SinkChat.channel.trade.prefix", "$");
+            addDefault("SinkChat.Channel.Help.Prefix", "?");
+            addDefault("SinkChat.Channel.Shout.Prefix", "!");
+            addDefault("SinkChat.Channel.Trade.Prefix", "$");
 
-            yamlConfiguration.options().copyDefaults(true);
+            if (createNewConfiguration)
+            {
+                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
+            }
+
+            if (createNewConfiguration && ! yamlFile.createNewFile())
+            {
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create settings file");
+                return;
+            }
 
             save();
-            Bukkit.getLogger().log(Level.INFO, "Succesfully created new configuration file: " + yamlFile.getName());
-            return true;
-        }
-        catch (Exception e)
-        {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
-            return false;
-        }
-    }
-
-    @Override
-    public void save()
-    {
-        try
-        {
-            yamlConfiguration.save(yamlFile);
         }
         catch (IOException e)
         {
-            Bukkit.getLogger().log(Level.WARNING, "Couldn't save Settings!", e);
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+        }
+        catch (InvalidConfigurationException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
+            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            recreate();
         }
     }
 }

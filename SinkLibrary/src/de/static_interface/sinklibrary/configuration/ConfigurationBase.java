@@ -16,37 +16,92 @@
 
 package de.static_interface.sinklibrary.configuration;
 
+import de.static_interface.sinklibrary.Util;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.logging.Level;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class ConfigurationBase
 {
     /**
      * Create Configuration File
-     *
-     * @return True if it has been successfully created
      */
-    public abstract boolean create();
+    public abstract void create();
 
     /**
      * Save config file
      */
-    public abstract void save();
+    public void save()
+    {
+        if (getFile() == null)
+        {
+            return;
+        }
+        if (! exists())
+        {
+            return;
+        }
+
+        try
+        {
+            getYamlConfiguration().save(getFile());
+        }
+        catch (IOException e)
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save configuration file: " + getFile() + "!");
+        }
+    }
 
     /**
      * @param path  Path to value
      * @param value Value of path
      */
-    public abstract void set(String path, Object value);
+    public void set(String path, Object value)
+    {
+        try
+        {
+            getYamlConfiguration().set(path, value);
+            save();
+        }
+        catch (Exception e)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "Configuration:" + getFile() + ": Couldn't save " + value + " to path " + path, e);
+        }
+    }
 
     /**
-     * Get value from config
+     * Get value from configuration. If it doesn't exists, it will return the default value.
+     * The default value for path: "Main.ConfigVersion" is always 0
      *
      * @param path Path to value
      * @return Value of path
      */
-    public abstract Object get(String path);
+    public Object get(String path)
+    {
+        try
+        {
+            Object value = getYamlConfiguration().get(path);
+            if (value == null || value == "")
+            {
+                throw new NullPointerException("Path returned null!");
+            }
+            return value;
+        }
+        catch (Exception e)
+        {
+            if (path.equals("Main.ConfigVersion"))
+            {
+                return 0;
+            }
+            Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
+            return getDefault(path);
+        }
+    }
 
     /**
      * Get YAML Configuration
@@ -56,14 +111,15 @@ public abstract class ConfigurationBase
     /**
      * @return True if the config file exists
      */
-    public abstract boolean exists();
+    public boolean exists()
+    {
+        return getFile().exists();
+    }
 
     /**
      * Load Configuration
-     *
-     * @return True if successfully loaded, false if file doesnt exists.
      */
-    public abstract boolean load();
+    public abstract void load();
 
     /**
      * Get default value for path
@@ -101,4 +157,47 @@ public abstract class ConfigurationBase
      * @return Default values
      */
     public abstract HashMap<String, Object> getDefaults();
+
+    /**
+     * Backup Configuration.
+     *
+     * @throws IOException if backup fails
+     */
+    public void backup() throws IOException
+    {
+        Util.backupFile(getFile(), true);
+    }
+
+    /**
+     * Delete Configuration
+     */
+    public void delete()
+    {
+        getFile().delete();
+    }
+
+    /**
+     * Get configuration file
+     *
+     * @return configuration file
+     */
+    public abstract File getFile();
+
+    /**
+     * Recreate configuration
+     */
+    public void recreate()
+    {
+        Bukkit.getLogger().log(Level.WARNING, "Recreating Configuration: " + getFile());
+        try
+        {
+            backup();
+        }
+        catch (IOException e)
+        {
+            return;
+        }
+        delete();
+        create();
+    }
 }

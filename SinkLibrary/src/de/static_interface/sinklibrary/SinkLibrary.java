@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
+import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.Settings;
 import de.static_interface.sinklibrary.listener.DisplayNameListener;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
@@ -52,7 +53,6 @@ public class SinkLibrary extends JavaPlugin
 
     private static String pluginName;
     private static Settings settings;
-
     private static List<Plugin> registeredPlugins;
 
     public void onEnable()
@@ -107,6 +107,7 @@ public class SinkLibrary extends JavaPlugin
         irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
 
         settings = new Settings();
+        LanguageConfiguration.init();
 
         tmpBannedPlayers = new ArrayList<>();
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
