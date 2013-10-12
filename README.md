@@ -30,5 +30,5 @@ else
 
 ToDo List
 ==============
-- [x] Add config files to plugins (partially implemented)
+- [x] Add config files for plugins (Done)
 - [ ] Add translation option for plugins (by using the LanguageConfiguration Class) (SinkChat is done) 
