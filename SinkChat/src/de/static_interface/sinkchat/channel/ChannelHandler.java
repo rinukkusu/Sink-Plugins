@@ -42,19 +42,16 @@ public class ChannelHandler
         registeredChannelsMap.put(name, channel);
         callChars.put(callChar, channel);
         registeredChannelNames = registeredChannelNames + name + " ";
-
-
     }
 
     /**
-     * @param name Channel name you get the channel with.<br>
-     *             Important: Case sensitive !
+     * @param callChar Char you use to call the channel in game.
      * @return Returns the instance of Channel with the given name.
      */
 
-    public static IChannel getRegisteredChannel(String name)
+    public static IChannel getRegisteredChannel(String callChar)
     {
-        return registeredChannelsMap.get(name);
+        return callChars.get(callChar);
     }
 
     /**
@@ -64,16 +61,6 @@ public class ChannelHandler
     public static String getChannelNames()
     {
         return registeredChannelNames;
-    }
-
-    /**
-     * @param callByChar Char you use to call the channel inGame.
-     * @return Returns the instance of Channel with given callByChar
-     */
-
-    public static IChannel getRegisteredChannel(char callByChar)
-    {
-        return callChars.get(callByChar);
     }
 
     /**

@@ -320,7 +320,7 @@ public class Updater
 
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
-                if (! newFile.exists())
+                if (! newFile.exists() && newFile.getName().toLowerCase().endsWith(".jar"))
                 {
                     ze = zis.getNextEntry();
                     continue;
@@ -350,21 +350,6 @@ public class Updater
             this.result = Updater.UpdateResult.FAIL_DOWNLOAD;
             ex.printStackTrace();
         }
-    }
-
-    /**
-     * Check if the name of a jar is one of the plugins currently installed, used for extracting the correct files out of a zip.
-     */
-    private boolean pluginFile(String name)
-    {
-        for (final File file : new File("plugins").listFiles())
-        {
-            if (file.getName().equals(name))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
