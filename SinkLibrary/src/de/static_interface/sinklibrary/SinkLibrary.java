@@ -123,7 +123,7 @@ public class SinkLibrary extends JavaPlugin
      */
     private void update()
     {
-        Updater updater = new Updater(getSettings().getUpdateType());
+        Updater updater = new Updater();
         String permission = "sinklibrary.updatenotification";
         String versionType = " " + updater.getLatestGameVersion() + " ";
         if (versionType.equalsIgnoreCase("release")) versionType = " ";

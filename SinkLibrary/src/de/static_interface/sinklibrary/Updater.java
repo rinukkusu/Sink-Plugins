@@ -305,18 +305,14 @@ public class Updater
 
         try
         {
-
-            //create output directory is not exists
             File outputFolder = zipFile.getParentFile();
             if (! outputFolder.exists())
             {
                 outputFolder.mkdir();
             }
 
-            //get the zip file content
             ZipInputStream zis =
                     new ZipInputStream(new FileInputStream(zipFile));
-            //get the zipped file list entry
             ZipEntry ze = zis.getNextEntry();
 
             while (ze != null)
@@ -324,8 +320,11 @@ public class Updater
 
                 String fileName = ze.getName();
                 File newFile = new File(outputFolder + File.separator + fileName);
-
-                new File(newFile.getParent()).mkdirs();
+                if (! newFile.exists())
+                {
+                    ze = zis.getNextEntry();
+                    continue;
+                }
 
                 FileOutputStream fos = new FileOutputStream(newFile);
 
