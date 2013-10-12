@@ -27,7 +27,6 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,13 +52,14 @@ public class SinkLibrary extends JavaPlugin
 
     private static String pluginName;
     private static Settings settings;
-    private static List<Plugin> registeredPlugins;
+    private static List<JavaPlugin> registeredPlugins;
+    private static String version;
 
     public void onEnable()
     {
         if (! vaultAvailable())
         {
-            Bukkit.getLogger().log(Level.WARNING, "Vault Plugin not found. Disabling economy and some permission features.");
+            Bukkit.getLogger().warning("Vault Plugin not found. Disabling economy and some permission features.");
             permissionsAvailable = false;
             economyAvailable = false;
             chatAvailable = false;
@@ -73,19 +73,18 @@ public class SinkLibrary extends JavaPlugin
 
             if (! setupEcononmy())
             {
-                Bukkit.getLogger().log(Level.WARNING, "Economy Plugin not found. Disabling economy features.");
+                Bukkit.getLogger().warning("Economy Plugin not found. Disabling economy features.");
                 economyAvailable = false;
             }
             if (! setupPermissions())
             {
-                Bukkit.getLogger().log(Level.WARNING, "Permissions Plugin not found. Disabling permissions features.");
+                Bukkit.getLogger().warning("Permissions Plugin not found. Disabling permissions features.");
                 permissionsAvailable = false;
             }
         }
 
         pluginName = this.getDescription().getName();
         dataFolder = getDataFolder();
-        registeredPlugins = new ArrayList<>();
 
         if (! getCustomDataFolder().exists())
         {
@@ -101,22 +100,46 @@ public class SinkLibrary extends JavaPlugin
 
         if (chatAvailable && economyAvailable && permissionsAvailable)
         {
-            Bukkit.getLogger().log(Level.INFO, "Successfully hooked into permissions, economy and chat.");
+            Bukkit.getLogger().info("Successfully hooked into permissions, economy and chat.");
         }
 
-        irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
-
-        settings = new Settings();
         LanguageConfiguration.init();
+        settings = new Settings();
 
+        irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
+        version = getDescription().getVersion();
         tmpBannedPlayers = new ArrayList<>();
+        registeredPlugins = new ArrayList<>();
+
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
         Bukkit.getPluginManager().registerEvents(new DisplayNameListener(), this);
+        getCommand("sinkdebug").setExecutor(new SinkDebugCommand());
+
+        update();
+    }
+
+    /**
+     * Update SinkPlugins
+     */
+    private void update()
+    {
+        Updater updater = new Updater(getSettings().getUpdateType());
+        String permission = "sinklibrary.updatenotification";
+        String versionType = " " + updater.getLatestGameVersion() + " ";
+        if (versionType.equalsIgnoreCase("release")) versionType = " ";
+        if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE)
+        {
+            BukkitUtil.broadcast(Updater.PREFIX + "A new" + versionType + "update is available: " + updater.getLatestName(), permission);
+        }
+        else if (updater.getResult() == Updater.UpdateResult.NO_UPDATE)
+        {
+            Bukkit.getLogger().info(Updater.PREFIX + "No new updates found...");
+        }
     }
 
     public void onDisable()
     {
-        getLogger().log(Level.INFO, "Saving players...");
+        Bukkit.getLogger().info("Saving players...");
         for (Player p : Bukkit.getOnlinePlayers())
         {
             User user = new User(p);
@@ -125,7 +148,7 @@ public class SinkLibrary extends JavaPlugin
                 user.getPlayerConfiguration().save();
             }
         }
-        getLogger().log(Level.INFO, "Disabled.");
+        Bukkit.getLogger().info("Disabled.");
     }
 
     private boolean setupChat()
@@ -300,9 +323,9 @@ public class SinkLibrary extends JavaPlugin
     /**
      * Register a plugin
      *
-     * @param plugin Plugin
+     * @param plugin Class which extends {@link org.bukkit.plugin.java.JavaPlugin}
      */
-    public static void registerPlugin(Plugin plugin)
+    public static void registerPlugin(JavaPlugin plugin)
     {
         registeredPlugins.add(plugin);
     }
@@ -332,5 +355,15 @@ public class SinkLibrary extends JavaPlugin
     public static User getUser(CommandSender sender)
     {
         return new User(sender);
+    }
+
+    /**
+     * Get Version of SinkLibrary
+     *
+     * @return Version
+     */
+    public static String getVersion()
+    {
+        return version;
     }
 }

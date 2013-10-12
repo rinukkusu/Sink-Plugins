@@ -1,7 +1,30 @@
 name: SinkLibrary
-version: 1.8
-description: Library required for Sink Plugins. This does nothing without a plugin that uses this.
+version: 1.8.5
+description: Library required for Sink Plugins. This does nothing without a plugin that uses it.
 author: Trojaner
 website: http://static-interface.de
 main: de.static_interface.sinklibrary.SinkLibrary
 soft-depend: [Vault,SinkIRC]
+
+commands:
+  sinkdebug:
+    description: Debug Plugin
+    permission: sinlibrary.debug
+    usage: "Wrong usage! Correct Usage: /<command> <option> <args>"
+    aliases: sdebug
+
+permissions:
+  sinklibrary.*:
+    default: op
+    description: Access all SinkLibrary commands
+    children:
+      sinklibrary.updatenotification: true
+      sinklibrary.debug: true
+
+  sinklibrary.updatenotification:
+    default: op
+    description: Receive update notifications
+
+  sinklibrary.debug:
+    default: op
+    description: Permission required for debugging

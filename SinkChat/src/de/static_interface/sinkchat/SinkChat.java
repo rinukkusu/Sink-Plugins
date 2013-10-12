@@ -35,8 +35,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
-
 public class SinkChat extends JavaPlugin
 {
     public void onEnable()
@@ -53,9 +51,9 @@ public class SinkChat extends JavaPlugin
             refreshDisplayName(p);
         }
 
-        IChannel fc = new HelpChannel(_("SinkChat.Channel.Help.Prefix"));
-        IChannel sc = new ShoutChannel(_("SinkChat.Channel.Shout.Prefix"));
-        IChannel hc = new TradeChannel(_("SinkChat.Channel.Trade.Prefix"));
+        IChannel fc = new HelpChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Help.Prefix"));
+        IChannel sc = new ShoutChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Shout.Prefix"));
+        IChannel hc = new TradeChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Trade.Prefix"));
 
         sc.registerChannel();
         hc.registerChannel();

@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -39,7 +40,7 @@ public class Settings extends ConfigurationBase
 
     public Settings()
     {
-        //load(); Dont init
+        load();
     }
 
     @Override
@@ -103,7 +104,14 @@ public class Settings extends ConfigurationBase
                 }
             }
 
+            getYamlConfiguration().options().header(String.format("You can customize the SinkPlugins with this configuration."));
+
             addDefault("Main.ConfigVersion", CURRENT_VERSION);
+
+            addDefault("Updater.Enabled", true);
+            addDefault("Updater.UpdateType", "default");
+
+            /*
             addDefault("SinkIRC.BotEnabled", false);
             addDefault("SinkIRC.Username", "SinkIRCBot");
             addDefault("SinkIRC.Server.Address", "irc.example.com");
@@ -114,21 +122,11 @@ public class Settings extends ConfigurationBase
             addDefault("SinkIRC.Authentification.AuthBot", "NickServ");
             addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
             addDefault("SinkIRC.Authentification.Password", "");
+            */
 
             addDefault("SinkChat.Channel.Help.Prefix", "?");
             addDefault("SinkChat.Channel.Shout.Prefix", "!");
             addDefault("SinkChat.Channel.Trade.Prefix", "$");
-
-            if (createNewConfiguration)
-            {
-                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
-            }
-
-            if (createNewConfiguration && ! yamlFile.createNewFile())
-            {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create settings file");
-                return;
-            }
 
             save();
         }
@@ -145,5 +143,25 @@ public class Settings extends ConfigurationBase
             Bukkit.getLogger().log(Level.SEVERE, "***************");
             recreate();
         }
+    }
+
+    public Updater.UpdateType getUpdateType()
+    {
+        switch (( (String) get("Updater.UpdateType") ).toLowerCase())
+        {
+            case "default":
+                return Updater.UpdateType.DEFAULT;
+            case "no_download":
+                return Updater.UpdateType.NO_DOWNLOAD;
+            case "no_version_check":
+                return Updater.UpdateType.NO_VERSION_CHECK;
+            default:
+                return Updater.UpdateType.DEFAULT;
+        }
+    }
+
+    public boolean getUpdaterEnabled()
+    {
+        return (boolean) get("Updater.Enabled");
     }
 }

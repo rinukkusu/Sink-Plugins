@@ -221,7 +221,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("votestatus").setExecutor(new VoteKickCommands.VotestatusCommand());
         getCommand("endvote").setExecutor(new VoteKickCommands.EndvoteCommand(this));
         getCommand("votekickunban").setExecutor(new VoteKickCommands.VotekickunbanCommand());
-        getCommand("commandsdebug").setExecutor(new CommandsdebugCommand());
         getCommand("rename").setExecutor(new RenameCommand());
         getCommand("clear").setExecutor(new ClearCommand());
         getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());

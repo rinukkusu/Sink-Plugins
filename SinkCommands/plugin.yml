@@ -1,5 +1,5 @@
 name: SinkCommands
-version: 1.8
+version: 1.8.5
 description: General Commands Plugin
 author: Trojaner
 authors: [Diar, _ShadowRaven_, Scary_Block]
@@ -96,12 +96,6 @@ commands:
     permission: sinkcommands.votekick.unban
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
 
-  commandsdebug:
-    description: Debug Plugin
-    permission: sinkcommands.debug
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <option> <args>"
-    aliases: cdebug
-
   rename:
     description: Rename an item
     permission: sinkcommands.rename
@@ -137,7 +131,6 @@ permissions:
       sinkcommands:spectate: true
       sinkcommands.votekick: true
       sinkcommands.votekick.bypass: true
-      sinkcommands.debug: true
       sinkcommands.rename: true
       sinkcommands.clear: true
       sinkcommands.clear.others: true
@@ -264,10 +257,6 @@ permissions:
      description: Unban a player banned by a votekick
      children:
        sinkcommands.votekick.staff: true
-
-  sinkcommands.debug:
-     default: op
-     description: Permission required for debugging
 
   sinkcommands.rename:
     default: op

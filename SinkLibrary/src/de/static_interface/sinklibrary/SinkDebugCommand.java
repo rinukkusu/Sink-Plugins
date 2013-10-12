@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package de.static_interface.sinkcommands.commands;
+package de.static_interface.sinklibrary;
 
-import de.static_interface.sinklibrary.SinkLibrary;
-import de.static_interface.sinklibrary.User;
-import de.static_interface.sinklibrary.Util;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
@@ -28,7 +25,7 @@ import org.bukkit.command.CommandSender;
 
 import java.io.IOException;
 
-public class CommandsdebugCommand implements CommandExecutor
+public class SinkDebugCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.BLUE + "[Debug] " + ChatColor.RESET;
 
@@ -46,7 +43,7 @@ public class CommandsdebugCommand implements CommandExecutor
             {
                 if (args.length != 3)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug getplayervalue <player> <path.to.key>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug getplayervalue <player> <path.to.key>");
                     break;
                 }
                 String player = args[1];
@@ -61,7 +58,7 @@ public class CommandsdebugCommand implements CommandExecutor
             {
                 if (args.length != 4)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug setplayervalue <player> <path.to.key> <value>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug setplayervalue <player> <path.to.key> <value>");
                     break;
                 }
                 String player = args[1];
@@ -79,7 +76,7 @@ public class CommandsdebugCommand implements CommandExecutor
             {
                 if (args.length != 3)
                 {
-                    sender.sendMessage(PREFIX + "Falsche Benutzung! Korrekte Benutzung: /cdebug haspermission <player> <permission>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug haspermission <player> <permission>");
                     break;
                 }
                 String player = args[1];

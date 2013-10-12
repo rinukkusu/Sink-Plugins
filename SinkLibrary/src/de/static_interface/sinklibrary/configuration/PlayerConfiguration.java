@@ -106,14 +106,7 @@ public class PlayerConfiguration extends ConfigurationBase
                 }
             }
 
-            if (createNewConfiguration)
-            {
-                yamlConfiguration.options().copyDefaults(true);
-            }
-            else
-            {
-                yamlConfiguration.options().copyDefaults(false);
-            }
+            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables to players.%nDon't edit it."));
 
             addDefault("Main.ConfigVersion", CURRENT_VERSION);
             addDefault("General.StatsEnabled", true);

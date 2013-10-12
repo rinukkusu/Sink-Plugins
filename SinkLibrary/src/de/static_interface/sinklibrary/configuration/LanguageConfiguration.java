@@ -83,14 +83,7 @@ public class LanguageConfiguration
                 }
             }
 
-            if (createNewConfiguration)
-            {
-                yamlConfiguration.options().copyDefaults(true);
-            }
-            else
-            {
-                yamlConfiguration.options().copyDefaults(false);
-            }
+            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language."));
 
             addDefault("Main.ConfigVersion", CURRENT_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
@@ -119,10 +112,6 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Help", "Help");
             addDefault("SinkChat.Channels.Shout", "Shout");
             addDefault("SinkChat.Channels.Trade", "Trade");
-
-            addDefault("SinkChat.Channel.Help.Prefix", "?"); //Todo: move these to Settings
-            addDefault("SinkChat.Channel.Shout.Prefix", "!");
-            addDefault("SinkChat.Channel.Trade.Prefix", "$");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
@@ -278,8 +267,17 @@ public class LanguageConfiguration
      */
     public static void addDefault(String path, Object value)
     {
+        if (getDefaults() == null)
+        {
+            throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
+        }
+
+        if (! getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null)
+        {
+            getYamlConfiguration().set(path, value);
+            save();
+        }
         getDefaults().put(path, value);
-        getYamlConfiguration().addDefault(path, value);
     }
 
     /**

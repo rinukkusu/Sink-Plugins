@@ -147,8 +147,12 @@ public abstract class ConfigurationBase
         {
             throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
         }
+        if (! getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null)
+        {
+            getYamlConfiguration().set(path, value);
+            save();
+        }
         getDefaults().put(path, value);
-        getYamlConfiguration().addDefault(path, value);
     }
 
     /**
