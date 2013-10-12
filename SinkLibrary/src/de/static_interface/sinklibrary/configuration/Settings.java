@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.Updater;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -141,6 +142,21 @@ public class Settings extends ConfigurationBase
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
             Bukkit.getLogger().log(Level.SEVERE, "***************");
             recreate();
+        }
+    }
+
+    public Updater.UpdateType getUpdateType()
+    {
+        switch (( (String) get("Updater.UpdateType") ).toLowerCase())
+        {
+            case "default":
+                return Updater.UpdateType.DEFAULT;
+            case "no_download":
+                return Updater.UpdateType.NO_DOWNLOAD;
+            case "no_version_check":
+                return Updater.UpdateType.NO_VERSION_CHECK;
+            default:
+                return Updater.UpdateType.DEFAULT;
         }
     }
 
