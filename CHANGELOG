@@ -1,6 +1,10 @@
+Version 1.8.6
+* Fixed that joining or leaving a channel was impossible
+
 Version 1.8.5
 * Added Auto Update Checker
 * Added SinkDebug Command (/sinkdebug or /sdebug)
+* Fixed Channel System
 
 Version 1.8
 * Fixed some bugs and exceptions

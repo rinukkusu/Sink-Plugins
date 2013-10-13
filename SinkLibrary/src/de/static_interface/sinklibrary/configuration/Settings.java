@@ -27,10 +27,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-/**
- * Currently unused
- */
-
 public class Settings extends ConfigurationBase
 {
     public static final int CURRENT_VERSION = 1;
@@ -107,6 +103,7 @@ public class Settings extends ConfigurationBase
             getYamlConfiguration().options().header(String.format("You can customize the SinkPlugins with this configuration."));
 
             addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("General.DisplayNamesEnabled", true);
 
             addDefault("Updater.Enabled", true);
             addDefault("Updater.UpdateType", "default");
@@ -163,5 +160,10 @@ public class Settings extends ConfigurationBase
     public boolean getUpdaterEnabled()
     {
         return (boolean) get("Updater.Enabled");
+    }
+
+    public boolean getDisplayNamesEnabled()
+    {
+        return (boolean) get("General.DisplayNamesEnabled");
     }
 }

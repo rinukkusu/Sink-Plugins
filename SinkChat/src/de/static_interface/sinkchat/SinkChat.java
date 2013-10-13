@@ -26,10 +26,7 @@ import de.static_interface.sinkchat.command.SpyCommands;
 import de.static_interface.sinkchat.listener.ChatListenerLowest;
 import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinklibrary.SinkLibrary;
-import de.static_interface.sinklibrary.User;
-import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,11 +42,6 @@ public class SinkChat extends JavaPlugin
         }
 
         SinkLibrary.registerPlugin(this);
-
-        for (Player p : Bukkit.getOnlinePlayers())
-        {
-            refreshDisplayName(p);
-        }
 
         IChannel fc = new HelpChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Help.Prefix"));
         IChannel sc = new ShoutChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Shout.Prefix"));
@@ -85,36 +77,6 @@ public class SinkChat extends JavaPlugin
         }
 
         return true;
-    }
-
-    /**
-     * Refresh Player DisplayName
-     */
-    public static void refreshDisplayName(Player player)
-    {
-        String nickname;
-        User user = SinkLibrary.getUser(player);
-        PlayerConfiguration config = user.getPlayerConfiguration();
-
-        if (! config.exists())
-        {
-            return;
-        }
-
-        if (config.getHasDisplayName())
-        {
-            nickname = config.getDisplayName();
-            if (nickname.equals(user.getDefaultDisplayName()))
-            {
-                config.setHasDisplayName(false);
-            }
-        }
-        else
-        {
-            nickname = user.getDefaultDisplayName();
-        }
-        player.setDisplayName(nickname);
-        player.setCustomName(nickname);
     }
 
     private void registerEvents(PluginManager pm)

@@ -17,11 +17,11 @@
 package de.static_interface.sinklibrary.listener;
 
 import de.static_interface.sinklibrary.SinkLibrary;
-import de.static_interface.sinklibrary.User;
-import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 public class DisplayNameListener implements Listener
@@ -29,13 +29,18 @@ public class DisplayNameListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        User user = SinkLibrary.getUser(event.getPlayer());
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        String nick = config.getDisplayName();
-        if (nick == null || nick.equals("null") || nick.equals(""))
-        {
-            config.setDisplayName(user.getDefaultDisplayName());
-            config.setHasDisplayName(false);
-        }
+        SinkLibrary.refreshDisplayName(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
+    {
+        SinkLibrary.refreshDisplayName(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+    {
+        SinkLibrary.refreshDisplayName(event.getPlayer());
     }
 }

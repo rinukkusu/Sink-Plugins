@@ -48,11 +48,6 @@ public class ChannelUtil
             formattedMessage = prefix + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
 
-        if (user.hasPermission("sinkchat.color"))
-        {
-            formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
-        }
-
         for (Player target : Bukkit.getOnlinePlayers())
         {
             if (! ( channel.contains(target) ) && target.hasPermission(channel.getPermission()))

@@ -18,6 +18,7 @@ package de.static_interface.sinklibrary;
 
 import de.static_interface.sinkirc.SinkIRC;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
+import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import de.static_interface.sinklibrary.configuration.Settings;
 import de.static_interface.sinklibrary.listener.DisplayNameListener;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
@@ -114,6 +115,11 @@ public class SinkLibrary extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
         Bukkit.getPluginManager().registerEvents(new DisplayNameListener(), this);
         getCommand("sinkdebug").setExecutor(new SinkDebugCommand());
+
+        for (Player p : Bukkit.getOnlinePlayers())
+        {
+            refreshDisplayName(p);
+        }
 
         update();
     }
@@ -365,5 +371,42 @@ public class SinkLibrary extends JavaPlugin
     public static String getVersion()
     {
         return version;
+    }
+
+    /**
+     * Refresh Player DisplayName
+     */
+    public static void refreshDisplayName(Player player)
+    {
+        if (! getSettings().getDisplayNamesEnabled()) return;
+        String nickname;
+        User user = SinkLibrary.getUser(player);
+        PlayerConfiguration config = user.getPlayerConfiguration();
+
+        if (! config.exists())
+        {
+            return;
+        }
+
+        nickname = config.getDisplayName();
+
+        if (nickname == null || nickname.equals("null") || nickname.equals(""))
+        {
+            config.setDisplayName(user.getDefaultDisplayName());
+            config.setHasDisplayName(false);
+        }
+        else if (config.getHasDisplayName())
+        {
+            if (nickname.equals(user.getDefaultDisplayName()))
+            {
+                config.setHasDisplayName(false);
+            }
+        }
+        else
+        {
+            nickname = user.getDefaultDisplayName();
+        }
+        player.setDisplayName(nickname);
+        player.setCustomName(nickname);
     }
 }

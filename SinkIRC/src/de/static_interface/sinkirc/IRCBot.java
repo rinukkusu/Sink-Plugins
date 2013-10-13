@@ -210,7 +210,7 @@ public class IRCBot extends PircBot
                 {
                     formattedReason = " (Reason: " + reason + ")";
                 }
-                reason = "Kicked by " + sender + " from IRC" + formattedReason + "!";
+                reason = targetPlayer.getName() + ": Kicked by " + sender + " from IRC" + formattedReason + "!";
                 final String finalReason = reason;
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
@@ -220,7 +220,7 @@ public class IRCBot extends PircBot
                         targetPlayer.kickPlayer(finalReason);
                     }
                 });
-                sendCleanMessage(channel, reason);
+                Bukkit.broadcastMessage(reason);
 
             }
 

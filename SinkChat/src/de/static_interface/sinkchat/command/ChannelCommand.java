@@ -64,7 +64,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 try
                 {
-                    IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
+                    IChannel channel = ChannelHandler.getChannelByName(args[1]);
                     if (! user.hasPermission(channel.getPermission()))
                     {
                         player.sendMessage(_("Permissions.General"));
@@ -93,7 +93,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 try
                 {
-                    IChannel channel = ChannelHandler.getRegisteredChannel(args[1]);
+                    IChannel channel = ChannelHandler.getChannelByName(args[1]);
                     if (! user.hasPermission(channel.getPermission()))
                     {
                         player.sendMessage(_("Permissions.General"));

@@ -58,11 +58,6 @@ public class ChatListenerNormal implements Listener
         String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getDisplayName());
         formattedMessage = formattedMessage.replace("%2$s", message);
 
-        if (eventPlayer.hasPermission("sinkchat.color"))
-        {
-            formattedMessage = ChatColor.translateAlternateColorCodes('&', formattedMessage);
-        }
-
         if (! SinkLibrary.permissionsAvailable())
         {
             formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.ChatLocal") + ChatColor.RESET + " " + formattedMessage;

@@ -55,6 +55,19 @@ public class ChannelHandler
     }
 
     /**
+     * @param name Name of the channel
+     * @return IChannel instance
+     */
+    public static IChannel getChannelByName(String name)
+    {
+        for (String channel : registeredChannelsMap.keySet())
+        {
+            if (channel.equalsIgnoreCase(name)) return registeredChannelsMap.get(channel);
+        }
+        return null;
+    }
+
+    /**
      * @return Returns regiteredChannelNames, a String containing the names of all registered instances.
      */
 
