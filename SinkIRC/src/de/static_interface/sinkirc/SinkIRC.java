@@ -17,50 +17,43 @@
 package de.static_interface.sinkirc;
 
 import de.static_interface.sinkirc.commands.IRCListCommand;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jibble.pircbot.IrcException;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
-public class SinkIRC extends JavaPlugin implements Listener
+public class SinkIRC extends JavaPlugin
 {
-    private static String channel = "#AdventuriaBot";
 
     static IRCBot ircBot;
 
     @Override
     public void onEnable()
     {
+        if (! checkDependencies()) return;
+
         ircBot = new IRCBot(this);
 
-        if (checkDependencies()) return;
-
-        getServer().getPluginManager().registerEvents(this, this);
+        SinkLibrary.registerPlugin(this);
+        String host = "irc.adventuria.eu";
 
         try
         {
-            String host = "irc.adventuria.eu";
             int port = 6667;
             ircBot.connect(host, port);
             //Todo: Add NickServ identification support
-            ircBot.joinChannel(channel);
+            ircBot.joinChannel(getMainChannel());
         }
         catch (IOException | IrcException e)
         {
-            String host = "irc.adventuria.eu";
             Bukkit.getLogger().severe("An Exception occurred while trying to connect to " + host + ":");
             Bukkit.getLogger().severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IRCListCommand());
+        Bukkit.getServer().getPluginManager().registerEvents(new IRCListener(ircBot), this);
     }
 
     private boolean checkDependencies()
@@ -88,60 +81,13 @@ public class SinkIRC extends JavaPlugin implements Listener
         ircBot.quitServer("Plugin reload or plugin has been deactivated");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(PlayerJoinEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        ircBot.sendCleanMessage(channel, event.getJoinMessage());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerQuit(PlayerQuitEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        ircBot.sendCleanMessage(channel, event.getQuitMessage());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerKick(PlayerKickEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        if (! event.getReason().equals(""))
-        {
-            ircBot.sendCleanMessage(channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked for reason: " + event.getReason());
-        }
-        else
-        {
-            ircBot.sendCleanMessage(channel, "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked!");
-        }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(PlayerDeathEvent event)
-    {
-        if (IRCBot.disabled)
-        {
-            return;
-        }
-        ircBot.sendCleanMessage(channel, event.getDeathMessage());
-    }
-
     public static IRCBot getIRCBot()
     {
         return ircBot;
     }
 
-    public static String getChannel()
+    public static String getMainChannel()
     {
-        return channel;
+        return "#AdventuriaBot";
     }
 }

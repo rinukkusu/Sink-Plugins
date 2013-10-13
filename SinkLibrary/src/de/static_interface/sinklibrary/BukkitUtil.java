@@ -16,7 +16,6 @@
 
 package de.static_interface.sinklibrary;
 
-import de.static_interface.sinkirc.SinkIRC;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -52,10 +51,7 @@ public class BukkitUtil
             p.sendMessage(message);
         }
         Bukkit.getConsoleSender().sendMessage(message);
-        if (SinkLibrary.sinkIRCAvailable())
-        {
-            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
-        }
+        SinkLibrary.sendIRCMessage(message);
     }
 
     /**
@@ -79,9 +75,9 @@ public class BukkitUtil
         }
         Bukkit.getConsoleSender().sendMessage(message);
         Permission perm = new Permission(permission);
-        if (perm.getDefault() == PermissionDefault.TRUE && SinkLibrary.sinkIRCAvailable())
+        if (perm.getDefault() == PermissionDefault.TRUE)
         {
-            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
+            SinkLibrary.sendIRCMessage(message);
         }
     }
 }

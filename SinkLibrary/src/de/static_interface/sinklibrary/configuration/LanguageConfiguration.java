@@ -83,7 +83,7 @@ public class LanguageConfiguration
                 }
             }
 
-            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language."));
+            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language.%n%%s will be replaced with the value by the plugin."));
 
             addDefault("Main.ConfigVersion", CURRENT_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");

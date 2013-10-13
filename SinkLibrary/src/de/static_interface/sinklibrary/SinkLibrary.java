@@ -16,10 +16,10 @@
 
 package de.static_interface.sinklibrary;
 
-import de.static_interface.sinkirc.SinkIRC;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import de.static_interface.sinklibrary.configuration.Settings;
+import de.static_interface.sinklibrary.events.IRCMessageEvent;
 import de.static_interface.sinklibrary.listener.DisplayNameListener;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
 import net.milkbowl.vault.chat.Chat;
@@ -44,7 +44,6 @@ public class SinkLibrary extends JavaPlugin
     private static Economy econ;
     private static Permission perm;
     private static Chat chat;
-    private static SinkIRC irc;
     private static File dataFolder;
 
     private static boolean economyAvailable = true;
@@ -106,8 +105,6 @@ public class SinkLibrary extends JavaPlugin
 
         LanguageConfiguration.init();
         settings = new Settings();
-
-        irc = (SinkIRC) Bukkit.getPluginManager().getPlugin("SinkIRC");
         version = getDescription().getVersion();
         tmpBannedPlayers = new ArrayList<>();
         registeredPlugins = new ArrayList<>();
@@ -139,7 +136,7 @@ public class SinkLibrary extends JavaPlugin
         }
         else if (updater.getResult() == Updater.UpdateResult.NO_UPDATE)
         {
-            Bukkit.getLogger().info(Updater.PREFIX + "No new updates found...");
+            Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "No new updates found...");
         }
     }
 
@@ -205,14 +202,6 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * @return True if SinkIRC is available
-     */
-    public static boolean sinkIRCAvailable()
-    {
-        return getSinkIRC() != null;
-    }
-
-    /**
      * @return True if permissions are available
      */
     public static boolean permissionsAvailable()
@@ -262,17 +251,6 @@ public class SinkLibrary extends JavaPlugin
     }
 
     /**
-     * Get SinkIRC Instance
-     *
-     * @return SinkIRC Instance
-     * @see SinkIRC
-     */
-    public static SinkIRC getSinkIRC()
-    {
-        return irc;
-    }
-
-    /**
      * Get custom data folder
      *
      * @return Data Folder of Sink Plugins (.../plugins/SinkPlugins/)
@@ -289,10 +267,8 @@ public class SinkLibrary extends JavaPlugin
      */
     public static void sendIRCMessage(String message)
     {
-        if (irc != null)
-        {
-            SinkIRC.getIRCBot().sendCleanMessage(SinkIRC.getChannel(), message);
-        }
+        IRCMessageEvent event = new IRCMessageEvent(message);
+        Bukkit.getServer().getPluginManager().callEvent(event);
     }
 
     /**

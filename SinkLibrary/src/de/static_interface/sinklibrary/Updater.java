@@ -39,7 +39,7 @@ import java.util.zip.ZipInputStream;
 @SuppressWarnings("UnusedDeclaration")
 public class Updater
 {
-    public static final String ConsolePREFIX = "[SinkPluginsUpdate] ";
+    public static final String CONSOLEPREFIX = "[SinkPluginsUpdate] ";
     public static final String PREFIX = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_GREEN + "SinkPluginsUpdate" + ChatColor.DARK_GRAY + "] " + ChatColor.RESET;
 
     private UpdateType type;
@@ -154,7 +154,7 @@ public class Updater
         }
         catch (MalformedURLException e)
         {
-            Bukkit.getLogger().severe(ConsolePREFIX + "The project ID provided for updating, " + id + " is invalid.");
+            Bukkit.getLogger().severe(CONSOLEPREFIX + "The project ID provided for updating, " + id + " is invalid.");
             result = UpdateResult.FAIL_BADID;
             e.printStackTrace();
         }
@@ -250,7 +250,7 @@ public class Updater
 
             final byte[] data = new byte[Updater.BYTE_SIZE];
             int count;
-            Bukkit.getLogger().info(ConsolePREFIX + "About to download a new update: " + this.versionName);
+            Bukkit.getLogger().info(CONSOLEPREFIX + "About to download a new update: " + this.versionName);
             long downloaded = 0;
             while (( count = in.read(data, 0, Updater.BYTE_SIZE) ) != - 1)
             {
@@ -259,7 +259,7 @@ public class Updater
                 final int percent = (int) ( ( downloaded * 100 ) / fileLength );
                 if (( ( percent % 10 ) == 0 ))
                 {
-                    Bukkit.getLogger().info(ConsolePREFIX + "Downloading update: " + percent + "% of " + fileLength + " bytes.");
+                    Bukkit.getLogger().info(CONSOLEPREFIX + "Downloading update: " + percent + "% of " + fileLength + " bytes.");
                 }
             }
             //Just a quick check to make sure we didn't leave any files from last time...
@@ -270,11 +270,11 @@ public class Updater
             // Check to see if it's a zip file, if it is, unzip it.
             final File dFile = new File(folder.getAbsolutePath() + "/" + tempFile);
             this.unzip(dFile);
-            Bukkit.getLogger().info(ConsolePREFIX + "Finished updating. Use the reload command to apply it");
+            Bukkit.getLogger().info(CONSOLEPREFIX + "Finished updating. Use the reload command to apply it");
         }
         catch (final Exception ex)
         {
-            Bukkit.getLogger().log(Level.WARNING, ConsolePREFIX + "The auto-updater tried to download a new update, but was unsuccessful.", ex);
+            Bukkit.getLogger().log(Level.WARNING, CONSOLEPREFIX + "The auto-updater tried to download a new update, but was unsuccessful.", ex);
             result = Updater.UpdateResult.FAIL_DOWNLOAD;
         }
         finally

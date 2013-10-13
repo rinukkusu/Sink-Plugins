@@ -24,6 +24,10 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class IRCBot extends PircBot
 {
     public static String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
@@ -35,7 +39,7 @@ public class IRCBot extends PircBot
     {
         this.setName(botName);
         this.setLogin(botName);
-        this.setVersion("Bukkit IRC Plugin, (c) 2013 Adventuria");
+        this.setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
         this.plugin = plugin;
     }
 
@@ -123,30 +127,67 @@ public class IRCBot extends PircBot
     }
 
     @Override
+    public void onPrivateMessage(String sender, String login, String hostname, String message)
+    {
+        String[] args = message.split(" ");
+        String cmd = args[0];
+        List<String> tmp = new ArrayList<>(Arrays.asList(args));
+        tmp.remove(0);
+        args = tmp.toArray(args);
+        executeCommand(cmd, args, sender, sender, message);
+    }
+
+    @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message)
+    {
+        if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
+                || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
+                || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
+                && ( message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ") ))
+        {
+            sendMessage(channel, "Hallo, " + sender);
+            return;
+        }
+
+        if (! message.toLowerCase().startsWith("~"))
+        {
+            return;
+        }
+        message = message.replaceFirst("~", "");
+        String[] args = message.split(" ");
+        String cmd = args[0];
+        List<String> tmp = new ArrayList<>(Arrays.asList(args));
+        tmp.remove(0);
+        args = tmp.toArray(args);
+        executeCommand(cmd, args, channel, sender, message);
+    }
+
+
+    private boolean isOp(String channel, String user)
+    {
+        for (User u : getUsers(channel))
+        {
+            if (u.isOp() && u.getNick().equals(user))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
+    {
+        sendMessage(SinkIRC.getMainChannel(), sourceNick + " hat mich mit dem Wert \"" + pingValue + "\" angepingt.");
+    }
+
+    public void executeCommand(String command, String[] args, String source, String sender, String label)
     {
         try
         {
-            if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
-                    || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
-                    || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
-                    && ( message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ") ))
-            {
-                sendMessage(channel, "Hallo, " + sender);
-                return;
-            }
+            boolean isOp = isOp(SinkIRC.getMainChannel(), sender);
 
-            if (! message.toLowerCase().startsWith("~"))
-            {
-                return;
-            }
-            message = message.replaceFirst("~", "");
-            String[] args = message.split(" ");
-            String cmd = args[0];
-
-            boolean isOp = isOp(channel, sender);
-
-            if (cmd.equals("toggle"))
+            if (command.equals("toggle"))
             {
                 if (! isOp)
                 {
@@ -155,11 +196,11 @@ public class IRCBot extends PircBot
                 disabled = ! disabled;
                 if (disabled)
                 {
-                    sendMessage(channel, "Disabled " + getName());
+                    sendMessage(source, "Disabled " + getName());
                 }
                 else
                 {
-                    sendMessage(channel, "Enabled " + getName());
+                    sendMessage(source, "Enabled " + getName());
                 }
             }
 
@@ -168,20 +209,63 @@ public class IRCBot extends PircBot
                 return;
             }
 
-            if (cmd.equals("say"))
+            if (command.equals("exec")) //Execute command as console
             {
-                if (args.length < 2)
+                if (! isOp) throw new UnauthorizedAccessException();
+                String commandWithArgs = "";
+                int i = 0;
+                for (String arg : args)
                 {
-                    sendCleanMessage(channel, "Usage: !say <text>");
-                    return;
+                    if (i == args.length - 1)
+                    {
+                        break;
+                    }
+                    i++;
+                    if (commandWithArgs.equals(""))
+                    {
+                        commandWithArgs = arg;
+                        continue;
+                    }
+                    commandWithArgs = commandWithArgs + " " + arg;
                 }
-                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
-                        + ": " + ChatColor.WHITE + message.replaceFirst("say", "");
-                Bukkit.getServer().broadcastMessage(messageWithPrefix);
-                sendCleanMessage(channel, replaceColorCodes(messageWithPrefix));
+
+
+                final String finalCommandWithArgs = commandWithArgs;
+
+                Bukkit.getScheduler().runTask(plugin, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommandWithArgs);
+                    }
+                });
+
+                sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
             }
 
-            if (cmd.equals("kick"))
+            if (command.equals("say")) //Speak to ingame players
+            {
+                boolean privateMessageCommand = ! source.startsWith("#");
+
+                if (args.length < 2)
+                {
+                    sendCleanMessage(source, "Usage: !say <text>");
+                    return;
+            }
+
+                if (privateMessageCommand)
+                {
+                    source = "Query";
+                }
+
+                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
+                        + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
+                Bukkit.getServer().broadcastMessage(messageWithPrefix);
+                sendCleanMessage(SinkIRC.getMainChannel(), replaceColorCodes(messageWithPrefix));
+            }
+
+            if (command.equals("kick"))  //Kick players from IRC
             {
                 if (! isOp)
                 {
@@ -190,23 +274,23 @@ public class IRCBot extends PircBot
                 String targetPlayerName;
                 try
                 {
-                    targetPlayerName = args[1];
+                    targetPlayerName = args[0];
                 }
                 catch (Exception e)
                 {
-                    sendCleanMessage(channel, "Usage: !kick <player> <reason>");
+                    sendCleanMessage(source, "Usage: !kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = Bukkit.getServer().getPlayer(targetPlayerName);
                 if (targetPlayer == null)
                 {
-                    sendCleanMessage(channel, "Player \"" + targetPlayerName + "\" is not online!");
+                    sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
                     return;
                 }
-                String reason = message.replace(targetPlayerName + " ", "");
+                String reason = label.replace(targetPlayerName + " ", "");
                 reason = reason.replace("kick ", "");
                 String formattedReason = "";
-                if (args.length >= 3)
+                if (args.length > 1)
                 {
                     formattedReason = " (Reason: " + reason + ")";
                 }
@@ -224,12 +308,12 @@ public class IRCBot extends PircBot
 
             }
 
-            if (cmd.equals("list"))
+            if (command.equals("list")) //List Players
             {
                 String players = "";
                 if (Bukkit.getServer().getOnlinePlayers().length == 0)
                 {
-                    sendCleanMessage(channel, "There are currently no online players");
+                    sendCleanMessage(source, "There are currently no online players");
                     return;
                 }
                 for (Player p : Bukkit.getServer().getOnlinePlayers())
@@ -238,57 +322,22 @@ public class IRCBot extends PircBot
                     {
                         players = p.getDisplayName();
                     }
-                    else
-                    {
-                        players = players + ", " + p.getDisplayName();
-                    }
-                }
-                sendCleanMessage(channel, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
-            }
-
-            if (cmd.equals("permissions") || cmd.equals("perms"))
-            {
-                if (isOp)
-                {
-                    sendCleanMessage(channel, "You are allowed to use administrator commands");
-                }
                 else
                 {
-                    sendCleanMessage(channel, "You aren't allowed to use administrator commands");
+                    players = players + ", " + p.getDisplayName();
                 }
             }
-
-            if (cmd.equals("whoami"))
-            {
-                sendCleanMessage(channel, "You are " + sender + " (" + login + "@" + hostname + ")");
+                sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
-            super.onMessage(channel, sender, login, hostname, message);
-        }
+    }
         catch (UnauthorizedAccessException e)
         {
-            sendMessage(channel, "You may not use that command");
+            sendMessage(source, "You may not use that command");
         }
         catch (Exception e)
         {
-            sendMessage(channel, "Uncaught Exception occured: " + e.getMessage());
+            sendMessage(source, "Uncaught Exception occured while trying to execute command: " + command);
+            sendMessage(source, e.getMessage());
         }
-    }
-
-    private boolean isOp(String channel, String user)
-    {
-        for (User u : getUsers(channel))
-        {
-            if (u.isOp() && u.getNick().equals(user))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
-    {
-        sendMessage(getChannels()[0], sourceNick + " hat mich mit dem Wert \"" + pingValue + "\" angepingt.");
     }
 }

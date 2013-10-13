@@ -35,6 +35,11 @@ public class NickCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        if (! SinkLibrary.getSettings().getDisplayNamesEnabled())
+        {
+            sender.sendMessage(PREFIX + "DisplayNames have been disabled in the config.");
+        }
+
         User user = SinkLibrary.getUser(sender);
         String newDisplayName;
 
