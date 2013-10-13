@@ -252,7 +252,7 @@ public class IRCBot extends PircBot
                 {
                     sendCleanMessage(source, "Usage: !say <text>");
                     return;
-            }
+                }
 
                 if (privateMessageCommand)
                 {
@@ -329,7 +329,7 @@ public class IRCBot extends PircBot
             }
                 sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
-    }
+        }
         catch (UnauthorizedAccessException e)
         {
             sendMessage(source, "You may not use that command");
