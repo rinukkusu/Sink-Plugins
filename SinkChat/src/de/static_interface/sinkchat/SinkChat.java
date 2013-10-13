@@ -57,22 +57,10 @@ public class SinkChat extends JavaPlugin
 
     private boolean checkDependencies()
     {
-
-        PluginManager pm = Bukkit.getPluginManager();
-        SinkLibrary sinkLibrary;
-
-        try
-        {
-            sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
-        }
-        catch (NoClassDefFoundError ignored)
-        {
-            sinkLibrary = null;
-        }
-        if (sinkLibrary == null)
+        if (Bukkit.getPluginManager().getPlugin("SinkLibrary") == null)
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
-            pm.disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
 
@@ -93,3 +81,4 @@ public class SinkChat extends JavaPlugin
         getCommand("disablespy").setExecutor(new SpyCommands.DisablSpyCommand());
     }
 }
+//49162800684

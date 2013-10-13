@@ -1,10 +1,11 @@
 name: SinkIRC
-version: 1.8.5
+version: 1.8.6
 description: Plugin that links Chat to IRC
 author: Trojaner
 authors: [_ShadowRaven_]
 website: http://static-interface.de
 main: de.static_interface.sinkirc.SinkIRC
+soft-depend: [SinkLibrary]
 
 commands:
   irclist:

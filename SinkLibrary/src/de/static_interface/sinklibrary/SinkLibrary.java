@@ -379,7 +379,6 @@ public class SinkLibrary extends JavaPlugin
     public static void refreshDisplayName(Player player)
     {
         if (! getSettings().getDisplayNamesEnabled()) return;
-        String nickname;
         User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
@@ -388,7 +387,7 @@ public class SinkLibrary extends JavaPlugin
             return;
         }
 
-        nickname = config.getDisplayName();
+        String nickname = config.getDisplayName();
 
         if (nickname == null || nickname.equals("null") || nickname.equals(""))
         {

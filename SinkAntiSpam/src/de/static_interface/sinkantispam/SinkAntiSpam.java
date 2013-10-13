@@ -21,15 +21,12 @@ import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
 public class SinkAntiSpam extends JavaPlugin
 {
-    SinkLibrary sinkLibrary;
-
     public static String prefix = ChatColor.RED + "[SinkAntiSpam] " + ChatColor.WHITE;
 
     public void onEnable()
@@ -51,20 +48,10 @@ public class SinkAntiSpam extends JavaPlugin
 
     private boolean checkDependencies()
     {
-
-        PluginManager pm = Bukkit.getPluginManager();
-        try
-        {
-            sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
-        }
-        catch (NoClassDefFoundError ignored)
-        {
-            sinkLibrary = null;
-        }
-        if (sinkLibrary == null)
+        if (Bukkit.getPluginManager().getPlugin("SinkLibrary") == null)
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
-            pm.disablePlugin(this);
+            Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
         return true;

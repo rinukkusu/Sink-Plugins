@@ -30,30 +30,21 @@ import org.jibble.pircbot.IrcException;
 
 import java.io.IOException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SinkIRC extends JavaPlugin implements Listener
 {
     private static String channel = "#AdventuriaBot";
 
     static IRCBot ircBot;
-    Logger log;
 
     @Override
     public void onEnable()
     {
         ircBot = new IRCBot(this);
 
-        if (Bukkit.getPluginManager().getPlugin("SinkChat") == null)
-        {
-            Bukkit.getLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
+        if (checkDependencies()) return;
 
         getServer().getPluginManager().registerEvents(this, this);
-
-        log = getLogger();
 
         try
         {
@@ -66,10 +57,29 @@ public class SinkIRC extends JavaPlugin implements Listener
         catch (IOException | IrcException e)
         {
             String host = "irc.adventuria.eu";
-            log.severe("An Exception occurred while trying to connect to " + host + ":");
-            log.severe(e.getMessage());
+            Bukkit.getLogger().severe("An Exception occurred while trying to connect to " + host + ":");
+            Bukkit.getLogger().severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IRCListCommand());
+    }
+
+    private boolean checkDependencies()
+    {
+        if (Bukkit.getPluginManager().getPlugin("SinkLibrary") == null)
+        {
+            getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return false;
+        }
+
+        if (Bukkit.getPluginManager().getPlugin("SinkChat") == null)
+        {
+            Bukkit.getLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return false;
+        }
+
+        return true;
     }
 
     @Override
