@@ -202,25 +202,25 @@ public class SinkCommands extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand("commandsver").setExecutor(new CommandsVerCommand(this));
+        getCommand("commandsver").setExecutor(new CommandsverCommand(this));
         getCommand("drug").setExecutor(new DrugCommand());
         getCommand("milk").setExecutor(new MilkCommand());
         getCommand("warn").setExecutor(new WarnCommand());
         getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand());
         getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand());
-        getCommand("globalmute").setExecutor(new GlobalMuteCommand());
-        getCommand("teamchat").setExecutor(new TeamChatCommand());
-        getCommand("newbiechat").setExecutor(new NewbieChatCommand());
+        getCommand("globalmute").setExecutor(new GlobalmuteCommand());
+        getCommand("teamchat").setExecutor(new TeamchatCommand());
+        getCommand("newbiechat").setExecutor(new NewbiechatCommand());
         getCommand("spectate").setExecutor(new SpectateCommands.SpectateCommand());
         getCommand("unspectate").setExecutor(new SpectateCommands.UnspectateCommand());
         getCommand("spectatorlist").setExecutor(new SpectateCommands.SpectatorlistCommand());
         getCommand("lag").setExecutor(new LagCommand());
-        getCommand("votekick").setExecutor(new VoteKickCommands.VotekickCommand(this));
-        getCommand("voteyes").setExecutor(new VoteKickCommands.VoteyesCommand(this));
-        getCommand("voteno").setExecutor(new VoteKickCommands.VotenoCommand(this));
-        getCommand("votestatus").setExecutor(new VoteKickCommands.VotestatusCommand());
-        getCommand("endvote").setExecutor(new VoteKickCommands.EndvoteCommand(this));
-        getCommand("votekickunban").setExecutor(new VoteKickCommands.VotekickunbanCommand());
+        getCommand("votekick").setExecutor(new VotekickCommands.VotekickCommand(this));
+        getCommand("voteyes").setExecutor(new VotekickCommands.VoteyesCommand(this));
+        getCommand("voteno").setExecutor(new VotekickCommands.VotenoCommand(this));
+        getCommand("votestatus").setExecutor(new VotekickCommands.VotestatusCommand());
+        getCommand("endvote").setExecutor(new VotekickCommands.EndvoteCommand(this));
+        getCommand("votekickunban").setExecutor(new VotekickCommands.VotekickunbanCommand());
         getCommand("rename").setExecutor(new RenameCommand());
         getCommand("clear").setExecutor(new ClearCommand());
         getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());

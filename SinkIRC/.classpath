@@ -3,7 +3,8 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/pircbot"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/bukkit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SinkLibrary"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SinkLibrary"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/bukkit"/>
 	<classpathentry kind="output" path="out/production/SinkIRC"/>
 </classpath>

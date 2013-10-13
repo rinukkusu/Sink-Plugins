@@ -23,7 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class GlobalMuteCommand implements CommandExecutor
+public class GlobalmuteCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.DARK_RED + "[GlobalMute] " + ChatColor.RESET;
 

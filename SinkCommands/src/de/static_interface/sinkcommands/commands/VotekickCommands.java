@@ -30,7 +30,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteKickCommands
+public class VotekickCommands
 {
     public static final String PREFIX = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
 
@@ -159,7 +159,7 @@ public class VoteKickCommands
                 @Override
                 public void run()
                 {
-                    VoteKickCommands.endVoteKick(plugin);
+                    VotekickCommands.endVoteKick(plugin);
                 }
             }, time);
             return true;
@@ -286,7 +286,7 @@ public class VoteKickCommands
 
     private static boolean sendStatus(CommandSender sender)
     {
-        if (! VoteKickCommands.voteStarted)
+        if (! VotekickCommands.voteStarted)
         {
             sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
@@ -299,7 +299,7 @@ public class VoteKickCommands
 
     private static boolean vote(CommandSender sender, boolean yes, Plugin plugin)
     {
-        if (! VoteKickCommands.voteStarted)
+        if (! VotekickCommands.voteStarted)
         {
             sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
@@ -324,7 +324,7 @@ public class VoteKickCommands
 
         if (( votesYes + votesNo ) == Bukkit.getOnlinePlayers().length)
         {
-            VoteKickCommands.endVoteKick(plugin);
+            VotekickCommands.endVoteKick(plugin);
         }
         return true;
     }
