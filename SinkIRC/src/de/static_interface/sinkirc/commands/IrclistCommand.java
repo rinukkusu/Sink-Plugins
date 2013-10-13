@@ -30,7 +30,7 @@ public class IRCListCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        User[] users = SinkIRC.getIRCBot().getUsers(SinkIRC.getChannel());
+        User[] users = SinkIRC.getIRCBot().getUsers(SinkIRC.getMainChannel());
         String message = "";
         for (User user : users)
         {
