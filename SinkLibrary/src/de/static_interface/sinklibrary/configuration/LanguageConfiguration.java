@@ -125,6 +125,7 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Private.LeftChat","You have left the private conversation %c!");
             addDefault("SinkChat.Channels.Private.PlayerLeftCon", "%t has left conversation %c");
             addDefault("SinkChat.Channels.Private.PlayerKicked","%t has been kicked: %r");
+            addDefault("SinkChat.Channels.Private.PlayerKicked.ErrorNotInChannel", "%t is not in that conversation!");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");

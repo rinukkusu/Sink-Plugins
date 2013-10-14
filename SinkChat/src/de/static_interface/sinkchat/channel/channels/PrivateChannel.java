@@ -86,4 +86,9 @@ public class PrivateChannel implements IPrivateChannel{
         return channelIdent;
     }
 
+    public Player getStarter()
+    {
+        return starter;
+    }
+
 }

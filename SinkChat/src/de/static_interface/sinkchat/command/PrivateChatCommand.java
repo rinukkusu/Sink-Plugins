@@ -19,9 +19,9 @@ public class PrivateChatCommand implements CommandExecutor {
 
         if ( (args.length == 0) || (args.length == 1) || ( args.length == 2 && !(args[0].equalsIgnoreCase("leave")) ) )
         {
-            sender.sendMessage("/privatechat add <channel identifier> <player> [players...]");
-            sender.sendMessage("/privatechat kick <channel identifier> <player> [reason]");
+            sender.sendMessage("/privatechat invite <channel identifier> <player> [players...]");
             sender.sendMessage("/privatechat leave <channel identifier>");
+            sender.sendMessage("/privatechat kick <channel identifier> <player> [reason]");
             return true;
         }
         //Everything else
@@ -30,7 +30,7 @@ public class PrivateChatCommand implements CommandExecutor {
             PrivateChannel ch = PrivateChannelHandler.getChannel(args[1]);
             switch ( args[0].toLowerCase() )
             {
-                case "add":
+                case "invite":
                     if ( ch == null )
                     {
                         if ( Bukkit.getPlayer(args[2]) == null )
@@ -43,16 +43,49 @@ public class PrivateChatCommand implements CommandExecutor {
                     }
                     for ( String s : args )
                     {
-                        if ( s.equals("add") || s.equals(args[1]) || ( ch.contains(Bukkit.getPlayer(args[2])) ) ) continue;
+                        if ( s.equals("invite") || s.equals(args[1]) || ( ch.contains(Bukkit.getPlayer(s)) ) ) continue;
+                        if ( Bukkit.getPlayer(s) == null )
+                        {
+                            sender.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", s));
+                        }
+                        ch.addPlayer((Player) (sender), Bukkit.getPlayer(s));
                     }
 
                     return true;
                 case "leave":
-                    PrivateChannel channel = PrivateChannelHandler.getChannel(args[1]);
+                    if ( !(ch.contains((Player) (sender))) || ( ch == null ) )
+                    {
+                        sender.sendMessage(_("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]));
+                        return true;
+                    }
+                    ch.kickPlayer((Player) sender, (Player) sender, "");
+                    return true;
+                case "kick":
+                    if ( !(ch.contains((Player) sender)) || ( ch == null ) )
+                    {
+                        sender.sendMessage(_("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]));
+                        return true;
+                    }
+                    if ( !(ch.getStarter().equals((Player) sender)) )
+                    {
+                        sender.sendMessage(_("Permissions.General"));
+                        return true;
+                    }
+                    if ( Bukkit.getPlayer(args[2]) == null )
+                    {
+                        sender.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", args[2]));
+                    }
+                    if ( !(ch.contains(Bukkit.getPlayer(args[2]))) )
+                    {
+                        sender.sendMessage(_("SinkChat.Channels.Private.PlayerKicked").replace("%t", args[2]));
+                        return true;
+                    }
 
+                    String reason = args[3];
+                    if ( reason == null ) reason = "kicked !";
 
-
-
+                    ch.kickPlayer(Bukkit.getPlayer(args[2]), (Player) sender, reason);
+                    return true;
             }
 
 

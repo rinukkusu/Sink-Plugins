@@ -59,4 +59,11 @@ public interface IPrivateChannel {
 
     public String getChannelIdentifier();
 
+    /**
+     * Returns the player who started that conversation.
+     * @return
+     * Player who started that conversation
+     */
+    public Player getStarter();
+
 }
