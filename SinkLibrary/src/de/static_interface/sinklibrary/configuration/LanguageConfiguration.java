@@ -30,7 +30,7 @@ import java.util.logging.Level;
 
 public class LanguageConfiguration
 {
-    public static final int CURRENT_VERSION = 1;
+    public static final int CURRENT_VERSION = 2;
 
     private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
     private static HashMap<String, Object> defaultValues;
@@ -112,6 +112,8 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Help", "Help");
             addDefault("SinkChat.Channels.Shout", "Shout");
             addDefault("SinkChat.Channels.Trade", "Trade");
+
+            addDefault("SinkChat.Channels.Private.InvitedToChat","You have been invited to a chat with %p");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
