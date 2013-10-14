@@ -23,6 +23,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jibble.pircbot.User;
 
+import java.util.Arrays;
+
 public class IrclistCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.YELLOW + "[IRC] " + ChatColor.RESET;
@@ -31,6 +33,7 @@ public class IrclistCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         User[] users = SinkIRC.getIRCBot().getUsers(SinkIRC.getMainChannel());
+        Arrays.sort(users);
         String message = "";
         for (User user : users)
         {

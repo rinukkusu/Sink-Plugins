@@ -317,7 +317,11 @@ public class IRCBot extends PircBot
                     sendCleanMessage(source, "There are currently no online players");
                     return;
                 }
-                for (Player p : Bukkit.getServer().getOnlinePlayers())
+
+                Player[] onlinePlayers = Bukkit.getOnlinePlayers();
+                Arrays.sort(onlinePlayers);
+
+                for ( Player p : onlinePlayers )
                 {
                     de.static_interface.sinklibrary.User user = SinkLibrary.getUser(p);
                     if (players.equals(""))
