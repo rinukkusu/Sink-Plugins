@@ -41,4 +41,14 @@ public interface IPrivateChannel {
 
     public void registerConversation();
 
+    /**
+     * Returns wether a conversation contains a player or not
+     * @param player
+     * Player to check for
+     * @return
+     * True if player is in that conversation, else false.
+     */
+
+    public boolean contains(Player player);
+
 }
