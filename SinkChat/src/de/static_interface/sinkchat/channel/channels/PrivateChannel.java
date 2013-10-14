@@ -18,7 +18,7 @@ public class PrivateChannel {
         for ( Player p : targets ){
             if ( participants.contains(p) ) continue;
 
-            p.sendMessage(LanguageConfiguration._("SinkChat.Channels.Private.InvitedToChat"));
+            p.sendMessage(LanguageConfiguration._("SinkChat.Channels.Private.InvitedToChat").replace("%p",starter.getDisplayName()));
 
         }
 
