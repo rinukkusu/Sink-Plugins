@@ -42,7 +42,7 @@ public class Util
      */
     public static void backupFile(File file, boolean notify) throws IOException
     {
-        if (notify) Bukkit.getLogger().log(Level.INFO, "Creating backup of " + file + "...");
+        if ( notify ) Bukkit.getLogger().log(Level.INFO, "Creating backup of " + file + "...");
 
         Calendar calender = new GregorianCalendar();
         String month = String.valueOf(calender.get(Calendar.MONTH));
@@ -50,22 +50,22 @@ public class Util
         String year = String.valueOf(calender.get(Calendar.YEAR));
         String hour = String.valueOf(calender.get(Calendar.HOUR));
         String minute = String.valueOf(calender.get(Calendar.MINUTE));
-        if (calender.get(Calendar.DAY_OF_MONTH) < 10)
+        if ( calender.get(Calendar.DAY_OF_MONTH) < 10 )
         {
             day = "0" + day;
         }
 
-        if (calender.get(Calendar.MONTH) < 10)
+        if ( calender.get(Calendar.MONTH) < 10 )
         {
             month = "0" + month;
         }
 
-        if (calender.get(Calendar.HOUR) < 10)
+        if ( calender.get(Calendar.HOUR) < 10 )
         {
             hour = "0" + hour;
         }
 
-        if (calender.get(Calendar.MINUTE) < 10)
+        if ( calender.get(Calendar.MINUTE) < 10 )
         {
             minute = "0" + minute;
         }
@@ -80,12 +80,11 @@ public class Util
         {
             Files.copy(sourcePath, targetPath, REPLACE_EXISTING);
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't backup file: " + file.getAbsolutePath());
             throw e;
         }
-        if (notify) Bukkit.getLogger().log(Level.INFO, "Successfully created backup: " + targetPath);
     }
 
     /**
@@ -98,9 +97,9 @@ public class Util
     public static String formatArrayToString(String[] input, String Char)
     {
         String tmp = "";
-        for (String s : input)
+        for ( String s : input )
         {
-            if (tmp.equals(""))
+            if ( tmp.equals("") )
             {
                 tmp = s;
                 continue;
@@ -120,15 +119,15 @@ public class Util
     {
         String tmp = "";
         int i = 0;
-        for (String s : names)
+        for ( String s : names )
         {
             i++;
-            if (tmp.equals(""))
+            if ( tmp.equals("") )
             {
                 tmp = s;
                 continue;
             }
-            if (i == names.toArray().length)
+            if ( i == names.toArray().length )
             {
                 tmp = tmp + " and " + s;
                 continue;
@@ -148,7 +147,7 @@ public class Util
         {
             Integer.parseInt(input);
         }
-        catch (NumberFormatException ex)
+        catch ( NumberFormatException ex )
         {
             return false;
         }
