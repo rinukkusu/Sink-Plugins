@@ -13,7 +13,7 @@ public interface IPrivateChannel {
      * Player who was invited
      */
 
-    public void addPlayer(CommandSender invitor, Player target);
+    public void addPlayer(Player invitor, Player target);
 
     /**
      * Kicks a player off a conversation
@@ -50,5 +50,13 @@ public interface IPrivateChannel {
      */
 
     public boolean contains(Player player);
+
+    /**
+     * Returns channel identifier
+     * @return
+     * channel identifier
+     */
+
+    public String getChannelIdentifier();
 
 }

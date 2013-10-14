@@ -16,35 +16,36 @@ public class PrivateChannel implements IPrivateChannel{
     Vector<Player> participants = new Vector<>();
     Player starter;
 
-    public PrivateChannel(String channelIdentifier, Player starter, Player... targets)
+    public PrivateChannel(String channelIdentifier, Player starter, Player target)
     {
-        channelIdent = channelIdentifier;
+        if ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) )
+        {
+            channelIdent = channelIdentifier+"_";
+            while ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) ) channelIdent = channelIdent+"_";
+        }
+        else
+        {
+            channelIdent = channelIdentifier;
+        }
         this.starter = starter;
         participants.add(starter);
-        for ( Player p : targets ){
-            if ( participants.contains(p) ) continue;
+        participants.add(target);
 
-            // <starter> has invited you to chat. Chat with <channel identifier>
-            p.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%c", channelIdentifier).replace("%i", starter.getDisplayName()));
-
-        }
+        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%i", starter.getDisplayName()).replace("%c", channelIdent));
 
     }
 
     @Override
-    public void addPlayer(CommandSender invitor, Player target) {
+    public void addPlayer(Player invitor, Player target) {
 
         if ( participants.contains(target) )
         {
-            invitor.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat").replace("%t",target.getDisplayName()));
+            invitor.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat").replace("%t", target.getDisplayName()));
             return;
         }
-        if ( Bukkit.getPlayer(target.getName()) == null ){
-            invitor.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", target.getDisplayName()));
-        }
 
-        // <invitor> invited you to a chat with <conversation starter>
-        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%i", ((Player) (invitor)).getDisplayName()).replace("%p", participants.get(0).getDisplayName()));
+        participants.add(target);
+        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%i", invitor.getDisplayName()).replace("%c", channelIdent));
 
     }
 
@@ -71,11 +72,18 @@ public class PrivateChannel implements IPrivateChannel{
 
     @Override
     public void registerConversation() {
-        PrivateChannelHandler.registerChannel(channelIdent, this);
+        PrivateChannelHandler.registerChannel(this);
     }
 
     @Override
     public boolean contains(Player player) {
         return ( participants.contains(player) );
     }
+
+    @Override
+    public String getChannelIdentifier()
+    {
+        return channelIdent;
+    }
+
 }
