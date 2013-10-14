@@ -1,15 +1,19 @@
 package de.static_interface.sinkchat.channel;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public interface IPrivateChannel {
 
     /**
      * Add player to existing conversation
+     * @param invitor
+     * Player who invited target
      * @param target
+     * Player who was invited
      */
 
-    public void addPlayer(Player target);
+    public void addPlayer(CommandSender invitor, Player target);
 
     /**
      * Kicks a player off a conversation

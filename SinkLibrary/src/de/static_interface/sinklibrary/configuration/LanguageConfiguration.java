@@ -113,9 +113,18 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Shout", "Shout");
             addDefault("SinkChat.Channels.Trade", "Trade");
 
-            addDefault("SinkChat.Channels.Private.InvitedToChat","You have been invited to a chat with %p");
-            addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %t to a chat with %p");
-            addDefault("SinkChat.Channels.Private.LeftChat","You have left the private conversation with %p!");
+            // %i = invitor
+            // %c = converation's channel identifier
+            // %t = target (invited player);
+            // %r = reason
+
+            addDefault("SinkChat.Channels.Private.InvitedToChat","%i invited you to a chat. Chat with %c");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %t to chat.");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat", "%t already takes part in that conversation !");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline", "%t is not online !");
+            addDefault("SinkChat.Channels.Private.LeftChat","You have left the private conversation %c!");
+            addDefault("SinkChat.Channels.Private.PlayerLeftCon", "%t has left conversation %c");
+            addDefault("SinkChat.Channels.Private.PlayerKicked","%t has been kicked: %r");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
