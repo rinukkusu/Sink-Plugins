@@ -114,6 +114,8 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Trade", "Trade");
 
             addDefault("SinkChat.Channels.Private.InvitedToChat","You have been invited to a chat with %p");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %t to a chat with %p");
+            addDefault("SinkChat.Channels.Private.LeftChat","You have left the private conversation with %p!");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
