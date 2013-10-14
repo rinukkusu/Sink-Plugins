@@ -16,7 +16,7 @@
 
 package de.static_interface.sinkirc;
 
-import de.static_interface.sinkirc.commands.IRCListCommand;
+import de.static_interface.sinkirc.commands.IrclistCommand;
 import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -52,7 +52,7 @@ public class SinkIRC extends JavaPlugin
             Bukkit.getLogger().severe("An Exception occurred while trying to connect to " + host + ":");
             Bukkit.getLogger().severe(e.getMessage());
         }
-        getCommand("irclist").setExecutor(new IRCListCommand());
+        getCommand("irclist").setExecutor(new IrclistCommand());
         Bukkit.getServer().getPluginManager().registerEvents(new IRCListener(ircBot), this);
     }
 

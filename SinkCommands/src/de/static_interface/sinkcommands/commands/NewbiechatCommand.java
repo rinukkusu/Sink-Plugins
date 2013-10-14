@@ -23,7 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class NewbieChatCommand implements CommandExecutor
+public class NewbiechatCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.YELLOW + "[SupportChat] " + ChatColor.RESET;
 

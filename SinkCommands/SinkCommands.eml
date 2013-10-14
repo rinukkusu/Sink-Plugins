@@ -3,5 +3,7 @@
 	<contentEntry url="file://$MODULE_DIR$"/>
 	<levels>
 		<level name="bukkit" value="project"/>
+		<level name="pircbot" value="project"/>
+		<level name="Vault" value="project"/>
 	</levels>
 </component>

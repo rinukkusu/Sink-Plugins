@@ -17,7 +17,7 @@
 package de.static_interface.sinkcommands.listener;
 
 import de.static_interface.sinkcommands.SinkCommands;
-import de.static_interface.sinkcommands.commands.GlobalMuteCommand;
+import de.static_interface.sinkcommands.commands.GlobalmuteCommand;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.event.EventHandler;
@@ -33,7 +33,7 @@ public class GlobalMuteListener implements Listener
         User user = SinkLibrary.getUser(event.getPlayer());
         if (SinkCommands.globalmuteEnabled && ! user.hasPermission("sinkcommands.globalmute.bypass"))
         {
-            event.getPlayer().sendMessage(GlobalMuteCommand.PREFIX + "Du kannst nicht schreiben wenn der globale Mute aktiviert ist.");
+            event.getPlayer().sendMessage(GlobalmuteCommand.PREFIX + "Du kannst nicht schreiben wenn der globale Mute aktiviert ist.");
             event.setCancelled(true);
         }
     }

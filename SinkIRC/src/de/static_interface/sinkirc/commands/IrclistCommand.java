@@ -23,7 +23,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jibble.pircbot.User;
 
-public class IRCListCommand implements CommandExecutor
+public class IrclistCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.YELLOW + "[IRC] " + ChatColor.RESET;
 
