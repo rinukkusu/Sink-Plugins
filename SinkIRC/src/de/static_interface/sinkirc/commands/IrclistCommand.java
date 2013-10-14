@@ -23,10 +23,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jibble.pircbot.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class IrclistCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.YELLOW + "[IRC] " + ChatColor.RESET;
@@ -35,38 +31,28 @@ public class IrclistCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         User[] users = SinkIRC.getIRCBot().getUsers(SinkIRC.getMainChannel());
-
-        List<String> userNames = new ArrayList<>();
+        String message = "";
         for ( User user : users )
         {
             String name = user.getNick();
-            if ( user.isOp() )
-            {
-                name = ChatColor.RED + user.getNick() + ChatColor.RESET;
-            }
-            userNames.add(name);
-        }
-
-
-        Arrays.sort(userNames.toArray());
-        String message = "";
-        for ( String user : userNames )
-        {
-            if ( user.equals(SinkIRC.getIRCBot().getNick()) )
+            if ( name.equals(SinkIRC.getIRCBot().getNick()) )
             {
                 continue;
             }
-
-            if (message.equals(""))
+            if ( user.isOp() )
             {
-                message = user;
+                name = ChatColor.RED + name + ChatColor.RESET;
+            }
+            if ( message.equals("") )
+            {
+                message = name;
             }
             else
             {
-                message = message + ", " + user;
+                message = message + ", " + name;
             }
         }
-        if (users.length <= 1)
+        if ( users.length <= 1 )
         {
             message = "Zur Zeit sind keine Benutzer im IRC.";
         }

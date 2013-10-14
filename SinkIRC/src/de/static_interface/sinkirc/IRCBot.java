@@ -318,28 +318,16 @@ public class IRCBot extends PircBot
                     return;
                 }
 
-                Player[] onlinePlayers = Bukkit.getOnlinePlayers();
-
-                List<String> userNames = new ArrayList<>();
-
-                for ( Player p : onlinePlayers )
+                for ( Player p : Bukkit.getServer().getOnlinePlayers() )
                 {
                     de.static_interface.sinklibrary.User user = SinkLibrary.getUser(p);
-                    String name = user.getDisplayName();
-                    userNames.add(name);
-                }
-
-                Arrays.sort(userNames.toArray());
-
-                for ( String name : userNames )
-                {
                     if (players.equals(""))
                     {
-                        players = name;
+                        players = user.getDisplayName();
                     }
                     else
                     {
-                        players = players + ", " + name;
+                        players = players + ", " + user.getDisplayName();
                     }
                 }
                 sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
