@@ -37,7 +37,6 @@ public class PlayerConfiguration extends ConfigurationBase
     private Player player;
     private File yamlFile;
     private YamlConfiguration yamlConfiguration;
-    private File playersPath;
     private User user;
 
     HashMap<String, Object> defaultValues;
@@ -72,7 +71,7 @@ public class PlayerConfiguration extends ConfigurationBase
     {
         try
         {
-            playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
+            File playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
             yamlFile = new File(playersPath, player.getName() + ".yml");
 
             boolean createNewConfiguration = ! exists();
@@ -228,6 +227,15 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public String getDisplayName()
     {
+        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
+        {
+            String prefix = "";
+            if ( SinkLibrary.chatAvailable() )
+            {
+                prefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(player));
+            }
+            return prefix + player.getDisplayName();
+        }
         if (! getHasDisplayName())
         {
             return user.getDefaultDisplayName();

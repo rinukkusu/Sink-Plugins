@@ -35,22 +35,23 @@ public class NickCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (! SinkLibrary.getSettings().getDisplayNamesEnabled())
+        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
         {
             sender.sendMessage(PREFIX + "DisplayNames have been disabled in the config.");
+            return true;
         }
 
         User user = SinkLibrary.getUser(sender);
         String newDisplayName;
 
-        if (args.length < 1)
+        if ( args.length < 1 )
         {
             return false;
         }
 
-        if (args.length > 1)
+        if ( args.length > 1 )
         {
-            if (! user.hasPermission("sinkchat.nick.others"))
+            if ( !user.hasPermission("sinkchat.nick.others") )
             {
                 sender.sendMessage(_("Permissions.SinkChat.Nick.Other"));
                 return true;
@@ -60,13 +61,13 @@ public class NickCommand implements CommandExecutor
             Player target = Bukkit.getServer().getPlayer(playerName);
 
             newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
-            if (target == null)
+            if ( target == null )
             {
                 sender.sendMessage(PREFIX + _("General.NotOnline").replace("%s", args[0]));
                 return true;
             }
 
-            if (setDisplayName(target, newDisplayName, sender))
+            if ( setDisplayName(target, newDisplayName, sender) )
             {
                 user = SinkLibrary.getUser(target);
                 PlayerConfiguration config = user.getPlayerConfiguration();
@@ -74,14 +75,14 @@ public class NickCommand implements CommandExecutor
             }
             return true;
         }
-        if (user.isConsole())
+        if ( user.isConsole() )
         {
             sender.sendMessage(_("General.ConsoleNotAvailabe"));
             return true;
         }
         newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[0]) + ChatColor.RESET;
         Player player = user.getPlayer();
-        if (setDisplayName(player, newDisplayName, sender))
+        if ( setDisplayName(player, newDisplayName, sender) )
         {
             sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.SelfChanged").replaceFirst("%s", newDisplayName));
         }
@@ -92,40 +93,40 @@ public class NickCommand implements CommandExecutor
     {
         User user = SinkLibrary.getUser(target);
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
-        if (! cleanDisplayName.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$"))
+        if ( !cleanDisplayName.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") )
         {
             sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.IllegalNickname"));
             return false;
         }
 
-        if (cleanDisplayName.length() > 16)
+        if ( cleanDisplayName.length() > 16 )
         {
             sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.TooLong"));
             return false;
         }
 
-        if (cleanDisplayName.equals("off"))
+        if ( cleanDisplayName.equals("off") )
         {
             newDisplayName = user.getDefaultDisplayName();
         }
 
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers())
+        for ( Player onlinePlayer : Bukkit.getOnlinePlayers() )
         {
-            if (target == onlinePlayer)
+            if ( target == onlinePlayer )
             {
                 continue;
             }
             String onlinePlayerDisplayName = ChatColor.stripColor(onlinePlayer.getDisplayName().toLowerCase());
             String onlinePlayerName = ChatColor.stripColor(onlinePlayer.getName().toLowerCase());
             String displayName = ChatColor.stripColor(newDisplayName.toLowerCase());
-            if (displayName.equals(onlinePlayerDisplayName) || displayName.equals(onlinePlayerName))
+            if ( displayName.equals(onlinePlayerDisplayName) || displayName.equals(onlinePlayerName) )
             {
                 target.sendMessage(PREFIX + _("SinkChat.Commands.Nick.Used"));
                 return false;
             }
         }
 
-        if (SinkLibrary.chatAvailable())
+        if ( SinkLibrary.chatAvailable() )
         {
             newDisplayName = user.getPrefix() + newDisplayName;
         }
