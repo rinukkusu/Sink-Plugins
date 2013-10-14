@@ -57,7 +57,7 @@ public class SinkLibrary extends JavaPlugin
 
     public void onEnable()
     {
-        if (! vaultAvailable())
+        if ( !vaultAvailable() )
         {
             Bukkit.getLogger().warning("Vault Plugin not found. Disabling economy and some permission features.");
             permissionsAvailable = false;
@@ -66,17 +66,17 @@ public class SinkLibrary extends JavaPlugin
         }
         else
         {
-            if (! setupChat())
+            if ( !setupChat() )
             {
                 chatAvailable = false;
             }
 
-            if (! setupEcononmy())
+            if ( !setupEcononmy() )
             {
                 Bukkit.getLogger().warning("Economy Plugin not found. Disabling economy features.");
                 economyAvailable = false;
             }
-            if (! setupPermissions())
+            if ( !setupPermissions() )
             {
                 Bukkit.getLogger().warning("Permissions Plugin not found. Disabling permissions features.");
                 permissionsAvailable = false;
@@ -86,19 +86,19 @@ public class SinkLibrary extends JavaPlugin
         pluginName = this.getDescription().getName();
         dataFolder = getDataFolder();
 
-        if (! getCustomDataFolder().exists())
+        if ( !getCustomDataFolder().exists() )
         {
             try
             {
                 getCustomDataFolder().mkdirs();
             }
-            catch (Exception e)
+            catch ( Exception e )
             {
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create Data Folder!", e);
             }
         }
 
-        if (chatAvailable && economyAvailable && permissionsAvailable)
+        if ( chatAvailable && economyAvailable && permissionsAvailable )
         {
             Bukkit.getLogger().info("Successfully hooked into permissions, economy and chat.");
         }
@@ -113,7 +113,7 @@ public class SinkLibrary extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new DisplayNameListener(), this);
         getCommand("sinkdebug").setExecutor(new SinkDebugCommand());
 
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             refreshDisplayName(p);
         }
@@ -129,12 +129,12 @@ public class SinkLibrary extends JavaPlugin
         Updater updater = new Updater(getSettings().getUpdateType());
         String permission = "sinklibrary.updatenotification";
         String versionType = " " + updater.getLatestGameVersion() + " ";
-        if (versionType.equalsIgnoreCase("release")) versionType = " ";
-        if (updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE)
+        if ( versionType.equalsIgnoreCase("release") ) versionType = " ";
+        if ( updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE )
         {
             BukkitUtil.broadcast(Updater.PREFIX + "A new" + versionType + "update is available: " + updater.getLatestName(), permission);
         }
-        else if (updater.getResult() == Updater.UpdateResult.NO_UPDATE)
+        else if ( updater.getResult() == Updater.UpdateResult.NO_UPDATE )
         {
             Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "No new updates found...");
         }
@@ -143,10 +143,10 @@ public class SinkLibrary extends JavaPlugin
     public void onDisable()
     {
         Bukkit.getLogger().info("Saving players...");
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = new User(p);
-            if (user.getPlayerConfiguration().exists())
+            if ( user.getPlayerConfiguration().exists() )
             {
                 user.getPlayerConfiguration().save();
             }
@@ -157,17 +157,17 @@ public class SinkLibrary extends JavaPlugin
     private boolean setupChat()
     {
         RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null)
+        if ( chatProvider != null )
         {
             chat = chatProvider.getProvider();
         }
-        return ( chat != null );
+        return (chat != null);
     }
 
     private boolean setupEcononmy()
     {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null)
+        if ( rsp == null )
         {
             return false;
         }
@@ -178,11 +178,11 @@ public class SinkLibrary extends JavaPlugin
     private boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null)
+        if ( permissionProvider != null )
         {
             perm = permissionProvider.getProvider();
         }
-        return ( perm != null );
+        return (perm != null);
     }
 
     /**
@@ -354,25 +354,25 @@ public class SinkLibrary extends JavaPlugin
      */
     public static void refreshDisplayName(Player player)
     {
-        if (! getSettings().getDisplayNamesEnabled()) return;
+        if ( !getSettings().getDisplayNamesEnabled() ) return;
         User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
-        if (! config.exists())
+        if ( !config.exists() )
         {
             return;
         }
 
-        String nickname = config.getDisplayName();
+        String nickname = user.getDisplayName();
 
-        if (nickname == null || nickname.equals("null") || nickname.equals(""))
+        if ( nickname == null || nickname.equals("null") || nickname.equals("") )
         {
             config.setDisplayName(user.getDefaultDisplayName());
             config.setHasDisplayName(false);
         }
-        else if (config.getHasDisplayName())
+        else if ( config.getHasDisplayName() )
         {
-            if (nickname.equals(user.getDefaultDisplayName()))
+            if ( nickname.equals(user.getDefaultDisplayName()) )
             {
                 config.setHasDisplayName(false);
             }

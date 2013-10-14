@@ -49,7 +49,7 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public PlayerConfiguration(User user)
     {
-        if (user.isConsole())
+        if ( user.isConsole() )
         {
             throw new RuntimeException("User is Console, cannot create PlayerConfiguration.");
         }
@@ -74,16 +74,16 @@ public class PlayerConfiguration extends ConfigurationBase
             File playersPath = new File(SinkLibrary.getCustomDataFolder() + File.separator + "Players");
             yamlFile = new File(playersPath, player.getName() + ".yml");
 
-            boolean createNewConfiguration = ! exists();
+            boolean createNewConfiguration = !exists();
 
-            if (createNewConfiguration)
+            if ( createNewConfiguration )
             {
                 Bukkit.getLogger().log(Level.INFO, "Creating new player configuration: " + yamlFile);
             }
 
             Files.createParentDirs(yamlFile);
 
-            if (createNewConfiguration && ! yamlFile.createNewFile())
+            if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player configuration: " + yamlFile);
                 return;
@@ -92,10 +92,10 @@ public class PlayerConfiguration extends ConfigurationBase
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            if (! createNewConfiguration)
+            if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if (version < CURRENT_VERSION)
+                if ( version < CURRENT_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
@@ -116,12 +116,12 @@ public class PlayerConfiguration extends ConfigurationBase
 
             save();
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getAbsolutePath());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
         }
-        catch (InvalidConfigurationException e)
+        catch ( InvalidConfigurationException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "***************");
             Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
@@ -216,7 +216,7 @@ public class PlayerConfiguration extends ConfigurationBase
         player.setDisplayName(displayName);
         player.setCustomName(displayName);
         set("Nick.DisplayName", displayName);
-        if (ChatColor.stripColor(displayName).equals(ChatColor.stripColor(user.getDefaultDisplayName())))
+        if ( ChatColor.stripColor(displayName).equals(ChatColor.stripColor(user.getDefaultDisplayName())) )
         {
             setHasDisplayName(false);
         }
@@ -227,16 +227,7 @@ public class PlayerConfiguration extends ConfigurationBase
      */
     public String getDisplayName()
     {
-        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
-        {
-            String prefix = "";
-            if ( SinkLibrary.chatAvailable() )
-            {
-                prefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(player));
-            }
-            return prefix + player.getDisplayName();
-        }
-        if (! getHasDisplayName())
+        if ( !getHasDisplayName() )
         {
             return user.getDefaultDisplayName();
         }

@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkirc;
 
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -318,15 +319,16 @@ public class IRCBot extends PircBot
                 }
                 for (Player p : Bukkit.getServer().getOnlinePlayers())
                 {
+                    de.static_interface.sinklibrary.User user = SinkLibrary.getUser(p);
                     if (players.equals(""))
                     {
-                        players = p.getDisplayName();
+                        players = user.getDisplayName();
                     }
-                else
-                {
-                    players = players + ", " + p.getDisplayName();
+                    else
+                    {
+                        players = players + ", " + user.getDisplayName();
+                    }
                 }
-            }
                 sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
         }

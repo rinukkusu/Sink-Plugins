@@ -63,7 +63,7 @@ public class User
 
     User(CommandSender sender)
     {
-        if (sender instanceof Player)
+        if ( sender instanceof Player )
         {
             base = (Player) sender;
             econ = SinkLibrary.getEconomy();
@@ -85,12 +85,12 @@ public class User
      */
     public int getMoney()
     {
-        if (isConsole())
+        if ( isConsole() )
         {
             throw new NullPointerException("User is console!");
         }
 
-        if (! SinkLibrary.economyAvailable())
+        if ( !SinkLibrary.economyAvailable() )
         {
             throw new EconomyNotAvailableException();
         }
@@ -114,7 +114,7 @@ public class User
      */
     public Player getPlayer()
     {
-        if (isConsole())
+        if ( isConsole() )
         {
             throw new NullPointerException("User is console!");
         }
@@ -128,12 +128,12 @@ public class User
     public boolean hasPermission(String permission)
     {
         //Todo: fix this for offline usage
-        if (isConsole())
+        if ( isConsole() )
         {
             return true;
         }
 
-        if (! isOnline())
+        if ( !isOnline() )
         {
             throw new RuntimeException("This may be only used for online players!");
         }
@@ -155,12 +155,12 @@ public class User
      */
     public String getPrimaryGroup()
     {
-        if (isConsole())
+        if ( isConsole() )
         {
             throw new NullPointerException("User is console!");
         }
 
-        if (! SinkLibrary.permissionsAvailable())
+        if ( !SinkLibrary.permissionsAvailable() )
         {
             throw new PermissionsNotAvailableException();
         }
@@ -173,19 +173,19 @@ public class User
      */
     public String getDefaultDisplayName()
     {
-        if (isConsole())
+        if ( isConsole() )
         {
             return playerName;
         }
         try
         {
-            if (SinkLibrary.chatAvailable())
+            if ( SinkLibrary.chatAvailable() )
             {
                 String playerPrefix = getPrefix();
                 return playerPrefix + base.getName() + ChatColor.RESET;
             }
         }
-        catch (Exception ignored)
+        catch ( Exception ignored )
         {
         }
 
@@ -201,7 +201,7 @@ public class User
      */
     public String getPrefix()
     {
-        if (! SinkLibrary.chatAvailable())
+        if ( !SinkLibrary.chatAvailable() )
         {
             throw new ChatNotAvailabeException();
         }
@@ -223,14 +223,14 @@ public class User
      */
     public boolean isOnline()
     {
-        if (isConsole())
+        if ( isConsole() )
         {
             return true;
         }
         base = Bukkit.getPlayerExact(playerName);
-        if (base != null)
+        if ( base != null )
         {
-            if (base.isOnline())
+            if ( base.isOnline() )
             {
                 return true;
             }
@@ -254,7 +254,16 @@ public class User
      */
     public String getDisplayName()
     {
-        if (isConsole())
+        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
+        {
+            String prefix = "";
+            if ( SinkLibrary.chatAvailable() )
+            {
+                prefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
+            }
+            return prefix + base.getDisplayName();
+        }
+        if ( isConsole() )
         {
             return ChatColor.RED + "Console" + ChatColor.RESET;
         }

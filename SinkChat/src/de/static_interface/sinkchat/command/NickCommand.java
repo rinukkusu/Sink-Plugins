@@ -70,8 +70,7 @@ public class NickCommand implements CommandExecutor
             if ( setDisplayName(target, newDisplayName, sender) )
             {
                 user = SinkLibrary.getUser(target);
-                PlayerConfiguration config = user.getPlayerConfiguration();
-                sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.OtherChanged").replaceFirst("%s", playerName).replaceFirst("%s", config.getDisplayName()));
+                sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.OtherChanged").replaceFirst("%s", playerName).replaceFirst("%s", user.getDisplayName()));
             }
             return true;
         }
