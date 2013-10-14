@@ -23,7 +23,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.jibble.pircbot.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class IrclistCommand implements CommandExecutor
 {
@@ -33,26 +35,35 @@ public class IrclistCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         User[] users = SinkIRC.getIRCBot().getUsers(SinkIRC.getMainChannel());
-        Arrays.sort(users);
-        String message = "";
-        for (User user : users)
+
+        List<String> userNames = new ArrayList<>();
+        for ( User user : users )
         {
             String name = user.getNick();
-            if (name.equals(SinkIRC.getIRCBot().getNick()))
+            if ( user.isOp() )
+            {
+                name = ChatColor.RED + user.getNick() + ChatColor.RESET;
+            }
+            userNames.add(name);
+        }
+
+
+        Arrays.sort(userNames.toArray());
+        String message = "";
+        for ( String user : userNames )
+        {
+            if ( user.equals(SinkIRC.getIRCBot().getNick()) )
             {
                 continue;
             }
-            if (user.isOp())
-            {
-                name = ChatColor.RED + name + ChatColor.RESET;
-            }
+
             if (message.equals(""))
             {
-                message = name;
+                message = user;
             }
             else
             {
-                message = message + ", " + name;
+                message = message + ", " + user;
             }
         }
         if (users.length <= 1)
