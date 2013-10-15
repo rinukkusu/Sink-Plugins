@@ -34,7 +34,7 @@ public class ShoutChannel extends JavaPlugin implements IChannel, Listener
     Vector<Player> exceptedPlayers = new Vector<>();
     String PREFIX = ChatColor.GRAY + "[" + getChannelName() + "] " + ChatColor.RESET;
 
-    private String callByChar = "!";
+    private String callByChar;
 
     public ShoutChannel(String callChar)
     {

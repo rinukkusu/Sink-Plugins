@@ -32,7 +32,7 @@ public class TradeChannel extends JavaPlugin implements IChannel
     Vector<Player> exceptedPlayers = new Vector<>();
     String PREFIX = ChatColor.GRAY + "[" + ChatColor.GOLD + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
 
-    private String callByChar = "$";
+    private String callByChar;
 
     public TradeChannel(String callChar)
     {

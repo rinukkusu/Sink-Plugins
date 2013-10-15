@@ -43,7 +43,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 3 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug getplayervalue <player> <path.to.key>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " getplayervalue <player> <path.to.key>");
                     break;
                 }
                 String player = args[1];
@@ -58,7 +58,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 4 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug setplayervalue <player> <path.to.key> <value>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " setplayervalue <player> <path.to.key> <value>");
                     break;
                 }
                 String player = args[1];
@@ -76,7 +76,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 3 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug haspermission <player> <permission>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " haspermission <player> <permission>");
                     break;
                 }
                 String player = args[1];

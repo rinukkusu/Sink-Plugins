@@ -28,6 +28,11 @@ commands:
     aliases: ds
     permission: sinkchat.spy
 
+  privatechannel:
+    description: Use private channels
+    aliases: [pc, privatechat]
+    permission: sinkchat.privatechannel.use
+
 permissions:
   sinkchat.*:
     description: Gives access to all commands
@@ -93,4 +98,8 @@ permissions:
 
   sinkchat.channel.help:
     description: Allows to use help chat
+    default: true
+
+  sinkchat.privatechannel.use:
+    description: Allows to use private channels
     default: true

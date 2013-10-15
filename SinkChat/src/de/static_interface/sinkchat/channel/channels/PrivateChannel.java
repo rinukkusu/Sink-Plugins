@@ -2,17 +2,15 @@ package de.static_interface.sinkchat.channel.channels;
 
 import de.static_interface.sinkchat.channel.IPrivateChannel;
 import de.static_interface.sinkchat.channel.PrivateChannelHandler;
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 import java.util.Vector;
 
-public class PrivateChannel implements IPrivateChannel{
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
-    String channelIdent = new String();
+public class PrivateChannel extends IPrivateChannel
+{
+    String channelIdent;
     Vector<Player> participants = new Vector<>();
     Player starter;
 
@@ -20,8 +18,8 @@ public class PrivateChannel implements IPrivateChannel{
     {
         if ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) )
         {
-            channelIdent = channelIdentifier+"_";
-            while ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) ) channelIdent = channelIdent+"_";
+            channelIdent = channelIdentifier + "_";
+            while ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) ) channelIdent = channelIdent + "_";
         }
         else
         {
@@ -36,7 +34,8 @@ public class PrivateChannel implements IPrivateChannel{
     }
 
     @Override
-    public void addPlayer(Player invitor, Player target) {
+    public void addPlayer(Player invitor, Player target)
+    {
 
         if ( participants.contains(target) )
         {
@@ -45,39 +44,52 @@ public class PrivateChannel implements IPrivateChannel{
         }
 
         participants.add(target);
-        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%i", invitor.getDisplayName()).replace("%c", channelIdent));
+        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%t", invitor.getDisplayName()).replace("%c", channelIdent));
 
     }
 
     @Override
-    public void kickPlayer(Player player, Player kicker, String reason) {
+    public void kickPlayer(Player player, Player kicker, String reason)
+    {
         if ( player.equals(kicker) )
         {
             participants.remove(player);
-            sendMessage(_("SinkChat.Channels.Private.PlayerLeftCon").replace("%t",player.getDisplayName()).replace("%c",channelIdent));
+            sendMessage(player, _("SinkChat.Channels.Private.PlayerLeftCon").replace("%c", channelIdent));
             return;
         }
 
         participants.remove(player);
-        sendMessage(_("SinkChat.Channels.Private.PlayerKicked").replace("%t",player.getDisplayName()).replace("%c", reason));
+        sendMessage(player, _("SinkChat.Channels.Private.PlayerKicked").replace("%c", reason));
     }
 
     @Override
-    public void sendMessage(String message) {
+    public boolean sendMessage(Player player, String message)
+    {
+        message = message.replace("%t", player.getDisplayName());
+
         for ( Player p : participants )
         {
             p.sendMessage(message);
         }
+        return true;
     }
 
     @Override
-    public void registerConversation() {
-        PrivateChannelHandler.registerChannel(this);
+    public boolean contains(Player player)
+    {
+        return (participants.contains(player));
     }
 
     @Override
-    public boolean contains(Player player) {
-        return ( participants.contains(player) );
+    public String getChannelName()
+    {
+        return channelIdent;
+    }
+
+    @Override
+    public String getPermission()
+    {
+        return "sinkchat.privatechannel.use";
     }
 
     @Override

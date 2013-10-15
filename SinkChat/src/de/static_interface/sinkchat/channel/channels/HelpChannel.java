@@ -32,7 +32,7 @@ public class HelpChannel extends JavaPlugin implements IChannel
 
     Vector<Player> exceptedPlayers = new Vector<>();
     String PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
-    private String callByChar = "?";
+    private String callByChar;
 
     public HelpChannel(String callChar)
     {

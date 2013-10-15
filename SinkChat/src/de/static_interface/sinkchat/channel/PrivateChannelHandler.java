@@ -1,21 +1,19 @@
 package de.static_interface.sinkchat.channel;
 
-import de.static_interface.sinkchat.channel.channels.PrivateChannel;
-
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.Vector;
 
-public class PrivateChannelHandler {
+public class PrivateChannelHandler
+{
 
-    private static TreeMap<String, PrivateChannel> registeredConversations = new TreeMap<>();
+    private static TreeMap<String, IPrivateChannel> registeredConversations = new TreeMap<>();
 
-    public static void registerChannel(PrivateChannel channel)
+    public static void registerChannel(IPrivateChannel channel)
     {
         registeredConversations.put(channel.getChannelIdentifier(), channel);
     }
 
-    public static PrivateChannel getChannel(String channelIdentifier)
+    public static IPrivateChannel getChannel(String channelIdentifier)
     {
         return (registeredConversations.get(channelIdentifier));
     }
@@ -30,5 +28,4 @@ public class PrivateChannelHandler {
 
         return false;
     }
-
 }
