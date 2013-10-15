@@ -42,6 +42,6 @@ public class ScoreboardListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        SinkCommands.refreshScoreboard(event.getPlayer(), - 1);
+        SinkCommands.refreshScoreboard(event.getPlayer(), -1);
     }
 }

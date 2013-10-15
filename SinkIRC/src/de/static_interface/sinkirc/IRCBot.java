@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkirc;
 
+import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -42,16 +43,6 @@ public class IRCBot extends PircBot
         this.setLogin(botName);
         this.setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
         this.plugin = plugin;
-    }
-
-    public void sendCleanMessage(String target, String message)
-    {
-        if (disabled)
-        {
-            return;
-        }
-        message = replaceColorCodes(message);
-        sendMessage(target, message);
     }
 
     public static String replaceColorCodes(String input)
@@ -81,10 +72,20 @@ public class IRCBot extends PircBot
         return input;
     }
 
+    public void sendCleanMessage(String target, String message)
+    {
+        if ( disabled )
+        {
+            return;
+        }
+        message = replaceColorCodes(message);
+        sendMessage(target, message);
+    }
+
     @Override
     public void onJoin(String channel, String sender, String login, String hostname)
     {
-        if (sender.equals(getNick()))
+        if ( sender.equals(getNick()) )
         {
             return;
         }
@@ -103,7 +104,7 @@ public class IRCBot extends PircBot
     public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
     {
         String formattedReason = "Grund: " + reason + ".";
-        if (reason.equals("") || reason.equals("\"\""))
+        if ( reason.equals("") || reason.equals("\"\"") )
         {
             formattedReason = "";
         }
@@ -114,7 +115,7 @@ public class IRCBot extends PircBot
     public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {
         String formattedReason = " (" + reason + ")";
-        if (reason.equals("") || reason.equals("\"\""))
+        if ( reason.equals("") || reason.equals("\"\"") )
         {
             formattedReason = "";
         }
@@ -141,16 +142,13 @@ public class IRCBot extends PircBot
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message)
     {
-        if (( message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi")
-                || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo")
-                || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen") )
-                && ( message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ") ))
+        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ")) )
         {
             sendMessage(channel, "Hallo, " + sender);
             return;
         }
 
-        if (! message.toLowerCase().startsWith("~"))
+        if ( !message.toLowerCase().startsWith("~") )
         {
             return;
         }
@@ -163,12 +161,11 @@ public class IRCBot extends PircBot
         executeCommand(cmd, args, channel, sender, message);
     }
 
-
     private boolean isOp(String channel, String user)
     {
-        for (User u : getUsers(channel))
+        for ( User u : getUsers(channel) )
         {
-            if (u.isOp() && u.getNick().equals(user))
+            if ( u.isOp() && u.getNick().equals(user) )
             {
                 return true;
             }
@@ -188,14 +185,14 @@ public class IRCBot extends PircBot
         {
             boolean isOp = isOp(SinkIRC.getMainChannel(), sender);
 
-            if (command.equals("toggle"))
+            if ( command.equals("toggle") )
             {
-                if (! isOp)
+                if ( !isOp )
                 {
                     throw new UnauthorizedAccessException();
                 }
-                disabled = ! disabled;
-                if (disabled)
+                disabled = !disabled;
+                if ( disabled )
                 {
                     sendMessage(source, "Disabled " + getName());
                 }
@@ -205,24 +202,24 @@ public class IRCBot extends PircBot
                 }
             }
 
-            if (disabled)
+            if ( disabled )
             {
                 return;
             }
 
-            if (command.equals("exec")) //Execute command as console
+            if ( command.equals("exec") ) //Execute command as console
             {
-                if (! isOp) throw new UnauthorizedAccessException();
+                if ( !isOp ) throw new UnauthorizedAccessException();
                 String commandWithArgs = "";
                 int i = 0;
-                for (String arg : args)
+                for ( String arg : args )
                 {
-                    if (i == args.length - 1)
+                    if ( i == args.length - 1 )
                     {
                         break;
                     }
                     i++;
-                    if (commandWithArgs.equals(""))
+                    if ( commandWithArgs.equals("") )
                     {
                         commandWithArgs = arg;
                         continue;
@@ -245,30 +242,29 @@ public class IRCBot extends PircBot
                 sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
             }
 
-            if (command.equals("say")) //Speak to ingame players
+            if ( command.equals("say") ) //Speak to ingame players
             {
-                boolean privateMessageCommand = ! source.startsWith("#");
+                boolean privateMessageCommand = !source.startsWith("#");
 
-                if (args.length < 2)
+                if ( args.length < 2 )
                 {
                     sendCleanMessage(source, "Usage: !say <text>");
                     return;
                 }
 
-                if (privateMessageCommand)
+                if ( privateMessageCommand )
                 {
                     source = "Query";
                 }
 
-                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY
-                        + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
-                Bukkit.getServer().broadcastMessage(messageWithPrefix);
+                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
+                Bukkit.broadcastMessage(messageWithPrefix);
                 sendCleanMessage(SinkIRC.getMainChannel(), replaceColorCodes(messageWithPrefix));
             }
 
-            if (command.equals("kick"))  //Kick players from IRC
+            if ( command.equals("kick") )  //Kick players from IRC
             {
-                if (! isOp)
+                if ( !isOp )
                 {
                     throw new UnauthorizedAccessException();
                 }
@@ -277,13 +273,13 @@ public class IRCBot extends PircBot
                 {
                     targetPlayerName = args[0];
                 }
-                catch (Exception e)
+                catch ( Exception e )
                 {
                     sendCleanMessage(source, "Usage: !kick <player> <reason>");
                     return;
                 }
-                final Player targetPlayer = Bukkit.getServer().getPlayer(targetPlayerName);
-                if (targetPlayer == null)
+                final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
+                if ( targetPlayer == null )
                 {
                     sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
                     return;
@@ -291,7 +287,7 @@ public class IRCBot extends PircBot
                 String reason = label.replace(targetPlayerName + " ", "");
                 reason = reason.replace("kick ", "");
                 String formattedReason = "";
-                if (args.length > 1)
+                if ( args.length > 1 )
                 {
                     formattedReason = " (Reason: " + reason + ")";
                 }
@@ -309,19 +305,19 @@ public class IRCBot extends PircBot
 
             }
 
-            if (command.equals("list")) //List Players
+            if ( command.equals("list") ) //List Players
             {
                 String players = "";
-                if (Bukkit.getServer().getOnlinePlayers().length == 0)
+                if ( Bukkit.getOnlinePlayers().length == 0 )
                 {
                     sendCleanMessage(source, "There are currently no online players");
                     return;
                 }
 
-                for ( Player p : Bukkit.getServer().getOnlinePlayers() )
+                for ( Player p : Bukkit.getOnlinePlayers() )
                 {
                     de.static_interface.sinklibrary.User user = SinkLibrary.getUser(p);
-                    if (players.equals(""))
+                    if ( players.equals("") )
                     {
                         players = user.getDisplayName();
                     }
@@ -333,11 +329,11 @@ public class IRCBot extends PircBot
                 sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
         }
-        catch (UnauthorizedAccessException e)
+        catch ( UnauthorizedAccessException e )
         {
             sendMessage(source, "You may not use that command");
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             sendMessage(source, "Uncaught Exception occured while trying to execute command: " + command);
             sendMessage(source, e.getMessage());

@@ -32,16 +32,16 @@ public class SinkDebugCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (args.length < 1)
+        if ( args.length < 1 )
         {
             return false;
         }
         String option = args[0];
-        switch (option.toLowerCase())
+        switch ( option.toLowerCase() )
         {
             case "getplayervalue":
             {
-                if (args.length != 3)
+                if ( args.length != 3 )
                 {
                     sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug getplayervalue <player> <path.to.key>");
                     break;
@@ -56,7 +56,7 @@ public class SinkDebugCommand implements CommandExecutor
 
             case "setplayervalue":
             {
-                if (args.length != 4)
+                if ( args.length != 4 )
                 {
                     sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug setplayervalue <player> <path.to.key> <value>");
                     break;
@@ -74,7 +74,7 @@ public class SinkDebugCommand implements CommandExecutor
 
             case "haspermission":
             {
-                if (args.length != 3)
+                if ( args.length != 3 )
                 {
                     sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /sdebug haspermission <player> <permission>");
                     break;
@@ -94,7 +94,7 @@ public class SinkDebugCommand implements CommandExecutor
                     LanguageConfiguration.backup();
                     sender.sendMessage(PREFIX + ChatColor.GREEN + "Done");
                 }
-                catch (IOException e)
+                catch ( IOException e )
                 {
                     sender.sendMessage(PREFIX + ChatColor.RED + "Failed: ");
                     sender.sendMessage(PREFIX + ChatColor.RED + e.getMessage());
@@ -112,15 +112,15 @@ public class SinkDebugCommand implements CommandExecutor
 
     private Object replaceValue(String value)
     {
-        if (value.equals("true"))
+        if ( value.equals("true") )
         {
             return true;
         }
-        if (value.equals("false"))
+        if ( value.equals("false") )
         {
             return false;
         }
-        if (Util.isNumber(value))
+        if ( Util.isNumber(value) )
         {
             return Integer.parseInt(value);
         }

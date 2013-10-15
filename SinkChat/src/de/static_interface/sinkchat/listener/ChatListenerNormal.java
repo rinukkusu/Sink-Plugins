@@ -36,15 +36,14 @@ public class ChatListenerNormal implements Listener
     @EventHandler(priority = EventPriority.HIGH)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
-        if (event.isCancelled())
+        if ( event.isCancelled() )
         {
             return;
         }
 
-        for (String callChar : ChannelHandler.getRegisteredCallChars().keySet())
+        for ( String callChar : ChannelHandler.getRegisteredCallChars().keySet() )
         {
-            if (event.getMessage().startsWith(callChar)
-                    && ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()))
+            if ( event.getMessage().startsWith(callChar) && ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()) )
             {
                 event.setCancelled(true);
                 return;
@@ -58,7 +57,7 @@ public class ChatListenerNormal implements Listener
         String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getDisplayName());
         formattedMessage = formattedMessage.replace("%2$s", message);
 
-        if (! SinkLibrary.permissionsAvailable())
+        if ( !SinkLibrary.permissionsAvailable() )
         {
             formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.ChatLocal") + ChatColor.RESET + " " + formattedMessage;
         }
@@ -69,23 +68,23 @@ public class ChatListenerNormal implements Listener
         double y = event.getPlayer().getLocation().getY();
         double z = event.getPlayer().getLocation().getZ();
 
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             Location loc = p.getLocation();
             boolean isInRange = Math.abs(x - loc.getX()) <= range && Math.abs(y - loc.getY()) <= range && Math.abs(z - loc.getZ()) <= range;
 
             User onlineUser = SinkLibrary.getUser(p);
 
-            boolean newbieSpy = ( onlineUser.hasPermission("sinkchat.spynewbie") ) && ! onlineUser.hasPermission("sinkchat.spynewbie.bypass");
+            boolean newbieSpy = (onlineUser.hasPermission("sinkchat.spynewbie")) && !onlineUser.hasPermission("sinkchat.spynewbie.bypass");
             boolean maySpy = onlineUser.hasPermission("sinkchat.spy");
 
             PlayerConfiguration config = onlineUser.getPlayerConfiguration();
 
-            if (isInRange)
+            if ( isInRange )
             {
                 p.sendMessage(formattedMessage);
             }
-            else if (( newbieSpy || maySpy ) && config.getSpyEnabled())
+            else if ( (newbieSpy || maySpy) && config.getSpyEnabled() )
             {
                 p.sendMessage(spyPrefix + formattedMessage);
             }

@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkchat.command;
 
+import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
@@ -58,7 +59,7 @@ public class NickCommand implements CommandExecutor
             }
 
             String playerName = args[0];
-            Player target = Bukkit.getServer().getPlayer(playerName);
+            Player target = BukkitUtil.getPlayer(playerName);
 
             newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             if ( target == null )

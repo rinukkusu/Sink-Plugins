@@ -38,7 +38,7 @@ public class SpyCommands
         {
             User user = SinkLibrary.getUser(sender);
 
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage(_("General.ConsoleNotAvailabe"));
                 return true;
@@ -47,7 +47,7 @@ public class SpyCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (config.getSpyEnabled())
+            if ( config.getSpyEnabled() )
             {
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.YlreadyEnabled"));
                 return true;
@@ -65,7 +65,7 @@ public class SpyCommands
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             User user = SinkLibrary.getUser(sender);
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage(_("General.ConsoleNotAvailabe"));
                 return true;
@@ -74,7 +74,7 @@ public class SpyCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (! config.getSpyEnabled())
+            if ( !config.getSpyEnabled() )
             {
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.AlreadyDisabled"));
                 return true;

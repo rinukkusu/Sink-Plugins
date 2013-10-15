@@ -71,14 +71,14 @@ public class Settings extends ConfigurationBase
         {
             yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Settings.yml");
 
-            boolean createNewConfiguration = ! exists();
+            boolean createNewConfiguration = !exists();
 
-            if (createNewConfiguration)
+            if ( createNewConfiguration )
             {
                 Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
 
-            if (createNewConfiguration && ! yamlFile.createNewFile())
+            if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
                 return;
@@ -87,10 +87,10 @@ public class Settings extends ConfigurationBase
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            if (! createNewConfiguration)
+            if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if (version < CURRENT_VERSION)
+                if ( version < CURRENT_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
@@ -127,12 +127,12 @@ public class Settings extends ConfigurationBase
 
             save();
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
         }
-        catch (InvalidConfigurationException e)
+        catch ( InvalidConfigurationException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "***************");
             Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
@@ -144,7 +144,7 @@ public class Settings extends ConfigurationBase
 
     public Updater.UpdateType getUpdateType()
     {
-        switch (( (String) get("Updater.UpdateType") ).toLowerCase())
+        switch ( ((String) get("Updater.UpdateType")).toLowerCase() )
         {
             case "default":
                 return Updater.UpdateType.DEFAULT;

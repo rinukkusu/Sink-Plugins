@@ -16,9 +16,9 @@
 
 package de.static_interface.sinkcommands.commands;
 
+import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -39,68 +39,68 @@ public class ClearCommand implements CommandExecutor
     {
         List<String> args = Arrays.asList(argsArr);
 
-        Player player = null;
+        Player player;
         User user = SinkLibrary.getUser(sender);
 
         int i = 0;
         boolean clearInvetory = false;
         boolean clearEffects = false;
         boolean clearArmor = false;
-        if (args.contains("-i") || args.contains("-inventory"))
+        if ( args.contains("-i") || args.contains("-inventory") )
         {
             clearInvetory = true;
             i++;
         }
-        if (args.contains("-e") || args.contains("-effects"))
+        if ( args.contains("-e") || args.contains("-effects") )
         {
             clearEffects = true;
             i++;
         }
-        if (args.contains("-ar") || args.contains("-armor"))
+        if ( args.contains("-ar") || args.contains("-armor") )
         {
             clearArmor = true;
             i++;
         }
-        if (args.contains("-a") || args.contains("-all"))
+        if ( args.contains("-a") || args.contains("-all") )
         {
             clearInvetory = true;
             clearEffects = true;
             clearArmor = true;
             i++;
         }
-        if (! clearInvetory && ! clearEffects && ! clearArmor)
+        if ( !clearInvetory && !clearEffects && !clearArmor )
         {
             clearInvetory = true;
         }
 
-        if (argsArr.length == i + 1)
+        if ( argsArr.length == i + 1 )
         {
             String name = argsArr[0];
-            if (! user.hasPermission("sinkcommands.clear.others"))
+            if ( !user.hasPermission("sinkcommands.clear.others") )
             {
                 sender.sendMessage(PREFIX + "Du hast nicht genügend Rechte um das Inventar von anderen Spielern zu leeren!");
                 return true;
             }
-            player = Bukkit.getPlayer(name);
-            if (player == null)
+            player = BukkitUtil.getPlayer(name);
+            if ( player == null )
             {
                 sender.sendMessage(PREFIX + "Spieler wurde nicht gefunden.");
                 return true;
             }
         }
-        else if (user.isConsole())
+        else if ( user.isConsole() )
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur ingame verfügbar.");
         }
 
         player = user.getPlayer();
 
-        if (clearInvetory)
+        if ( clearInvetory )
         {
             player.getInventory().clear();
         }
 
-        if (clearEffects)
+        if ( clearEffects )
         {
             player.removePotionEffect(PotionEffectType.ABSORPTION);
             player.removePotionEffect(PotionEffectType.BLINDNESS);
@@ -126,14 +126,14 @@ public class ClearCommand implements CommandExecutor
             player.removePotionEffect(PotionEffectType.WITHER);
             player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
         }
-        if (clearArmor)
+        if ( clearArmor )
         {
             player.getInventory().setHelmet(null);
             player.getInventory().setChestplate(null);
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
         }
-        if (player != sender)
+        if ( player != sender )
         {
             sender.sendMessage(PREFIX + player.getDisplayName() + " wurde gecleart.");
         }

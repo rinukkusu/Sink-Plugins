@@ -37,18 +37,18 @@ public class RenameCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         User user = SinkLibrary.getUser(sender);
-        if (user.isConsole())
+        if ( user.isConsole() )
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur Ingame ausführbar.");
             return true;
         }
         Player p = user.getPlayer();
 
-        if (args.length < 2)
+        if ( args.length < 2 )
         {
             return false;
         }
-        if (p.getItemInHand().getType() == Material.AIR)
+        if ( p.getItemInHand().getType() == Material.AIR )
         {
             sender.sendMessage(PREFIX + "Nimm ein Item in die Hand bevor du diesen Befehl ausführst.");
             return true;

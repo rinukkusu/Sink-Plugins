@@ -55,7 +55,7 @@ public class TradeChannel extends JavaPlugin implements IChannel
     @Override
     public boolean contains(Player player)
     {
-        return ( exceptedPlayers.contains(player) );
+        return (exceptedPlayers.contains(player));
     }
 
     @Override

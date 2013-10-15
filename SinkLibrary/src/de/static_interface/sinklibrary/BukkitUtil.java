@@ -22,8 +22,36 @@ import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BukkitUtil
 {
+
+    /**
+     * Get online Player by name.
+     *
+     * @param name Name of the
+     * @return If more than one matches, it will return the player with exact name.
+     */
+    public static Player getPlayer(String name)
+    {
+        List<Player> matchedPlayers = new ArrayList<>();
+        for ( Player player : Bukkit.getOnlinePlayers() )
+        {
+            if ( player.getName().contains(name) ) matchedPlayers.add(player);
+        }
+
+        Player exactPlayer = Bukkit.getPlayerExact(name);
+        if ( matchedPlayers.toArray().length > 1 && exactPlayer != null )
+        {
+            return exactPlayer;
+        }
+        else
+        {
+            return matchedPlayers.get(0);
+        }
+    }
 
     /**
      * @param sender Command Sender
@@ -46,7 +74,7 @@ public class BukkitUtil
      */
     public static void broadcastMessage(String message)
     {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             p.sendMessage(message);
         }
@@ -64,10 +92,10 @@ public class BukkitUtil
      */
     public static void broadcast(String message, String permission)
     {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = SinkLibrary.getUser(p);
-            if (! user.hasPermission(permission))
+            if ( !user.hasPermission(permission) )
             {
                 continue;
             }
@@ -75,7 +103,7 @@ public class BukkitUtil
         }
         Bukkit.getConsoleSender().sendMessage(message);
         Permission perm = new Permission(permission);
-        if (perm.getDefault() == PermissionDefault.TRUE)
+        if ( perm.getDefault() == PermissionDefault.TRUE )
         {
             SinkLibrary.sendIRCMessage(message);
         }

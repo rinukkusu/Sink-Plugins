@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkcommands.commands;
 
+import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
@@ -38,30 +39,30 @@ public class SpectateCommands
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             User user = SinkLibrary.getUser(sender);
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage("Dieser Befehl kann nur von einem Spieler ausgeführt werden!");
                 return true;
             }
             Player player = user.getPlayer();
-            if (specedPlayers.containsKey(player))
+            if ( specedPlayers.containsKey(player) )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit /unspec bevor du einen anderen Spieler beobachtest..");
                 return true;
             }
-            if (args.length < 1)
+            if ( args.length < 1 )
             {
                 return false;
             }
 
-            Player target = ( Bukkit.getServer().getPlayer(args[0]) );
-            if (target == null)
+            Player target = (BukkitUtil.getPlayer(args[0]));
+            if ( target == null )
             {
                 player.sendMessage(PREFIX + args[0] + " ist nicht online!");
                 return true;
             }
 
-            if (target.hasPermission("sinkcommands.spectate.bypass"))
+            if ( target.hasPermission("sinkcommands.spectate.bypass") )
             {
                 player.sendMessage(PREFIX + "Der Spectate Modus kann nicht für den gewählten Spieler aktiviert werden!");
                 return true;
@@ -85,14 +86,14 @@ public class SpectateCommands
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
             User user = SinkLibrary.getUser(sender);
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage("This command can only be run by a player.");
                 return true;
             }
 
             Player player = user.getPlayer();
-            if (! specedPlayers.containsKey(player))
+            if ( !specedPlayers.containsKey(player) )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich nicht im Spectate Modus!");
                 return true;
@@ -116,10 +117,10 @@ public class SpectateCommands
             sender.sendMessage(PREFIX + "Spieler im Spectate Modus:");
             int i = 0;
             String message = "";
-            for (Player player : specedPlayers.keySet())
+            for ( Player player : specedPlayers.keySet() )
             {
                 Player target = specedPlayers.get(player);
-                if (message.equals(""))
+                if ( message.equals("") )
                 {
                     message = player.getDisplayName() + " beobachtet: " + target.getDisplayName();
                 }
@@ -129,7 +130,7 @@ public class SpectateCommands
                 }
                 i++;
             }
-            if (i == 0 || message.equals(""))
+            if ( i == 0 || message.equals("") )
             {
                 message = "Es gibt keine Spieler im Spectate Modus.";
             }
@@ -146,10 +147,10 @@ public class SpectateCommands
      */
     public static void hide(Player player, String permission)
     {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = SinkLibrary.getUser(p);
-            if (user.hasPermission(permission))
+            if ( user.hasPermission(permission) )
             {
                 continue;
             }
@@ -164,7 +165,7 @@ public class SpectateCommands
      */
     public static void show(Player player)
     {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             p.showPlayer(player);
         }

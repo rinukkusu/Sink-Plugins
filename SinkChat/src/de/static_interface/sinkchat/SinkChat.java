@@ -36,7 +36,7 @@ public class SinkChat extends JavaPlugin
 {
     public void onEnable()
     {
-        if (! checkDependencies())
+        if ( !checkDependencies() )
         {
             return;
         }
@@ -57,7 +57,7 @@ public class SinkChat extends JavaPlugin
 
     private boolean checkDependencies()
     {
-        if (Bukkit.getPluginManager().getPlugin("SinkLibrary") == null)
+        if ( Bukkit.getPluginManager().getPlugin("SinkLibrary") == null )
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
             Bukkit.getPluginManager().disablePlugin(this);

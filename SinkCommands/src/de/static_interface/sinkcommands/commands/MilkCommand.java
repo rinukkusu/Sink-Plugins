@@ -33,17 +33,17 @@ public class MilkCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (args.length == 0) //Remove all
+        if ( args.length == 0 ) //Remove all
         {
             String s = "";
             int i = 0;
-            for (Player p : Bukkit.getOnlinePlayers())
+            for ( Player p : Bukkit.getOnlinePlayers() )
             {
-                if (p.hasPotionEffect(PotionEffectType.INVISIBILITY))
+                if ( p.hasPotionEffect(PotionEffectType.INVISIBILITY) )
                 {
                     i++;
                     p.removePotionEffect(PotionEffectType.INVISIBILITY);
-                    if (s.equals(""))
+                    if ( s.equals("") )
                     {
                         s = p.getDisplayName();
                     }
@@ -53,10 +53,9 @@ public class MilkCommand implements CommandExecutor
                     }
                 }
             }
-            if (i > 0)
+            if ( i > 0 )
             {
-                BukkitUtil.broadcast(PREFIX + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch "
-                        + BukkitUtil.getSenderName(sender) + " entfernt:", "sinkcommands.milk.message");
+                BukkitUtil.broadcast(PREFIX + "Der Unsichtbarkeits Trank von den folgenden Spielern wurde durch " + BukkitUtil.getSenderName(sender) + " entfernt:", "sinkcommands.milk.message");
                 BukkitUtil.broadcast(PREFIX + s, "sinkcommands.milk.message");
                 return true;
             }
@@ -64,22 +63,20 @@ public class MilkCommand implements CommandExecutor
             return true;
         }
         //Remove from specified player
-        Player target = Bukkit.getServer().getPlayer(args[0]);
-        if (target == null)
+        Player target = BukkitUtil.getPlayer(args[0]);
+        if ( target == null )
         {
             sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
             return true;
         }
 
-        if (target.hasPotionEffect(PotionEffectType.INVISIBILITY))
+        if ( target.hasPotionEffect(PotionEffectType.INVISIBILITY) )
         {
-            BukkitUtil.broadcast(PREFIX + "Der Unsichtbarkeits Trank von " + target.getDisplayName()
-                    + " wurde durch " + BukkitUtil.getSenderName(sender) + " entfernt.", "sinkcommands.milk.message");
+            BukkitUtil.broadcast(PREFIX + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + BukkitUtil.getSenderName(sender) + " entfernt.", "sinkcommands.milk.message");
             target.removePotionEffect(PotionEffectType.INVISIBILITY);
             return true;
         }
-        sender.sendMessage(PREFIX + ChatColor.RED + "Spieler \"" + target.getDisplayName()
-                + "\" hat keinen Unsichtbarkeits Trank Effekt!");
+        sender.sendMessage(PREFIX + ChatColor.RED + "Spieler \"" + target.getDisplayName() + "\" hat keinen Unsichtbarkeits Trank Effekt!");
         return true;
     }
 }

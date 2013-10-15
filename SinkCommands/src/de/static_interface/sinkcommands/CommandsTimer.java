@@ -43,35 +43,35 @@ public class CommandsTimer implements Runnable
     {
         onTick();
         final long startTime = System.nanoTime();
-        long timeSpent = ( startTime - lastPoll ) / 1000;
-        if (timeSpent == 0)
+        long timeSpent = (startTime - lastPoll) / 1000;
+        if ( timeSpent == 0 )
         {
             timeSpent = 1;
         }
-        if (history.size() > 10)
+        if ( history.size() > 10 )
         {
             history.remove();
         }
         long tickInterval = 50;
         double tps = tickInterval * 1000000.0 / timeSpent;
-        if (tps <= 21)
+        if ( tps <= 21 )
         {
             history.add(tps);
         }
         lastPoll = startTime;
         int count = 0;
-        for (Player player : Bukkit.getServer().getOnlinePlayers())
+        for ( Player player : Bukkit.getOnlinePlayers() )
         {
             count++;
-            if (skip1 > 0)
+            if ( skip1 > 0 )
             {
                 skip1--;
                 continue;
             }
-            if (count % 10 == 0)
+            if ( count % 10 == 0 )
             {
                 long maxTime = 10 * 1000000;
-                if (System.nanoTime() - startTime > maxTime / 2)
+                if ( System.nanoTime() - startTime > maxTime / 2 )
                 {
                     skip1 = count - 1;
                     break;
@@ -82,18 +82,18 @@ public class CommandsTimer implements Runnable
 
         count = 0;
         final Iterator<String> iterator = onlineUsers.iterator();
-        while (iterator.hasNext())
+        while ( iterator.hasNext() )
         {
             count++;
-            if (skip2 > 0)
+            if ( skip2 > 0 )
             {
                 skip2--;
                 continue;
             }
-            if (count % 10 == 0)
+            if ( count % 10 == 0 )
             {
                 long maxTime = 10 * 1000000;
-                if (System.nanoTime() - startTime > maxTime)
+                if ( System.nanoTime() - startTime > maxTime )
                 {
                     skip2 = count - 1;
                     break;
@@ -110,9 +110,9 @@ public class CommandsTimer implements Runnable
     public double getAverageTPS()
     {
         double avg = 0;
-        for (Double f : history)
+        for ( Double f : history )
         {
-            if (f != null)
+            if ( f != null )
             {
                 avg += f;
             }

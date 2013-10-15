@@ -40,7 +40,7 @@ public class SinkCommands extends JavaPlugin
 
     public void onEnable()
     {
-        if (! checkDependencies())
+        if ( !checkDependencies() )
         {
             return;
         }
@@ -73,11 +73,11 @@ public class SinkCommands extends JavaPlugin
         {
             sinkLibrary = (SinkLibrary) pm.getPlugin("SinkLibrary");
         }
-        catch (NoClassDefFoundError ignored)
+        catch ( NoClassDefFoundError ignored )
         {
             sinkLibrary = null;
         }
-        if (sinkLibrary == null)
+        if ( sinkLibrary == null )
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
             pm.disablePlugin(this);
@@ -88,7 +88,7 @@ public class SinkCommands extends JavaPlugin
 
     public void onDisable()
     {
-        for (Player p : SpectateCommands.specedPlayers.keySet())
+        for ( Player p : SpectateCommands.specedPlayers.keySet() )
         {
             Player target = SpectateCommands.specedPlayers.get(p);
             target.eject();
@@ -97,7 +97,7 @@ public class SinkCommands extends JavaPlugin
             p.sendMessage(SpectateCommands.PREFIX + "Du wurdest durch einen Reload gezwungen den Spectate Modus zu verlassen.");
         }
         getLogger().info("Saving player configurations...");
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = SinkLibrary.getUser(p);
             PlayerConfiguration config = user.getPlayerConfiguration();
@@ -111,7 +111,7 @@ public class SinkCommands extends JavaPlugin
      */
     public static void refreshScoreboard()
     {
-        refreshScoreboard(- 1);
+        refreshScoreboard(-1);
     }
 
     /**
@@ -121,7 +121,7 @@ public class SinkCommands extends JavaPlugin
      */
     public static void refreshScoreboard(int players)
     {
-        for (Player p : Bukkit.getOnlinePlayers())
+        for ( Player p : Bukkit.getOnlinePlayers() )
         {
             refreshScoreboard(p, players);
         }
@@ -137,14 +137,14 @@ public class SinkCommands extends JavaPlugin
         User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
-        if (! config.exists())
+        if ( !config.exists() )
         {
             return;
         }
 
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-        if (! user.hasPermission("sinkcommands.stats") || ! config.getStatsEnabled())
+        if ( !user.hasPermission("sinkcommands.stats") || !config.getStatsEnabled() )
         {
             player.setScoreboard(manager.getNewScoreboard());
             return;
@@ -155,7 +155,7 @@ public class SinkCommands extends JavaPlugin
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        if (SinkLibrary.economyAvailable())
+        if ( SinkLibrary.economyAvailable() )
         {
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
             money.setScore(user.getMoney());
@@ -163,7 +163,7 @@ public class SinkCommands extends JavaPlugin
 
         Score onlinePlayers = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Online: "));
 
-        if (players >= 0)
+        if ( players >= 0 )
         {
             onlinePlayers.setScore(players);
         }

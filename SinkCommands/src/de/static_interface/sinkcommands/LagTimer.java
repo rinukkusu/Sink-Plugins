@@ -28,11 +28,11 @@ public class LagTimer implements Runnable
     public void run()
     {
         double tps = SinkCommands.getCommandsTimer().getAverageTPS();
-        if (tps <= 17)
+        if ( tps <= 17 )
         {
             BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Der Server laggt gerade!");
         }
-        else if (tps <= 18)
+        else if ( tps <= 18 )
         {
             BukkitUtil.broadcastMessage(PREFIX + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
         }

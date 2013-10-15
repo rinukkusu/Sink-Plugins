@@ -33,7 +33,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerMove(PlayerMoveEvent event)
     {
-        if (FreezeCommands.isFrozen(event.getPlayer()))
+        if ( FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setTo(event.getFrom());
         }
@@ -42,7 +42,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
+        if ( !event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setCancelled(true);
         }
@@ -51,7 +51,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
-        if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
+        if ( !event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setCancelled(true);
         }
@@ -60,7 +60,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockIgnite(BlockIgniteEvent event)
     {
-        if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
+        if ( !event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setCancelled(true);
         }
@@ -69,7 +69,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
-        if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
+        if ( !event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setCancelled(true);
         }
@@ -78,7 +78,7 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
-        if (FreezeCommands.isFrozen(event.getPlayer()))
+        if ( FreezeCommands.isFrozen(event.getPlayer()) )
         {
             event.setTo(event.getFrom());
         }
@@ -87,9 +87,9 @@ public class FreezeListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
-        if (! event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()))
+        if ( !event.isCancelled() && event.getPlayer() != null && FreezeCommands.isFrozen(event.getPlayer()) )
         {
-            if (event.getMessage().startsWith("/login") || event.getMessage().startsWith("/register"))
+            if ( event.getMessage().startsWith("/login") || event.getMessage().startsWith("/register") )
             {
                 return;
             }

@@ -34,7 +34,7 @@ public class ChannelHandler
      */
     public static void registerChannel(IChannel channel, String name, String callChar)
     {
-        if (registeredChannelsMap.containsValue(name))
+        if ( registeredChannelsMap.containsValue(name) )
         {
             return;
         }
@@ -60,9 +60,9 @@ public class ChannelHandler
      */
     public static IChannel getChannelByName(String name)
     {
-        for (String channel : registeredChannelsMap.keySet())
+        for ( String channel : registeredChannelsMap.keySet() )
         {
-            if (channel.equalsIgnoreCase(name)) return registeredChannelsMap.get(channel);
+            if ( channel.equalsIgnoreCase(name) ) return registeredChannelsMap.get(channel);
         }
         return null;
     }

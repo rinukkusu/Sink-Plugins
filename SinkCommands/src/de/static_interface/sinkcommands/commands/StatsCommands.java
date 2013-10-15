@@ -37,7 +37,7 @@ public class StatsCommands
         {
             User user = SinkLibrary.getUser(sender);
 
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage("This command is only ingame available.");
                 return true;
@@ -46,7 +46,7 @@ public class StatsCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (config.getStatsEnabled())
+            if ( config.getStatsEnabled() )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon aktiviert!");
                 return true;
@@ -54,7 +54,7 @@ public class StatsCommands
 
             config.setStatsEnabled(true);
             sender.sendMessage(PREFIX + ChatColor.GREEN + "Die Statistiken wurden aktiviert.");
-            SinkCommands.refreshScoreboard(player, - 1);
+            SinkCommands.refreshScoreboard(player, -1);
             return true;
         }
     }
@@ -66,7 +66,7 @@ public class StatsCommands
         {
             User user = SinkLibrary.getUser(sender);
 
-            if (user.isConsole())
+            if ( user.isConsole() )
             {
                 sender.sendMessage("This command is only ingame available.");
                 return true;
@@ -75,7 +75,7 @@ public class StatsCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if (! config.getStatsEnabled())
+            if ( !config.getStatsEnabled() )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon deaktiviert!");
                 return true;
@@ -83,7 +83,7 @@ public class StatsCommands
 
             config.setStatsEnabled(false);
             sender.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken wurden deaktiviert.");
-            SinkCommands.refreshScoreboard(player, - 1);
+            SinkCommands.refreshScoreboard(player, -1);
             return true;
         }
     }

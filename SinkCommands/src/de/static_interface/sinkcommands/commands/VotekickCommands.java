@@ -55,28 +55,28 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (args.length < 1)
+            if ( args.length < 1 )
             {
                 return false;
             }
 
             String reason = "";
-            if (Bukkit.getOnlinePlayers().length < 5)
+            if ( Bukkit.getOnlinePlayers().length < 5 )
             {
                 sender.sendMessage(PREFIX + "Es sind zu wenige Leute für einen Votekick online!");
                 return true;
             }
-            if (args.length > 2)
+            if ( args.length > 2 )
             {
                 int i = 0;
-                for (String arg : args)
+                for ( String arg : args )
                 {
                     i++;
-                    if (i < 2)
+                    if ( i < 2 )
                     {
                         continue;
                     }
-                    if (reason.equals(""))
+                    if ( reason.equals("") )
                     {
                         reason = arg;
                         continue;
@@ -84,65 +84,65 @@ public class VotekickCommands
                     reason = reason + " " + arg;
                 }
             }
-            if (voteStarted)
+            if ( voteStarted )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten während ein anderer Votekick läuft!");
                 return true;
             }
             boolean voteable = true;
             User user = SinkLibrary.getUser(sender);
-            if (! user.hasPermission("sinkcommands.votekick.staff"))
+            if ( !user.hasPermission("sinkcommands.votekick.staff") )
             {
                 int i = 0;
                 Player[] onlinePlayers = Bukkit.getOnlinePlayers();
-                for (Player p : onlinePlayers)
+                for ( Player p : onlinePlayers )
                 {
                     User onlinePlayer = SinkLibrary.getUser(p);
-                    if (! onlinePlayer.hasPermission("sinkcommands.votekick.staff"))
+                    if ( !onlinePlayer.hasPermission("sinkcommands.votekick.staff") )
                     {
                         i++;
                         break;
                     }
                 }
-                if (i != onlinePlayers.length)
+                if ( i != onlinePlayers.length )
                 {
                     voteable = false;
                 }
             }
 
-            if (! voteable)
+            if ( !voteable )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten wenn ein Teammitglied online ist!");
                 return true;
             }
-            targetPlayer = ( Bukkit.getServer().getPlayer(args[0]) );
+            targetPlayer = (BukkitUtil.getPlayer(args[0]));
             target = targetPlayer.getDisplayName();
-            if (targetPlayer == sender)
+            if ( targetPlayer == sender )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen dich selbst starten!");
                 return true;
             }
 
-            if (! user.hasPermission("sinkcommands.votekick.bypass"))
+            if ( !user.hasPermission("sinkcommands.votekick.bypass") )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");
                 return true;
             }
 
             User targetUser = SinkLibrary.getUser(targetPlayer);
-            if (targetUser.hasPermission("sinkcommands.votekick.bypass"))
+            if ( targetUser.hasPermission("sinkcommands.votekick.bypass") )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");
                 return true;
             }
 
-            if (target == null)
+            if ( target == null )
             {
                 sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
                 return true;
             }
 
-            if (reason.equals(""))
+            if ( reason.equals("") )
             {
                 BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
@@ -231,12 +231,12 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (args.length != 1)
+            if ( args.length != 1 )
             {
                 return false;
             }
             String username = args[0];
-            if (! SinkLibrary.tmpBannedPlayers.contains(username))
+            if ( !SinkLibrary.tmpBannedPlayers.contains(username) )
             {
                 sender.sendMessage(PREFIX + ChatColor.BLUE + username + ChatColor.RESET + " wurde nicht durch einen Votekick gebannt!");
                 return true;
@@ -249,15 +249,15 @@ public class VotekickCommands
 
     private static void endVoteKick(Plugin plugin)
     {
-        if (voteStarted)
+        if ( voteStarted )
         {
-            int percentYes = (int) Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
-            int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
-            if (( percentYes + percentNo ) <= 1)
+            int percentYes = (int) Math.round((votesYes / (votesYes + votesNo)) * 100);
+            int percentNo = (int) Math.round((votesNo / (votesYes + votesNo)) * 100);
+            if ( (percentYes + percentNo) <= 1 )
             {
                 BukkitUtil.broadcast(PREFIX + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "sinkcommands.votekick.vote");
             }
-            if (percentYes > 50)
+            if ( percentYes > 50 )
             {
                 BukkitUtil.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
                 final String username = targetPlayer.getName();
@@ -286,30 +286,30 @@ public class VotekickCommands
 
     private static boolean sendStatus(CommandSender sender)
     {
-        if (! VotekickCommands.voteStarted)
+        if ( !VotekickCommands.voteStarted )
         {
             sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
         }
-        int percentYes = (int) Math.round(( votesYes / ( votesYes + votesNo ) ) * 100);
-        int percentNo = (int) Math.round(( votesNo / ( votesYes + votesNo ) ) * 100);
+        int percentYes = (int) Math.round((votesYes / (votesYes + votesNo)) * 100);
+        int percentNo = (int) Math.round((votesNo / (votesYes + votesNo)) * 100);
         sender.sendMessage(PREFIX + "Status: Ja: " + percentYes + "%, Nein: " + percentNo + "%.");
         return true;
     }
 
     private static boolean vote(CommandSender sender, boolean yes, Plugin plugin)
     {
-        if (! VotekickCommands.voteStarted)
+        if ( !VotekickCommands.voteStarted )
         {
             sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
             return true;
         }
-        if (votedPlayers.contains(sender))
+        if ( votedPlayers.contains(sender) )
         {
             sender.sendMessage(PREFIX + "Du kannst nur einmal voten!");
             return true;
         }
-        if (yes)
+        if ( yes )
         {
             sender.sendMessage(PREFIX + "Du hast für einen Kick gestimmt!");
             votesYes = votesYes + 1;
@@ -322,7 +322,7 @@ public class VotekickCommands
         votedPlayers.add(sender);
         sendStatus(sender);
 
-        if (( votesYes + votesNo ) == Bukkit.getOnlinePlayers().length)
+        if ( (votesYes + votesNo) == Bukkit.getOnlinePlayers().length )
         {
             VotekickCommands.endVoteKick(plugin);
         }

@@ -34,16 +34,16 @@ public class FreezeCommands
     {
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            if (args.length < 1)
+            if ( args.length < 1 )
             {
                 return false;
             }
             User user = SinkLibrary.getUser(sender);
             String reason = "";
 
-            for (int i = 1; i < args.length; i++)
+            for ( int i = 1; i < args.length; i++ )
             {
-                if (reason.equals(""))
+                if ( reason.equals("") )
                 {
                     reason = args[i];
                     continue;
@@ -51,19 +51,19 @@ public class FreezeCommands
                 reason = reason + " " + args[i];
             }
 
-            for (Player p : Bukkit.getOnlinePlayers())
+            for ( Player p : Bukkit.getOnlinePlayers() )
             {
-                if (p.getName().toLowerCase().contains(args[0].toLowerCase()) || p.getName().equalsIgnoreCase(args[0]))
+                if ( p.getName().toLowerCase().contains(args[0].toLowerCase()) || p.getName().equalsIgnoreCase(args[0]) )
                 {
-                    if (! canBeFrozen(p) && ! user.isConsole())
+                    if ( !canBeFrozen(p) && !user.isConsole() )
                     {
                         sender.sendMessage(PREFIX + ChatColor.DARK_RED + "Dieser Spieler kann nicht eingefroren werden!");
                         return true;
                     }
 
-                    if (toggleFreeze(p))
+                    if ( toggleFreeze(p) )
                     {
-                        if (args.length < 2)
+                        if ( args.length < 2 )
                         {
                             BukkitUtil.broadcast(PREFIX + p.getDisplayName() + " wurde von " + BukkitUtil.getSenderName(sender) + " eingefroren.", "sinkcommands.freeze.message");
                         }
@@ -88,11 +88,11 @@ public class FreezeCommands
         {
             String frozenList = "";
 
-            for (Player p : Bukkit.getOnlinePlayers())
+            for ( Player p : Bukkit.getOnlinePlayers() )
             {
-                if (isFrozen(p))
+                if ( isFrozen(p) )
                 {
-                    if (frozenList.length() > 0)
+                    if ( frozenList.length() > 0 )
                     {
                         frozenList = frozenList + ", " + p.getDisplayName();
                     }
@@ -103,7 +103,7 @@ public class FreezeCommands
                 }
             }
 
-            if (frozenList.length() > 0)
+            if ( frozenList.length() > 0 )
             {
                 sender.sendMessage(PREFIX + "Eingefrorene Spieler: " + frozenList);
             }
@@ -124,14 +124,14 @@ public class FreezeCommands
     public static boolean canBeFrozen(Player player)
     {
         User user = SinkLibrary.getUser(player);
-        return ! user.hasPermission("sinkcommands.freeze.bypass");
+        return !user.hasPermission("sinkcommands.freeze.bypass");
     }
 
 
     public static boolean toggleFreeze(Player player)
     {
         User user = SinkLibrary.getUser(player);
-        if (user.getPlayerConfiguration().getFrozen())
+        if ( user.getPlayerConfiguration().getFrozen() )
         {
             user.getPlayerConfiguration().setFrozen(false);
             return false;

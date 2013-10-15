@@ -37,7 +37,7 @@ public class DrugCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         User user = SinkLibrary.getUser(sender);
-        if (user.isConsole())
+        if ( user.isConsole() )
         {
             sender.sendMessage("Dieser Befehl kann nur von einem Spieler genutzt werden.");
             return true;
@@ -45,7 +45,7 @@ public class DrugCommand implements CommandExecutor
 
         Player player = user.getPlayer();
 
-        if (! player.hasPotionEffect(PotionEffectType.BLINDNESS))
+        if ( !player.hasPotionEffect(PotionEffectType.BLINDNESS) )
         {
             player.sendMessage(PREFIX + ChatColor.BLUE + "Du hast Drogen genommen...");
             player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 20 * 20, 1), true);
@@ -53,31 +53,31 @@ public class DrugCommand implements CommandExecutor
         }
         else
         {
-            for (PotionEffect pe : player.getActivePotionEffects())
+            for ( PotionEffect pe : player.getActivePotionEffects() )
             {
-                if (! pe.getType().equals(PotionEffectType.BLINDNESS))
+                if ( !pe.getType().equals(PotionEffectType.BLINDNESS) )
                 {
                     continue;
                 }
                 int duration = pe.getDuration();
                 int amplifier = pe.getAmplifier();
-                if (amplifier == 1)
+                if ( amplifier == 1 )
                 {
                     player.sendMessage(PREFIX + ChatColor.BLUE + "Du hast mehr Drogen genommen...");
                 }
-                else if (amplifier == 2)
+                else if ( amplifier == 2 )
                 {
                     player.sendMessage(PREFIX + ChatColor.BLUE + "Vielleicht solltest du nicht so viele Drogen nehmen.");
                 }
-                else if (amplifier == 3)
+                else if ( amplifier == 3 )
                 {
                     player.sendMessage(PREFIX + ChatColor.BLUE + "Noch mehr Drogen...");
                 }
-                else if (amplifier == 4)
+                else if ( amplifier == 4 )
                 {
                     player.sendMessage(PREFIX + ChatColor.BLUE + "Wow, du hast so viele Drogen genommen... und lebst immer noch!");
                 }
-                else if (amplifier >= 5)
+                else if ( amplifier >= 5 )
                 {
                     killedByDrugs = player;
                     player.setHealth(0.0);
@@ -85,8 +85,8 @@ public class DrugCommand implements CommandExecutor
                 }
                 player.removePotionEffect(PotionEffectType.BLINDNESS);
                 player.removePotionEffect(PotionEffectType.CONFUSION);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + ( 20 * 30 ), amplifier + 1), true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration + ( 20 * 30 ), amplifier + 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + (20 * 30), amplifier + 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration + (20 * 30), amplifier + 1), true);
             }
         }
         return true;

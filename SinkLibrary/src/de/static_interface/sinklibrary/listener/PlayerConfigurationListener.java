@@ -33,7 +33,7 @@ public class PlayerConfigurationListener implements Listener
         User user = SinkLibrary.getUser(event.getPlayer());
         PlayerConfiguration config = user.getPlayerConfiguration();
 
-        if (! config.exists())
+        if ( !config.exists() )
         {
             config.create();
         }

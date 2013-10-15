@@ -17,7 +17,6 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinklibrary.BukkitUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -31,24 +30,24 @@ public class WarnCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (args.length < 1)
+        if ( args.length < 1 )
         {
             sender.sendMessage(PREFIX + ChatColor.RED + "Zu wenige Argumente!");
             sender.sendMessage(PREFIX + ChatColor.RED + "Benutzung: /warn [Spieler] (Grund)");
             return false;
         }
-        Player target = ( Bukkit.getServer().getPlayer(args[0]) );
-        if (target == null)
+        Player target = (BukkitUtil.getPlayer(args[0]));
+        if ( target == null )
         {
             sender.sendMessage(PREFIX + args[0] + " ist nicht online!");
             return true;
         }
-        if (target.getDisplayName().equals(BukkitUtil.getSenderName(sender)))
+        if ( target.getDisplayName().equals(BukkitUtil.getSenderName(sender)) )
         {
             sender.sendMessage(PREFIX + "Du kannst dich nicht selbst verwarnen!");
             return true;
         }
-        if (args.length == 1)
+        if ( args.length == 1 )
         {
             sender.sendMessage(PREFIX + "Du musst einen Grund angeben!");
             return false;
@@ -56,9 +55,9 @@ public class WarnCommand implements CommandExecutor
 
         String reason = "";
 
-        for (int i = 1; i < args.length; i++)
+        for ( int i = 1; i < args.length; i++ )
         {
-            if (reason.equals(""))
+            if ( reason.equals("") )
             {
                 reason = args[i];
                 continue;

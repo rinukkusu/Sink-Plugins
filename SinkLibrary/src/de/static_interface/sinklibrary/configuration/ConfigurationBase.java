@@ -38,11 +38,11 @@ public abstract class ConfigurationBase
      */
     public void save()
     {
-        if (getFile() == null)
+        if ( getFile() == null )
         {
             return;
         }
-        if (! exists())
+        if ( !exists() )
         {
             return;
         }
@@ -51,7 +51,7 @@ public abstract class ConfigurationBase
         {
             getYamlConfiguration().save(getFile());
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't save configuration file: " + getFile() + "!");
         }
@@ -68,7 +68,7 @@ public abstract class ConfigurationBase
             getYamlConfiguration().set(path, value);
             save();
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             Bukkit.getLogger().log(Level.WARNING, "Configuration:" + getFile() + ": Couldn't save " + value + " to path " + path, e);
         }
@@ -86,15 +86,15 @@ public abstract class ConfigurationBase
         try
         {
             Object value = getYamlConfiguration().get(path);
-            if (value == null || value == "")
+            if ( value == null || value == "" )
             {
                 throw new NullPointerException("Path returned null!");
             }
             return value;
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-            if (path.equals("Main.ConfigVersion"))
+            if ( path.equals("Main.ConfigVersion") )
             {
                 return 0;
             }
@@ -128,7 +128,7 @@ public abstract class ConfigurationBase
      */
     public Object getDefault(String path)
     {
-        if (getDefaults() == null)
+        if ( getDefaults() == null )
         {
             throw new RuntimeException("defaultValues are null! Couldn't read value from path: " + path);
         }
@@ -143,11 +143,11 @@ public abstract class ConfigurationBase
      */
     public void addDefault(String path, Object value)
     {
-        if (getDefaults() == null)
+        if ( getDefaults() == null )
         {
             throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
         }
-        if (! getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null)
+        if ( !getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null )
         {
             getYamlConfiguration().set(path, value);
             save();
@@ -197,7 +197,7 @@ public abstract class ConfigurationBase
         {
             backup();
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             return;
         }

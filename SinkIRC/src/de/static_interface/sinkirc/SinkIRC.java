@@ -33,7 +33,7 @@ public class SinkIRC extends JavaPlugin
     @Override
     public void onEnable()
     {
-        if (! checkDependencies()) return;
+        if ( !checkDependencies() ) return;
 
         ircBot = new IRCBot(this);
 
@@ -47,25 +47,25 @@ public class SinkIRC extends JavaPlugin
             //Todo: Add NickServ identification support
             ircBot.joinChannel(getMainChannel());
         }
-        catch (IOException | IrcException e)
+        catch ( IOException | IrcException e )
         {
             Bukkit.getLogger().severe("An Exception occurred while trying to connect to " + host + ":");
             Bukkit.getLogger().severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IrclistCommand());
-        Bukkit.getServer().getPluginManager().registerEvents(new IRCListener(ircBot), this);
+        Bukkit.getPluginManager().registerEvents(new IRCListener(ircBot), this);
     }
 
     private boolean checkDependencies()
     {
-        if (Bukkit.getPluginManager().getPlugin("SinkLibrary") == null)
+        if ( Bukkit.getPluginManager().getPlugin("SinkLibrary") == null )
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
 
-        if (Bukkit.getPluginManager().getPlugin("SinkChat") == null)
+        if ( Bukkit.getPluginManager().getPlugin("SinkChat") == null )
         {
             Bukkit.getLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
             Bukkit.getPluginManager().disablePlugin(this);

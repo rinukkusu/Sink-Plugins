@@ -37,7 +37,7 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        if (IRCBot.disabled)
+        if ( IRCBot.disabled )
         {
             return;
         }
@@ -47,7 +47,7 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        if (IRCBot.disabled)
+        if ( IRCBot.disabled )
         {
             return;
         }
@@ -57,19 +57,19 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKick(PlayerKickEvent event)
     {
-        if (IRCBot.disabled)
+        if ( IRCBot.disabled )
         {
             return;
         }
         String reason = " for reason: " + event.getReason();
-        if (event.getReason().equals("")) reason = "";
+        if ( event.getReason().equals("") ) reason = "";
         ircBot.sendCleanMessage(SinkIRC.getMainChannel(), "Player \"" + event.getPlayer().getDisplayName() + "\" has been kicked" + reason + "!");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if (IRCBot.disabled)
+        if ( IRCBot.disabled )
         {
             return;
         }
@@ -79,7 +79,7 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCMessage(IRCMessageEvent event)
     {
-        if (IRCBot.disabled)
+        if ( IRCBot.disabled )
         {
             return;
         }

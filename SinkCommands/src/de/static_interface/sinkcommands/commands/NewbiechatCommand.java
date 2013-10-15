@@ -30,7 +30,7 @@ public class NewbiechatCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if (args.length < 1)
+        if ( args.length < 1 )
         {
             return false;
         }

@@ -55,7 +55,7 @@ public class User
      */
     User(String player)
     {
-        base = Bukkit.getPlayer(player);
+        base = BukkitUtil.getPlayer(player);
         econ = SinkLibrary.getEconomy();
         playerName = player;
         sender = base;

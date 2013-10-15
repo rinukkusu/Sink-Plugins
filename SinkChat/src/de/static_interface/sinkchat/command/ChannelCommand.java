@@ -37,7 +37,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         User user = SinkLibrary.getUser(sender);
-        if (user.isConsole())
+        if ( user.isConsole() )
         {
             sender.sendMessage(_("General.ConsoleNotAvailabe"));
             return true;
@@ -45,7 +45,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
         Player player = user.getPlayer();
 
-        if (args.length == 0)
+        if ( args.length == 0 )
         {
             sendHelp(player);
             return true;
@@ -53,10 +53,10 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
         String message;
 
-        switch (args[0])
+        switch ( args[0] )
         {
             case "join":
-                if (args.length < 2)
+                if ( args.length < 2 )
                 {
                     player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.NoChannelGiven"));
                     return true;
@@ -65,13 +65,13 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 try
                 {
                     IChannel channel = ChannelHandler.getChannelByName(args[1]);
-                    if (! user.hasPermission(channel.getPermission()))
+                    if ( !user.hasPermission(channel.getPermission()) )
                     {
                         player.sendMessage(_("Permissions.General"));
                     }
                     channel.removeExceptedPlayer(player);
                 }
-                catch (NullPointerException e)
+                catch ( NullPointerException e )
                 {
                     message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
                     player.sendMessage(message);
@@ -85,7 +85,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
             case "leave":
 
-                if (args.length < 2)
+                if ( args.length < 2 )
                 {
                     player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.NoChannelGiven"));
                     return true;
@@ -94,13 +94,13 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 try
                 {
                     IChannel channel = ChannelHandler.getChannelByName(args[1]);
-                    if (! user.hasPermission(channel.getPermission()))
+                    if ( !user.hasPermission(channel.getPermission()) )
                     {
                         player.sendMessage(_("Permissions.General"));
                     }
                     channel.addExceptedPlayer(player);
                 }
-                catch (NullPointerException e)
+                catch ( NullPointerException e )
                 {
                     message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
                     player.sendMessage(message);
@@ -119,9 +119,9 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
             case "participating":
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.Part"));
-                for (IChannel target : ChannelHandler.getRegisteredChannels())
+                for ( IChannel target : ChannelHandler.getRegisteredChannels() )
                 {
-                    if (target.contains(player))
+                    if ( target.contains(player) )
                     {
                         continue;
                     }

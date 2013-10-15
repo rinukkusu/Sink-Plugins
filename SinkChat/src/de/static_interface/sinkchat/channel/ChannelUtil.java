@@ -26,12 +26,12 @@ public class ChannelUtil
 {
     public static boolean sendMessage(Player player, String message, IChannel channel, String prefix, String callByChar)
     {
-        if (channel.contains(player))
+        if ( channel.contains(player) )
         {
             return false;
         }
 
-        if (message.equals(callByChar))
+        if ( message.equals(callByChar) )
         {
             return false;
         }
@@ -39,7 +39,7 @@ public class ChannelUtil
         String formattedMessage = message.substring(1);
         User user = SinkLibrary.getUser(player);
 
-        if (SinkLibrary.permissionsAvailable())
+        if ( SinkLibrary.permissionsAvailable() )
         {
             formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
@@ -48,9 +48,9 @@ public class ChannelUtil
             formattedMessage = prefix + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
 
-        for (Player target : Bukkit.getOnlinePlayers())
+        for ( Player target : Bukkit.getOnlinePlayers() )
         {
-            if (! ( channel.contains(target) ) && target.hasPermission(channel.getPermission()))
+            if ( !(channel.contains(target)) && target.hasPermission(channel.getPermission()) )
             {
                 target.sendMessage(formattedMessage);
             }

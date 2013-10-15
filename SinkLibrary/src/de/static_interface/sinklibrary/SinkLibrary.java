@@ -268,7 +268,7 @@ public class SinkLibrary extends JavaPlugin
     public static void sendIRCMessage(String message)
     {
         IRCMessageEvent event = new IRCMessageEvent(message);
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     /**

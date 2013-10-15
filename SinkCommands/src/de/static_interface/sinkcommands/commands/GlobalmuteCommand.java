@@ -30,16 +30,16 @@ public class GlobalmuteCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        SinkCommands.globalmuteEnabled = ! SinkCommands.globalmuteEnabled;
+        SinkCommands.globalmuteEnabled = !SinkCommands.globalmuteEnabled;
 
-        if (SinkCommands.globalmuteEnabled)
+        if ( SinkCommands.globalmuteEnabled )
         {
-            if (args.length > 0)
+            if ( args.length > 0 )
             {
                 String reason = "";
-                for (String arg : args)
+                for ( String arg : args )
                 {
-                    if (reason.equals(""))
+                    if ( reason.equals("") )
                     {
                         reason = arg;
                         continue;

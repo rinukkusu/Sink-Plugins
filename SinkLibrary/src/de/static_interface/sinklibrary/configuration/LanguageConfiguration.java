@@ -54,14 +54,14 @@ public class LanguageConfiguration
         {
             yamlFile = new File(SinkLibrary.getCustomDataFolder(), "Language.yml");
 
-            boolean createNewConfiguration = ! exists();
+            boolean createNewConfiguration = !exists();
 
-            if (createNewConfiguration)
+            if ( createNewConfiguration )
             {
                 Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
 
-            if (createNewConfiguration && ! yamlFile.createNewFile())
+            if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
                 Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
                 return;
@@ -70,10 +70,10 @@ public class LanguageConfiguration
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            if (! createNewConfiguration)
+            if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if (version < CURRENT_VERSION)
+                if ( version < CURRENT_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
@@ -126,12 +126,12 @@ public class LanguageConfiguration
 
             save();
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
             Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
         }
-        catch (InvalidConfigurationException e)
+        catch ( InvalidConfigurationException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "***************");
             Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
@@ -146,11 +146,11 @@ public class LanguageConfiguration
      */
     public static void save()
     {
-        if (yamlFile == null)
+        if ( yamlFile == null )
         {
             return;
         }
-        if (! exists())
+        if ( !exists() )
         {
             return;
         }
@@ -159,7 +159,7 @@ public class LanguageConfiguration
         {
             yamlConfiguration.save(yamlFile);
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't save configuration file: " + yamlFile + "!");
         }
@@ -176,15 +176,15 @@ public class LanguageConfiguration
         try
         {
             Object value = yamlConfiguration.get(path);
-            if (value == null || value == "")
+            if ( value == null || value == "" )
             {
                 throw new NullPointerException("Path returned null!");
             }
             return value;
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
-            if (path.equals("Main.ConfigVersion")) return 0;
+            if ( path.equals("Main.ConfigVersion") ) return 0;
             Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return getDefault(path);
         }
@@ -235,13 +235,13 @@ public class LanguageConfiguration
         try
         {
             String value = yamlConfiguration.getRoot().getString(path);
-            if (value == null || value.equals("null"))
+            if ( value == null || value.equals("null") )
             {
                 throw new NullPointerException("Path returned null.");
             }
             return ChatColor.translateAlternateColorCodes('&', value);
         }
-        catch (Exception e)
+        catch ( Exception e )
         {
             Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return (String) getDefault(path);
@@ -267,12 +267,12 @@ public class LanguageConfiguration
      */
     public static void addDefault(String path, Object value)
     {
-        if (getDefaults() == null)
+        if ( getDefaults() == null )
         {
             throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
         }
 
-        if (! getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null)
+        if ( !getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null )
         {
             getYamlConfiguration().set(path, value);
             save();
@@ -310,7 +310,7 @@ public class LanguageConfiguration
         {
             backup();
         }
-        catch (IOException e)
+        catch ( IOException e )
         {
             return;
         }

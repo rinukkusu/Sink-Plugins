@@ -31,11 +31,11 @@ public class LagCommand implements CommandExecutor
     {
         double realTPS = SinkCommands.getCommandsTimer().getAverageTPS();
         double shownTPS = Math.round(realTPS);
-        if (realTPS >= 18.5)
+        if ( realTPS >= 18.5 )
         {
             sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
         }
-        else if (realTPS >= 17)
+        else if ( realTPS >= 17 )
         {
             sender.sendMessage(PREFIX + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
         }
