@@ -29,7 +29,7 @@ import java.util.logging.Level;
 
 public class Settings extends ConfigurationBase
 {
-    public static final int CURRENT_VERSION = 1;
+    public static final int REQUIRED_VERSION = 1;
     private YamlConfiguration yamlConfiguration;
     private File yamlFile;
     private HashMap<String, Object> defaultValues;
@@ -90,10 +90,10 @@ public class Settings extends ConfigurationBase
             if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if ( version < CURRENT_VERSION )
+                if ( version < REQUIRED_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
                     recreate();
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     return;
@@ -102,7 +102,7 @@ public class Settings extends ConfigurationBase
 
             getYamlConfiguration().options().header(String.format("You can customize the SinkPlugins with this configuration."));
 
-            addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.DisplayNamesEnabled", true);
 
             addDefault("Updater.Enabled", true);

@@ -64,14 +64,14 @@ public class NickCommand implements CommandExecutor
             newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[1]) + ChatColor.RESET;
             if ( target == null )
             {
-                sender.sendMessage(PREFIX + _("General.NotOnline").replace("%s", args[0]));
+                sender.sendMessage(PREFIX + String.format(_("General.NotOnline"), args[0]));
                 return true;
             }
 
             if ( setDisplayName(target, newDisplayName, sender) )
             {
                 user = SinkLibrary.getUser(target);
-                sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.OtherChanged").replaceFirst("%s", playerName).replaceFirst("%s", user.getDisplayName()));
+                sender.sendMessage(PREFIX + String.format(_("SinkChat.Commands.Nick.OtherChanged"), playerName, user.getDisplayName()));
             }
             return true;
         }
@@ -84,7 +84,7 @@ public class NickCommand implements CommandExecutor
         Player player = user.getPlayer();
         if ( setDisplayName(player, newDisplayName, sender) )
         {
-            sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.SelfChanged").replaceFirst("%s", newDisplayName));
+            sender.sendMessage(PREFIX + String.format(_("SinkChat.Commands.Nick.SelfChanged"), newDisplayName));
         }
         return true;
     }

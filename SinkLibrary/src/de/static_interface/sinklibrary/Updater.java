@@ -398,18 +398,10 @@ public class Updater
     {
         if ( s.contains(".") )
         {
-            final StringBuilder sb = new StringBuilder();
-            for ( int i = 0; i < s.length(); i++ )
-            {
-                final Character c = s.charAt(i);
-                if ( Character.isLetterOrDigit(c) )
-                {
-                    sb.append(c);
-                }
-            }
-            return Integer.parseInt(sb.toString());
+            s.replace(".", "");
+            return Integer.parseInt(s);
         }
-        return Integer.parseInt(s);
+        return Integer.parseInt(s) * 10;
     }
 
     /**
@@ -480,7 +472,6 @@ public class Updater
 
     private class UpdateRunnable implements Runnable
     {
-
         @Override
         public void run()
         {

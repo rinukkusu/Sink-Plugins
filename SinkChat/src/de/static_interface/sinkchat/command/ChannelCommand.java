@@ -73,12 +73,12 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 }
                 catch ( NullPointerException e )
                 {
-                    message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
+                    message = PREFIX + String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]);
                     player.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + _("SinkChat.Commands.Channel.PlayerJoins").replace("%s", args[1]);
+                message = PREFIX + String.format(_("SinkChat.Commands.Channel.PlayerJoins"), args[1]);
                 ChatColor.translateAlternateColorCodes('&', message);
                 player.sendMessage(message);
                 return true;
@@ -102,18 +102,18 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                 }
                 catch ( NullPointerException e )
                 {
-                    message = PREFIX + _("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]);
+                    message = PREFIX + String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]);
                     player.sendMessage(message);
                     return true;
                 }
 
-                message = PREFIX + _("SinkChat.Commands.Channel.PlayerLeaves").replace("%s", args[1]);
+                message = PREFIX + String.format(_("SinkChat.Commands.Channel.PlayerLeaves"), args[1]);
                 player.sendMessage(message);
 
 
                 return true;
             case "list":
-                message = PREFIX + _("SinkChat.Commands.Channel.List").replace("%s", ChannelHandler.getChannelNames());
+                message = PREFIX + String.format(_("SinkChat.Commands.Channel.List"), ChannelHandler.getChannelNames());
                 player.sendMessage(message);
                 return true;
 

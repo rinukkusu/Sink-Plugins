@@ -54,12 +54,11 @@ public class ChatListenerNormal implements Listener
 
         String message = event.getMessage();
         int range = 50;
-        String formattedMessage = event.getFormat().replace("%1$s", eventPlayer.getDisplayName());
-        formattedMessage = formattedMessage.replace("%2$s", message);
+        String formattedMessage = String.format(event.getFormat(), eventPlayer.getDisplayName(), message);
 
         if ( !SinkLibrary.permissionsAvailable() )
         {
-            formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.ChatLocal") + ChatColor.RESET + " " + formattedMessage;
+            formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.Chat.Local") + ChatColor.RESET + " " + formattedMessage;
         }
 
         String spyPrefix = ChatColor.GRAY + _("SinkChat.Prefix.Spy") + " " + ChatColor.RESET;

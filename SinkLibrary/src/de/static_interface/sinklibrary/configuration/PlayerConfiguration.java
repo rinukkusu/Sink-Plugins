@@ -32,7 +32,7 @@ import java.util.logging.Level;
 
 public class PlayerConfiguration extends ConfigurationBase
 {
-    public static final int CURRENT_VERSION = 1;
+    public static final int REQUIRED_VERSION = 1;
 
     private Player player;
     private File yamlFile;
@@ -95,10 +95,10 @@ public class PlayerConfiguration extends ConfigurationBase
             if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if ( version < CURRENT_VERSION )
+                if ( version < REQUIRED_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
                     recreate();
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     return;
@@ -107,7 +107,7 @@ public class PlayerConfiguration extends ConfigurationBase
 
             getYamlConfiguration().options().header(String.format("This configuration saves and loads variables to players.%nDon't edit it."));
 
-            addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.StatsEnabled", true);
             addDefault("Spy.Enabled", true);
             addDefault("Nick.HasDisplayName", false);

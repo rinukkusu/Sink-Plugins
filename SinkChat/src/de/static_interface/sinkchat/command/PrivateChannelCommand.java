@@ -36,7 +36,7 @@ public class PrivateChannelCommand implements CommandExecutor
                 {
                     if ( Bukkit.getPlayer(args[2]) == null )
                     {
-                        sender.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", args[2]));
+                        sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), args[2]));
                         return true;
                     }
                     PrivateChannelHandler.registerChannel(new PrivateChannel(args[1], (Player) (sender), Bukkit.getPlayer(args[2])));
@@ -47,7 +47,7 @@ public class PrivateChannelCommand implements CommandExecutor
                     if ( s.equals("invite") || s.equals(args[1]) || (ch.contains(Bukkit.getPlayer(s))) ) continue;
                     if ( Bukkit.getPlayer(s) == null )
                     {
-                        sender.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", s));
+                        sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), s));
                     }
                     ch.addPlayer((Player) (sender), Bukkit.getPlayer(s));
                 }
@@ -57,7 +57,7 @@ public class PrivateChannelCommand implements CommandExecutor
             case "leave":
                 if ( !(ch.contains((Player) (sender))) || (ch == null) )
                 {
-                    sender.sendMessage(_("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]));
+                    sender.sendMessage(String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]));
                     return true;
                 }
                 ch.kickPlayer((Player) sender, (Player) sender, "");
@@ -66,7 +66,7 @@ public class PrivateChannelCommand implements CommandExecutor
             case "kick":
                 if ( !(ch.contains((Player) sender)) || (ch == null) )
                 {
-                    sender.sendMessage(_("SinkChat.Commands.Channel.ChannelUnknown").replace("%s", args[1]));
+                    sender.sendMessage(String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]));
                     return true;
                 }
                 if ( !(ch.getStarter().equals(sender)) )
@@ -76,11 +76,11 @@ public class PrivateChannelCommand implements CommandExecutor
                 }
                 if ( Bukkit.getPlayer(args[2]) == null )
                 {
-                    sender.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline").replace("%t", args[2]));
+                    sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), args[2]));
                 }
                 if ( !(ch.contains(Bukkit.getPlayer(args[2]))) )
                 {
-                    sender.sendMessage(_("SinkChat.Channels.Private.PlayerKicked").replace("%t", args[2]));
+                    sender.sendMessage(String.format(_("SinkChat.Channels.Private.PlayerKicked"), args[2]));
                     return true;
                 }
 

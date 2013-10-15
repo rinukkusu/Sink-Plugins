@@ -32,7 +32,6 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class Util
 {
-
     /**
      * Backup a file
      *

@@ -30,7 +30,7 @@ import java.util.logging.Level;
 
 public class LanguageConfiguration
 {
-    public static final int CURRENT_VERSION = 2;
+    public static final int REQUIRED_VERSION = 1;
 
     private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
     private static HashMap<String, Object> defaultValues;
@@ -73,10 +73,10 @@ public class LanguageConfiguration
             if ( !createNewConfiguration )
             {
                 int version = (int) get("Main.ConfigVersion");
-                if ( version < CURRENT_VERSION )
+                if ( version < REQUIRED_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + CURRENT_VERSION);
+                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
                     recreate();
                     Bukkit.getLogger().log(Level.WARNING, "***************");
                     return;
@@ -85,7 +85,7 @@ public class LanguageConfiguration
 
             getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language.%n%%s will be replaced with the value by the plugin."));
 
-            addDefault("Main.ConfigVersion", CURRENT_VERSION);
+            addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
             addDefault("General.ConsoleNotAvailabe", "&cThis command is only ingame available");
 
@@ -113,18 +113,14 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Shout", "Shout");
             addDefault("SinkChat.Channels.Trade", "Trade");
 
-            // %c = converation's channel identifier
-            // %t = player
-            // %r = reason
-
-            addDefault("SinkChat.Channels.Private.InvitedToChat", "%t invited you to a chat. Chat with %c");
-            addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %t to chat.");
-            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat", "%t already takes part in that conversation !");
-            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline", "%t is not online !");
-            addDefault("SinkChat.Channels.Private.LeftChat", "You have left the private conversation %c!");
-            addDefault("SinkChat.Channels.Private.PlayerLeftCon", "%t has left conversation %c");
-            addDefault("SinkChat.Channels.Private.PlayerKicked", "%t has been kicked: %r");
-            addDefault("SinkChat.Channels.Private.PlayerKicked.ErrorNotInChannel", "%t is not in that conversation!");
+            addDefault("SinkChat.Channels.Private.InvitedToChat", "%s invited you to a chat. Chat with %s");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %s to chat.");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat", "%s already takes part in that conversation !");
+            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline", "%s is not online !");
+            addDefault("SinkChat.Channels.Private.LeftChat", "You have left the private conversation %s!");
+            addDefault("SinkChat.Channels.Private.PlayerLeftCon", "%s has left conversation %s");
+            addDefault("SinkChat.Channels.Private.PlayerKicked", "%s has been kicked: %s");
+            addDefault("SinkChat.Channels.Private.PlayerKicked.ErrorNotInChannel", "%s is not in that conversation!");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
@@ -245,20 +241,22 @@ public class LanguageConfiguration
      */
     public static String _(String path)
     {
+        String value;
         try
         {
-            String value = yamlConfiguration.getRoot().getString(path);
-            if ( value == null || value.equals("null") )
+            String rawValue = yamlConfiguration.getRoot().getString(path);
+            if ( rawValue == null || rawValue.equals("null") )
             {
                 throw new NullPointerException("Path returned null.");
             }
-            return ChatColor.translateAlternateColorCodes('&', value);
+            value = ChatColor.translateAlternateColorCodes('&', rawValue);
         }
         catch ( Exception e )
         {
             Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
-            return (String) getDefault(path);
+            value = (String) getDefault(path);
         }
+        return value;
     }
 
     /**

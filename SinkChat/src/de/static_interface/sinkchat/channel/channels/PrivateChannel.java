@@ -29,7 +29,7 @@ public class PrivateChannel extends IPrivateChannel
         participants.add(starter);
         participants.add(target);
 
-        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%i", starter.getDisplayName()).replace("%c", channelIdent));
+        target.sendMessage(String.format(_("SinkChat.Channels.Private.InvitedToChat"), starter.getDisplayName(), channelIdent));
 
     }
 
@@ -39,13 +39,12 @@ public class PrivateChannel extends IPrivateChannel
 
         if ( participants.contains(target) )
         {
-            invitor.sendMessage(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat").replace("%t", target.getDisplayName()));
+            invitor.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat"), target.getDisplayName()));
             return;
         }
 
         participants.add(target);
-        target.sendMessage(_("SinkChat.Channels.Private.InvitedToChat").replace("%t", invitor.getDisplayName()).replace("%c", channelIdent));
-
+        target.sendMessage(String.format(_("SinkChat.Channels.Private.InvitedToChat"), invitor.getDisplayName(), channelIdent));
     }
 
     @Override
@@ -54,18 +53,18 @@ public class PrivateChannel extends IPrivateChannel
         if ( player.equals(kicker) )
         {
             participants.remove(player);
-            sendMessage(player, _("SinkChat.Channels.Private.PlayerLeftCon").replace("%c", channelIdent));
+            sendMessage(player, String.format(_("SinkChat.Channels.Private.PlayerLeftCon"), channelIdent));
             return;
         }
 
         participants.remove(player);
-        sendMessage(player, _("SinkChat.Channels.Private.PlayerKicked").replace("%c", reason));
+        sendMessage(player, String.format(_("SinkChat.Channels.Private.PlayerKicked"), reason));
     }
 
     @Override
     public boolean sendMessage(Player player, String message)
     {
-        message = message.replace("%t", player.getDisplayName());
+        message = String.format(message, player.getDisplayName());
 
         for ( Player p : participants )
         {
