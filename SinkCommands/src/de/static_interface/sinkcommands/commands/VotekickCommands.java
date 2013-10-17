@@ -115,6 +115,7 @@ public class VotekickCommands
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick starten wenn ein Teammitglied online ist!");
                 return true;
             }
+
             targetPlayer = (BukkitUtil.getPlayer(args[0]));
             target = targetPlayer.getDisplayName();
             if ( targetPlayer == sender )
@@ -144,15 +145,15 @@ public class VotekickCommands
 
             if ( reason.equals("") )
             {
-                BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
             else
             {
-                BukkitUtil.broadcast(PREFIX + BukkitUtil.getSenderName(sender) + " hat einen Votekick gegen " + target + " gestartet. Grund: " + reason + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Grund: " + reason + ChatColor.RED + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote");
             }
 
             voteStarted = true;
-            long time = 20 * 180; // 20 Ticks (= 1 second) * 180 = 3 Minutes
+            long time = 20 * 90; // 20 Ticks (= 1 second) * 90 = 1,5 Minutes
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
             {
@@ -219,7 +220,7 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
         {
-            BukkitUtil.broadcast(PREFIX + "Der Votekick gegen " + target + " wurde durch " + BukkitUtil.getSenderName(commandSender) + " beendet.", "sinkcommands.votekick.vote");
+            BukkitUtil.broadcast(PREFIX + ChatColor.RED + "Der Votekick gegen " + target + ChatColor.RED + " wurde durch " + BukkitUtil.getSenderName(commandSender) + ChatColor.RED + " beendet.", "sinkcommands.votekick.vote");
             voteStarted = false;
             endVoteKick(plugin);
             return true;
@@ -255,13 +256,13 @@ public class VotekickCommands
             int percentNo = (int) Math.round((votesNo / (votesYes + votesNo)) * 100);
             if ( (percentYes + percentNo) <= 1 )
             {
-                BukkitUtil.broadcast(PREFIX + target + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + target + ChatColor.RED + " wurde nicht gekickt, da zu wenige Spieler gevotet haben.", "sinkcommands.votekick.vote");
             }
             if ( percentYes > 50 )
             {
-                BukkitUtil.broadcast(PREFIX + target + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + target + ChatColor.RED + " wurde gekickt, weil die Mehrheit der Spieler dafür war (Ja: " + percentYes + "%, Nein: " + percentNo + "%). Er wurde für 5 Minuten gebannt.", "sinkcommands.votekick.vote");
                 final String username = targetPlayer.getName();
-                targetPlayer.kickPlayer("Du wurdest durch einen Votekick gekickt.");
+                targetPlayer.kickPlayer(ChatColor.RED + "Du wurdest durch einen Votekick gekickt und für 5 Minuten gebannt.");
                 SinkLibrary.addTempBan(username);
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
                 {
@@ -274,7 +275,7 @@ public class VotekickCommands
             }
             else
             {
-                BukkitUtil.broadcast(PREFIX + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + target + " wurde nicht gekickt, da die Mehrheit der Spieler dagegen war (Ja: " + percentYes + "%, Nein: " + percentNo + "%).", "sinkcommands.votekick.vote");
             }
         }
         votesYes = 0;

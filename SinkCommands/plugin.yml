@@ -119,7 +119,7 @@ permissions:
     description: Gives access to all commands
     children:
       sinkcommands.drug: true
-      sinkcommands.milk: true
+      sinkcommands.milk.*: true
       sinkcommands.message: true
       sinkcommands.freeze: true
       sinkcommands.ver: true
@@ -140,15 +140,38 @@ permissions:
     description: Allows to use the drug command
     default: true
 
-  sinkcommands.milk:
-    description: Allow to use the milk command
+  sinkcommands.milk.*:
+    description: Allows to use all milk commands
     default: op
     children:
+      sinkcommands.milk: true
+      sinkcommands.milk.others: true
+      sinkcommands.milk.message: true
+      sinkcommands.milk.all: true
+
+  sinkcommands.milk.others:
+    description: Allows to use milk command on other players
+    default: op
+    children:
+      sinkcommands.milk: true
+      sinkcommands.milk.message: true
+
+  sinkcommands.milk.all: true:
+    description: Allows to use milk on all players
+    default: op
+    children:
+      sinkcommands.milk: true
       sinkcommands.milk.message: true
 
   sinkcommands.milk.message:
     description: Allows to get message when somebodys potion got removed
     default: op
+
+  sinkcommands.milk:
+    description: Allow to use the milk command
+    default: op
+    children:
+      sinkcommands.milk.message: true
 
   sinkcommands.warn:
     description: Allows to warn players

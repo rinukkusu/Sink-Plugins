@@ -17,6 +17,8 @@
 package de.static_interface.sinkcommands.commands;
 
 import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -24,6 +26,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class MilkCommand implements CommandExecutor
 {
@@ -33,6 +37,12 @@ public class MilkCommand implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
+        User user = SinkLibrary.getUser(sender);
+        if ( !user.hasPermission("sinkcommands.milk.all") )
+        {
+            sender.sendMessage(_("Permissions.General"));
+            return true;
+        }
         if ( args.length == 0 ) //Remove all
         {
             String s = "";
@@ -70,6 +80,14 @@ public class MilkCommand implements CommandExecutor
             return true;
         }
 
+        if ( !user.isConsole() )
+        {
+            if ( user.getPlayer() != target && user.hasPermission("sinkcommands.milk.others") )
+            {
+                sender.sendMessage(_("Permissions.General"));
+                return true;
+            }
+        }
         if ( target.hasPotionEffect(PotionEffectType.INVISIBILITY) )
         {
             BukkitUtil.broadcast(PREFIX + "Der Unsichtbarkeits Trank von " + target.getDisplayName() + " wurde durch " + BukkitUtil.getSenderName(sender) + " entfernt.", "sinkcommands.milk.message");
