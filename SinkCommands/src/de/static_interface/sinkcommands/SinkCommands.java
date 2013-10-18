@@ -50,7 +50,7 @@ public class SinkCommands extends JavaPlugin
         LagTimer lagTimer = new LagTimer();
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, timer, 1000, 50);
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 60000, 60000);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, lagTimer, 15000, 15000);
         registerEvents();
         registerCommands();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
