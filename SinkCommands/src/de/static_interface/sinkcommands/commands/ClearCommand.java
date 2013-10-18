@@ -42,38 +42,33 @@ public class ClearCommand implements CommandExecutor
         Player player;
         User user = SinkLibrary.getUser(sender);
 
-        int i = 0;
         boolean clearInvetory = false;
         boolean clearEffects = false;
         boolean clearArmor = false;
         if ( args.contains("-i") || args.contains("-inventory") )
         {
             clearInvetory = true;
-            i++;
         }
         if ( args.contains("-e") || args.contains("-effects") )
         {
             clearEffects = true;
-            i++;
         }
         if ( args.contains("-ar") || args.contains("-armor") )
         {
             clearArmor = true;
-            i++;
         }
         if ( args.contains("-a") || args.contains("-all") )
         {
             clearInvetory = true;
             clearEffects = true;
             clearArmor = true;
-            i++;
         }
         if ( !clearInvetory && !clearEffects && !clearArmor )
         {
             clearInvetory = true;
         }
 
-        if ( argsArr.length == i + 1 )
+        if ( argsArr.length >= 1 )
         {
             String name = argsArr[0];
             if ( !user.hasPermission("sinkcommands.clear.others") )
@@ -84,13 +79,14 @@ public class ClearCommand implements CommandExecutor
             player = BukkitUtil.getPlayer(name);
             if ( player == null )
             {
-                sender.sendMessage(PREFIX + "Spieler wurde nicht gefunden.");
+                sender.sendMessage(PREFIX + "Spieler wurde nicht gefunden: " + name);
                 return true;
             }
         }
         else if ( user.isConsole() )
         {
             sender.sendMessage(PREFIX + "Dieser Befehl ist nur ingame verfügbar.");
+            return true;
         }
 
         player = user.getPlayer();

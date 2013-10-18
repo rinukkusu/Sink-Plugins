@@ -39,7 +39,7 @@ public class BukkitUtil
         List<Player> matchedPlayers = new ArrayList<>();
         for ( Player player : Bukkit.getOnlinePlayers() )
         {
-            if ( player.getName().contains(name) ) matchedPlayers.add(player);
+            if ( player.getName().toLowerCase().contains(name.toLowerCase()) ) matchedPlayers.add(player);
         }
 
         Player exactPlayer = Bukkit.getPlayerExact(name);
@@ -49,7 +49,14 @@ public class BukkitUtil
         }
         else
         {
-            return matchedPlayers.get(0);
+            try
+            {
+                return matchedPlayers.get(0);
+            }
+            catch ( Exception e )
+            {
+                return null;
+            }
         }
     }
 

@@ -25,7 +25,6 @@ import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class User
@@ -87,7 +86,7 @@ public class User
     {
         if ( isConsole() )
         {
-            throw new NullPointerException("User is console!");
+            throw new NullPointerException("User is console, cannot get Player instance!");
         }
 
         if ( !SinkLibrary.economyAvailable() )
@@ -244,7 +243,7 @@ public class User
      */
     public boolean isConsole()
     {
-        return sender instanceof ConsoleCommandSender;
+        return (sender.equals(Bukkit.getConsoleSender()));
     }
 
     /**

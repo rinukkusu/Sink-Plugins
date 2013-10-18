@@ -156,11 +156,12 @@ permissions:
       sinkcommands.milk: true
       sinkcommands.milk.message: true
 
-  sinkcommands.milk.all: true:
+  sinkcommands.milk.all:
     description: Allows to use milk on all players
     default: op
     children:
       sinkcommands.milk: true
+      sinkcommands.milk.others: true
       sinkcommands.milk.message: true
 
   sinkcommands.milk.message:
