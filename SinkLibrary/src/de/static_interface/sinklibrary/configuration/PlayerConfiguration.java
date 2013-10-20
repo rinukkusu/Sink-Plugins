@@ -171,7 +171,7 @@ public class PlayerConfiguration extends ConfigurationBase
     /**
      * Get freeze value
      *
-     * @return true if player is freezed
+     * @return true if player is frozen
      */
     public boolean getFrozen()
     {

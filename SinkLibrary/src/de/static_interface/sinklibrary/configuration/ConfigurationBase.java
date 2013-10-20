@@ -25,9 +25,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Level;
 
-@SuppressWarnings("UnusedDeclaration")
 public abstract class ConfigurationBase
 {
+    private static boolean busy;
+
     /**
      * Create Configuration File
      */
@@ -192,6 +193,10 @@ public abstract class ConfigurationBase
      */
     public void recreate()
     {
+        if ( busy ) return;
+
+        busy = true;
+
         Bukkit.getLogger().log(Level.WARNING, "Recreating Configuration: " + getFile());
         try
         {
@@ -199,9 +204,12 @@ public abstract class ConfigurationBase
         }
         catch ( IOException e )
         {
+            Bukkit.getLogger().log(Level.SEVERE, "Coudln't backup configuration: " + getFile(), e);
             return;
         }
         delete();
         create();
+
+        busy = false;
     }
 }

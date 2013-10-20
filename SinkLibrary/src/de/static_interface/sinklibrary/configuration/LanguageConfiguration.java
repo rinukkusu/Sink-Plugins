@@ -35,6 +35,7 @@ public class LanguageConfiguration
     private static YamlConfiguration yamlConfiguration = new YamlConfiguration();
     private static HashMap<String, Object> defaultValues;
     private static File yamlFile;
+    private static boolean busy;
 
     /**
      * Initialize
@@ -316,6 +317,10 @@ public class LanguageConfiguration
      */
     public static void recreate()
     {
+        if ( busy ) return;
+
+        busy = true;
+
         Bukkit.getLogger().log(Level.WARNING, "Recreating Configuration: " + getFile());
         try
         {
@@ -323,9 +328,12 @@ public class LanguageConfiguration
         }
         catch ( IOException e )
         {
+            Bukkit.getLogger().log(Level.SEVERE, "Coudln't backup configuration: " + getFile(), e);
             return;
         }
         delete();
         create();
+
+        busy = false;
     }
 }

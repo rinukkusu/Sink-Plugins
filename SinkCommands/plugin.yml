@@ -30,7 +30,7 @@ commands:
     permission: sinkcommands.freeze.freeze
 
   freezelist:
-    description: List all the freezed or tmpfreezed players.
+    description: List of frozen players
     permission: sinkcommands.freeze.list
 
   globalmute:
@@ -202,11 +202,11 @@ permissions:
     default: op
 
   sinkcommands.freeze.list:
-    description: Be able to list every freezed or tmpfreezed players.
+    description: Be able to list every frozen player.
     default: op
 
   sinkcommands.freeze.message:
-    description: Allows to receive a message when somebody got freezed
+    description: Allows to receive a message when somebody got frozen
     default: true
 
   sinkcommands.ver:
