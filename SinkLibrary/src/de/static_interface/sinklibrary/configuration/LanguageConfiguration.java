@@ -194,7 +194,6 @@ public class LanguageConfiguration
         }
         catch ( Exception e )
         {
-            if ( path.equals("Main.ConfigVersion") ) return 0;
             Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return getDefault(path);
         }

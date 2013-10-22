@@ -77,7 +77,6 @@ public abstract class ConfigurationBase
 
     /**
      * Get value from configuration. If it doesn't exists, it will return the default value.
-     * The default value for path: "Main.ConfigVersion" is always 0
      *
      * @param path Path to value
      * @return Value of path
@@ -95,10 +94,6 @@ public abstract class ConfigurationBase
         }
         catch ( Exception e )
         {
-            if ( path.equals("Main.ConfigVersion") )
-            {
-                return 0;
-            }
             Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return getDefault(path);
         }
