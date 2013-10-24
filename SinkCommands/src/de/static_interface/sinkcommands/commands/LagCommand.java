@@ -22,6 +22,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import java.text.DecimalFormat;
+
 public class LagCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.DARK_PURPLE + "[Lag] " + ChatColor.RESET;
@@ -30,7 +32,8 @@ public class LagCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         double realTPS = SinkCommands.getCommandsTimer().getAverageTPS();
-        double shownTPS = Math.round(realTPS);
+        DecimalFormat f = new DecimalFormat("##.00");
+        String shownTPS = f.format(realTPS); //Math.round(realTPS * 100.0) / 100.0;
         if ( realTPS >= 18.5 )
         {
             sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Server läuft ohne Probleme!");

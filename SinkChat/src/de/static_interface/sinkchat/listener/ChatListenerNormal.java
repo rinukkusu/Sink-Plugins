@@ -33,7 +33,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class ChatListenerNormal implements Listener
 {
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
         if ( event.isCancelled() )
@@ -53,7 +53,7 @@ public class ChatListenerNormal implements Listener
         User eventPlayer = SinkLibrary.getUser(event.getPlayer());
 
         String message = event.getMessage();
-        int range = 50;
+        int range = 50; //ToDo: Add settings for this
         String formattedMessage = String.format(event.getFormat(), eventPlayer.getDisplayName(), message);
 
         if ( !SinkLibrary.permissionsAvailable() )

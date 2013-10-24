@@ -17,6 +17,7 @@
 package de.static_interface.sinklibrary;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -69,7 +70,7 @@ public class BukkitUtil
     public static String getSenderName(CommandSender sender)
     {
         User user = SinkLibrary.getUser(sender);
-        return user.getDisplayName();
+        return user.getDisplayName() + ChatColor.RESET;
     }
 
     /**

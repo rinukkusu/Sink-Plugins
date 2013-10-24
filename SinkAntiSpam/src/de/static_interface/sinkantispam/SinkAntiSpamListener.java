@@ -134,7 +134,7 @@ public class SinkAntiSpamListener implements Listener
         int i = 0;
         for ( String s : stringArray )
         {
-            if ( input.contains(" " + s.toLowerCase() + " ") || input.contains(" " + s.toLowerCase()) || input.contains(s.toLowerCase() + " ") || (stringArray.length == 0 && input.contains(s.toLowerCase())) )
+            if ( input.toLowerCase().contains(" " + s.toLowerCase() + " ") || input.toLowerCase().contains(" " + s.toLowerCase()) || input.toLowerCase().contains(s.toLowerCase() + " ") || (stringArray.length == 0 && input.toLowerCase().contains(s.toLowerCase())) )
             {
                 return stringArray[i];
             }

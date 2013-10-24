@@ -253,6 +253,10 @@ public class User
      */
     public String getDisplayName()
     {
+        if ( isConsole() )
+        {
+            return ChatColor.RED + "Console" + ChatColor.RESET;
+        }
         if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
         {
             String prefix = "";
@@ -261,10 +265,6 @@ public class User
                 prefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
             }
             return prefix + base.getDisplayName();
-        }
-        if ( isConsole() )
-        {
-            return ChatColor.RED + "Console" + ChatColor.RESET;
         }
         else
         {
