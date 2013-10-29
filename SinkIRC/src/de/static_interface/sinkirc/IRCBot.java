@@ -284,15 +284,19 @@ public class IRCBot extends PircBot
                     sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
                     return;
                 }
-                String reason = label.replace(targetPlayerName + " ", "");
-                reason = reason.replace("kick ", "");
-                String formattedReason = "";
+
+                String formattedReason;
                 if ( args.length > 1 )
                 {
+                    String reason = label.replace(targetPlayerName, "");
+                    reason = reason.replace("kick ", "");
                     formattedReason = " (Reason: " + reason + ")";
                 }
-                reason = "Kicked by " + sender + " from IRC" + formattedReason;
-                final String finalReason = reason;
+                else
+                {
+                    formattedReason = ".";
+                }
+                final String finalReason = "Kicked by " + sender + " from IRC" + formattedReason;
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
                     @Override
@@ -301,7 +305,7 @@ public class IRCBot extends PircBot
                         targetPlayer.kickPlayer(finalReason);
                     }
                 });
-                Bukkit.broadcastMessage(reason);
+                Bukkit.broadcastMessage(finalReason);
 
             }
 

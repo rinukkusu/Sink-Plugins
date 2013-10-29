@@ -24,8 +24,8 @@ import de.static_interface.sinkchat.command.ChannelCommand;
 import de.static_interface.sinkchat.command.NickCommand;
 import de.static_interface.sinkchat.command.PrivateChannelCommand;
 import de.static_interface.sinkchat.command.SpyCommands;
+import de.static_interface.sinkchat.listener.ChatListenerHighest;
 import de.static_interface.sinkchat.listener.ChatListenerLowest;
-import de.static_interface.sinkchat.listener.ChatListenerNormal;
 import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
@@ -71,7 +71,7 @@ public class SinkChat extends JavaPlugin
     private void registerEvents(PluginManager pm)
     {
         pm.registerEvents(new ChatListenerLowest(), this);
-        pm.registerEvents(new ChatListenerNormal(), this);
+        pm.registerEvents(new ChatListenerHighest(), this);
     }
 
     private void registerCommands()

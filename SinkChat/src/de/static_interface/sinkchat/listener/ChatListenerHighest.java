@@ -31,9 +31,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
-public class ChatListenerNormal implements Listener
+public class ChatListenerHighest implements Listener
 {
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
         if ( event.isCancelled() )

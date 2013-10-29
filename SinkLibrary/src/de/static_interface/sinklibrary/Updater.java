@@ -32,7 +32,7 @@ import java.util.zip.ZipInputStream;
  * <br>
  * If you are unsure about these rules, please read the plugin submission guidelines: http://goo.gl/8iU5l
  *
- * @author Gravity
+ * @author Gravity, modified by Trojaner
  * @version 2.0
  */
 

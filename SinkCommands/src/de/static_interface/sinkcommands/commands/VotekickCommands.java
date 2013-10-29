@@ -117,7 +117,8 @@ public class VotekickCommands
             }
 
             targetPlayer = (BukkitUtil.getPlayer(args[0]));
-            target = targetPlayer.getDisplayName();
+            User targetUser = SinkLibrary.getUser(targetPlayer);
+            target = targetUser.getDisplayName();
             if ( targetPlayer == sender )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen dich selbst starten!");
@@ -130,7 +131,7 @@ public class VotekickCommands
                 return true;
             }
 
-            User targetUser = SinkLibrary.getUser(targetPlayer);
+
             if ( targetUser.hasPermission("sinkcommands.votekick.bypass") )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen diese Person starten!");

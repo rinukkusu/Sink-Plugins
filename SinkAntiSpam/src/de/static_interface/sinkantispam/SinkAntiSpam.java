@@ -18,6 +18,7 @@ package de.static_interface.sinkantispam;
 
 import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -25,9 +26,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class SinkAntiSpam extends JavaPlugin
 {
-    public static String prefix = ChatColor.RED + "[SinkAntiSpam] " + ChatColor.WHITE;
+    public static String prefix;
 
     public void onEnable()
     {
@@ -37,12 +40,19 @@ public class SinkAntiSpam extends JavaPlugin
         }
         SinkLibrary.registerPlugin(this);
         Bukkit.getPluginManager().registerEvents(new SinkAntiSpamListener(), this);
+        prefix = _("SinkAntiSpam.Prefix") + " " + ChatColor.RESET;
     }
 
     public static void warnPlayer(Player player, String reason)
     {
-        player.sendMessage(prefix + ChatColor.RED + "Du wurdest automatisch für den folgenden Grund verwarnt: " + ChatColor.RESET + reason);
-        BukkitUtil.broadcast(prefix + player.getDisplayName() + " wurde automatisch verwarnt. Grund: " + reason, "sinkantispam.message");
+        String message = prefix + String.format(_("SinkAntiSpam.Warn"), player.getDisplayName(), reason);
+        String permission = "sinkantispam.message";
+        User user = SinkLibrary.getUser(player);
+        if ( !user.hasPermission(permission) )
+        {
+            player.sendMessage(message);
+        }
+        BukkitUtil.broadcast(message, permission);
     }
 
 

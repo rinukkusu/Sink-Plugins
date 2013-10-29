@@ -24,7 +24,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 public class Settings extends ConfigurationBase
@@ -87,23 +89,11 @@ public class Settings extends ConfigurationBase
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            if ( !createNewConfiguration )
-            {
-                int version = (int) get("Main.ConfigVersion");
-                if ( version < REQUIRED_VERSION )
-                {
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
-                    recreate();
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
-                    return;
-                }
-            }
-
             getYamlConfiguration().options().header(String.format("You can customize the SinkPlugins with this configuration."));
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.DisplayNamesEnabled", true);
+
 
             addDefault("Updater.Enabled", true);
             addDefault("Updater.UpdateType", "default");
@@ -121,6 +111,31 @@ public class Settings extends ConfigurationBase
             addDefault("SinkIRC.Authentification.Password", "");
             */
 
+            addDefault("SinkAntiSpam.BlacklistedWordsCheck.Enabled", true);
+
+            List<String> defaultBlackList = new ArrayList();
+            defaultBlackList.add("BlacklistedWord");
+            defaultBlackList.add("BlackListedWord2");
+            addDefault("SinkAntiSpam.BlacklistedWordsCheck.Words", defaultBlackList);
+
+            addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Enabled", true);
+
+            List<String> defaultDomainWiteList = new ArrayList();
+            defaultDomainWiteList.add("google.com");
+            defaultDomainWiteList.add("examlple.com");
+            addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Domains", defaultDomainWiteList);
+
+            addDefault("SinkAntiSpam.IPCheck.Enabled", true);
+
+            List<String> defaultExcludedCommands = new ArrayList();
+            defaultExcludedCommands.add("msg");
+            defaultExcludedCommands.add("tell");
+            defaultExcludedCommands.add("m");
+            defaultExcludedCommands.add("whisper");
+            defaultExcludedCommands.add("t");
+            addDefault("SinkAntiSpam.ExcludedCommands.Commands", defaultExcludedCommands);
+
+
             addDefault("SinkChat.Channel.Help.Prefix", "?");
             addDefault("SinkChat.Channel.Shout.Prefix", "!");
             addDefault("SinkChat.Channel.Trade.Prefix", "$");
@@ -134,10 +149,8 @@ public class Settings extends ConfigurationBase
         }
         catch ( InvalidConfigurationException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
             Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
             recreate();
         }
     }
@@ -165,5 +178,35 @@ public class Settings extends ConfigurationBase
     public boolean getDisplayNamesEnabled()
     {
         return (boolean) get("General.DisplayNamesEnabled");
+    }
+
+    public List<String> getBlackListedWords()
+    {
+        return (List<String>) get("SinkAntiSpam.BlacklistedWordsCheck.Words");
+    }
+
+    public List<String> getWhitelistedWords()
+    {
+        return (List<String>) get("SinkAntiSpam.WhitelistedDomainsCheck.Domains");
+    }
+
+    public List<String> getExcludedCommands()
+    {
+        return (List<String>) get("SinkAntiSpam.ExcludedCommands.Commands");
+    }
+
+    public boolean getBlacklistedWordsEnabled()
+    {
+        return (boolean) get("SinkAntiSpam.BlacklistedWordsCheck.Enabled");
+    }
+
+    public boolean getIPCheckEnabled()
+    {
+        return (boolean) get("SinkAntiSpam.IPCheck.Enabled");
+    }
+
+    public boolean getWhitelistedDomainCheckEnabled()
+    {
+        return (boolean) get("SinkAntiSpam.WhitelistedDomainsCheck.Enabled");
     }
 }

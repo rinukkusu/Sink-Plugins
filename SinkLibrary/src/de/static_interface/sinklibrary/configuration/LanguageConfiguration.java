@@ -71,19 +71,6 @@ public class LanguageConfiguration
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            if ( !createNewConfiguration )
-            {
-                int version = (int) get("Main.ConfigVersion");
-                if ( version < REQUIRED_VERSION )
-                {
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
-                    recreate();
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
-                    return;
-                }
-            }
-
             getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language.%n%%s will be replaced with the value by the plugin."));
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
@@ -123,16 +110,24 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Private.PlayerKicked", "%s has been kicked: %s");
             addDefault("SinkChat.Channels.Private.PlayerKicked.ErrorNotInChannel", "%s is not in that conversation!");
 
+            addDefault("SinkChat.Prefix.Channel", "&a[Channel]");
+            addDefault("SinkChat.Prefix.Nick", "&2[Nick]");
+            addDefault("SinkChat.Prefix.Spy", "&7[Spy]");
+            addDefault("SinkChat.Prefix.Local", "&7[Local]");
+
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
             addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
             addDefault("Permissions.SinkChat.Channels.Help", "&4You may not use the help channel.");
             addDefault("Permissions.SinkChat.Channels.Trade", "&4You may not use the trade channel.");
             addDefault("Permissions.SinkChat.Nick.Other", "&4You may not change the nickname of other players!");
 
-            addDefault("SinkChat.Prefix.Channel", "&a[Channel]");
-            addDefault("SinkChat.Prefix.Nick", "&2[Nick]");
-            addDefault("SinkChat.Prefix.Spy", "&7[Spy]");
-            addDefault("SinkChat.Prefix.Local", "&7[Local]");
+            addDefault("SinkAntiSpam.Prefix", "&4[SinkAntiSpam]");
+            addDefault("SinkAntiSpam.Warn", "%s has been automatically warned: %s");
+            addDefault("SinkAntiSpam.Reasons.BlacklistedWord", "Tried to write a blacklisted word: %s");
+            addDefault("SinkAntiSpam.Reasons.IP", "Tried to write IP: %s");
+            addDefault("SinkAntiSpam.Reasons.Domain", "Tried to write a not whitelisted domain: %s");
+            addDefault("SinkAntiSpam.ReplaceDomain", "google.com");
+            addDefault("SinkAntiSpam.ReplaceIP", "127.0.0.1");
 
             save();
         }
@@ -143,10 +138,8 @@ public class LanguageConfiguration
         }
         catch ( InvalidConfigurationException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
             Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
             Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
             recreate();
         }
     }

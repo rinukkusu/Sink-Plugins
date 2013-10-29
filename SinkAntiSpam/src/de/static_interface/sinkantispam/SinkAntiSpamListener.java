@@ -28,14 +28,24 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 public class SinkAntiSpamListener implements Listener
 {
-    String[] blacklist = {"schlampe", "anus", "nigger", "nigga", "suck", "motherfucker", "bastard", "hure", "asshole", "arschloch", "fotze", "bitch", "hurensohn"};
+    List<String> blacklistedWords;
+    List<String> whiteListDomains;
+    List<String> excludedCommands;
 
-    String[] whiteListDomains = {"youtube.de", "youtube.com", "google.de", "adventuria.eu"};
+    public SinkAntiSpamListener()
+    {
+        blacklistedWords = SinkLibrary.getSettings().getBlackListedWords();
+        whiteListDomains = SinkLibrary.getSettings().getWhitelistedWords();
+        excludedCommands = SinkLibrary.getSettings().getExcludedCommands();
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
@@ -46,6 +56,13 @@ public class SinkAntiSpamListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
+        for ( String command : excludedCommands )
+        {
+            if ( event.getMessage().startsWith("/" + command) || event.getMessage().startsWith(command) )
+            {
+                return;
+            }
+        }
         checkMessage(event);
     }
 
@@ -54,7 +71,7 @@ public class SinkAntiSpamListener implements Listener
         String message;
         Player player;
 
-        if ( event instanceof AsyncPlayerChatEvent ) //ToDo: make this more clean...
+        if ( event instanceof AsyncPlayerChatEvent )
         {
             message = ((AsyncPlayerChatEvent) event).getMessage();
             player = ((AsyncPlayerChatEvent) event).getPlayer();
@@ -75,11 +92,12 @@ public class SinkAntiSpamListener implements Listener
         {
             return;
         }
-        String word = ContainsArrayItem(message, blacklist);
-        if ( word != null )
+
+        String word = ContainsArrayItem(message, blacklistedWords);
+        if ( word != null && !word.equals("") && SinkLibrary.getSettings().getBlacklistedWordsEnabled() )
         {
             message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
-            SinkAntiSpam.warnPlayer(player, "Schreiben eines verbotenen Wortes: " + message);
+            SinkAntiSpam.warnPlayer(player, String.format(_("SinkAntiSpam.BlacklistedWord"), message));
             if ( event instanceof AsyncPlayerChatEvent )
             {
                 ((AsyncPlayerChatEvent) event).setCancelled(true);
@@ -88,25 +106,29 @@ public class SinkAntiSpamListener implements Listener
             {
                 ((PlayerCommandPreprocessEvent) event).setCancelled(true);
             }
+            return;
         }
+
         Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
         Matcher matcher = pattern.matcher(message);
-        if ( matcher.find() )
+        if ( matcher.find() && SinkLibrary.getSettings().getIPCheckEnabled() )
         {
             String match = matcher.group(0);
-            SinkAntiSpam.warnPlayer(player, "Fremdwerbung für folgende IP: " + match + " !");
+            SinkAntiSpam.warnPlayer(player, String.format(_("SinkAntiSpam.IP"), match));//"Fremdwerbung für folgende IP: " + match + " !");
             if ( event instanceof AsyncPlayerChatEvent )
             {
-                ((AsyncPlayerChatEvent) event).setMessage(message.replace(match, "127.0.0.1"));
+                ((AsyncPlayerChatEvent) event).setMessage(message.replace(match, " " + _("SinkAntiSpam.ReplaceIP")));
             }
             else
             {
-                ((PlayerCommandPreprocessEvent) event).setMessage(message.replace(match, " 127.0.0.1"));
+                ((PlayerCommandPreprocessEvent) event).setMessage(message.replace(match, " " + _("SinkAntiSpam.ReplaceIP")));
             }
+            return;
         }
+
         pattern = Pattern.compile(" [a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S)? ");
         matcher = pattern.matcher(message);
-        if ( matcher.find() )
+        if ( matcher.find() && SinkLibrary.getSettings().getWhitelistedDomainCheckEnabled() )
         {
             String match = matcher.group(0);
             if ( match.contains("..") )
@@ -117,28 +139,26 @@ public class SinkAntiSpamListener implements Listener
             {
                 return;
             }
-            SinkAntiSpam.warnPlayer(player, "Fremdwerbung für folgende Domain: " + match + " !");
+            SinkAntiSpam.warnPlayer(player, String.format(_("SinkAntiSpam.Reasons.Domain"), match));
             if ( event instanceof AsyncPlayerChatEvent )
             {
-                ((AsyncPlayerChatEvent) event).setMessage(message.replace(match, "adventuria.eu"));
+                ((AsyncPlayerChatEvent) event).setMessage(message.replace(match, " " + _("SinkAntiSpam.ReplaceDomain")));
             }
             else
             {
-                ((PlayerCommandPreprocessEvent) event).setMessage(message.replace(match, " adventuria.eu "));
+                ((PlayerCommandPreprocessEvent) event).setMessage(message.replace(match, " " + _("SinkAntiSpam.ReplaceDomain")));
             }
         }
     }
 
-    private String ContainsArrayItem(String input, String[] stringArray)
+    private String ContainsArrayItem(String input, List<String> listString)
     {
-        int i = 0;
-        for ( String s : stringArray )
+        for ( String s : listString )
         {
-            if ( input.toLowerCase().contains(" " + s.toLowerCase() + " ") || input.toLowerCase().contains(" " + s.toLowerCase()) || input.toLowerCase().contains(s.toLowerCase() + " ") || (stringArray.length == 0 && input.toLowerCase().contains(s.toLowerCase())) )
+            if ( input.toLowerCase().contains(" " + s.toLowerCase() + " ") || input.toLowerCase().contains(" " + s.toLowerCase()) || input.toLowerCase().contains(s.toLowerCase() + " ") || (listString.toArray().length == 0 && input.toLowerCase().contains(s.toLowerCase())) || input.equals(s) )
             {
-                return stringArray[i];
+                return s;
             }
-            i++;
         }
         return null;
     }

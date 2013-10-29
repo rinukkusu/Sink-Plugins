@@ -23,6 +23,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 /**
  * Used for setting chat format
@@ -43,6 +44,16 @@ public class ChatListenerLowest implements Listener
 
         event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
 
+        if ( user.hasPermission("sinkchat.color") )
+        {
+            event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
+    {
+        User user = SinkLibrary.getUser(event.getPlayer());
         if ( user.hasPermission("sinkchat.color") )
         {
             event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));

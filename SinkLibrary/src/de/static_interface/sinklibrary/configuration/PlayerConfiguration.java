@@ -92,9 +92,18 @@ public class PlayerConfiguration extends ConfigurationBase
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
+            /*
             if ( !createNewConfiguration )
             {
-                int version = (int) get("Main.ConfigVersion");
+                int version;
+                try
+                {
+                    version = (int) get("Main.ConfigVersion");
+                }
+                catch(NullPointerException e)
+                {
+                    version = 0;
+                }
                 if ( version < REQUIRED_VERSION )
                 {
                     Bukkit.getLogger().log(Level.WARNING, "***************");
@@ -104,6 +113,7 @@ public class PlayerConfiguration extends ConfigurationBase
                     return;
                 }
             }
+            */
 
             getYamlConfiguration().options().header(String.format("This configuration saves and loads variables to players.%nDon't edit it."));
 
