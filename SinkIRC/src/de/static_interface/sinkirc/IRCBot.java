@@ -258,6 +258,16 @@ public class IRCBot extends PircBot
                 }
 
                 String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
+
+                if ( isOp )
+                {
+                    messageWithPrefix = ChatColor.translateAlternateColorCodes('&', messageWithPrefix);
+                }
+                else
+                {
+                    messageWithPrefix = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', messageWithPrefix));
+                }
+
                 Bukkit.broadcastMessage(messageWithPrefix);
                 sendCleanMessage(SinkIRC.getMainChannel(), replaceColorCodes(messageWithPrefix));
             }
@@ -296,6 +306,7 @@ public class IRCBot extends PircBot
                 {
                     formattedReason = ".";
                 }
+                formattedReason = ChatColor.translateAlternateColorCodes('&', formattedReason);
                 final String finalReason = "Kicked by " + sender + " from IRC" + formattedReason;
                 Bukkit.getScheduler().runTask(plugin, new Runnable()
                 {
