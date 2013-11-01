@@ -16,10 +16,13 @@
 
 package de.static_interface.sinklibrary;
 
+import de.static_interface.sinklibrary.commands.SinkDebugCommand;
+import de.static_interface.sinklibrary.commands.SinkReloadCommand;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import de.static_interface.sinklibrary.configuration.Settings;
 import de.static_interface.sinklibrary.events.IRCMessageEvent;
+import de.static_interface.sinklibrary.exceptions.NotInitializedException;
 import de.static_interface.sinklibrary.listener.DisplayNameListener;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
 import net.milkbowl.vault.chat.Chat;
@@ -33,6 +36,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -55,9 +59,13 @@ public class SinkLibrary extends JavaPlugin
     private static List<JavaPlugin> registeredPlugins;
     private static String version;
 
+    private static boolean initialized;
+
+    private static HashMap<String, User> users;
+
     public void onEnable()
     {
-        if ( !vaultAvailable() )
+        if ( !isVaultAvailable() )
         {
             Bukkit.getLogger().warning("Vault Plugin not found. Disabling economy and some permission features.");
             permissionsAvailable = false;
@@ -85,6 +93,7 @@ public class SinkLibrary extends JavaPlugin
 
         pluginName = this.getDescription().getName();
         dataFolder = getDataFolder();
+        users = new HashMap();
 
         if ( !getCustomDataFolder().exists() )
         {
@@ -103,22 +112,25 @@ public class SinkLibrary extends JavaPlugin
             Bukkit.getLogger().info("Successfully hooked into permissions, economy and chat.");
         }
 
-        LanguageConfiguration.init();
+        LanguageConfiguration.load();
         settings = new Settings();
         version = getDescription().getVersion();
         tmpBannedPlayers = new ArrayList<>();
         registeredPlugins = new ArrayList<>();
-
-        Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
-        Bukkit.getPluginManager().registerEvents(new DisplayNameListener(), this);
-        getCommand("sinkdebug").setExecutor(new SinkDebugCommand());
 
         for ( Player p : Bukkit.getOnlinePlayers() )
         {
             refreshDisplayName(p);
         }
 
+        registerPlugin(this);
+
+        registerListeners();
+        registerCommands();
+
         update();
+
+        initialized = true;
     }
 
     /**
@@ -132,11 +144,15 @@ public class SinkLibrary extends JavaPlugin
         if ( versionType.equalsIgnoreCase("release") ) versionType = " ";
         if ( updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE )
         {
-            BukkitUtil.broadcast(Updater.PREFIX + "A new" + versionType + "update is available: " + updater.getLatestName(), permission);
+            BukkitUtil.broadcast(Updater.CONSOLEPREFIX + "A new" + versionType + "update is available: " + updater.getLatestName(), permission);
         }
         else if ( updater.getResult() == Updater.UpdateResult.NO_UPDATE )
         {
             Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "No new updates found...");
+        }
+        else if ( updater.getResult() == Updater.UpdateResult.SUCCESS )
+        {
+            Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "Updates downloaded, please restart or reload the server to take effect...");
         }
     }
 
@@ -185,35 +201,55 @@ public class SinkLibrary extends JavaPlugin
         return (perm != null);
     }
 
+    private void registerListeners()
+    {
+        Bukkit.getPluginManager().registerEvents(new PlayerConfigurationListener(), this);
+        Bukkit.getPluginManager().registerEvents(new DisplayNameListener(), this);
+    }
+
+    private void registerCommands()
+    {
+        getCommand("sinkdebug").setExecutor(new SinkDebugCommand());
+        getCommand("sinkreload").setExecutor(new SinkReloadCommand(this));
+    }
+
     /**
      * @return True if chat is available
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    public static boolean chatAvailable()
+    public static boolean isChatAvailable()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return chatAvailable;
     }
 
     /**
      * @return True if economy is available
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    public static boolean economyAvailable()
+    public static boolean isEconomyAvailable()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return economyAvailable;
     }
 
     /**
      * @return True if permissions are available
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    public static boolean permissionsAvailable()
+    public static boolean isPermissionsAvailable()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return permissionsAvailable;
     }
 
     /**
      * @return True if Vault available
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    public static boolean vaultAvailable()
+    public static boolean isVaultAvailable()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return Bukkit.getPluginManager().getPlugin("Vault") != null;
     }
 
@@ -222,9 +258,11 @@ public class SinkLibrary extends JavaPlugin
      *
      * @return Chat instance
      * @see Chat
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static Chat getChat()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return chat;
     }
 
@@ -233,9 +271,11 @@ public class SinkLibrary extends JavaPlugin
      *
      * @return Economy instace
      * @see Economy
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static Economy getEconomy()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return econ;
     }
 
@@ -244,9 +284,11 @@ public class SinkLibrary extends JavaPlugin
      *
      * @return Permissions
      * @see Permission
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static Permission getPermissions()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return perm;
     }
 
@@ -264,20 +306,26 @@ public class SinkLibrary extends JavaPlugin
      * Send Message to IRC via SinkIRC Plugin.
      *
      * @param message Message to send
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    public static void sendIRCMessage(String message)
+    public static boolean sendIRCMessage(String message)
     {
+        if ( !isReady() ) throw new NotInitializedException();
+        if ( !getRegisteredPlugins().contains("SinkIRC") ) return false;
         IRCMessageEvent event = new IRCMessageEvent(message);
         Bukkit.getPluginManager().callEvent(event);
+        return true;
     }
 
     /**
      * Add Temp Ban to Player. Will be cleared on next server restart or plugin reload.
      *
      * @param username Player to ban
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static void addTempBan(String username)
     {
+        if ( !isReady() ) throw new NotInitializedException();
         tmpBannedPlayers.add(username);
     }
 
@@ -285,9 +333,11 @@ public class SinkLibrary extends JavaPlugin
      * Remove Temp Ban
      *
      * @param username Player to unban
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static void removeTempBan(String username)
     {
+        if ( !isReady() ) throw new NotInitializedException();
         tmpBannedPlayers.remove(username);
     }
 
@@ -295,10 +345,11 @@ public class SinkLibrary extends JavaPlugin
      * Get SinkPlugins Settings.
      *
      * @return Settings
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
-    @SuppressWarnings("UnusedDeclaration")
     public static Settings getSettings()
     {
+        if ( !isReady() ) throw new NotInitializedException();
         return settings;
     }
 
@@ -306,37 +357,57 @@ public class SinkLibrary extends JavaPlugin
      * Register a plugin
      *
      * @param plugin Class which extends {@link org.bukkit.plugin.java.JavaPlugin}
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static void registerPlugin(JavaPlugin plugin)
     {
+        if ( !isReady() ) throw new NotInitializedException();
         registeredPlugins.add(plugin);
     }
 
     /**
      * @param player Player
      * @return User instance of player
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static User getUser(Player player)
     {
-        return new User(player);
+        if ( !isReady() ) throw new NotInitializedException();
+        if ( !users.containsKey(player.getName()) )
+        {
+            users.put(player.getName(), new User(player));
+        }
+        return users.get(player.getName()); //new User(player);
     }
 
     /**
      * @param playerName Name of Player
      * @return User instance
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static User getUser(String playerName)
     {
-        return new User(playerName);
+        if ( !isReady() ) throw new NotInitializedException();
+        if ( !users.containsKey(playerName) )
+        {
+            users.put(playerName, new User(playerName));
+        }
+        return users.get(playerName);
     }
 
     /**
      * @param sender Command Sender
      * @return User instance
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static User getUser(CommandSender sender)
     {
-        return new User(sender);
+        if ( !isReady() ) throw new NotInitializedException();
+        if ( !users.containsKey(sender.getName()) )
+        {
+            users.put(sender.getName(), new User(sender));
+        }
+        return users.get(sender.getName());
     }
 
     /**
@@ -351,9 +422,11 @@ public class SinkLibrary extends JavaPlugin
 
     /**
      * Refresh Player DisplayName
+     * @throws de.static_interface.sinklibrary.exceptions.NotInitializedException if the plugin hasn't initialized. See {@link SinkLibrary#isReady()}
      */
     public static void refreshDisplayName(Player player)
     {
+        if ( !isReady() ) throw new NotInitializedException();
         if ( !getSettings().getDisplayNamesEnabled() ) return;
         User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
@@ -382,5 +455,32 @@ public class SinkLibrary extends JavaPlugin
 
         player.setDisplayName(nickname);
         player.setCustomName(nickname);
+    }
+
+    /**
+     * @return Plugins which are registered through {@link SinkLibrary#registerPlugin(org.bukkit.plugin.java.JavaPlugin)}
+     */
+    public static List<JavaPlugin> getRegisteredPlugins()
+    {
+        if ( !isReady() ) throw new NotInitializedException();
+        return registeredPlugins;
+    }
+
+    /**
+     * @return True if the onCreate method has been executed
+     */
+    public static boolean isReady()
+    {
+        return initialized;
+    }
+
+    public static void unloadUser(User user)
+    {
+        user.getPlayerConfiguration().save();
+        String name = user.getPlayer().getName();
+        if ( name != null && !name.equals("") )
+        {
+            users.remove(name);
+        }
     }
 }
