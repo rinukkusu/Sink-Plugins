@@ -155,7 +155,7 @@ public class SinkCommands extends JavaPlugin
         Objective objective = board.registerNewObjective(ChatColor.DARK_GREEN + "Statistiken", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        if ( SinkLibrary.economyAvailable() )
+        if ( SinkLibrary.isEconomyAvailable() )
         {
             Score money = objective.getScore(Bukkit.getOfflinePlayer(ChatColor.DARK_GRAY + "Geld: "));
             money.setScore(user.getMoney());
@@ -192,7 +192,6 @@ public class SinkCommands extends JavaPlugin
     private void registerEvents()
     {
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new FreezeListener(), this);
         pm.registerEvents(new GlobalMuteListener(), this);
         pm.registerEvents(new SpectateListener(), this);
         pm.registerEvents(new VotekickListener(), this);
@@ -206,8 +205,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("drug").setExecutor(new DrugCommand());
         getCommand("milk").setExecutor(new MilkCommand());
         getCommand("warn").setExecutor(new WarnCommand());
-        getCommand("freeze").setExecutor(new FreezeCommands.FreezeCommand());
-        getCommand("freezelist").setExecutor(new FreezeCommands.FreezelistCommand());
         getCommand("globalmute").setExecutor(new GlobalmuteCommand());
         getCommand("teamchat").setExecutor(new TeamchatCommand());
         getCommand("newbiechat").setExecutor(new NewbiechatCommand());
@@ -225,5 +222,6 @@ public class SinkCommands extends JavaPlugin
         getCommand("clear").setExecutor(new ClearCommand());
         getCommand("enablestats").setExecutor(new StatsCommands.EnableStatsCommand());
         getCommand("disablestats").setExecutor(new StatsCommands.DisableStatsCommand());
+        getCommand("raw").setExecutor(new RawCommand());
     }
 }

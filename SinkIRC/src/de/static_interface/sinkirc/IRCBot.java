@@ -257,19 +257,19 @@ public class IRCBot extends PircBot
                     source = "Query";
                 }
 
-                String messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
+                String messageWithPrefix;
 
                 if ( isOp )
                 {
-                    messageWithPrefix = ChatColor.translateAlternateColorCodes('&', messageWithPrefix);
+                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
                 }
                 else
                 {
-                    messageWithPrefix = ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', messageWithPrefix));
+                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + ChatColor.stripColor(label.replaceFirst("say", ""));
                 }
 
-                Bukkit.broadcastMessage(messageWithPrefix);
-                sendCleanMessage(SinkIRC.getMainChannel(), replaceColorCodes(messageWithPrefix));
+                BukkitUtil.broadcastMessage(messageWithPrefix);
+                //sendCleanMessage(SinkIRC.getMainChannel(), replaceColorCodes(messageWithPrefix));
             }
 
             if ( command.equals("kick") )  //Kick players from IRC
@@ -329,9 +329,9 @@ public class IRCBot extends PircBot
                     return;
                 }
 
-                for ( Player p : Bukkit.getOnlinePlayers() )
+                for ( Player player : Bukkit.getOnlinePlayers() )
                 {
-                    de.static_interface.sinklibrary.User user = SinkLibrary.getUser(p);
+                    de.static_interface.sinklibrary.User user = SinkLibrary.getUser(player);
                     if ( players.equals("") )
                     {
                         players = user.getDisplayName();
@@ -343,6 +343,24 @@ public class IRCBot extends PircBot
                 }
                 sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
+
+            if ( command.equals("debug") )
+            {
+                if ( !isOp ) throw new UnauthorizedAccessException();
+                sendCleanMessage(source, Colors.BLUE + "Debug Output: ");
+                String values = "";
+                for ( String user : SinkLibrary.getUsers().keySet() )
+                {
+                    String tmp = "<" + user + "," + ChatColor.stripColor(SinkLibrary.getUsers().get(user).getDisplayName()) + ">";
+                    if ( values.equals("") )
+                    {
+                        values = tmp;
+                        continue;
+                    }
+                    values = values + ", " + tmp;
+                }
+                sendCleanMessage(source, "HashMap Values: " + values);
+            }
         }
         catch ( UnauthorizedAccessException e )
         {
@@ -350,7 +368,7 @@ public class IRCBot extends PircBot
         }
         catch ( Exception e )
         {
-            sendMessage(source, "Uncaught Exception occured while trying to execute command: " + command);
+            sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
             sendMessage(source, e.getMessage());
         }
     }

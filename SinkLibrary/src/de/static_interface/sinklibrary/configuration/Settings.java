@@ -113,21 +113,21 @@ public class Settings extends ConfigurationBase
 
             addDefault("SinkAntiSpam.BlacklistedWordsCheck.Enabled", true);
 
-            List<String> defaultBlackList = new ArrayList();
+            List<String> defaultBlackList = new ArrayList<>();
             defaultBlackList.add("BlacklistedWord");
             defaultBlackList.add("BlackListedWord2");
             addDefault("SinkAntiSpam.BlacklistedWordsCheck.Words", defaultBlackList);
 
             addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Enabled", true);
 
-            List<String> defaultDomainWiteList = new ArrayList();
+            List<String> defaultDomainWiteList = new ArrayList<>();
             defaultDomainWiteList.add("google.com");
             defaultDomainWiteList.add("examlple.com");
             addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Domains", defaultDomainWiteList);
 
             addDefault("SinkAntiSpam.IPCheck.Enabled", true);
 
-            List<String> defaultExcludedCommands = new ArrayList();
+            List<String> defaultExcludedCommands = new ArrayList<>();
             defaultExcludedCommands.add("msg");
             defaultExcludedCommands.add("tell");
             defaultExcludedCommands.add("m");
@@ -136,9 +136,9 @@ public class Settings extends ConfigurationBase
             addDefault("SinkAntiSpam.ExcludedCommands.Commands", defaultExcludedCommands);
 
 
-            addDefault("SinkChat.Channel.Help.Prefix", "?");
-            addDefault("SinkChat.Channel.Shout.Prefix", "!");
-            addDefault("SinkChat.Channel.Trade.Prefix", "$");
+            addDefault("SinkChat.Channels.Help.Prefix", "?");
+            addDefault("SinkChat.Channels.Shout.Prefix", "!");
+            addDefault("SinkChat.Channels.Trade.Prefix", "$");
 
             save();
         }
@@ -182,17 +182,35 @@ public class Settings extends ConfigurationBase
 
     public List<String> getBlackListedWords()
     {
-        return (List<String>) get("SinkAntiSpam.BlacklistedWordsCheck.Words");
+        return getStringList("SinkAntiSpam.BlacklistedWordsCheck.Words");
     }
 
     public List<String> getWhitelistedWords()
     {
-        return (List<String>) get("SinkAntiSpam.WhitelistedDomainsCheck.Domains");
+        return getStringList("SinkAntiSpam.WhitelistedDomainsCheck.Domains");
     }
 
     public List<String> getExcludedCommands()
     {
-        return (List<String>) get("SinkAntiSpam.ExcludedCommands.Commands");
+        return getStringList("SinkAntiSpam.ExcludedCommands.Commands");
+    }
+
+    public List<String> getStringList(String path)
+    {
+        try
+        {
+            List<String> value = getYamlConfiguration().getStringList(path);
+            if ( value == null )
+            {
+                throw new NullPointerException("Path returned null!");
+            }
+            return value;
+        }
+        catch ( Exception e )
+        {
+            Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     public boolean getBlacklistedWordsEnabled()

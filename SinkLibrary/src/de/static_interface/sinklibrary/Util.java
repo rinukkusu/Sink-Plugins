@@ -93,14 +93,14 @@ public class Util
      * @param Char  Chat
      * @return If Array = {"s1", "s2", "s3" } and Char = " & " it will return "s1 & s2 & s3"
      */
-    public static String formatArrayToString(String[] input, String Char)
+    public static String formatArrayToString(Object[] input, String Char)
     {
         String tmp = "";
-        for ( String s : input )
+        for ( Object s : input )
         {
             if ( tmp.equals("") )
             {
-                tmp = s;
+                tmp = (String) s;
                 continue;
             }
             tmp = tmp + Char + s;

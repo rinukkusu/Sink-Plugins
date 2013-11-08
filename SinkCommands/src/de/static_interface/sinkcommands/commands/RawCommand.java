@@ -16,38 +16,19 @@
 
 package de.static_interface.sinkcommands.commands;
 
-import de.static_interface.sinkcommands.SinkCommands;
+import de.static_interface.sinklibrary.BukkitUtil;
+import de.static_interface.sinklibrary.Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import java.text.DecimalFormat;
-
-public class LagCommand implements CommandExecutor
+public class RawCommand implements CommandExecutor
 {
-    public static final String PREFIX = ChatColor.DARK_PURPLE + "[Lag] " + ChatColor.RESET;
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        double realTPS = SinkCommands.getCommandsTimer().getAverageTPS();
-        DecimalFormat f = new DecimalFormat("##.0");
-        String shownTPS = f.format(realTPS);
-        if ( realTPS >= 18.5 )
-        {
-            sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
-        }
-        else if ( realTPS >= 17 )
-        {
-            sender.sendMessage(PREFIX + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
-        }
-        else
-        {
-            sender.sendMessage(PREFIX + ChatColor.RED + "Der Server laggt gerade!");
-        }
-        sender.sendMessage(PREFIX + "(TPS: " + shownTPS + ")");
+        BukkitUtil.broadcastMessage(ChatColor.translateAlternateColorCodes('&', Util.formatArrayToString(args, " ")));
         return true;
     }
 }
-

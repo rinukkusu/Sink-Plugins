@@ -24,15 +24,6 @@ commands:
     description: Warn a player
     permission: sinkcommands.warn
 
-  freeze:
-    description: Freeze or unfreeze a player.
-    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> <Grund>"
-    permission: sinkcommands.freeze.freeze
-
-  freezelist:
-    description: List of frozen players
-    permission: sinkcommands.freeze.list
-
   globalmute:
     descripion: Mutes all players
     usage: "Falsche Benutzung! Korrekte Benutzung: /<command>[Grund]"
@@ -113,6 +104,10 @@ commands:
   disablestats:
     description: Disable stats scoreboard
     permission: sinkcommands.stats
+
+  raw:
+    description: Send raw commands
+    permission: sinkcommands.raw
 
 permissions:
   sinkcommands.*:
@@ -299,3 +294,7 @@ permissions:
   sinkcommands.stats:
     default: true
     description: Allows player to see scoreboard statistics
+
+  sinkcommands.raw:
+    default: op
+    description: Allows to send raw commands

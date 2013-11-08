@@ -56,7 +56,7 @@ public class ChatListenerHighest implements Listener
         int range = 50; //ToDo: Add settings for this
         String formattedMessage = String.format(event.getFormat(), eventPlayer.getDisplayName(), message);
 
-        if ( !SinkLibrary.permissionsAvailable() )
+        if ( !SinkLibrary.isPermissionsAvailable() )
         {
             formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.Chat.Local") + ChatColor.RESET + " " + formattedMessage;
         }
@@ -74,7 +74,7 @@ public class ChatListenerHighest implements Listener
 
             User onlineUser = SinkLibrary.getUser(p);
 
-            boolean newbieSpy = (onlineUser.hasPermission("sinkchat.spynewbie")) && !onlineUser.hasPermission("sinkchat.spynewbie.bypass");
+            boolean newbieSpy = (onlineUser.hasPermission("sinkchat.spynewbie")) && !eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
             boolean maySpy = onlineUser.hasPermission("sinkchat.spy");
 
             PlayerConfiguration config = onlineUser.getPlayerConfiguration();

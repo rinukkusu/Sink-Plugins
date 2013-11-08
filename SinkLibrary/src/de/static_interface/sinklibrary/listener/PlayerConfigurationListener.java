@@ -27,9 +27,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerConfigurationListener implements Listener
 {
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        SinkLibrary.loadUser(event.getPlayer());
+
         User user = SinkLibrary.getUser(event.getPlayer());
         PlayerConfiguration config = user.getPlayerConfiguration();
 
@@ -39,11 +41,9 @@ public class PlayerConfigurationListener implements Listener
         }
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        User user = SinkLibrary.getUser(event.getPlayer());
-        PlayerConfiguration config = user.getPlayerConfiguration();
-        config.save();
+        SinkLibrary.unloadUser(event.getPlayer());
     }
 }

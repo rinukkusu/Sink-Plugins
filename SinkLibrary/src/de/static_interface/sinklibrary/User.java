@@ -35,45 +35,24 @@ public class User
     private CommandSender sender;
 
     /**
-     * Should be used for online players only. Use {@link #User(String)} for offline players.
+     * Get User instance by player's name
      *
-     * @param player Online Player
-     */
-    User(Player player)
-    {
-        base = player;
-        econ = SinkLibrary.getEconomy();
-        playerName = base.getName();
-        sender = base;
-    }
-
-    /**
-     * Should be used for offline players. Use {@link #User(org.bukkit.entity.Player)} for online players.
-     *
-     * @param player Name of offline player
+     * @param player Name of the player
      */
     User(String player)
     {
+        if ( player.equals("CONSOLE") )
+        {
+            sender = Bukkit.getConsoleSender();
+            base = null;
+            econ = SinkLibrary.getEconomy();
+            playerName = "Console";
+            return;
+        }
         base = BukkitUtil.getPlayer(player);
         econ = SinkLibrary.getEconomy();
         playerName = player;
         sender = base;
-    }
-
-    User(CommandSender sender)
-    {
-        if ( sender instanceof Player )
-        {
-            base = (Player) sender;
-            econ = SinkLibrary.getEconomy();
-            playerName = base.getName();
-            this.sender = base;
-            return;
-        }
-        this.sender = sender;
-        base = null;
-        econ = SinkLibrary.getEconomy();
-        playerName = "Console";
     }
 
     /**
@@ -89,7 +68,7 @@ public class User
             throw new NullPointerException("User is console, cannot get Player instance!");
         }
 
-        if ( !SinkLibrary.economyAvailable() )
+        if ( !SinkLibrary.isEconomyAvailable() )
         {
             throw new EconomyNotAvailableException();
         }
@@ -159,7 +138,7 @@ public class User
             throw new NullPointerException("User is console!");
         }
 
-        if ( !SinkLibrary.permissionsAvailable() )
+        if ( !SinkLibrary.isPermissionsAvailable() )
         {
             throw new PermissionsNotAvailableException();
         }
@@ -178,7 +157,7 @@ public class User
         }
         try
         {
-            if ( SinkLibrary.chatAvailable() )
+            if ( SinkLibrary.isChatAvailable() )
             {
                 String playerPrefix = getPrefix();
                 return playerPrefix + base.getName() + ChatColor.RESET;
@@ -200,7 +179,7 @@ public class User
      */
     public String getPrefix()
     {
-        if ( !SinkLibrary.chatAvailable() )
+        if ( !SinkLibrary.isChatAvailable() )
         {
             throw new ChatNotAvailabeException();
         }
@@ -260,7 +239,7 @@ public class User
         if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
         {
             String prefix = "";
-            if ( SinkLibrary.chatAvailable() )
+            if ( SinkLibrary.isChatAvailable() )
             {
                 prefix = ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
             }

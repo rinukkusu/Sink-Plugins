@@ -39,7 +39,7 @@ public class ChannelUtil
         String formattedMessage = message.substring(1);
         User user = SinkLibrary.getUser(player);
 
-        if ( SinkLibrary.permissionsAvailable() )
+        if ( SinkLibrary.isPermissionsAvailable() )
         {
             formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }

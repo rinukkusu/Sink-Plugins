@@ -270,7 +270,6 @@ public class Updater
             // Check to see if it's a zip file, if it is, unzip it.
             final File dFile = new File(folder.getAbsolutePath() + "/" + tempFile);
             this.unzip(dFile);
-            Bukkit.getLogger().info(CONSOLEPREFIX + "Finished updating. Use the reload command to apply it");
         }
         catch ( final Exception ex )
         {

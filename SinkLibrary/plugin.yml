@@ -13,6 +13,11 @@ commands:
     usage: "Wrong usage! Correct Usage: /<command> <option> <args>"
     aliases: sdebug
 
+  sinkreload:
+    description: Reload SinkPlugins Configurations
+    permission: sinklibrary.reload
+    aliases: sreload
+
 permissions:
   sinklibrary.*:
     default: op
@@ -20,6 +25,7 @@ permissions:
     children:
       sinklibrary.updatenotification: true
       sinklibrary.debug: true
+      sinklibrary.reload: true
 
   sinklibrary.updatenotification:
     default: op
@@ -28,3 +34,7 @@ permissions:
   sinklibrary.debug:
     default: op
     description: Permission required for debugging
+
+  sinklibrary.reload:
+    default: op
+    description: Permission required for reloading SinkPlugins Configurations

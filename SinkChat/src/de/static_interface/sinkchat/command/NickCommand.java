@@ -126,7 +126,7 @@ public class NickCommand implements CommandExecutor
             }
         }
 
-        if ( SinkLibrary.chatAvailable() )
+        if ( SinkLibrary.isChatAvailable() )
         {
             newDisplayName = user.getPrefix() + newDisplayName;
         }

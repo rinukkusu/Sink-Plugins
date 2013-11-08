@@ -65,9 +65,9 @@ public class IRCListener implements Listener
             return;
         }
         String reason = ": " + event.getReason();
-        if ( event.getReason().equals("") ) reason = "";
+        if ( event.getReason().equals("") ) reason = "!";
         User user = SinkLibrary.getUser(event.getPlayer());
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), "" + user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason + "!");
+        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), "" + user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

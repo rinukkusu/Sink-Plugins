@@ -44,9 +44,9 @@ public class SinkChat extends JavaPlugin
 
         SinkLibrary.registerPlugin(this);
 
-        IChannel fc = new HelpChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Help.Prefix"));
-        IChannel sc = new ShoutChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Shout.Prefix"));
-        IChannel hc = new TradeChannel((String) SinkLibrary.getSettings().get("SinkChat.Channel.Trade.Prefix"));
+        IChannel fc = new HelpChannel((String) SinkLibrary.getSettings().get("SinkChat.Channels.Help.Prefix"));
+        IChannel sc = new ShoutChannel((String) SinkLibrary.getSettings().get("SinkChat.Channels.Shout.Prefix"));
+        IChannel hc = new TradeChannel((String) SinkLibrary.getSettings().get("SinkChat.Channels.Trade.Prefix"));
 
         sc.registerChannel();
         hc.registerChannel();

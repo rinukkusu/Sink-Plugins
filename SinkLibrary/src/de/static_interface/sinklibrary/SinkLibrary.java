@@ -36,7 +36,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -361,7 +360,8 @@ public class SinkLibrary extends JavaPlugin
      */
     public static User getUser(Player player)
     {
-        return users.get(player.getName());
+        return new User(player.getName());
+        //return users.get(player.getName());
     }
 
     /**
@@ -370,7 +370,8 @@ public class SinkLibrary extends JavaPlugin
      */
     public static User getUser(String playerName)
     {
-        return users.get(playerName);
+        return new User(playerName);
+        //return users.get(playerName);
     }
 
     /**
@@ -379,7 +380,8 @@ public class SinkLibrary extends JavaPlugin
      */
     public static User getUser(CommandSender sender)
     {
-        return users.get(sender.getName());
+        return new User(sender.getName());
+        //return users.get(sender.getName());
     }
 
     /**
@@ -495,22 +497,23 @@ public class SinkLibrary extends JavaPlugin
      *
      * @return Online players as Users
      */
+   /*
     public static Collection<User> getOnlineUsers()
     {
         users.clear();
-        for ( Player player : Bukkit.getOnlinePlayers() )
+        for (Player player : Bukkit.getOnlinePlayers())
         {
             loadUser(player);
         }
         return users.values();
     }
+    */
 
     /**
      * Get Users HashMap
      */
     public static HashMap<String, User> getUsers()
     {
-
         return users;
     }
 }

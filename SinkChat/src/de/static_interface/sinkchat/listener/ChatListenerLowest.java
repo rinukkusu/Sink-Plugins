@@ -40,7 +40,7 @@ public class ChatListenerLowest implements Listener
 
         User user = SinkLibrary.getUser(event.getPlayer());
 
-        String groupPrefix = SinkLibrary.permissionsAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.RESET + ChatColor.GRAY + "] " : "";
+        String groupPrefix = SinkLibrary.isPermissionsAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.RESET + ChatColor.GRAY + "] " : "";
 
         event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
 

@@ -207,4 +207,14 @@ public abstract class ConfigurationBase
 
         busy = false;
     }
+
+    /**
+     * Reload a config
+     */
+    public void reload()
+    {
+        if ( !exists() ) return;
+        load();
+    }
+
 }

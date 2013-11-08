@@ -122,7 +122,6 @@ public class PlayerConfiguration extends ConfigurationBase
             addDefault("Spy.Enabled", true);
             addDefault("Nick.HasDisplayName", false);
             addDefault("Nick.DisplayName", user.getDefaultDisplayName());
-            addDefault("Freeze.Frozen", false);
 
             save();
         }
@@ -176,26 +175,6 @@ public class PlayerConfiguration extends ConfigurationBase
     public void setSpyEnabled(boolean value)
     {
         set("Spy.Enabled", value);
-    }
-
-    /**
-     * Get freeze value
-     *
-     * @return true if player is frozen
-     */
-    public boolean getFrozen()
-    {
-        return (boolean) get("Freeze.Frozen");
-    }
-
-    /**
-     * Set freeze value
-     *
-     * @param value Set value, true will freeze player
-     */
-    public void setFrozen(boolean value)
-    {
-        set("Freeze.Frozen", value);
     }
 
     /**

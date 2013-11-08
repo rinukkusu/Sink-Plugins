@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package de.static_interface.sinklibrary;
+package de.static_interface.sinklibrary.commands;
 
+import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.User;
+import de.static_interface.sinklibrary.Util;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-
-import java.io.IOException;
 
 public class SinkDebugCommand implements CommandExecutor
 {
@@ -94,7 +95,7 @@ public class SinkDebugCommand implements CommandExecutor
                     LanguageConfiguration.backup();
                     sender.sendMessage(PREFIX + ChatColor.GREEN + "Done");
                 }
-                catch ( IOException e )
+                catch ( Exception e )
                 {
                     sender.sendMessage(PREFIX + ChatColor.RED + "Failed: ");
                     sender.sendMessage(PREFIX + ChatColor.RED + e.getMessage());
