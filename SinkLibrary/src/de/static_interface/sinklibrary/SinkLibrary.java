@@ -21,7 +21,7 @@ import de.static_interface.sinklibrary.commands.SinkReloadCommand;
 import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
 import de.static_interface.sinklibrary.configuration.Settings;
-import de.static_interface.sinklibrary.events.IRCMessageEvent;
+import de.static_interface.sinklibrary.events.IRCSendMessageEvent;
 import de.static_interface.sinklibrary.listener.DisplayNameListener;
 import de.static_interface.sinklibrary.listener.PlayerConfigurationListener;
 import net.milkbowl.vault.chat.Chat;
@@ -309,7 +309,7 @@ public class SinkLibrary extends JavaPlugin
         }
         if ( !ircAvailable ) return false;
 
-        IRCMessageEvent event = new IRCMessageEvent(message);
+        IRCSendMessageEvent event = new IRCSendMessageEvent(message);
         Bukkit.getPluginManager().callEvent(event);
         return true;
     }

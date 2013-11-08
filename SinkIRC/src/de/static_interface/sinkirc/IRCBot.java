@@ -18,6 +18,7 @@ package de.static_interface.sinkirc;
 
 import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -26,19 +27,15 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class IRCBot extends PircBot
 {
-    public static String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
-    public static boolean disabled = false;
-    String botName = "AdventuriaBot";
+    public static final String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
+    private static boolean disabled = false;
     private Plugin plugin;
 
     public IRCBot(Plugin plugin)
     {
+        String botName = "AdventuriaBot";
         this.setName(botName);
         this.setLogin(botName);
         this.setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
@@ -74,10 +71,6 @@ public class IRCBot extends PircBot
 
     public void sendCleanMessage(String target, String message)
     {
-        if ( disabled )
-        {
-            return;
-        }
         message = replaceColorCodes(message);
         sendMessage(target, message);
     }
@@ -85,85 +78,96 @@ public class IRCBot extends PircBot
     @Override
     public void onJoin(String channel, String sender, String login, String hostname)
     {
-        if ( sender.equals(getNick()) )
+        IRCJoinEvent event = new IRCJoinEvent(channel, sender, login, hostname);
+        if ( disabled )
         {
-            return;
+            event.setCancelled(true);
         }
-        sendMessage(channel, "Willkommen, " + sender + "!");
-        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " ist dem Kanal beigetreten.");
-        super.onJoin(channel, sender, login, hostname);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onPart(String channel, String sender, String login, String hostname)
     {
-        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
+        IRCPartEvent event = new IRCPartEvent(channel, sender, login, hostname);
+        if ( disabled )
+        {
+            event.setCancelled(true);
+        }
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
     {
-        String formattedReason = "Grund: " + reason + ".";
-        if ( reason.equals("") || reason.equals("\"\"") )
+        IRCKickEvent event = new IRCKickEvent(channel, kickerNick, kickerLogin, kickerHostname, recipientNick, reason);
+        if ( disabled )
         {
-            formattedReason = "";
+            event.setCancelled(true);
         }
-        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + recipientNick + ChatColor.WHITE + " wurde von " + kickerNick + " aus dem Kanal geworfen. " + formattedReason);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {
-        String formattedReason = " (" + reason + ")";
-        if ( reason.equals("") || reason.equals("\"\"") )
+        IRCQuitEvent event = new IRCQuitEvent(sourceNick, sourceLogin, sourceHostname, reason);
+        if ( disabled )
         {
-            formattedReason = "";
+            event.setCancelled(true);
         }
-        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + sourceNick + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onNickChange(String oldNick, String login, String hostname, String newNick)
     {
-        Bukkit.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + oldNick + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + newNick + ChatColor.WHITE + " bekannt.");
+        IRCNickChangeEvent event = new IRCNickChangeEvent(oldNick, login, hostname, newNick);
+        if ( disabled )
+        {
+            event.setCancelled(true);
+        }
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onPrivateMessage(String sender, String login, String hostname, String message)
     {
-        String[] args = message.split(" ");
-        String cmd = args[0];
-        List<String> tmp = new ArrayList<>(Arrays.asList(args));
-        tmp.remove(0);
-        args = tmp.toArray(args);
-        executeCommand(cmd, args, sender, sender, message);
+        IRCPrivateMessageEvent event = new IRCPrivateMessageEvent(sender, login, hostname, message);
+        if ( disabled )
+        {
+            event.setCancelled(true);
+        }
+        Bukkit.getPluginManager().callEvent(event);
     }
 
     @Override
     public void onMessage(String channel, String sender, String login, String hostname, String message)
     {
-        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(" " + getName() + " ") || message.toLowerCase().contains(" bot ")) )
+        IRCReceiveMessageEvent event = new IRCReceiveMessageEvent(channel, sender, login, hostname, message);
+        if ( disabled )
         {
-            sendMessage(channel, "Hallo, " + sender);
-            return;
+            event.setCancelled(true);
         }
-
-        if ( !message.toLowerCase().startsWith("~") )
-        {
-            return;
-        }
-        message = message.replaceFirst("~", "");
-        String[] args = message.split(" ");
-        String cmd = args[0];
-        List<String> tmp = new ArrayList<>(Arrays.asList(args));
-        tmp.remove(0);
-        args = tmp.toArray(args);
-        executeCommand(cmd, args, channel, sender, message);
+        Bukkit.getPluginManager().callEvent(event);
     }
 
-    private boolean isOp(String channel, String user)
+    @Override
+    public void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
     {
-        for ( User u : getUsers(channel) )
+        IRCPingEvent event = new IRCPingEvent(sourceNick, sourceLogin, sourceHostname, target, pingValue);
+        if ( disabled )
+        {
+            event.setCancelled(true);
+        }
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+
+    public static boolean isOp(String channel, String user, IRCBot ircBot)
+    {
+        for ( User u : ircBot.getUsers(channel) )
         {
             if ( u.isOp() && u.getNick().equals(user) )
             {
@@ -173,17 +177,11 @@ public class IRCBot extends PircBot
         return false;
     }
 
-    @Override
-    public void onPing(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
-    {
-        sendMessage(SinkIRC.getMainChannel(), sourceNick + " hat mich mit dem Wert \"" + pingValue + "\" angepingt.");
-    }
-
-    public void executeCommand(String command, String[] args, String source, String sender, String label)
+    public static void executeCommand(String command, String[] args, String source, String sender, String label, IRCBot ircBot)
     {
         try
         {
-            boolean isOp = isOp(SinkIRC.getMainChannel(), sender);
+            boolean isOp = isOp(SinkIRC.getMainChannel(), sender, ircBot);
 
             if ( command.equals("toggle") )
             {
@@ -194,11 +192,11 @@ public class IRCBot extends PircBot
                 disabled = !disabled;
                 if ( disabled )
                 {
-                    sendMessage(source, "Disabled " + getName());
+                    ircBot.sendMessage(source, "Disabled " + ircBot.getName());
                 }
                 else
                 {
-                    sendMessage(source, "Enabled " + getName());
+                    ircBot.sendMessage(source, "Enabled " + ircBot.getName());
                 }
             }
 
@@ -230,7 +228,7 @@ public class IRCBot extends PircBot
 
                 final String finalCommandWithArgs = commandWithArgs;
 
-                Bukkit.getScheduler().runTask(plugin, new Runnable()
+                Bukkit.getScheduler().runTask(ircBot.plugin, new Runnable()
                 {
                     @Override
                     public void run()
@@ -239,7 +237,7 @@ public class IRCBot extends PircBot
                     }
                 });
 
-                sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
+                ircBot.sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
             }
 
             if ( command.equals("say") ) //Speak to ingame players
@@ -248,7 +246,7 @@ public class IRCBot extends PircBot
 
                 if ( args.length < 2 )
                 {
-                    sendCleanMessage(source, "Usage: !say <text>");
+                    ircBot.sendCleanMessage(source, "Usage: !say <text>");
                     return;
                 }
 
@@ -285,13 +283,13 @@ public class IRCBot extends PircBot
                 }
                 catch ( Exception e )
                 {
-                    sendCleanMessage(source, "Usage: !kick <player> <reason>");
+                    ircBot.sendCleanMessage(source, "Usage: !kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
                 if ( targetPlayer == null )
                 {
-                    sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
+                    ircBot.sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
                     return;
                 }
 
@@ -308,7 +306,7 @@ public class IRCBot extends PircBot
                 }
                 formattedReason = ChatColor.translateAlternateColorCodes('&', formattedReason);
                 final String finalReason = "Kicked by " + sender + " from IRC" + formattedReason;
-                Bukkit.getScheduler().runTask(plugin, new Runnable()
+                Bukkit.getScheduler().runTask(ircBot.plugin, new Runnable()
                 {
                     @Override
                     public void run()
@@ -316,7 +314,7 @@ public class IRCBot extends PircBot
                         targetPlayer.kickPlayer(finalReason);
                     }
                 });
-                Bukkit.broadcastMessage(finalReason);
+                BukkitUtil.broadcastMessage(finalReason);
 
             }
 
@@ -325,7 +323,7 @@ public class IRCBot extends PircBot
                 String players = "";
                 if ( Bukkit.getOnlinePlayers().length == 0 )
                 {
-                    sendCleanMessage(source, "There are currently no online players");
+                    ircBot.sendCleanMessage(source, "There are currently no online players");
                     return;
                 }
 
@@ -341,13 +339,13 @@ public class IRCBot extends PircBot
                         players = players + ", " + user.getDisplayName();
                     }
                 }
-                sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
+                ircBot.sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
 
             if ( command.equals("debug") )
             {
                 if ( !isOp ) throw new UnauthorizedAccessException();
-                sendCleanMessage(source, Colors.BLUE + "Debug Output: ");
+                ircBot.sendCleanMessage(source, Colors.BLUE + "Debug Output: ");
                 String values = "";
                 for ( String user : SinkLibrary.getUsers().keySet() )
                 {
@@ -359,17 +357,22 @@ public class IRCBot extends PircBot
                     }
                     values = values + ", " + tmp;
                 }
-                sendCleanMessage(source, "HashMap Values: " + values);
+                ircBot.sendCleanMessage(source, "HashMap Values: " + values);
             }
         }
         catch ( UnauthorizedAccessException e )
         {
-            sendMessage(source, "You may not use that command");
+            ircBot.sendMessage(source, "You may not use that command");
         }
         catch ( Exception e )
         {
-            sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
-            sendMessage(source, e.getMessage());
+            ircBot.sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
+            ircBot.sendMessage(source, e.getMessage());
         }
+    }
+
+    public static boolean isDisabled()
+    {
+        return disabled;
     }
 }

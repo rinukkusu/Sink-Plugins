@@ -20,46 +20,44 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * Called when sending IRC Messages
- */
-public class IRCMessageEvent extends Event implements Cancellable
+public class IRCPartEvent extends Event implements Cancellable
 {
     private static final HandlerList handlers = new HandlerList();
+    private final String sender;
+    private final String login;
+    private final String hostname;
+    private final String channel;
 
-    private String message;
     private boolean cancelled;
 
-    /**
-     * Don't fire this event by yourself, use {@link de.static_interface.sinklibrary.SinkLibrary#sendIRCMessage(String)} instead!
-     *
-     * @param message Message to send
-     */
-    public IRCMessageEvent(String message)
+    public IRCPartEvent(String channel, String sender, String login, String hostname)
     {
-        this.message = message;
+        this.channel = channel;
+        this.sender = sender;
+        this.login = login;
+        this.hostname = hostname;
     }
 
-    @Override
-    public HandlerList getHandlers()
+    public String getChannel()
     {
-        return handlers;
+        return channel;
     }
 
-    public String getMessage()
+    public String getSender()
     {
-        return message;
-    }
-
-    public void setMessage(String message)
-    {
-        this.message = message;
+        return sender;
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public static HandlerList getHandlerList()
+    public String getLogin()
     {
-        return handlers;
+        return login;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public String getHostname()
+    {
+        return hostname;
     }
 
     @Override
@@ -72,5 +70,17 @@ public class IRCMessageEvent extends Event implements Cancellable
     public void setCancelled(boolean value)
     {
         cancelled = value;
+    }
+
+    @Override
+    public HandlerList getHandlers()
+    {
+        return handlers;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public static HandlerList getHandlerList()
+    {
+        return handlers;
     }
 }
