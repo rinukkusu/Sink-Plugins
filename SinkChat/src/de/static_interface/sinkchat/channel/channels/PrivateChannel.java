@@ -1,7 +1,9 @@
 package de.static_interface.sinkchat.channel.channels;
 
+import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IPrivateChannel;
 import de.static_interface.sinkchat.channel.PrivateChannelHandler;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Vector;
@@ -14,7 +16,7 @@ public class PrivateChannel extends IPrivateChannel
     Vector<Player> participants = new Vector<>();
     Player starter;
 
-    public PrivateChannel(String channelIdentifier, Player starter, Player target)
+    public PrivateChannel(String channelIdentifier, Player starter, Player target, String name)
     {
         if ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) )
         {
@@ -28,7 +30,7 @@ public class PrivateChannel extends IPrivateChannel
         this.starter = starter;
         participants.add(starter);
         participants.add(target);
-
+        ChannelHandler.registerChannel(this, ChatColor.translateAlternateColorCodes('&', name), channelIdentifier);
         target.sendMessage(String.format(_("SinkChat.Channels.Private.InvitedToChat"), starter.getDisplayName(), channelIdent));
 
     }

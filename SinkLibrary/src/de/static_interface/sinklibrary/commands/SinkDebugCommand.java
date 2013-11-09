@@ -31,12 +31,13 @@ public class SinkDebugCommand implements CommandExecutor
     public static final String PREFIX = ChatColor.BLUE + "[Debug] " + ChatColor.RESET;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         if ( args.length < 1 )
         {
             return false;
         }
+        String cmd = command.getLabel();
         String option = args[0];
         switch ( option.toLowerCase() )
         {
