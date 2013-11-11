@@ -77,7 +77,7 @@ public class NickCommand implements CommandExecutor
         }
         if ( user.isConsole() )
         {
-            sender.sendMessage(_("General.ConsoleNotAvailabe"));
+            sender.sendMessage(_("General.ConsoleNotAvailable"));
             return true;
         }
         newDisplayName = ChatColor.RESET + ChatColor.translateAlternateColorCodes('&', args[0]) + ChatColor.RESET;

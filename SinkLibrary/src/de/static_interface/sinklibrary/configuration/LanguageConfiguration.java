@@ -75,7 +75,7 @@ public class LanguageConfiguration
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
-            addDefault("General.ConsoleNotAvailabe", "&cThis command is only ingame available");
+            addDefault("General.ConsoleNotAvailable", "&cThis command is only ingame available");
 
             addDefault("SinkChat.Commands.Nick.OtherChanged", "%s's name is now %s!");
             addDefault("SinkChat.Commands.Nick.SelfChanged", "Your name is now %s!");
@@ -101,14 +101,22 @@ public class LanguageConfiguration
             addDefault("SinkChat.Channels.Shout", "Shout");
             addDefault("SinkChat.Channels.Trade", "Trade");
 
-            addDefault("SinkChat.Channels.Private.InvitedToChat", "%s invited you to a chat. Chat with %s");
+            addDefault("SinkChat.Channels.Private.InvitedToChat", "%s invited you to a chat. Use \"%s <text>\" to chat with him!");
             addDefault("SinkChat.Channels.Private.HasInvitedToChat", "You have invited %s to chat.");
             addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat", "%s already takes part in that conversation !");
-            addDefault("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline", "%s is not online !");
             addDefault("SinkChat.Channels.Private.LeftChat", "You have left the private conversation %s!");
             addDefault("SinkChat.Channels.Private.PlayerLeftCon", "%s has left conversation %s");
             addDefault("SinkChat.Channels.Private.PlayerKicked", "%s has been kicked: %s");
             addDefault("SinkChat.Channels.Private.PlayerKicked.ErrorNotInChannel", "%s is not in that conversation!");
+            addDefault("SinkChat.Channels.Private.Invites", "&2Invited players: %s");
+            addDefault("SinkChat.Channels.Private.DoesntExists", "&cCoudln't find channel: \"%s\"");
+            addDefault("SinkChat.Channels.Private.WrongUsage", "&cWrong Usage!");
+            addDefault("SinkChat.Channels.Private.Created", "&2Created successfully channel: \"%s\"!");
+            addDefault("SinkChat.Channels.Private.IdentifierUsed", "&cIdentifier is already used!");
+            addDefault("SinkChat.Channels.Private.AlreadyExstis", "&6Channel already exists! Use a diffrent identifier.");
+            addDefault("SinkChat.Channels.Private.Renamed", "&bChannel renamed to: %s");
+            addDefault("SinkChat.Channels.Private.Users", "Users in channel \"%s\":");
+            addDefault("SinkChat.Channels.Private.Channels", "&bAvailable channels: %s");
 
             addDefault("SinkChat.Prefix.Channel", "&a[Channel]");
             addDefault("SinkChat.Prefix.Nick", "&2[Nick]");
@@ -116,9 +124,7 @@ public class LanguageConfiguration
             addDefault("SinkChat.Prefix.Local", "&7[Local]");
 
             addDefault("Permissions.General", "&4You dont have permissions to do that.");
-            addDefault("Permissions.SinkChat.Channels.Shout", "&4You may not use the shout channel.");
-            addDefault("Permissions.SinkChat.Channels.Help", "&4You may not use the help channel.");
-            addDefault("Permissions.SinkChat.Channels.Trade", "&4You may not use the trade channel.");
+            addDefault("Permissions.SinkChat.Channel", "&4You may not use the %s channel.");
             addDefault("Permissions.SinkChat.Nick.Other", "&4You may not change the nickname of other players!");
 
             addDefault("SinkAntiSpam.Prefix", "&4[SinkAntiSpam]");

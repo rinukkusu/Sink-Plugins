@@ -3,6 +3,8 @@ package de.static_interface.sinkchat.channel;
 import org.bukkit.entity.Player;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.Vector;
+
 public abstract class IPrivateChannel implements IChannel
 {
 
@@ -14,18 +16,6 @@ public abstract class IPrivateChannel implements IChannel
      */
 
     public abstract void addPlayer(Player invitor, Player target);
-
-    /**
-     * Kicks a player off a conversation
-     *
-     * @param player Player to kick
-     * @param kicker Player who kicked
-     */
-
-    public void kickPlayer(Player player, Player kicker)
-    {
-        kickPlayer(player, kicker, null);
-    }
 
     /**
      * Kicks a player off a conversation
@@ -82,4 +72,8 @@ public abstract class IPrivateChannel implements IChannel
     {
         throw new NotImplementedException();
     }
+
+    public abstract void setChannelName(String channelName);
+
+    public abstract Vector<Player> getPlayers();
 }

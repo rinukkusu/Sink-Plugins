@@ -1,5 +1,6 @@
 package de.static_interface.sinkchat.channel;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -27,5 +28,10 @@ public class PrivateChannelHandler
         }
 
         return false;
+    }
+
+    public static Collection<IPrivateChannel> getRegisteredChannels()
+    {
+        return registeredConversations.values();
     }
 }

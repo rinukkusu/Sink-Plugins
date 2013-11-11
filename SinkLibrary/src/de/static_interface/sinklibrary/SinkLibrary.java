@@ -95,6 +95,11 @@ public class SinkLibrary extends JavaPlugin
                 Bukkit.getLogger().warning("Permissions Plugin not found. Disabling permissions features.");
                 permissionsAvailable = false;
             }
+
+            for ( Player p : Bukkit.getOnlinePlayers() )
+            {
+                refreshDisplayName(p);
+            }
         }
 
         pluginName = this.getDescription().getName();

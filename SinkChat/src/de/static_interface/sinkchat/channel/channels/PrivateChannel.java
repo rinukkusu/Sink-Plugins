@@ -3,6 +3,7 @@ package de.static_interface.sinkchat.channel.channels;
 import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinkchat.channel.IPrivateChannel;
 import de.static_interface.sinkchat.channel.PrivateChannelHandler;
+import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -15,9 +16,11 @@ public class PrivateChannel extends IPrivateChannel
     String channelIdent;
     Vector<Player> participants = new Vector<>();
     Player starter;
+    String channelName;
 
-    public PrivateChannel(String channelIdentifier, Player starter, Player target, String name)
+    public PrivateChannel(String channelIdentifier, Player starter, String name)
     {
+        channelName = name;
         if ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) )
         {
             channelIdent = channelIdentifier + "_";
@@ -29,9 +32,7 @@ public class PrivateChannel extends IPrivateChannel
         }
         this.starter = starter;
         participants.add(starter);
-        participants.add(target);
-        ChannelHandler.registerChannel(this, ChatColor.translateAlternateColorCodes('&', name), channelIdentifier);
-        target.sendMessage(String.format(_("SinkChat.Channels.Private.InvitedToChat"), starter.getDisplayName(), channelIdent));
+        ChannelHandler.registerChannel(this, ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', name) + ChatColor.GRAY + "]", channelIdentifier);
 
     }
 
@@ -67,7 +68,13 @@ public class PrivateChannel extends IPrivateChannel
     public boolean sendMessage(Player player, String message)
     {
         message = String.format(message, player.getDisplayName());
-
+        message = message.replaceFirst(channelIdent, "");
+        String group = "";
+        if ( SinkLibrary.isChatAvailable() )
+        {
+            group = "[" + SinkLibrary.getUser(player).getPrimaryGroup() + ChatColor.GRAY + "] ";
+        }
+        message = ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', channelName) + ChatColor.GRAY + "] " + ChatColor.GRAY + group + SinkLibrary.getUser(player).getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message);
         for ( Player p : participants )
         {
             p.sendMessage(message);
@@ -84,7 +91,7 @@ public class PrivateChannel extends IPrivateChannel
     @Override
     public String getChannelName()
     {
-        return channelIdent;
+        return channelName;
     }
 
     @Override
@@ -102,6 +109,18 @@ public class PrivateChannel extends IPrivateChannel
     public Player getStarter()
     {
         return starter;
+    }
+
+    @Override
+    public void setChannelName(String channelName)
+    {
+        this.channelName = channelName;
+    }
+
+    @Override
+    public Vector<Player> getPlayers()
+    {
+        return participants;
     }
 
 }

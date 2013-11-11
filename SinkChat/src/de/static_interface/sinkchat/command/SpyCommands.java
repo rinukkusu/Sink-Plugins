@@ -40,7 +40,7 @@ public class SpyCommands
 
             if ( user.isConsole() )
             {
-                sender.sendMessage(_("General.ConsoleNotAvailabe"));
+                sender.sendMessage(_("General.ConsoleNotAvailable"));
                 return true;
             }
             Player player = user.getPlayer();
@@ -67,7 +67,7 @@ public class SpyCommands
             User user = SinkLibrary.getUser(sender);
             if ( user.isConsole() )
             {
-                sender.sendMessage(_("General.ConsoleNotAvailabe"));
+                sender.sendMessage(_("General.ConsoleNotAvailable"));
                 return true;
             }
             Player player = user.getPlayer();

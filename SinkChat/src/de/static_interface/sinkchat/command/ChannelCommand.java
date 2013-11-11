@@ -39,7 +39,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
         User user = SinkLibrary.getUser(sender);
         if ( user.isConsole() )
         {
-            sender.sendMessage(_("General.ConsoleNotAvailabe"));
+            sender.sendMessage(_("General.ConsoleNotAvailable"));
             return true;
         }
 
@@ -113,10 +113,11 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
 
                 return true;
             case "list":
+            {
                 message = PREFIX + String.format(_("SinkChat.Commands.Channel.List"), ChannelHandler.getChannelNames());
                 player.sendMessage(message);
                 return true;
-
+            }
             case "participating":
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.Part"));
                 for ( IChannel target : ChannelHandler.getRegisteredChannels() )
