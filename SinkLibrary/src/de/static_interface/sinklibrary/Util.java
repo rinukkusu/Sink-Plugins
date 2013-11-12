@@ -23,7 +23,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
@@ -43,35 +45,8 @@ public class Util
     {
         if ( notify ) Bukkit.getLogger().log(Level.INFO, "Creating backup of " + file + "...");
 
-        Calendar calender = new GregorianCalendar();
-        String month = String.valueOf(calender.get(Calendar.MONTH));
-        String day = String.valueOf(calender.get(Calendar.DAY_OF_MONTH));
-        String year = String.valueOf(calender.get(Calendar.YEAR));
-        String hour = String.valueOf(calender.get(Calendar.HOUR));
-        String minute = String.valueOf(calender.get(Calendar.MINUTE));
-        if ( calender.get(Calendar.DAY_OF_MONTH) < 10 )
-        {
-            day = "0" + day;
-        }
-
-        if ( calender.get(Calendar.MONTH) < 10 )
-        {
-            month = "0" + month;
-        }
-
-        if ( calender.get(Calendar.HOUR) < 10 )
-        {
-            hour = "0" + hour;
-        }
-
-        if ( calender.get(Calendar.MINUTE) < 10 )
-        {
-            minute = "0" + minute;
-        }
-
-        String seperator = ".";
-
-        String date = day + seperator + month + seperator + year + "-" + hour + seperator + minute;
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.YYYY-hh.mm");
+        String date = format.format(new Date());
 
         Path sourcePath = Paths.get(file.getAbsolutePath());
         Path targetPath = Paths.get(file.getPath() + "." + date + ".backup");
