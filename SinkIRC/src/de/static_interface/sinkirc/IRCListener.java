@@ -111,8 +111,13 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCKick(IRCKickEvent event)
     {
-        String formattedReason = "Grund: " + event.getReason() + ".";
-        if ( event.getReason().equals("") || event.getReason().equals("\"\"") )
+        String reason = event.getReason();
+        if ( reason.equals(event.getKickerNick()) )
+        {
+            reason = "";
+        }
+        String formattedReason = "Grund: " + reason + ".";
+        if ( reason.equals("") || reason.equals("\"\"") )
         {
             formattedReason = "";
         }
