@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="bukkit" level="project" />
+    <orderEntry type="library" name="Bukkit" level="project" />
     <orderEntry type="module" module-name="SinkLibrary" />
   </component>
 </module>

@@ -199,7 +199,7 @@ public abstract class ConfigurationBase
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Coudln't backup configuration: " + getFile(), e);
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't backup configuration: " + getFile(), e);
             return;
         }
         delete();

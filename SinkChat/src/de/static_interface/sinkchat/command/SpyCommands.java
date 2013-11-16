@@ -49,7 +49,7 @@ public class SpyCommands
 
             if ( config.getSpyEnabled() )
             {
-                player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.YlreadyEnabled"));
+                player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.AlreadyEnabled"));
                 return true;
             }
 

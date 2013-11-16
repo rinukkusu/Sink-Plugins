@@ -20,6 +20,10 @@ import de.static_interface.sinkchat.channel.ChannelHandler;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
+import de.static_interface.sinklibrary.configuration.Settings;
+import de.static_interface.sinklibrary.SinkLibrary;
+import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,8 +32,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-
-import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class ChatListenerHighest implements Listener
 {
@@ -53,7 +55,7 @@ public class ChatListenerHighest implements Listener
         User eventPlayer = SinkLibrary.getUser(event.getPlayer());
 
         String message = event.getMessage();
-        int range = 50; //ToDo: Add settings for this
+        int range = SinkLibrary.getSettings().getLocalChatRange();
         String formattedMessage = String.format(event.getFormat(), eventPlayer.getDisplayName(), message);
 
         if ( !SinkLibrary.isPermissionsAvailable() )

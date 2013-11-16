@@ -128,7 +128,7 @@ public class PlayerConfiguration extends ConfigurationBase
         catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getAbsolutePath());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occurred: ", e);
         }
         catch ( InvalidConfigurationException e )
         {

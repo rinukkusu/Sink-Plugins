@@ -100,7 +100,7 @@ public class PrivateChannelCommand implements CommandExecutor
 
                 if ( ch != null )
                 {
-                    sender.sendMessage(String.format(_("SinkChat.Channels.Private.AlreadyExstis")));
+                    sender.sendMessage(String.format(_("SinkChat.Channels.Private.AlreadyExists")));
                     return true;
                 }
 

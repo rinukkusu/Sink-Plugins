@@ -123,7 +123,7 @@ public class LanguageConfiguration
             addDefault("SinkChat.Prefix.Spy", "&7[Spy]");
             addDefault("SinkChat.Prefix.Local", "&7[Local]");
 
-            addDefault("Permissions.General", "&4You dont have permissions to do that.");
+            addDefault("Permissions.General", "&4You don't have permissions to do that.");
             addDefault("Permissions.SinkChat.Channel", "&4You may not use the %s channel.");
             addDefault("Permissions.SinkChat.Nick.Other", "&4You may not change the nickname of other players!");
 

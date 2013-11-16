@@ -136,6 +136,7 @@ public class Settings extends ConfigurationBase
             addDefault("SinkAntiSpam.ExcludedCommands.Commands", defaultExcludedCommands);
 
 
+            addDefault("SinkChat.LocalChatRange", 50);
             addDefault("SinkChat.Channels.Help.Prefix", "?");
             addDefault("SinkChat.Channels.Shout.Prefix", "!");
             addDefault("SinkChat.Channels.Trade.Prefix", "$");
@@ -145,7 +146,7 @@ public class Settings extends ConfigurationBase
         catch ( IOException e )
         {
             Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            Bukkit.getLogger().log(Level.SEVERE, "Exception occurred: ", e);
         }
         catch ( InvalidConfigurationException e )
         {
@@ -226,5 +227,10 @@ public class Settings extends ConfigurationBase
     public boolean getWhitelistedDomainCheckEnabled()
     {
         return (boolean) get("SinkAntiSpam.WhitelistedDomainsCheck.Enabled");
+    }
+
+    public int getLocalChatRange()
+    {
+        return (int) get("SinkChat.LocalChatRange");
     }
 }
