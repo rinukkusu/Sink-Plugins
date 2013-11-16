@@ -105,7 +105,7 @@ public class IRCListener implements Listener
             return;
         }
         ircBot.sendMessage(event.getChannel(), "Willkommen, " + event.getSender() + "!");
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " ist dem Kanal beigetreten.");
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " ist dem Kanal beigetreten.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -121,13 +121,13 @@ public class IRCListener implements Listener
         {
             formattedReason = "";
         }
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getRecipientNick() + ChatColor.WHITE + " wurde von " + event.getKickerNick() + " aus dem Kanal geworfen. " + formattedReason);
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getRecipientNick() + ChatColor.WHITE + " wurde von " + event.getKickerNick() + " aus dem Kanal geworfen. " + formattedReason, false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCNickChange(IRCNickChangeEvent event)
     {
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.");
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -161,7 +161,7 @@ public class IRCListener implements Listener
         {
             formattedReason = "";
         }
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getSourceNick() + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason);
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getSourceNick() + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason, false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

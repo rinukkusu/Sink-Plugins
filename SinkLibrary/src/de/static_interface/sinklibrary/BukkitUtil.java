@@ -80,14 +80,20 @@ public class BukkitUtil
      *
      * @param message Message to send
      */
-    public static void broadcastMessage(String message)
+    public static void broadcastMessage(String message, boolean sendIRC)
     {
         for ( Player p : Bukkit.getOnlinePlayers() )
         {
             p.sendMessage(message);
         }
         Bukkit.getConsoleSender().sendMessage(message);
+        if ( !sendIRC ) return;
         SinkLibrary.sendIRCMessage(message);
+    }
+
+    public static void broadcastMessage(String message)
+    {
+        broadcastMessage(message, true);
     }
 
     /**
@@ -98,7 +104,7 @@ public class BukkitUtil
      * @param message    Message to send
      * @param permission Permission needed to receive the message
      */
-    public static void broadcast(String message, String permission)
+    public static void broadcast(String message, String permission, boolean sendIRC)
     {
         for ( Player p : Bukkit.getOnlinePlayers() )
         {
@@ -111,9 +117,14 @@ public class BukkitUtil
         }
         Bukkit.getConsoleSender().sendMessage(message);
         Permission perm = new Permission(permission);
-        if ( perm.getDefault() == PermissionDefault.TRUE )
+        if ( perm.getDefault() == PermissionDefault.TRUE && sendIRC )
         {
             SinkLibrary.sendIRCMessage(message);
         }
+    }
+
+    public static void broadcast(String message, String permission)
+    {
+        broadcast(message, permission, true);
     }
 }

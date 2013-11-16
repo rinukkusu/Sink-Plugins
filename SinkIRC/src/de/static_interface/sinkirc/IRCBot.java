@@ -89,7 +89,6 @@ public class IRCBot extends PircBot
     @Override
     public void onPart(String channel, String sender, String login, String hostname)
     {
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + channel + "] " + ChatColor.DARK_AQUA + sender + ChatColor.WHITE + " hat den Kanal verlassen.");
         IRCPartEvent event = new IRCPartEvent(channel, sender, login, hostname);
         if ( disabled )
         {
