@@ -79,6 +79,7 @@ public class BukkitUtil
      * It will also send the message also to IRC
      *
      * @param message Message to send
+     * @param sendIRC If true, message will broadcasted to IRC if available
      */
     public static void broadcastMessage(String message, boolean sendIRC)
     {
@@ -91,6 +92,9 @@ public class BukkitUtil
         SinkLibrary.sendIRCMessage(message);
     }
 
+    /**
+     * @param message Message to send
+     */
     public static void broadcastMessage(String message)
     {
         broadcastMessage(message, true);
@@ -103,6 +107,7 @@ public class BukkitUtil
      *
      * @param message    Message to send
      * @param permission Permission needed to receive the message
+     * @param sendIRC If true, message will broadcasted to IRC if available
      */
     public static void broadcast(String message, String permission, boolean sendIRC)
     {
@@ -116,15 +121,26 @@ public class BukkitUtil
             p.sendMessage(message);
         }
         Bukkit.getConsoleSender().sendMessage(message);
-        Permission perm = new Permission(permission);
-        if ( perm.getDefault() == PermissionDefault.TRUE && sendIRC )
+        if ( sendIRC )
         {
             SinkLibrary.sendIRCMessage(message);
         }
     }
 
+    /**
+     * @param message    Message to send
+     * @param permission Permission needed to receive the message
+     * @deprecated Use {@link #broadcast(String, String, boolean)} instead
+     */
+    @Deprecated
     public static void broadcast(String message, String permission)
     {
-        broadcast(message, permission, true);
+        Permission perm = new Permission(permission);
+        boolean sendIRC = false;
+        if ( perm.getDefault() == PermissionDefault.TRUE )
+        {
+            sendIRC = true;
+        }
+        broadcast(message, permission, sendIRC);
     }
 }
