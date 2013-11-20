@@ -1,6 +1,12 @@
 Version 1.9
-* Added exec command to SinkIRC
-* Added Private Channels
+* Plugins causing less lag
+* Added SinkAntiSpam
+* Locale Chat is now configurable
+* Configurations doesn't recreate themself so often now
+* Optimized Code
+* Fixed "NewbieSpy"
+* Fixed that Nicknames changes
+* Fixed many more bugs...
 
 Version 1.8.6
 * Changed the way how DisplayNames are handled
