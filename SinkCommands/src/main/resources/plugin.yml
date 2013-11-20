@@ -1,0 +1,300 @@
+name: SinkCommands
+version: 2.0
+description: General Commands Plugin
+author: Trojaner
+authors: [Diar, _ShadowRaven_, Scary_Block]
+website: http://static-interface.de
+main: de.static_interface.sinkcommands.SinkCommands
+soft-depend: [SinkLibrary]
+
+commands:
+  commandsver:
+    description: Shows Version
+    permission: sinkcommands.ver
+
+  drug:
+    description: Take drugs!
+    permission: sinkcommands.drug
+
+  milk:
+    description: Remove the invisibility potion of players
+    permission: sinkcommands.milk
+
+  warn:
+    description: Warn a player
+    permission: sinkcommands.warn
+
+  globalmute:
+    descripion: Mutes all players
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command>[Grund]"
+    permission: sinkcommands.globalmute
+
+  teamchat:
+    description: Staff only chat
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Nachricht>"
+    permission: sinkcommands.teamchat
+    aliases: tc
+
+  newbiechat:
+    description: Chat for new users
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Nachricht>"
+    permission: sinkcommands.newbiechat
+    aliases: nc
+
+  spectate:
+    description: Spectate a player
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
+    permission: sinkcommands.spectate
+    aliases: spec
+
+  unspectate:
+    description: Unspec yourself
+    permission: sinkcommands.spectate
+    aliases: unspec
+
+  spectatorlist:
+    description: See speced players
+    permission: sinkcommands.spectate
+    aliases: speclist
+
+  lag:
+    description: Shows information about server lag
+    permission: sinkcommands.lag
+
+  votekick:
+    description: Votekick a player
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler> [Grund]"
+    permission: sinkcommands.votekick
+
+  voteyes:
+    description: Votes yes on a votekick
+    permission: sinkcommands.votekick.vote
+
+  voteno:
+    description: Votes no on a votekick
+    permission: sinkcommands.votekick.vote
+
+  votestatus:
+    description: Shows Votekick status
+    permission: sinkcommands.votekick.vote
+
+  endvote:
+    description: Ends a votekick
+    permission: sinkcommands.votekick.endvote
+
+  votekickunban:
+    description: Unbans a player banned by a votekick
+    permission: sinkcommands.votekick.unban
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Spieler>"
+
+  rename:
+    description: Rename an item
+    permission: sinkcommands.rename
+    usage: "Falsche Benutzung! Korrekte Benutzung: /<command> <Neuer Name>"
+
+  clear:
+    description: Clear your or an other players inventory
+    permission: sinkcommands.clear
+    aliases: [ci,invclear]
+
+  enablestats:
+    description: Enable stats scoreboard
+    permission: sinkcommands.stats
+
+  disablestats:
+    description: Disable stats scoreboard
+    permission: sinkcommands.stats
+
+  raw:
+    description: Send raw commands
+    permission: sinkcommands.raw
+
+permissions:
+  sinkcommands.*:
+    description: Gives access to all commands
+    children:
+      sinkcommands.drug: true
+      sinkcommands.milk.*: true
+      sinkcommands.message: true
+      sinkcommands.freeze: true
+      sinkcommands.ver: true
+      sinkcommands.globalmute: true
+      sinkcommands.teamchat: true
+      sinkcommands.teamchat.color: true
+      sinkcommands.newbiechat: true
+      sinkcommands.newbiechat.color: true
+      sinkcommands:spectate: true
+      sinkcommands.votekick: true
+      sinkcommands.votekick.bypass: true
+      sinkcommands.rename: true
+      sinkcommands.clear: true
+      sinkcommands.clear.others: true
+      sinkcommands.stats: true
+
+  sinkcommands.drug:
+    description: Allows to use the drug command
+    default: true
+
+  sinkcommands.milk.*:
+    description: Allows to use all milk commands
+    default: op
+    children:
+      sinkcommands.milk: true
+      sinkcommands.milk.others: true
+      sinkcommands.milk.message: true
+      sinkcommands.milk.all: true
+
+  sinkcommands.milk.others:
+    description: Allows to use milk command on other players
+    default: op
+    children:
+      sinkcommands.milk: true
+      sinkcommands.milk.message: true
+
+  sinkcommands.milk.all:
+    description: Allows to use milk on all players
+    default: op
+    children:
+      sinkcommands.milk: true
+      sinkcommands.milk.others: true
+      sinkcommands.milk.message: true
+
+  sinkcommands.milk.message:
+    description: Allows to get message when somebodys potion got removed
+    default: op
+
+  sinkcommands.milk:
+    description: Allow to use the milk command
+    default: op
+    children:
+      sinkcommands.milk.message: true
+
+  sinkcommands.warn:
+    description: Allows to warn players
+    default: op
+    children:
+      sinkcommands.warn.message: true
+
+  sinkcommands.warn.message:
+    description: Allows to receive a messeage when somebody got warned
+    default: op
+
+  sinkcommands.freeze.*:
+    description: Be able to use all freeze commands.
+    children:
+      sinkcommands.freeze.freeze: true
+      sinkcommands.freeze.unfreezeall: true
+      sinkcommands.freeze.list: true
+      sinkcommands.freeze.message: true
+      sinkcommands.freeze.bypass: true
+
+  sinkcommands.freeze.freeze:
+    description: Be able to freeze players.
+    default: op
+
+  sinkcommands.freeze.bypass:
+    description: Bypass freeze.
+    default: op
+
+  sinkcommands.freeze.list:
+    description: Be able to list every frozen player.
+    default: op
+
+  sinkcommands.freeze.message:
+    description: Allows to receive a message when somebody got frozen
+    default: true
+
+  sinkcommands.ver:
+    description: Allows to use commandsver command
+    default: true
+
+  sinkcommands.globalmute:
+    description: Allows to use globalmute command
+    default: op
+    children:
+      sinkcommands.globalmute.never: true
+
+  sinkcommands.globalmute.bypass:
+    description: Allows to bypass globalmute
+    default: op
+
+  sinkcommands.teamchat:
+    description: Allows to use teamchat command
+    default: op
+
+  sinkcommands.teamchat.color:
+    description: Allows you to use color on teamchat
+    default: op
+
+  sinkcommands.newbiechat:
+    description: Allows to use newchat command
+    default: false
+
+  sinkcommands.newbiechat.color:
+    description: Allows you to use color on newbiechat
+    default: op
+
+  sinkcommands.spectate:
+    description: Allows to use spec command
+    default: op
+    children:
+      sinkcommands.spectate.bypass: true
+
+  sinkcommands.spectate.bypass:
+    description: Players with this permission cannot be spectated
+    default: op
+
+  sinkcommands.votekick:
+    default: true
+    description: Players with this permission can start a vote kick
+    children:
+      sinkcommands.votekick.vote: true
+
+  sinkcommands.votekick.vote:
+    default: true
+    description: Players with this permission can vote on a votekick.
+
+  sinkcommands.votekick.bypass:
+    default: op
+    description: Players with this permission cannot be vote kicked
+
+  sinkcommands.votekick.staff:
+    default: op
+    description: If a player with this permission is online, nobody can start a votekick.
+    children:
+      sinkcommands.votekick: true
+      sinkcommands.votekick.bypass: true
+
+  sinkcommands.votekick.endvote:
+     default: op
+     description: Cancels a votekick
+     children:
+       sinkcommands.votekick.staff: true
+
+  sinkcommands.votekick.unban:
+     default: op
+     description: Unban a player banned by a votekick
+     children:
+       sinkcommands.votekick.staff: true
+
+  sinkcommands.rename:
+    default: op
+    description: Permission required for rename command
+
+  sinkcommands.clear:
+    default: op
+    description: Permission required for clear command
+
+  sinkcommands.clear.others:
+    default: op
+    description: Allows to clear other players inventory
+    children:
+       sinkcommands.clear: true
+
+  sinkcommands.stats:
+    default: true
+    description: Allows player to see scoreboard statistics
+
+  sinkcommands.raw:
+    default: op
+    description: Allows to send raw commands

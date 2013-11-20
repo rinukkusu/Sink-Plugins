@@ -1,0 +1,22 @@
+name: SinkAntiSpam
+version: 2.0
+description: Sink Anti Spam
+author: Trojaner
+website: http://static-interface.de
+main: de.static_interface.sinkantispam.SinkAntiSpam
+soft-depend: [SinkLibrary]
+
+permissions:
+ sinkantispam.*:
+   description: Gives access to all SinkAntiSpam commands
+   children:
+     sinkantispam.message: true
+     sinkantispam.bypass: true
+
+ sinkantispam.bypass:
+    description: Allows to bypass SinkAntiSpam
+    default: op
+
+ sinkantispam.message:
+    description: Allows to receive messages
+    default: op
