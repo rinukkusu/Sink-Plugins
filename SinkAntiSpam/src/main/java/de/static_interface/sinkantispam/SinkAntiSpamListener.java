@@ -131,7 +131,7 @@ public class SinkAntiSpamListener implements Listener
         if ( matcher.find() && SinkLibrary.getSettings().getWhitelistedDomainCheckEnabled() )
         {
             String match = matcher.group(0);
-            if ( match.contains("src/main") )
+            if ( match.contains("..") )
             {
                 return;
             }
