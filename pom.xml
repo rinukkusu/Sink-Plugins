@@ -177,7 +177,7 @@
                     <filesToInclude>**/src/main/java*</filesToInclude>
                     <replacements>
                         <replacement>
-                            <token>BuildVersion</token>
+                            <token>BuildNumber</token>
                             <value>${build.number}</value>
                         </replacement>
                         <replacement>

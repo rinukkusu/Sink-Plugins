@@ -74,8 +74,11 @@ public class ChatListenerHighest implements Listener
 
             User onlineUser = SinkLibrary.getUser(p);
 
-            boolean newbieSpy = (onlineUser.hasPermission("sinkchat.spynewbie")) && !eventPlayer.hasPermission("sinkchat.spynewbie.bypass");
-            boolean maySpy = onlineUser.hasPermission("sinkchat.spy");
+            // User has permission to read all spy chat
+            boolean spyAll = onlineUser.hasPermission("sinkchat.spy.all");
+
+            // User has permission to read spy, check for bypass
+            boolean canSpy = onlineUser.hasPermission("sinkchat.spy") && !eventPlayer.hasPermission("sinkchat.spy.bypass");
 
             PlayerConfiguration config = onlineUser.getPlayerConfiguration();
 
@@ -83,7 +86,7 @@ public class ChatListenerHighest implements Listener
             {
                 p.sendMessage(formattedMessage);
             }
-            else if ( (newbieSpy || maySpy) && config.getSpyEnabled() )
+            else if ( (spyAll || canSpy) && config.getSpyEnabled() )
             {
                 p.sendMessage(spyPrefix + formattedMessage);
             }

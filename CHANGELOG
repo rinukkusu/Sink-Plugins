@@ -1,7 +1,7 @@
 Version 1.9
 * Plugins causing less lag
 * Added SinkAntiSpam
-* Locale Chat is now configurable
+* Locale Chat Range is now configurable
 * Configurations doesn't recreate themself so often now
 * Optimized Code
 * Fixed "NewbieSpy"
@@ -24,7 +24,7 @@ Version 1.8
 * Fixed /nick command
 * You can now use color codes for chat prefixes
 * Fixed default chat colors
-* Improved chat and channels system\\\\
+* Improved chat and channels system
 
 Version 1.7.5
 * Initial Release

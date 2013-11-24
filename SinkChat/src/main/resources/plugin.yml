@@ -47,21 +47,17 @@ permissions:
   sinkchat.spy:
     description: Allows to read local chat
     default: op
-    children:
-       sinkchat.spynewbie: true
 
-  sinkchat.spynewbie:
-    description: Allows to read local chat of newbies
+  sinkchat.spy.bypass:
+    description: Bypasses spy, players with permission sinkchat.spy cant read these
     default: false
-    children:
-       sinkchat.spynewbie.bypass: true
 
-  sinkchat.spynewbie.bypass:
-      description: Marks a player as not newbie (players with sinkchat.spynewbie cant read local messages of them)
+  sinkchat.spy.all:
+      description: Players with this permission can read spy of all players, even of them with bypass permissions
       default: false
 
   sinkchat.color:
-    description: Allows to use color chat
+    description: Allows to use chat colors
     default: true
 
   sinkchat.nick:

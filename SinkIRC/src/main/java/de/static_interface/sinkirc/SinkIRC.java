@@ -28,24 +28,43 @@ import java.util.logging.Level;
 public class SinkIRC extends JavaPlugin
 {
 
-    static IRCBot ircBot;
+    static SinkIRCBot sinkIrcBot;
+    static String mainChannel;
+
 
     @Override
     public void onEnable()
     {
         if ( !checkDependencies() ) return;
 
-        ircBot = new IRCBot(this);
+        sinkIrcBot = new SinkIRCBot(this);
 
         SinkLibrary.registerPlugin(this);
-        String host = "irc.adventuria.eu";
+        String host = SinkLibrary.getSettings().getIRCAddress();
+        int port = SinkLibrary.getSettings().getIRCPort();
+        mainChannel = SinkLibrary.getSettings().getIRCChannel();
+
+        boolean usingPassword = SinkLibrary.getSettings().getIRCPasswordEnabled();
 
         try
         {
-            int port = 6667;
-            ircBot.connect(host, port);
-            //Todo: Add NickServ identification support
-            ircBot.joinChannel(getMainChannel());
+            if ( usingPassword )
+            {
+                String password = SinkLibrary.getSettings().getIRCPassword();
+                sinkIrcBot.connect(host, port, password);
+            }
+            else
+            {
+                sinkIrcBot.connect(host, port);
+            }
+            sinkIrcBot.joinChannel(getMainChannel());
+
+            if ( SinkLibrary.getSettings().getIRCAuthentificationEnabled() )
+            {
+                String authBot = SinkLibrary.getSettings().getIRCAuthBot();
+                String authMessage = SinkLibrary.getSettings().getIRCAuthMessage();
+                sinkIrcBot.sendMessage(authBot, authMessage);
+            }
         }
         catch ( IOException | IrcException e )
         {
@@ -53,7 +72,7 @@ public class SinkIRC extends JavaPlugin
             Bukkit.getLogger().severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IrclistCommand());
-        Bukkit.getPluginManager().registerEvents(new IRCListener(ircBot), this);
+        Bukkit.getPluginManager().registerEvents(new IRCListener(sinkIrcBot), this);
     }
 
     private boolean checkDependencies()
@@ -78,16 +97,16 @@ public class SinkIRC extends JavaPlugin
     @Override
     public void onDisable()
     {
-        ircBot.quitServer("Plugin reload or plugin has been deactivated");
+        sinkIrcBot.quitServer("Plugin reload or plugin has been deactivated");
     }
 
-    public static IRCBot getIRCBot()
+    public static SinkIRCBot getIRCBot()
     {
-        return ircBot;
+        return sinkIrcBot;
     }
 
     public static String getMainChannel()
     {
-        return "#AdventuriaBot";
+        return mainChannel;
     }
 }

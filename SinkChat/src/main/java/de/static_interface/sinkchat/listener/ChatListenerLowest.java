@@ -30,7 +30,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
  */
 public class ChatListenerLowest implements Listener
 {
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
         if ( event.isCancelled() )

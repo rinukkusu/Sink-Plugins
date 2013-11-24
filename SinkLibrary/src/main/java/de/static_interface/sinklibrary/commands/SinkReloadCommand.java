@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class SinkReloadCommand implements CommandExecutor
 {
@@ -34,6 +35,14 @@ public class SinkReloadCommand implements CommandExecutor
             User user = SinkLibrary.getUser(p);
             user.getPlayerConfiguration().reload();
         }
+
+        sender.sendMessage(PREFIX + "Reloading Plugins...");
+        for ( Plugin p : SinkLibrary.getRegisteredPlugins() )
+        {
+            p.onDisable();
+            p.onEnable();
+        }
+
         sender.sendMessage(PREFIX + ChatColor.GREEN + "Done");
         return true;
     }

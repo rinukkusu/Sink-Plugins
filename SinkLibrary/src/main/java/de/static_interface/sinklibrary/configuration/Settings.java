@@ -98,18 +98,16 @@ public class Settings extends ConfigurationBase
             addDefault("Updater.Enabled", true);
             addDefault("Updater.UpdateType", "default");
 
-            /*
             addDefault("SinkIRC.BotEnabled", false);
             addDefault("SinkIRC.Username", "SinkIRCBot");
             addDefault("SinkIRC.Server.Address", "irc.example.com");
-            addDefault("SinkIRC.Server.Password", "");
+            addDefault("SinkIRC.Server.PasswordEnabled", false);
+            addDefault("SinkIRC.Server.Password", "ServerPasswordHere");
             addDefault("SinkIRC.Server.Port", 6667);
             addDefault("SinkIRC.Channel", "#ChatBot");
-            addDefault("SinkIRC.Authentification.Enabled", false); //ToDo: http://www.deaded.com/staticpages/index.php/pircbotdemos
+            addDefault("SinkIRC.Authentification.Enabled", false);
             addDefault("SinkIRC.Authentification.AuthBot", "NickServ");
-            addDefault("SinkIRC.Authentification.AuthMessage", "indentify <password>");
-            addDefault("SinkIRC.Authentification.Password", "");
-            */
+            addDefault("SinkIRC.Authentification.AuthMessage", "indentify NickServPasswordHere");
 
             addDefault("SinkAntiSpam.BlacklistedWordsCheck.Enabled", true);
 
@@ -122,7 +120,8 @@ public class Settings extends ConfigurationBase
 
             List<String> defaultDomainWiteList = new ArrayList<>();
             defaultDomainWiteList.add("google.com");
-            defaultDomainWiteList.add("examlple.com");
+            defaultDomainWiteList.add("youtube.com");
+            defaultDomainWiteList.add("example.com");
             addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Domains", defaultDomainWiteList);
 
             addDefault("SinkAntiSpam.IPCheck.Enabled", true);
@@ -232,5 +231,56 @@ public class Settings extends ConfigurationBase
     public int getLocalChatRange()
     {
         return (int) get("SinkChat.LocalChatRange");
+    }
+
+    public boolean getIRCBotEnabled()
+    {
+        return (boolean) get("SinkIRC.BotEnabled");
+    }
+
+    public String getIRCBotUsername()
+    {
+        return (String) get("SinkIRC.Username");
+    }
+
+    public String getIRCAddress()
+    {
+        return (String) get("SinkIRC.Server.Address");
+    }
+
+    public boolean getIRCPasswordEnabled()
+    {
+        return (boolean) get("SinkIRC.Server.PasswordEnabled");
+    }
+
+
+    public String getIRCPassword()
+    {
+        return (String) get("SinkIRC.Server.Password");
+    }
+
+    public int getIRCPort()
+    {
+        return (int) get("SinkIRC.Server.Port");
+    }
+
+    public String getIRCChannel()
+    {
+        return (String) get("SinkIRC.Channel");
+    }
+
+    public boolean getIRCAuthentificationEnabled()
+    {
+        return (boolean) get("SinkIRC.Authentification.Enabled");
+    }
+
+    public String getIRCAuthBot()
+    {
+        return (String) get("SinkIRC.Authentification.AuthBot");
+    }
+
+    public String getIRCAuthMessage()
+    {
+        return (String) get("SinkIRC.Authentification.AuthMessage");
     }
 }

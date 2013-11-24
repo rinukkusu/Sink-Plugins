@@ -33,78 +33,78 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static de.static_interface.sinkirc.IRCBot.IRC_PREFIX;
+import static de.static_interface.sinkirc.SinkIRCBot.IRC_PREFIX;
 
 public class IRCListener implements Listener
 {
-    private final IRCBot ircBot;
+    private final SinkIRCBot sinkIrcBot;
 
-    public IRCListener(IRCBot ircBot)
+    public IRCListener(SinkIRCBot sinkIrcBot)
     {
-        this.ircBot = ircBot;
+        this.sinkIrcBot = sinkIrcBot;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        if ( IRCBot.isDisabled() )
+        if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getJoinMessage());
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getJoinMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        if ( IRCBot.isDisabled() )
+        if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getQuitMessage());
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getQuitMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerKick(PlayerKickEvent event)
     {
-        if ( IRCBot.isDisabled() )
+        if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
         String reason = ": " + event.getReason();
         if ( event.getReason().equals("") ) reason = "!";
         User user = SinkLibrary.getUser(event.getPlayer());
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), "" + user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), "" + user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if ( IRCBot.isDisabled() )
+        if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getDeathMessage());
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getDeathMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCMessage(IRCSendMessageEvent event)
     {
-        if ( IRCBot.isDisabled() )
+        if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        ircBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getMessage());
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCJoin(IRCJoinEvent event)
     {
-        if ( event.getSender().equals(ircBot.getNick()) )
+        if ( event.getSender().equals(sinkIrcBot.getNick()) )
         {
             return;
         }
-        ircBot.sendMessage(event.getChannel(), "Willkommen, " + event.getSender() + "!");
+        sinkIrcBot.sendMessage(event.getChannel(), "Willkommen, " + event.getSender() + "!");
         BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " ist dem Kanal beigetreten.", false);
     }
 
@@ -139,7 +139,7 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPing(IRCPingEvent event)
     {
-        ircBot.sendMessage(SinkIRC.getMainChannel(), event.getSourceNick() + " hat mich mit dem Wert \"" + event.getPingValue() + "\" angepingt.");
+        sinkIrcBot.sendMessage(SinkIRC.getMainChannel(), event.getSourceNick() + " hat mich mit dem Wert \"" + event.getPingValue() + "\" angepingt.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -150,7 +150,7 @@ public class IRCListener implements Listener
         List<String> tmp = new ArrayList<>(Arrays.asList(args));
         tmp.remove(0);
         args = tmp.toArray(args);
-        IRCBot.executeCommand(cmd, args, event.getSender(), event.getSender(), event.getMessage(), ircBot);
+        SinkIRCBot.executeCommand(cmd, args, event.getSender(), event.getSender(), event.getMessage(), sinkIrcBot);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -171,9 +171,9 @@ public class IRCListener implements Listener
         String channel = event.getChannel();
         String sender = event.getSender();
 
-        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(" " + ircBot.getName() + " ") || message.toLowerCase().contains(" bot ")) )
+        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(" " + sinkIrcBot.getName() + " ") || message.toLowerCase().contains(" bot ")) )
         {
-            ircBot.sendMessage(channel, "Hallo, " + sender);
+            sinkIrcBot.sendMessage(channel, "Hallo, " + sender);
             return;
         }
 
@@ -187,6 +187,6 @@ public class IRCListener implements Listener
         List<String> tmp = new ArrayList<>(Arrays.asList(args));
         tmp.remove(0);
         args = tmp.toArray(args);
-        IRCBot.executeCommand(cmd, args, channel, sender, message, ircBot);
+        SinkIRCBot.executeCommand(cmd, args, channel, sender, message, sinkIrcBot);
     }
 }

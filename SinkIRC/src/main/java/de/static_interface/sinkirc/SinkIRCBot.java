@@ -27,19 +27,21 @@ import org.jibble.pircbot.Colors;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
-public class IRCBot extends PircBot
+public class SinkIRCBot extends PircBot
 {
     public static final String IRC_PREFIX = ChatColor.GRAY + "[IRC] " + ChatColor.RESET;
     private static boolean disabled = false;
     private Plugin plugin;
 
-    public IRCBot(Plugin plugin)
+    public SinkIRCBot(Plugin plugin)
     {
-        String botName = "AdventuriaBot";
+        this.plugin = plugin;
+
+        String botName = SinkLibrary.getSettings().getIRCBotUsername();
         this.setName(botName);
         this.setLogin(botName);
         this.setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
-        this.plugin = plugin;
+        disabled = !SinkLibrary.getSettings().getIRCBotEnabled();
     }
 
     public static String replaceColorCodes(String input)
@@ -164,9 +166,9 @@ public class IRCBot extends PircBot
     }
 
 
-    public static boolean isOp(String channel, String user, IRCBot ircBot)
+    public static boolean isOp(String channel, String user, SinkIRCBot sinkIrcBot)
     {
-        for ( User u : ircBot.getUsers(channel) )
+        for ( User u : sinkIrcBot.getUsers(channel) )
         {
             if ( u.isOp() && u.getNick().equals(user) )
             {
@@ -176,11 +178,11 @@ public class IRCBot extends PircBot
         return false;
     }
 
-    public static void executeCommand(String command, String[] args, String source, String sender, String label, IRCBot ircBot)
+    public static void executeCommand(String command, String[] args, String source, String sender, String label, SinkIRCBot sinkIrcBot)
     {
         try
         {
-            boolean isOp = isOp(SinkIRC.getMainChannel(), sender, ircBot);
+            boolean isOp = isOp(SinkIRC.getMainChannel(), sender, sinkIrcBot);
 
             if ( command.equals("toggle") )
             {
@@ -191,11 +193,11 @@ public class IRCBot extends PircBot
                 disabled = !disabled;
                 if ( disabled )
                 {
-                    ircBot.sendMessage(source, "Disabled " + ircBot.getName());
+                    sinkIrcBot.sendMessage(source, "Disabled " + sinkIrcBot.getName());
                 }
                 else
                 {
-                    ircBot.sendMessage(source, "Enabled " + ircBot.getName());
+                    sinkIrcBot.sendMessage(source, "Enabled " + sinkIrcBot.getName());
                 }
             }
 
@@ -227,7 +229,7 @@ public class IRCBot extends PircBot
 
                 final String finalCommandWithArgs = commandWithArgs;
 
-                Bukkit.getScheduler().runTask(ircBot.plugin, new Runnable()
+                Bukkit.getScheduler().runTask(sinkIrcBot.plugin, new Runnable()
                 {
                     @Override
                     public void run()
@@ -236,7 +238,7 @@ public class IRCBot extends PircBot
                     }
                 });
 
-                ircBot.sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
+                sinkIrcBot.sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
             }
 
             if ( command.equals("say") ) //Speak to ingame players
@@ -245,7 +247,7 @@ public class IRCBot extends PircBot
 
                 if ( args.length < 2 )
                 {
-                    ircBot.sendCleanMessage(source, "Usage: !say <text>");
+                    sinkIrcBot.sendCleanMessage(source, "Usage: !say <text>");
                     return;
                 }
 
@@ -282,13 +284,13 @@ public class IRCBot extends PircBot
                 }
                 catch ( Exception e )
                 {
-                    ircBot.sendCleanMessage(source, "Usage: !kick <player> <reason>");
+                    sinkIrcBot.sendCleanMessage(source, "Usage: !kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
                 if ( targetPlayer == null )
                 {
-                    ircBot.sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
+                    sinkIrcBot.sendCleanMessage(source, "Player \"" + targetPlayerName + "\" is not online!");
                     return;
                 }
 
@@ -305,7 +307,7 @@ public class IRCBot extends PircBot
                 }
                 formattedReason = ChatColor.translateAlternateColorCodes('&', formattedReason);
                 final String finalReason = "Kicked by " + sender + " from IRC" + formattedReason;
-                Bukkit.getScheduler().runTask(ircBot.plugin, new Runnable()
+                Bukkit.getScheduler().runTask(sinkIrcBot.plugin, new Runnable()
                 {
                     @Override
                     public void run()
@@ -322,7 +324,7 @@ public class IRCBot extends PircBot
                 String players = "";
                 if ( Bukkit.getOnlinePlayers().length == 0 )
                 {
-                    ircBot.sendCleanMessage(source, "There are currently no online players");
+                    sinkIrcBot.sendCleanMessage(source, "There are currently no online players");
                     return;
                 }
 
@@ -338,13 +340,13 @@ public class IRCBot extends PircBot
                         players = players + ", " + user.getDisplayName();
                     }
                 }
-                ircBot.sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
+                sinkIrcBot.sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
             }
 
             if ( command.equals("debug") )
             {
                 if ( !isOp ) throw new UnauthorizedAccessException();
-                ircBot.sendCleanMessage(source, Colors.BLUE + "Debug Output: ");
+                sinkIrcBot.sendCleanMessage(source, Colors.BLUE + "Debug Output: ");
                 String values = "";
                 for ( String user : SinkLibrary.getUsers().keySet() )
                 {
@@ -356,17 +358,17 @@ public class IRCBot extends PircBot
                     }
                     values = values + ", " + tmp;
                 }
-                ircBot.sendCleanMessage(source, "HashMap Values: " + values);
+                sinkIrcBot.sendCleanMessage(source, "HashMap Values: " + values);
             }
         }
         catch ( UnauthorizedAccessException e )
         {
-            ircBot.sendMessage(source, "You may not use that command");
+            sinkIrcBot.sendMessage(source, "You may not use that command");
         }
         catch ( Exception e )
         {
-            ircBot.sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
-            ircBot.sendMessage(source, e.getMessage());
+            sinkIrcBot.sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
+            sinkIrcBot.sendMessage(source, e.getMessage());
         }
     }
 
