@@ -247,7 +247,7 @@ public class SinkIRCBot extends PircBot
 
                 if ( args.length < 2 )
                 {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: !say <text>");
+                    sinkIrcBot.sendCleanMessage(source, "Usage: ~say <text>");
                     return;
                 }
 
