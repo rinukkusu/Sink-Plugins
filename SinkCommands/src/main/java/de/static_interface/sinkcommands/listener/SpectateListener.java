@@ -48,7 +48,7 @@ public class SpectateListener implements Listener
     {
         for ( Player p : hashmap.keySet() )
         {
-            if ( hashmap.get(p) == value )
+            if ( hashmap.get(p).equals(value) )
             {
                 return p;
             }

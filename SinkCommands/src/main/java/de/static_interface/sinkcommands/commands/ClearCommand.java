@@ -129,7 +129,7 @@ public class ClearCommand implements CommandExecutor
             player.getInventory().setLeggings(null);
             player.getInventory().setBoots(null);
         }
-        if ( player != sender )
+        if ( !player.equals(sender) )
         {
             sender.sendMessage(PREFIX + player.getDisplayName() + " wurde gecleart.");
         }

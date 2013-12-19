@@ -30,13 +30,15 @@ import org.bukkit.scoreboard.*;
 
 import java.util.logging.Level;
 
+import static de.static_interface.sinklibrary.Constants.TICK;
+
 public class SinkCommands extends JavaPlugin
 {
     public static boolean globalmuteEnabled;
 
     private static CommandsTimer timer;
 
-    SinkLibrary sinkLibrary;
+    SinkLibrary sinkLibrary = null;
 
     public void onEnable()
     {
@@ -55,13 +57,12 @@ public class SinkCommands extends JavaPlugin
         registerCommands();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
         {
-
             @Override
             public void run()
             {
                 refreshScoreboard();
             }
-        }, 0, 20 * 30); //Update every 30 seconds
+        }, 0, (long) (TICK * 30)); //Update every 30 seconds
 
     }
 
@@ -77,6 +78,7 @@ public class SinkCommands extends JavaPlugin
         {
             sinkLibrary = null;
         }
+
         if ( sinkLibrary == null )
         {
             getLogger().log(Level.WARNING, "This Plugin requires SinkLibrary!");
@@ -96,14 +98,15 @@ public class SinkCommands extends JavaPlugin
             SpectateCommands.specedPlayers.remove(p);
             p.sendMessage(SpectateCommands.PREFIX + "Du wurdest durch einen Reload gezwungen den Spectate Modus zu verlassen.");
         }
-        getLogger().info("Saving player configurations...");
+        SinkLibrary.getCustomLogger().info("Saving player configurations...");
         for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = SinkLibrary.getUser(p);
             PlayerConfiguration config = user.getPlayerConfiguration();
             config.save();
         }
-        getLogger().info("Done, disabled.");
+        SinkLibrary.getCustomLogger().info("Done, disabled.");
+        System.gc();
     }
 
     /**
@@ -144,7 +147,7 @@ public class SinkCommands extends JavaPlugin
 
         ScoreboardManager manager = Bukkit.getScoreboardManager();
 
-        if ( !user.hasPermission("sinkcommands.stats") || !config.getStatsEnabled() )
+        if ( !user.hasPermission("sinkcommands.stats") || !config.isStatsEnabled() )
         {
             player.setScoreboard(manager.getNewScoreboard());
             return;

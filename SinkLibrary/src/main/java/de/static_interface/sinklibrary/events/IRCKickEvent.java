@@ -30,7 +30,7 @@ public class IRCKickEvent extends Event implements Cancellable
     private final String recipientNick;
     private final String reason;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCKickEvent(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
     {

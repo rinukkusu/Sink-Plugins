@@ -29,7 +29,7 @@ public class IRCPingEvent extends Event implements Cancellable
     private final String target;
     private final String pingValue;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCPingEvent(String sourceNick, String sourceLogin, String sourceHostname, String target, String pingValue)
     {

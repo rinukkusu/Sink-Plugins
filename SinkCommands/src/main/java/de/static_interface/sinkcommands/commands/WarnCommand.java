@@ -23,6 +23,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
+
 public class WarnCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.RED + "[Warn] " + ChatColor.RESET;
@@ -33,7 +35,7 @@ public class WarnCommand implements CommandExecutor
         if ( args.length < 1 )
         {
             sender.sendMessage(PREFIX + ChatColor.RED + "Zu wenige Argumente!");
-            sender.sendMessage(PREFIX + ChatColor.RED + "Benutzung: /warn [Spieler] (Grund)");
+            sender.sendMessage(PREFIX + ChatColor.RED + "Benutzung: " + COMMAND_PREFIX + "warn [Spieler] (Grund)");
             return false;
         }
         Player target = (BukkitUtil.getPlayer(args[0]));
@@ -57,12 +59,12 @@ public class WarnCommand implements CommandExecutor
 
         for ( int i = 1; i < args.length; i++ )
         {
-            if ( reason.equals("") )
+            if ( reason.isEmpty() )
             {
                 reason = args[i];
                 continue;
             }
-            reason = reason + " " + args[i];
+            reason = reason + ' ' + args[i];
         }
 
         target.sendMessage(PREFIX + ChatColor.RED + "Du wurdest von " + BukkitUtil.getSenderName(sender) + ChatColor.RED + " verwarnt. Grund: " + reason);

@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013 adventuria.eu / static-interface.de
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.static_interface.sinkchat.channel.channels;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
@@ -21,10 +37,10 @@ public class PrivateChannel extends IPrivateChannel
     public PrivateChannel(String channelIdentifier, Player starter, String name)
     {
         channelName = name;
-        if ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) )
+        if ( PrivateChannelHandler.isChannelIdentTaken(channelIdentifier) )
         {
-            channelIdent = channelIdentifier + "_";
-            while ( PrivateChannelHandler.channelIdentIsTaken(channelIdentifier) ) channelIdent = channelIdent + "_";
+            channelIdent = channelIdentifier + '_';
+            while ( PrivateChannelHandler.isChannelIdentTaken(channelIdentifier) ) channelIdent = channelIdent + '_';
         }
         else
         {
@@ -32,7 +48,7 @@ public class PrivateChannel extends IPrivateChannel
         }
         this.starter = starter;
         participants.add(starter);
-        ChannelHandler.registerChannel(this, ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', name) + ChatColor.GRAY + "]", channelIdentifier);
+        ChannelHandler.registerChannel(this, ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', name) + ChatColor.GRAY + ']', channelIdentifier);
 
     }
 
@@ -72,7 +88,7 @@ public class PrivateChannel extends IPrivateChannel
         String group = "";
         if ( SinkLibrary.isChatAvailable() )
         {
-            group = "[" + SinkLibrary.getUser(player).getPrimaryGroup() + ChatColor.GRAY + "] ";
+            group = '[' + SinkLibrary.getUser(player).getPrimaryGroup() + ChatColor.GRAY + "] ";
         }
         message = ChatColor.GRAY + "[" + ChatColor.translateAlternateColorCodes('&', channelName) + ChatColor.GRAY + "] " + ChatColor.GRAY + group + SinkLibrary.getUser(player).getDisplayName() + ChatColor.GRAY + ": " + ChatColor.WHITE + ChatColor.translateAlternateColorCodes('&', message);
         for ( Player p : participants )

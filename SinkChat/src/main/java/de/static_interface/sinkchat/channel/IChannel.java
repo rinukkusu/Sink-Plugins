@@ -45,6 +45,7 @@ public interface IChannel
      * @param message Message
      * @return True if message was send successfully
      */
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     public boolean sendMessage(Player player, String message);
 
 

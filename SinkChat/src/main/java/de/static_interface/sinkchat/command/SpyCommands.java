@@ -29,7 +29,7 @@ import static de.static_interface.sinklibrary.configuration.LanguageConfiguratio
 
 public class SpyCommands
 {
-    public static final String PREFIX = _("SinkChat.Prefix.Spy") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("SinkChat.Prefix.Spy") + ' ' + ChatColor.RESET;
 
     public static class EnableSpyCommand implements CommandExecutor
     {
@@ -47,7 +47,7 @@ public class SpyCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if ( config.getSpyEnabled() )
+            if ( config.isSpyEnabled() )
             {
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.AlreadyEnabled"));
                 return true;
@@ -74,7 +74,7 @@ public class SpyCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if ( !config.getSpyEnabled() )
+            if ( !config.isSpyEnabled() )
             {
                 player.sendMessage(PREFIX + _("SinkChat.Commands.Spy.AlreadyDisabled"));
                 return true;

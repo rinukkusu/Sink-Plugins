@@ -28,7 +28,7 @@ public class IRCQuitEvent extends Event implements Cancellable
     private final String sourceHostname;
     private final String reason;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCQuitEvent(String sourceNick, String sourceLogin, String sourceHostname, String reason)
     {

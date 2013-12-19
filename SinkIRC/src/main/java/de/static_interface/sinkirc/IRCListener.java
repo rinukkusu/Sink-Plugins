@@ -44,27 +44,33 @@ public class IRCListener implements Listener
         this.sinkIrcBot = sinkIrcBot;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getJoinMessage());
+        String message = event.getJoinMessage();
+        if ( message == null || message.isEmpty() )
+        {
+            message = event.getPlayer().getDisplayName() + ChatColor.RESET + ChatColor.GRAY + " betrat das Spiel";
+        }
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), message);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
         {
             return;
         }
-        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getQuitMessage());
+        String message = event.getQuitMessage();
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), message);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerKick(PlayerKickEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
@@ -72,12 +78,12 @@ public class IRCListener implements Listener
             return;
         }
         String reason = ": " + event.getReason();
-        if ( event.getReason().equals("") ) reason = "!";
+        if ( event.getReason().isEmpty() ) reason = "!";
         User user = SinkLibrary.getUser(event.getPlayer());
-        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), "" + user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
+        sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
@@ -104,8 +110,8 @@ public class IRCListener implements Listener
         {
             return;
         }
-        sinkIrcBot.sendMessage(event.getChannel(), "Willkommen, " + event.getSender() + "!");
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " ist dem Kanal beigetreten.", false);
+        sinkIrcBot.sendMessage(event.getChannel(), "Willkommen, " + event.getSender() + '!');
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " ist dem Kanal beigetreten.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -116,24 +122,24 @@ public class IRCListener implements Listener
         {
             reason = "";
         }
-        String formattedReason = "Grund: " + reason + ".";
-        if ( reason.equals("") || reason.equals("\"\"") )
+        String formattedReason = "Grund: " + reason + '.';
+        if ( reason.isEmpty() || reason.equals("\"\"") )
         {
             formattedReason = "";
         }
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getRecipientNick() + ChatColor.WHITE + " wurde von " + event.getKickerNick() + " aus dem Kanal geworfen. " + formattedReason, false);
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getRecipientNick() + ChatColor.WHITE + " wurde von " + event.getKickerNick() + " aus dem Kanal geworfen. " + formattedReason, false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCNickChange(IRCNickChangeEvent event)
     {
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.", false);
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPart(IRCPartEvent event)
     {
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " hat den Kanal verlassen.");
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " hat den Kanal verlassen.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -156,13 +162,15 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCQuit(IRCQuitEvent event)
     {
-        String formattedReason = " (" + event.getReason() + ")";
-        if ( event.getReason().equals("") || event.getReason().equals("\"\"") )
+        String formattedReason = " (" + event.getReason() + ')';
+        if ( event.getReason().isEmpty() || event.getReason().equals("\"\"") )
         {
             formattedReason = "";
         }
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + "[" + "Server" + "] " + ChatColor.DARK_AQUA + event.getSourceNick() + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason, false);
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + "Server" + "] " + ChatColor.DARK_AQUA + event.getSourceNick() + ChatColor.WHITE + " hat den IRC Server verlassen." + formattedReason, false);
     }
+
+    public static final String COMMAND_PREFIX = "~";
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCReceiveMessage(IRCReceiveMessageEvent event)
@@ -171,13 +179,13 @@ public class IRCListener implements Listener
         String channel = event.getChannel();
         String sender = event.getSender();
 
-        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(" " + sinkIrcBot.getName() + " ") || message.toLowerCase().contains(" bot ")) )
+        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(' ' + sinkIrcBot.getName() + ' ') || message.toLowerCase().contains(" bot ")) )
         {
             sinkIrcBot.sendMessage(channel, "Hallo, " + sender);
             return;
         }
 
-        if ( !message.toLowerCase().startsWith("~") )
+        if ( !message.toLowerCase().startsWith(COMMAND_PREFIX) )
         {
             return;
         }

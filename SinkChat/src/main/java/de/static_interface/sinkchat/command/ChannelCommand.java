@@ -27,14 +27,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class ChannelCommand extends JavaPlugin implements CommandExecutor
 {
-    public static final String PREFIX = _("SinkChat.Prefix.Channel") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("SinkChat.Prefix.Channel") + ' ' + ChatColor.RESET;
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
         User user = SinkLibrary.getUser(sender);
         if ( user.isConsole() )
@@ -71,7 +72,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                     }
                     channel.removeExceptedPlayer(player);
                 }
-                catch ( NullPointerException e )
+                catch ( NullPointerException ignored )
                 {
                     message = PREFIX + String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]);
                     player.sendMessage(message);
@@ -100,7 +101,7 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
                     }
                     channel.addExceptedPlayer(player);
                 }
-                catch ( NullPointerException e )
+                catch ( NullPointerException ignored )
                 {
                     message = PREFIX + String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]);
                     player.sendMessage(message);
@@ -141,9 +142,9 @@ public class ChannelCommand extends JavaPlugin implements CommandExecutor
     private static void sendHelp(Player player)
     {
         player.sendMessage(PREFIX + _("SinkChat.Commands.Channel.Help"));
-        player.sendMessage(PREFIX + "/ch join <channel>");
-        player.sendMessage(PREFIX + "/ch leave <channel>");
-        player.sendMessage(PREFIX + "/ch list");
-        player.sendMessage(PREFIX + "/ch participating");
+        player.sendMessage(PREFIX + COMMAND_PREFIX + "ch join <channel>");
+        player.sendMessage(PREFIX + COMMAND_PREFIX + "ch leave <channel>");
+        player.sendMessage(PREFIX + COMMAND_PREFIX + "ch list");
+        player.sendMessage(PREFIX + COMMAND_PREFIX + "ch participating");
     }
 }

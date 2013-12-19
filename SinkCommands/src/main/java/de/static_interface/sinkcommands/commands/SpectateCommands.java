@@ -28,6 +28,8 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
+
 public class SpectateCommands
 {
     public static HashMap<Player, Player> specedPlayers = new HashMap<>();
@@ -47,7 +49,7 @@ public class SpectateCommands
             Player player = user.getPlayer();
             if ( specedPlayers.containsKey(player) )
             {
-                player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit /unspec bevor du einen anderen Spieler beobachtest..");
+                player.sendMessage(PREFIX + ChatColor.RED + "Du befindest dich bereits im Spectate Modus! Verlasse ihn erst mit " + COMMAND_PREFIX + "unspec bevor du einen anderen Spieler beobachtest..");
                 return true;
             }
             if ( args.length < 1 )
@@ -68,7 +70,7 @@ public class SpectateCommands
                 return true;
             }
 
-            player.sendMessage(PREFIX + "Zum verlassen des spectate Modus, /unspec nutzen.");
+            player.sendMessage(PREFIX + "Zum verlassen des spectate Modus, " + COMMAND_PREFIX + "unspec nutzen.");
 
 
             specedPlayers.put(player, target);
@@ -120,7 +122,7 @@ public class SpectateCommands
             for ( Player player : specedPlayers.keySet() )
             {
                 Player target = specedPlayers.get(player);
-                if ( message.equals("") )
+                if ( message.isEmpty() )
                 {
                     message = player.getDisplayName() + " beobachtet: " + target.getDisplayName();
                 }
@@ -130,7 +132,7 @@ public class SpectateCommands
                 }
                 i++;
             }
-            if ( i == 0 || message.equals("") )
+            if ( i == 0 || message.isEmpty() )
             {
                 message = "Es gibt keine Spieler im Spectate Modus.";
             }

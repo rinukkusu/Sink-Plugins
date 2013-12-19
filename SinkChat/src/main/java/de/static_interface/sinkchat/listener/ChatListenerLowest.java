@@ -33,16 +33,12 @@ public class ChatListenerLowest implements Listener
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
-        if ( event.isCancelled() )
-        {
-            return;
-        }
 
         User user = SinkLibrary.getUser(event.getPlayer());
 
-        String groupPrefix = SinkLibrary.isPermissionsAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.RESET + ChatColor.GRAY + "] " : "";
+        String groupPrefix = SinkLibrary.isPermissionsAvailable() ? ChatColor.RESET.toString() + ChatColor.GRAY + '[' + user.getPrimaryGroup() + ChatColor.RESET + ChatColor.GRAY + "] " : "";
 
-        event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ":" + ChatColor.WHITE + " %2$s");
+        event.setFormat(groupPrefix + "%1$s" + ChatColor.GRAY + ':' + ChatColor.WHITE + " %2$s");
 
         if ( user.hasPermission("sinkchat.color") )
         {

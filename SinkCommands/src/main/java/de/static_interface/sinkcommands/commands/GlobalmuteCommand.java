@@ -39,12 +39,12 @@ public class GlobalmuteCommand implements CommandExecutor
                 String reason = "";
                 for ( String arg : args )
                 {
-                    if ( reason.equals("") )
+                    if ( reason.isEmpty() )
                     {
                         reason = arg;
                         continue;
                     }
-                    reason = reason + " " + arg;
+                    reason = reason + ' ' + arg;
                 }
                 BukkitUtil.broadcastMessage(PREFIX + "Der globale Mute wurde von " + BukkitUtil.getSenderName(sender) + " aktiviert. Grund: " + reason + ". Alle Spieler sind jetzt stumm.");
             }

@@ -24,8 +24,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
 
+import static de.static_interface.sinklibrary.Constants.TICK;
 
-public class CommandsTimer implements Runnable                  // Nope, es fehlt noch die bukkit jar
+
+public class CommandsTimer implements Runnable
 {
     private final transient Set<String> onlineUsers = new HashSet<>();
     private transient long lastPoll = System.nanoTime();
@@ -35,13 +37,12 @@ public class CommandsTimer implements Runnable                  // Nope, es fehl
 
     CommandsTimer()
     {
-        history.add(20d);
+        history.add(TICK);
     }
 
     @Override
     public void run()
     {
-        onTick();
         final long startTime = System.nanoTime();
         long timeSpent = (startTime - lastPoll) / 1000;
         if ( timeSpent == 0 )
@@ -102,19 +103,14 @@ public class CommandsTimer implements Runnable                  // Nope, es fehl
         }
     }
 
-    private void onTick()
-    {
-        //ToDo
-    }
-
     public double getAverageTPS()
     {
         double avg = 0;
-        for ( Double f : history )
+        for ( Double d : history )
         {
-            if ( f != null )
+            if ( d != null )
             {
-                avg += f;
+                avg += d;
             }
         }
         return avg / history.size();

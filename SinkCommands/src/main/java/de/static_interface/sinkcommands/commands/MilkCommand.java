@@ -53,7 +53,7 @@ public class MilkCommand implements CommandExecutor
                 {
                     i++;
                     p.removePotionEffect(PotionEffectType.INVISIBILITY);
-                    if ( s.equals("") )
+                    if ( s.isEmpty() )
                     {
                         s = p.getDisplayName();
                     }
@@ -82,7 +82,7 @@ public class MilkCommand implements CommandExecutor
 
         if ( !user.isConsole() )
         {
-            if ( user.getPlayer() != target && user.hasPermission("sinkcommands.milk.others") )
+            if ( !user.getPlayer().equals(target) && user.hasPermission("sinkcommands.milk.others") )
             {
                 sender.sendMessage(_("Permissions.General"));
                 return true;

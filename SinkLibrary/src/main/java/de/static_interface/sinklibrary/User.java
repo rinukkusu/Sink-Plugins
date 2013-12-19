@@ -27,6 +27,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("NewExceptionWithoutArguments")
 public class User
 {
     private static Player base;
@@ -236,7 +237,7 @@ public class User
         {
             return ChatColor.RED + "Console" + ChatColor.RESET;
         }
-        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
+        if ( !SinkLibrary.getSettings().isDisplayNamesEnabled() )
         {
             String prefix = "";
             if ( SinkLibrary.isChatAvailable() )

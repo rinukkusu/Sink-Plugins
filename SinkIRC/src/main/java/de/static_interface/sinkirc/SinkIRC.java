@@ -37,14 +37,18 @@ public class SinkIRC extends JavaPlugin
     {
         if ( !checkDependencies() ) return;
 
-        sinkIrcBot = new SinkIRCBot(this);
+        if ( !SinkLibrary.getSettings().isIRCBotEnabled() )
+        {
+            return;
+        }
 
+        sinkIrcBot = new SinkIRCBot(this);
         SinkLibrary.registerPlugin(this);
         String host = SinkLibrary.getSettings().getIRCAddress();
         int port = SinkLibrary.getSettings().getIRCPort();
         mainChannel = SinkLibrary.getSettings().getIRCChannel();
 
-        boolean usingPassword = SinkLibrary.getSettings().getIRCPasswordEnabled();
+        boolean usingPassword = SinkLibrary.getSettings().isIRCPasswordEnabled();
 
         try
         {
@@ -57,9 +61,9 @@ public class SinkIRC extends JavaPlugin
             {
                 sinkIrcBot.connect(host, port);
             }
-            sinkIrcBot.joinChannel(getMainChannel());
+            sinkIrcBot.joinChannel(mainChannel);
 
-            if ( SinkLibrary.getSettings().getIRCAuthentificationEnabled() )
+            if ( SinkLibrary.getSettings().isIRCAuthentificationEnabled() )
             {
                 String authBot = SinkLibrary.getSettings().getIRCAuthBot();
                 String authMessage = SinkLibrary.getSettings().getIRCAuthMessage();
@@ -68,8 +72,8 @@ public class SinkIRC extends JavaPlugin
         }
         catch ( IOException | IrcException e )
         {
-            Bukkit.getLogger().severe("An Exception occurred while trying to connect to " + host + ":");
-            Bukkit.getLogger().severe(e.getMessage());
+            SinkLibrary.getCustomLogger().severe("An Exception occurred while trying to connect to " + host + ':');
+            SinkLibrary.getCustomLogger().severe(e.getMessage());
         }
         getCommand("irclist").setExecutor(new IrclistCommand());
         Bukkit.getPluginManager().registerEvents(new IRCListener(sinkIrcBot), this);
@@ -86,7 +90,7 @@ public class SinkIRC extends JavaPlugin
 
         if ( Bukkit.getPluginManager().getPlugin("SinkChat") == null )
         {
-            Bukkit.getLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
+            SinkLibrary.getCustomLogger().log(Level.WARNING, "This plugin will not work without SinkChat.");
             Bukkit.getPluginManager().disablePlugin(this);
             return false;
         }
@@ -98,6 +102,7 @@ public class SinkIRC extends JavaPlugin
     public void onDisable()
     {
         sinkIrcBot.quitServer("Plugin reload or plugin has been deactivated");
+        System.gc();
     }
 
     public static SinkIRCBot getIRCBot()

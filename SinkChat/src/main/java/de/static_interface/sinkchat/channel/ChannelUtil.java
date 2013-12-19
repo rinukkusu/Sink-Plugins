@@ -26,6 +26,9 @@ public class ChannelUtil
 {
     public static boolean sendMessage(Player player, String message, IChannel channel, String prefix, String callByChar)
     {
+
+        SinkLibrary.getCustomLogger().debug("sendMessage(\"" + player.getName() + "\", \"" + message + "\", \"" + channel.getChannelName() + "\", \"" + prefix + "\", \'" + callByChar + "\');");
+
         if ( channel.contains(player) )
         {
             return false;
@@ -41,7 +44,7 @@ public class ChannelUtil
 
         if ( SinkLibrary.isPermissionsAvailable() )
         {
-            formattedMessage = prefix + ChatColor.GRAY + "[" + user.getPrimaryGroup() + ChatColor.GRAY + "] " + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
+            formattedMessage = prefix + ChatColor.GRAY + '[' + user.getPrimaryGroup() + ChatColor.GRAY + "] " + user.getDisplayName() + ChatColor.GRAY + ": " + ChatColor.RESET + formattedMessage;
         }
         else
         {
@@ -55,7 +58,6 @@ public class ChannelUtil
                 target.sendMessage(formattedMessage);
             }
         }
-
         Bukkit.getConsoleSender().sendMessage(formattedMessage);
         SinkLibrary.sendIRCMessage(formattedMessage);
         return true;

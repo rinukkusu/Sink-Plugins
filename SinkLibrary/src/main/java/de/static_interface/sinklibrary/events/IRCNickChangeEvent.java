@@ -29,7 +29,7 @@ public class IRCNickChangeEvent extends Event implements Cancellable
     private final String hostname;
     private final String newNick;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCNickChangeEvent(String oldNick, String login, String hostname, String newNick)
     {

@@ -38,10 +38,10 @@ public class SinkIRCBot extends PircBot
         this.plugin = plugin;
 
         String botName = SinkLibrary.getSettings().getIRCBotUsername();
-        this.setName(botName);
-        this.setLogin(botName);
-        this.setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
-        disabled = !SinkLibrary.getSettings().getIRCBotEnabled();
+        setName(botName);
+        setLogin(botName);
+        setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
+        disabled = !SinkLibrary.getSettings().isIRCBotEnabled();
     }
 
     public static String replaceColorCodes(String input)
@@ -73,6 +73,7 @@ public class SinkIRCBot extends PircBot
 
     public void sendCleanMessage(String target, String message)
     {
+        SinkLibrary.getCustomLogger().debug("sendCleanMessage(\"" + target + "\", \"" + message + "\")");
         message = replaceColorCodes(message);
         sendMessage(target, message);
     }
@@ -218,12 +219,12 @@ public class SinkIRCBot extends PircBot
                         break;
                     }
                     i++;
-                    if ( commandWithArgs.equals("") )
+                    if ( commandWithArgs.isEmpty() )
                     {
                         commandWithArgs = arg;
                         continue;
                     }
-                    commandWithArgs = commandWithArgs + " " + arg;
+                    commandWithArgs = commandWithArgs + ' ' + arg;
                 }
 
 
@@ -238,33 +239,37 @@ public class SinkIRCBot extends PircBot
                     }
                 });
 
-                sinkIrcBot.sendMessage(source, "Executed command: \"" + commandWithArgs + "\"");
+                sinkIrcBot.sendMessage(source, "Executed command: \"" + commandWithArgs + '"');
             }
 
             if ( command.equals("say") ) //Speak to ingame players
             {
                 boolean privateMessageCommand = !source.startsWith("#");
 
-                if ( args.length < 2 )
-                {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: ~say <text>");
-                    return;
-                }
+                String prefix = IRCListener.COMMAND_PREFIX;
 
                 if ( privateMessageCommand )
                 {
                     source = "Query";
+                    prefix = "";
+                }
+
+
+                if ( args.length < 2 )
+                {
+                    sinkIrcBot.sendCleanMessage(source, "Usage: " + prefix + "say <text>");
+                    return;
                 }
 
                 String messageWithPrefix;
 
                 if ( isOp )
                 {
-                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
+                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + '[' + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + label.replaceFirst("say", "");
                 }
                 else
                 {
-                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + "[" + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + ChatColor.stripColor(label.replaceFirst("say", ""));
+                    messageWithPrefix = IRC_PREFIX + ChatColor.GRAY + '[' + source + "] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE + ChatColor.stripColor(label.replaceFirst("say", ""));
                 }
 
                 BukkitUtil.broadcastMessage(messageWithPrefix);
@@ -282,7 +287,7 @@ public class SinkIRCBot extends PircBot
                 {
                     targetPlayerName = args[0];
                 }
-                catch ( Exception e )
+                catch ( Exception ignored )
                 {
                     sinkIrcBot.sendCleanMessage(source, "Usage: !kick <player> <reason>");
                     return;
@@ -299,7 +304,7 @@ public class SinkIRCBot extends PircBot
                 {
                     String reason = label.replace(targetPlayerName, "");
                     reason = reason.replace("kick ", "");
-                    formattedReason = " (Reason: " + reason + ")";
+                    formattedReason = " (Reason: " + reason + ')';
                 }
                 else
                 {
@@ -331,7 +336,7 @@ public class SinkIRCBot extends PircBot
                 for ( Player player : Bukkit.getOnlinePlayers() )
                 {
                     de.static_interface.sinklibrary.User user = SinkLibrary.getUser(player);
-                    if ( players.equals("") )
+                    if ( players.isEmpty() )
                     {
                         players = user.getDisplayName();
                     }
@@ -340,7 +345,7 @@ public class SinkIRCBot extends PircBot
                         players = players + ", " + user.getDisplayName();
                     }
                 }
-                sinkIrcBot.sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + "/" + Bukkit.getMaxPlayers() + "): " + players);
+                sinkIrcBot.sendCleanMessage(source, "Online Players (" + Bukkit.getOnlinePlayers().length + '/' + Bukkit.getMaxPlayers() + "): " + players);
             }
 
             if ( command.equals("debug") )
@@ -350,8 +355,8 @@ public class SinkIRCBot extends PircBot
                 String values = "";
                 for ( String user : SinkLibrary.getUsers().keySet() )
                 {
-                    String tmp = "<" + user + "," + ChatColor.stripColor(SinkLibrary.getUsers().get(user).getDisplayName()) + ">";
-                    if ( values.equals("") )
+                    String tmp = '<' + user + ',' + ChatColor.stripColor(SinkLibrary.getUsers().get(user).getDisplayName()) + '>';
+                    if ( values.isEmpty() )
                     {
                         values = tmp;
                         continue;
@@ -361,7 +366,7 @@ public class SinkIRCBot extends PircBot
                 sinkIrcBot.sendCleanMessage(source, "HashMap Values: " + values);
             }
         }
-        catch ( UnauthorizedAccessException e )
+        catch ( UnauthorizedAccessException ignored )
         {
             sinkIrcBot.sendMessage(source, "You may not use that command");
         }

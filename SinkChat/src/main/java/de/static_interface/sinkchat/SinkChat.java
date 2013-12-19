@@ -55,6 +55,11 @@ public class SinkChat extends JavaPlugin
         registerCommands();
     }
 
+    public void onDisable()
+    {
+        System.gc();
+    }
+
     private boolean checkDependencies()
     {
         if ( Bukkit.getPluginManager().getPlugin("SinkLibrary") == null )

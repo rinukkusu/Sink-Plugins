@@ -18,7 +18,6 @@ package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.Updater;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -32,9 +31,9 @@ import java.util.logging.Level;
 public class Settings extends ConfigurationBase
 {
     public static final int REQUIRED_VERSION = 1;
-    private YamlConfiguration yamlConfiguration;
-    private File yamlFile;
-    private HashMap<String, Object> defaultValues;
+    private YamlConfiguration yamlConfiguration = null;
+    private File yamlFile = null;
+    private HashMap<String, Object> defaultValues = null;
 
     public Settings()
     {
@@ -77,23 +76,25 @@ public class Settings extends ConfigurationBase
 
             if ( createNewConfiguration )
             {
-                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
 
             if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
                 return;
             }
 
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            getYamlConfiguration().options().header(String.format("You can customize the SinkPlugins with this configuration."));
+            yamlConfiguration.options().header("You can customize the SinkPlugins with this configuration.");
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
-            addDefault("General.DisplayNamesEnabled", true);
 
+            addDefault("General.DisplayNamesEnabled", true);
+            addDefault("General.EnableLog", true);
+            addDefault("General.EnableDebug", false);
 
             addDefault("Updater.Enabled", true);
             addDefault("Updater.UpdateType", "default");
@@ -121,7 +122,7 @@ public class Settings extends ConfigurationBase
             List<String> defaultDomainWiteList = new ArrayList<>();
             defaultDomainWiteList.add("google.com");
             defaultDomainWiteList.add("youtube.com");
-            defaultDomainWiteList.add("example.com");
+            defaultDomainWiteList.add("yourhomepagehere.com");
             addDefault("SinkAntiSpam.WhitelistedDomainsCheck.Domains", defaultDomainWiteList);
 
             addDefault("SinkAntiSpam.IPCheck.Enabled", true);
@@ -144,13 +145,13 @@ public class Settings extends ConfigurationBase
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occurred: ", e);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Exception occurred: ", e);
         }
         catch ( InvalidConfigurationException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
-            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, e.getMessage());
             recreate();
         }
     }
@@ -170,12 +171,12 @@ public class Settings extends ConfigurationBase
         }
     }
 
-    public boolean getUpdaterEnabled()
+    public boolean isUpdaterEnabled()
     {
         return (boolean) get("Updater.Enabled");
     }
 
-    public boolean getDisplayNamesEnabled()
+    public boolean isDisplayNamesEnabled()
     {
         return (boolean) get("General.DisplayNamesEnabled");
     }
@@ -199,7 +200,7 @@ public class Settings extends ConfigurationBase
     {
         try
         {
-            List<String> value = getYamlConfiguration().getStringList(path);
+            List<String> value = yamlConfiguration.getStringList(path);
             if ( value == null )
             {
                 throw new NullPointerException("Path returned null!");
@@ -208,22 +209,22 @@ public class Settings extends ConfigurationBase
         }
         catch ( Exception e )
         {
-            Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage());
+            SinkLibrary.getCustomLogger().log(Level.WARNING, yamlFile + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
-    public boolean getBlacklistedWordsEnabled()
+    public boolean isBlacklistedWordsEnabled()
     {
         return (boolean) get("SinkAntiSpam.BlacklistedWordsCheck.Enabled");
     }
 
-    public boolean getIPCheckEnabled()
+    public boolean isIPCheckEnabled()
     {
         return (boolean) get("SinkAntiSpam.IPCheck.Enabled");
     }
 
-    public boolean getWhitelistedDomainCheckEnabled()
+    public boolean isWhitelistedDomainCheckEnabled()
     {
         return (boolean) get("SinkAntiSpam.WhitelistedDomainsCheck.Enabled");
     }
@@ -233,7 +234,7 @@ public class Settings extends ConfigurationBase
         return (int) get("SinkChat.LocalChatRange");
     }
 
-    public boolean getIRCBotEnabled()
+    public boolean isIRCBotEnabled()
     {
         return (boolean) get("SinkIRC.BotEnabled");
     }
@@ -248,7 +249,7 @@ public class Settings extends ConfigurationBase
         return (String) get("SinkIRC.Server.Address");
     }
 
-    public boolean getIRCPasswordEnabled()
+    public boolean isIRCPasswordEnabled()
     {
         return (boolean) get("SinkIRC.Server.PasswordEnabled");
     }
@@ -269,7 +270,7 @@ public class Settings extends ConfigurationBase
         return (String) get("SinkIRC.Channel");
     }
 
-    public boolean getIRCAuthentificationEnabled()
+    public boolean isIRCAuthentificationEnabled()
     {
         return (boolean) get("SinkIRC.Authentification.Enabled");
     }
@@ -282,5 +283,15 @@ public class Settings extends ConfigurationBase
     public String getIRCAuthMessage()
     {
         return (String) get("SinkIRC.Authentification.AuthMessage");
+    }
+
+    public boolean isLogEnabled()
+    {
+        return (boolean) get("General.EnableLog");
+    }
+
+    public boolean isDebugEnabled()
+    {
+        return (boolean) get("General.EnableDebug");
     }
 }

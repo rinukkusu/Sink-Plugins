@@ -26,6 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import static de.static_interface.sinklibrary.Constants.TICK;
+
 public class DrugCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.AQUA + "[Drogen] " + ChatColor.RESET;
@@ -85,8 +87,8 @@ public class DrugCommand implements CommandExecutor
                 }
                 player.removePotionEffect(PotionEffectType.BLINDNESS);
                 player.removePotionEffect(PotionEffectType.CONFUSION);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, duration + (20 * 30), amplifier + 1), true);
-                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, duration + (20 * 30), amplifier + 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, (int) (duration + (TICK * 30)), amplifier + 1), true);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, (int) (duration + (TICK * 30)), amplifier + 1), true);
             }
         }
         return true;

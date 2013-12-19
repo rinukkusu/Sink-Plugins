@@ -30,6 +30,8 @@ import org.bukkit.plugin.Plugin;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
+
 public class VotekickCommands
 {
     public static final String PREFIX = ChatColor.DARK_GREEN + ChatColor.BOLD.toString() + "[VoteKick] " + ChatColor.RESET;
@@ -76,12 +78,12 @@ public class VotekickCommands
                     {
                         continue;
                     }
-                    if ( reason.equals("") )
+                    if ( reason.isEmpty() )
                     {
                         reason = arg;
                         continue;
                     }
-                    reason = reason + " " + arg;
+                    reason = reason + ' ' + arg;
                 }
             }
             if ( voteStarted )
@@ -119,7 +121,7 @@ public class VotekickCommands
             targetPlayer = (BukkitUtil.getPlayer(args[0]));
             User targetUser = SinkLibrary.getUser(targetPlayer);
             target = targetUser.getDisplayName();
-            if ( targetPlayer == sender )
+            if ( targetPlayer.equals(sender) )
             {
                 sender.sendMessage(PREFIX + "Du kannst nicht einen Votekick gegen dich selbst starten!");
                 return true;
@@ -144,13 +146,13 @@ public class VotekickCommands
                 return true;
             }
 
-            if ( reason.equals("") )
+            if ( reason.isEmpty() )
             {
-                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote", true);
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Nutze " + COMMAND_PREFIX + "voteyes oder " + COMMAND_PREFIX + "voteno um zu voten und " + COMMAND_PREFIX + "votestatus für den Vote Status!", "sinkcommands.votekick.vote", true);
             }
             else
             {
-                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Grund: " + reason + ChatColor.RED + ". Nutze /voteyes oder /voteno um zu voten und /votestatus für den Vote Status!", "sinkcommands.votekick.vote", true);
+                BukkitUtil.broadcast(PREFIX + ChatColor.RED + BukkitUtil.getSenderName(sender) + ChatColor.RED + " hat einen Votekick gegen " + target + ChatColor.RED + " gestartet. Grund: " + reason + ChatColor.RED + ". Nutze " + COMMAND_PREFIX + "voteyes oder " + COMMAND_PREFIX + COMMAND_PREFIX + "voteno um zu voten und " + COMMAND_PREFIX + "votestatus für den Vote Status!", "sinkcommands.votekick.vote", true);
             }
 
             voteStarted = true;
@@ -205,7 +207,8 @@ public class VotekickCommands
         @Override
         public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
         {
-            return sendStatus(sender);
+            sendStatus(sender);
+            return true;
         }
     }
 
@@ -249,7 +252,7 @@ public class VotekickCommands
         }
     }
 
-    private static void endVoteKick(Plugin plugin)
+    public static void endVoteKick(Plugin plugin)
     {
         if ( voteStarted )
         {
@@ -286,19 +289,20 @@ public class VotekickCommands
         votedPlayers.clear();
     }
 
-    private static boolean sendStatus(CommandSender sender)
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    private static void sendStatus(CommandSender sender)
     {
         if ( !VotekickCommands.voteStarted )
         {
             sender.sendMessage(PREFIX + "Derzeit läuft kein Votekick...");
-            return true;
+            return;
         }
         int percentYes = (int) Math.round((votesYes / (votesYes + votesNo)) * 100);
         int percentNo = (int) Math.round((votesNo / (votesYes + votesNo)) * 100);
         sender.sendMessage(PREFIX + "Status: Ja: " + percentYes + "%, Nein: " + percentNo + "%.");
-        return true;
     }
 
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     private static boolean vote(CommandSender sender, boolean yes, Plugin plugin)
     {
         if ( !VotekickCommands.voteStarted )

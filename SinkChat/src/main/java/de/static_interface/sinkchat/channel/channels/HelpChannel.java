@@ -31,12 +31,12 @@ public class HelpChannel extends JavaPlugin implements IChannel
 {
 
     Vector<Player> exceptedPlayers = new Vector<>();
-    String PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
-    private String callByChar;
+    public final String PREFIX = ChatColor.GRAY + "[" + ChatColor.DARK_GREEN + getChannelName() + ChatColor.GRAY + "] " + ChatColor.RESET;
+    private String callString;
 
     public HelpChannel(String callChar)
     {
-        callByChar = callChar;
+        callString = callChar;
     }
 
     @Override
@@ -72,12 +72,12 @@ public class HelpChannel extends JavaPlugin implements IChannel
     @Override
     public boolean sendMessage(Player player, String message)
     {
-        return ChannelUtil.sendMessage(player, message, this, PREFIX, callByChar);
+        return ChannelUtil.sendMessage(player, message, this, PREFIX, callString);
     }
 
     @Override
     public void registerChannel()
     {
-        ChannelHandler.registerChannel(this, getChannelName(), callByChar);
+        ChannelHandler.registerChannel(this, getChannelName(), callString);
     }
 }

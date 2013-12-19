@@ -35,7 +35,7 @@ public class LagTimer implements Runnable
             BukkitUtil.broadcastMessage(PREFIX + ChatColor.RED + "Der Server laggt gerade!");
             send = true;
         }
-        else if ( tps <= 18.5 & !send )
+        else if ( tps <= 18.5 && !send )
         {
             BukkitUtil.broadcastMessage(PREFIX + ChatColor.YELLOW + "Der Server könnte gerade etwas laggen!");
             send = true;

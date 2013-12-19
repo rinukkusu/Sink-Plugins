@@ -18,16 +18,18 @@ package de.static_interface.sinklibrary.configuration;
 
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
+@SuppressWarnings({"OverlyBroadCatchBlock", "InstanceMethodNamingConvention", "BooleanMethodNameMustStartWithQuestion", "InstanceMethodNamingConvention", "StaticMethodNamingConvention"})
 public class LanguageConfiguration
 {
     public static final int REQUIRED_VERSION = 1;
@@ -59,19 +61,19 @@ public class LanguageConfiguration
 
             if ( createNewConfiguration )
             {
-                Bukkit.getLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.INFO, "Creating new configuration: " + yamlFile);
             }
 
             if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create configuration: " + yamlFile);
                 return;
             }
 
             yamlConfiguration = new YamlConfiguration();
             yamlConfiguration.load(yamlFile);
 
-            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables for language.%n%%s will be replaced with the value by the plugin."));
+            yamlConfiguration.options().header(String.format("This configuration saves and loads variables for language.%n%%s will be replaced with the value by the plugin."));
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
@@ -139,13 +141,13 @@ public class LanguageConfiguration
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occured: ", e);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Exception occured: ", e);
         }
         catch ( InvalidConfigurationException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
-            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, e.getMessage());
             recreate();
         }
     }
@@ -168,9 +170,9 @@ public class LanguageConfiguration
         {
             yamlConfiguration.save(yamlFile);
         }
-        catch ( IOException e )
+        catch ( IOException ignored )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't save configuration file: " + yamlFile + "!");
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't save configuration file: " + yamlFile + '!');
         }
     }
 
@@ -193,7 +195,7 @@ public class LanguageConfiguration
         }
         catch ( Exception e )
         {
-            Bukkit.getLogger().log(Level.WARNING, getFile() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
+            SinkLibrary.getCustomLogger().log(Level.WARNING, yamlFile + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             return getDefault(path);
         }
     }
@@ -219,7 +221,7 @@ public class LanguageConfiguration
      */
     public static void backup() throws IOException
     {
-        Util.backupFile(getFile(), true);
+        Util.backupFile(yamlFile, true);
     }
 
     /**
@@ -227,9 +229,9 @@ public class LanguageConfiguration
      *
      * @return Default Values
      */
-    public static HashMap<String, Object> getDefaults()
+    public static Map<String, Object> getDefaults()
     {
-        return defaultValues;
+        return Collections.unmodifiableMap(defaultValues);
     }
 
     /**
@@ -252,7 +254,7 @@ public class LanguageConfiguration
         }
         catch ( Exception e )
         {
-            Bukkit.getLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
+            SinkLibrary.getCustomLogger().log(Level.WARNING, yamlFile.getName() + ": Couldn't load value from path: " + path + ". Reason: " + e.getMessage() + " Using default value.");
             value = (String) getDefault(path);
         }
         return value;
@@ -282,22 +284,12 @@ public class LanguageConfiguration
             throw new RuntimeException("defaultValues are null! Couldn't add " + value + " to path: " + path);
         }
 
-        if ( !getYamlConfiguration().isSet(path) || getYamlConfiguration().get(path) == null )
+        if ( !yamlConfiguration.isSet(path) || yamlConfiguration.get(path) == null )
         {
-            getYamlConfiguration().set(path, value);
+            yamlConfiguration.set(path, value);
             save();
         }
         getDefaults().put(path, value);
-    }
-
-    /**
-     * Get YAML Configuration
-     *
-     * @return YamlConfiguration
-     */
-    public static YamlConfiguration getYamlConfiguration()
-    {
-        return yamlConfiguration;
     }
 
     /**
@@ -319,14 +311,14 @@ public class LanguageConfiguration
 
         busy = true;
 
-        Bukkit.getLogger().log(Level.WARNING, "Recreating Configuration: " + getFile());
+        SinkLibrary.getCustomLogger().log(Level.WARNING, "Recreating Configuration: " + yamlFile);
         try
         {
             backup();
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Coudln't backup configuration: " + getFile(), e);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Coudln't backup configuration: " + yamlFile, e);
             return;
         }
         delete();

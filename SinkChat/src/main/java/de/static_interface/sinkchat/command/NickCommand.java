@@ -27,16 +27,19 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.regex.Pattern;
+
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class NickCommand implements CommandExecutor
 {
-    public static final String PREFIX = _("SinkChat.Prefix.Nick") + " " + ChatColor.RESET;
+    public static final String PREFIX = _("SinkChat.Prefix.Nick") + ' ' + ChatColor.RESET;
+    private static final Pattern NICKNAME_PATTERN = Pattern.compile("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$");
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        if ( !SinkLibrary.getSettings().getDisplayNamesEnabled() )
+        if ( !SinkLibrary.getSettings().isDisplayNamesEnabled() )
         {
             sender.sendMessage(PREFIX + "DisplayNames have been disabled in the config.");
             return true;
@@ -89,11 +92,12 @@ public class NickCommand implements CommandExecutor
         return true;
     }
 
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     private boolean setDisplayName(Player target, String newDisplayName, CommandSender sender)
     {
         User user = SinkLibrary.getUser(target);
         String cleanDisplayName = ChatColor.stripColor(newDisplayName);
-        if ( !cleanDisplayName.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") )
+        if ( !NICKNAME_PATTERN.matcher(cleanDisplayName).matches() )
         {
             sender.sendMessage(PREFIX + _("SinkChat.Commands.Nick.IllegalNickname"));
             return false;
@@ -112,7 +116,7 @@ public class NickCommand implements CommandExecutor
 
         for ( Player onlinePlayer : Bukkit.getOnlinePlayers() )
         {
-            if ( target == onlinePlayer )
+            if ( target.equals(onlinePlayer) )
             {
                 continue;
             }

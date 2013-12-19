@@ -20,15 +20,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BukkitUtil
 {
-
     /**
      * Get online Player by name.
      *
@@ -54,7 +51,7 @@ public class BukkitUtil
             {
                 return matchedPlayers.get(0);
             }
-            catch ( Exception e )
+            catch ( Exception ignored )
             {
                 return null;
             }
@@ -125,22 +122,5 @@ public class BukkitUtil
         {
             SinkLibrary.sendIRCMessage(message);
         }
-    }
-
-    /**
-     * @param message    Message to send
-     * @param permission Permission needed to receive the message
-     * @deprecated Use {@link #broadcast(String, String, boolean)} instead
-     */
-    @Deprecated
-    public static void broadcast(String message, String permission)
-    {
-        Permission perm = new Permission(permission);
-        boolean sendIRC = false;
-        if ( perm.getDefault() == PermissionDefault.TRUE )
-        {
-            sendIRC = true;
-        }
-        broadcast(message, permission, sendIRC);
     }
 }

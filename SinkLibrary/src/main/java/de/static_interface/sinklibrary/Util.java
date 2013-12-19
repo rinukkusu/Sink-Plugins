@@ -33,6 +33,36 @@ import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 public class Util
 {
     /**
+     * Create a file
+     *
+     * @param file file to create
+     * @return true if file exists or has been created, false if it failed
+     */
+    public static boolean createFile(File file)
+    {
+        if ( file.exists() ) return true;
+        try
+        {
+            com.google.common.io.Files.createParentDirs(file);
+        }
+        catch ( IOException e )
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create Directorys for file " + file + ": ", e);
+            return false;
+        }
+
+        try
+        {
+            return file.createNewFile();
+        }
+        catch ( IOException ignored )
+        {
+            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create file: " + file);
+            return false;
+        }
+    }
+
+    /**
      * Backup a file
      *
      * @param file   File to backup
@@ -41,20 +71,20 @@ public class Util
      */
     public static void backupFile(File file, boolean notify) throws IOException
     {
-        if ( notify ) Bukkit.getLogger().log(Level.INFO, "Creating backup of " + file + "...");
+        if ( notify ) SinkLibrary.getCustomLogger().log(Level.INFO, "Creating backup of " + file + "...");
 
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.YYYY-hh.mm");
         String date = format.format(new Date());
 
         Path sourcePath = Paths.get(file.getAbsolutePath());
-        Path targetPath = Paths.get(file.getPath() + "." + date + ".backup");
+        Path targetPath = Paths.get(file.getPath() + '.' + date + ".backup");
         try
         {
             Files.copy(sourcePath, targetPath, REPLACE_EXISTING);
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't backup file: " + file.getAbsolutePath());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't backup file: " + file.getAbsolutePath());
             throw e;
         }
     }
@@ -62,21 +92,21 @@ public class Util
     /**
      * Format Array to String
      *
-     * @param input Input String
-     * @param Char  Chat
-     * @return If Array = {"s1", "s2", "s3" } and Char = " & " it will return "s1 & s2 & s3"
+     * @param input     Input String
+     * @param character Chat
+     * @return If Array = {"s1", "s2", "s3" } and character = " & " it will return "s1 & s2 & s3"
      */
-    public static String formatArrayToString(Object[] input, String Char)
+    public static String formatArrayToString(Object[] input, String character)
     {
         String tmp = "";
-        for ( Object s : input )
+        for ( Object o : input )
         {
-            if ( tmp.equals("") )
+            if ( tmp.isEmpty() )
             {
-                tmp = (String) s;
+                tmp = (String) o;
                 continue;
             }
-            tmp = tmp + Char + s;
+            tmp = tmp + character + o;
         }
         return tmp;
     }
@@ -94,7 +124,7 @@ public class Util
         for ( String s : names )
         {
             i++;
-            if ( tmp.equals("") )
+            if ( tmp.isEmpty() )
             {
                 tmp = s;
                 continue;
@@ -119,7 +149,7 @@ public class Util
         {
             Integer.parseInt(input);
         }
-        catch ( NumberFormatException ex )
+        catch ( NumberFormatException ignored )
         {
             return false;
         }

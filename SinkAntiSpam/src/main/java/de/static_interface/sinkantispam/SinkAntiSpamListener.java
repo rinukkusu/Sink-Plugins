@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class SinkAntiSpamListener implements Listener
@@ -50,23 +51,24 @@ public class SinkAntiSpamListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
-        checkMessage(event);
+        validateMessageEvent(event);
     }
 
+    @SuppressWarnings("HardcodedFileSeparator")
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
         for ( String command : excludedCommands )
         {
-            if ( event.getMessage().startsWith("/" + command) || event.getMessage().startsWith(command) )
+            if ( event.getMessage().startsWith(COMMAND_PREFIX + command) || event.getMessage().startsWith(command) )
             {
                 return;
             }
         }
-        checkMessage(event);
+        validateMessageEvent(event);
     }
 
-    public void checkMessage(Event event)
+    public static void validateMessageEvent(Event event)
     {
         String message;
         Player player;
@@ -93,8 +95,8 @@ public class SinkAntiSpamListener implements Listener
             return;
         }
 
-        String word = ListContainsString(blacklistedWords, message);
-        if ( word != null && !word.equals("") && SinkLibrary.getSettings().getBlacklistedWordsEnabled() )
+        String word = listContainsString(blacklistedWords, message);
+        if ( word != null && !word.isEmpty() && SinkLibrary.getSettings().isBlacklistedWordsEnabled() )
         {
             message = message.replace(word, ChatColor.BLUE.toString() + ChatColor.BOLD.toString() + ChatColor.UNDERLINE.toString() + word + ChatColor.RESET.toString());
             SinkAntiSpam.warnPlayer(player, String.format(_("SinkAntiSpam.Reasons.BlacklistedWord"), message));
@@ -111,7 +113,7 @@ public class SinkAntiSpamListener implements Listener
 
         Pattern pattern = Pattern.compile("\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b");
         Matcher matcher = pattern.matcher(message);
-        if ( matcher.find() && SinkLibrary.getSettings().getIPCheckEnabled() )
+        if ( matcher.find() && SinkLibrary.getSettings().isIPCheckEnabled() )
         {
             String match = matcher.group(0);
             SinkAntiSpam.warnPlayer(player, String.format(_("SinkAntiSpam.Reasons.IP"), match));//"Fremdwerbung für folgende IP: " + match + " !");
@@ -128,14 +130,14 @@ public class SinkAntiSpamListener implements Listener
 
         pattern = Pattern.compile(" [a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(/\\S)? ");
         matcher = pattern.matcher(message);
-        if ( matcher.find() && SinkLibrary.getSettings().getWhitelistedDomainCheckEnabled() )
+        if ( matcher.find() && SinkLibrary.getSettings().isWhitelistedDomainCheckEnabled() )
         {
             String match = matcher.group(0);
             if ( match.contains("..") )
             {
                 return;
             }
-            if ( ListContainsString(whiteListDomains, match) != null )
+            if ( listContainsString(whiteListDomains, match) != null )
             {
                 return;
             }
@@ -151,11 +153,11 @@ public class SinkAntiSpamListener implements Listener
         }
     }
 
-    private String ListContainsString(List<String> listString, String input)
+    private static String listContainsString(List<String> listString, String input)
     {
         for ( String s : listString )
         {
-            if ( input.toLowerCase().contains(" " + s.toLowerCase() + " ") || input.toLowerCase().contains(" " + s.toLowerCase()) || input.toLowerCase().contains(s.toLowerCase() + " ") ||
+            if ( input.toLowerCase().contains(' ' + s.toLowerCase() + ' ') || input.toLowerCase().contains(' ' + s.toLowerCase()) || input.toLowerCase().contains(s.toLowerCase() + ' ') ||
                     (listString.toArray().length == 0 && input.toLowerCase().contains(s.toLowerCase())) || input.equals(s) )
             {
                 return s;

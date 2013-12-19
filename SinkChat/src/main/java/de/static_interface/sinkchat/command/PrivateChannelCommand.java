@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2013 adventuria.eu / static-interface.de
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package de.static_interface.sinkchat.command;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
@@ -14,8 +30,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
+@SuppressWarnings("UnusedDeclaration")
 public class PrivateChannelCommand implements CommandExecutor
 {
 
@@ -33,7 +51,7 @@ public class PrivateChannelCommand implements CommandExecutor
             sendHelp(sender, cmd);
             return true;
         }
-        IPrivateChannel ch = PrivateChannelHandler.getChannel(args[1]);
+        IPrivateChannel privateChannel = PrivateChannelHandler.getChannel(args[1]);
         switch ( args[0].toLowerCase() )
         {
             case "list":
@@ -43,7 +61,7 @@ public class PrivateChannelCommand implements CommandExecutor
                     String channels = "";
                     for ( IPrivateChannel channel : PrivateChannelHandler.getRegisteredChannels() )
                     {
-                        if ( channels.equals("") )
+                        if ( channels.isEmpty() )
                         {
                             channels = channel.getChannelName();
                             continue;
@@ -53,24 +71,24 @@ public class PrivateChannelCommand implements CommandExecutor
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.Channels"), ChatColor.WHITE + channels));
                     return true;
                 }
-                if ( ch == null )
+                if ( privateChannel == null )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.DoesntExists"), args[1]));
                     return true;
                 }
                 String players = "";
-                for ( Player player : ch.getPlayers() )
+                for ( Player player : privateChannel.getPlayers() )
                 {
                     if ( player == null ) continue;
                     String name = SinkLibrary.getUser(player).getDisplayName();
-                    if ( players.equals("") )
+                    if ( players.isEmpty() )
                     {
                         players = name;
                         continue;
                     }
                     players = players + ", " + name;
                 }
-                sender.sendMessage(String.format(_("SinkChat.Channels.Private.Users"), ch.getChannelName()));
+                sender.sendMessage(String.format(_("SinkChat.Channels.Private.Users"), privateChannel.getChannelName()));
                 sender.sendMessage(players);
                 return true;
             }
@@ -81,12 +99,12 @@ public class PrivateChannelCommand implements CommandExecutor
                     sendHelp(sender, cmd);
                     return true;
                 }
-                if ( ch == null )
+                if ( privateChannel == null )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.DoesntExists"), args[1]));
                     return true;
                 }
-                ch.setChannelName(args[2]);
+                privateChannel.setChannelName(args[2]);
                 sender.sendMessage(String.format(_("SinkChat.Channels.Private.Renamed"), args[2]));
                 return true;
             }
@@ -98,9 +116,9 @@ public class PrivateChannelCommand implements CommandExecutor
                     return true;
                 }
 
-                if ( ch != null )
+                if ( privateChannel != null )
                 {
-                    sender.sendMessage(String.format(_("SinkChat.Channels.Private.AlreadyExists")));
+                    sender.sendMessage(_("SinkChat.Channels.Private.AlreadyExists"));
                     return true;
                 }
 
@@ -116,8 +134,8 @@ public class PrivateChannelCommand implements CommandExecutor
                     }
                 }
 
-                ch = new PrivateChannel(identifier, (Player) (sender), channelName);
-                PrivateChannelHandler.registerChannel(ch);
+                privateChannel = new PrivateChannel(identifier, (Player) (sender), channelName);
+                PrivateChannelHandler.registerChannel(privateChannel);
                 sender.sendMessage(String.format(_("SinkChat.Channels.Private.Created"), channelName));
                 return true;
             }
@@ -129,7 +147,7 @@ public class PrivateChannelCommand implements CommandExecutor
                     return true;
                 }
 
-                if ( ch == null )
+                if ( privateChannel == null )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.DoesntExists"), args[1]));
                     return true;
@@ -139,7 +157,8 @@ public class PrivateChannelCommand implements CommandExecutor
                 for ( int i = 2; i < args.length; i++ )
                 {
                     String s = args[i];
-                    if ( s.equals("invite") || s.equals(args[1]) || (ch.contains(Bukkit.getPlayer(s))) ) continue;
+                    if ( s.equals("invite") || s.equals(args[1]) || (privateChannel.contains(Bukkit.getPlayer(s))) )
+                        continue;
                     if ( Bukkit.getPlayer(s) == null )
                     {
                         sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), s));
@@ -153,13 +172,13 @@ public class PrivateChannelCommand implements CommandExecutor
                     }
 
                     User user = SinkLibrary.getUser(player);
-                    if ( ch.contains(user.getPlayer()) )
+                    if ( privateChannel.contains(user.getPlayer()) )
                     {
                         sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorAlreadyInChat"), user.getDisplayName()));
                         continue;
                     }
-                    ch.addPlayer(user.getPlayer(), player);
-                    if ( players.equals("") )
+                    privateChannel.addPlayer(user.getPlayer(), player);
+                    if ( players.isEmpty() )
                     {
                         players = user.getDisplayName();
                         continue;
@@ -172,12 +191,12 @@ public class PrivateChannelCommand implements CommandExecutor
 
             case "leave":
             {
-                if ( !(ch.contains((Player) (sender))) || (ch == null) )
+                if ( !(privateChannel.contains((Player) (sender))) || (privateChannel == null) )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]));
                     return true;
                 }
-                ch.kickPlayer((Player) sender, (Player) sender, "");
+                privateChannel.kickPlayer((Player) sender, (Player) sender, "");
                 return true;
             }
 
@@ -188,12 +207,12 @@ public class PrivateChannelCommand implements CommandExecutor
                     sendHelp(sender, cmd);
                     return true;
                 }
-                if ( !(ch.contains((Player) sender)) || (ch == null) )
+                if ( !(privateChannel.contains((Player) sender)) || (privateChannel == null) )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]));
                     return true;
                 }
-                if ( !(ch.getStarter().equals(sender)) )
+                if ( !(privateChannel.getStarter().equals(sender)) )
                 {
                     sender.sendMessage(_("Permissions.General"));
                     return true;
@@ -202,7 +221,7 @@ public class PrivateChannelCommand implements CommandExecutor
                 {
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), args[2]));
                 }
-                if ( !(ch.contains(Bukkit.getPlayer(args[2]))) )
+                if ( !(privateChannel.contains(Bukkit.getPlayer(args[2]))) )
                 {
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.PlayerKicked"), args[2]));
                     return true;
@@ -217,9 +236,9 @@ public class PrivateChannelCommand implements CommandExecutor
                         reason = args[x];
                         continue;
                     }
-                    reason = reason + " " + args[x];
+                    reason = reason + ' ' + args[x];
                 }
-                ch.kickPlayer(Bukkit.getPlayer(args[2]), (Player) sender, reason);
+                privateChannel.kickPlayer(Bukkit.getPlayer(args[2]), (Player) sender, reason);
                 return true;
             }
 
@@ -234,11 +253,11 @@ public class PrivateChannelCommand implements CommandExecutor
     private void sendHelp(CommandSender sender, Command cmd)
     {
         sender.sendMessage(_("SinkChat.Channels.Private.WrongUsage"));
-        sender.sendMessage("/" + cmd.getLabel() + " create <channel identifier> <channel name>");
-        sender.sendMessage("/" + cmd.getLabel() + " rename <channel identifier> <new name>");
-        sender.sendMessage("/" + cmd.getLabel() + " list <channel identifier|all>");
-        sender.sendMessage("/" + cmd.getLabel() + " invite <channel identifier> <channel name> <player> [players...]");
-        sender.sendMessage("/" + cmd.getLabel() + " leave <channel identifier>");
-        sender.sendMessage("/" + cmd.getLabel() + " kick <channel identifier> <player> [reason]");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " create <channel identifier> <channel name>");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " rename <channel identifier> <new name>");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " list <channel identifier|all>");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " invite <channel identifier> <channel name> <player> [players...]");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " leave <channel identifier>");
+        sender.sendMessage(COMMAND_PREFIX + cmd.getLabel() + " kick <channel identifier> <player> [reason]");
     }
 }

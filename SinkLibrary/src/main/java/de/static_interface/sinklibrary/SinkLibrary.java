@@ -31,15 +31,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
+@SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
 public class SinkLibrary extends JavaPlugin
 {
 
@@ -54,26 +58,36 @@ public class SinkLibrary extends JavaPlugin
     private static boolean permissionsAvailable = true;
     private static boolean chatAvailable = true;
 
-    private static String pluginName;
     private static String version;
     private static Settings settings;
     private static List<JavaPlugin> registeredPlugins;
     private static HashMap<String, User> users;
 
+    private static PluginDescriptionFile description;
+    static Logger logger;
+
     public void onEnable()
     {
-        // Init variables first to prevent NullPointerExceptions when other plugins are trying to access them
-
+        // Init variables first to prevent NullPointerExceptions when other plugins try to access them
         version = getDescription().getVersion();
         tmpBannedPlayers = new ArrayList<>();
         registeredPlugins = new ArrayList<>();
         users = new HashMap<>();
+        description = getDescription();
+        dataFolder = getDataFolder();
+        logger = new Logger();
 
+        // Init language
+        LanguageConfiguration.load();
 
+        // Init Settings
+        settings = new Settings();
+
+        logger.log(Level.INFO, "Loading...");
         // Check optional dependencies
         if ( !isVaultAvailable() )
         {
-            Bukkit.getLogger().warning("Vault Plugin not found. Disabling economy and some permission features.");
+            SinkLibrary.getCustomLogger().warning("Vault Plugin not found. Disabling economy and some permission features.");
             permissionsAvailable = false;
             economyAvailable = false;
             chatAvailable = false;
@@ -87,12 +101,12 @@ public class SinkLibrary extends JavaPlugin
 
             if ( !setupEcononmy() )
             {
-                Bukkit.getLogger().warning("Economy Plugin not found. Disabling economy features.");
+                SinkLibrary.getCustomLogger().warning("Economy Plugin not found. Disabling economy features.");
                 economyAvailable = false;
             }
             if ( !setupPermissions() )
             {
-                Bukkit.getLogger().warning("Permissions Plugin not found. Disabling permissions features.");
+                SinkLibrary.getCustomLogger().warning("Permissions Plugin not found. Disabling permissions features.");
                 permissionsAvailable = false;
             }
 
@@ -102,9 +116,6 @@ public class SinkLibrary extends JavaPlugin
             }
         }
 
-        pluginName = this.getDescription().getName();
-        dataFolder = getDataFolder();
-
         if ( !getCustomDataFolder().exists() )
         {
             try
@@ -113,21 +124,14 @@ public class SinkLibrary extends JavaPlugin
             }
             catch ( Exception e )
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create Data Folder!", e);
+                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create Data Folder!", e); // Log via Bukkits Logger, because Log File doesnt exists
             }
         }
 
         if ( chatAvailable && economyAvailable && permissionsAvailable )
         {
-            Bukkit.getLogger().info("Successfully hooked into permissions, economy and chat.");
+            SinkLibrary.getCustomLogger().info("Successfully hooked into permissions, economy and chat.");
         }
-
-
-        // Init language
-        LanguageConfiguration.load();
-
-        // Init Settings
-        settings = new Settings();
 
         // Register Listeners and Commands
         registerListeners();
@@ -146,7 +150,8 @@ public class SinkLibrary extends JavaPlugin
 
     public void onDisable()
     {
-        Bukkit.getLogger().info("Saving players...");
+        SinkLibrary.getCustomLogger().log(Level.INFO, "Disabling...");
+        SinkLibrary.getCustomLogger().info("Saving players...");
         for ( Player p : Bukkit.getOnlinePlayers() )
         {
             User user = SinkLibrary.getUser(p);
@@ -155,14 +160,20 @@ public class SinkLibrary extends JavaPlugin
                 user.getPlayerConfiguration().save();
             }
         }
-        Bukkit.getLogger().info("Disabled.");
+        SinkLibrary.getCustomLogger().debug("Disabled.");
+        try
+        {
+            logger.getFileWriter().close();
+        }
+        catch ( IOException ignored ) { }
+        System.gc();
     }
 
     private void update()
     {
-        Updater updater = new Updater(getSettings().getUpdateType());
+        Updater updater = new Updater(settings.getUpdateType());
         String permission = "sinklibrary.updatenotification";
-        String versionType = " " + updater.getLatestGameVersion() + " ";
+        String versionType = ' ' + updater.getLatestGameVersion() + ' ';
         if ( versionType.equalsIgnoreCase("release") ) versionType = " ";
         if ( updater.getResult() == Updater.UpdateResult.UPDATE_AVAILABLE )
         {
@@ -170,11 +181,11 @@ public class SinkLibrary extends JavaPlugin
         }
         else if ( updater.getResult() == Updater.UpdateResult.NO_UPDATE )
         {
-            Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "No new updates found...");
+            SinkLibrary.getCustomLogger().info(Updater.CONSOLEPREFIX + "No new updates found...");
         }
         else if ( updater.getResult() == Updater.UpdateResult.SUCCESS )
         {
-            Bukkit.getLogger().info(Updater.CONSOLEPREFIX + "Updates downloaded, please restart or reload the server to take effect...");
+            SinkLibrary.getCustomLogger().info(Updater.CONSOLEPREFIX + "Updates downloaded, please restart or reload the server to take effect...");
         }
     }
 
@@ -293,6 +304,9 @@ public class SinkLibrary extends JavaPlugin
      */
     public static File getCustomDataFolder()
     {
+        String pluginName = getPluginName();
+        if ( pluginName == null ) throw new NullPointerException("getPluginName() returned null");
+        if ( dataFolder == null ) throw new NullPointerException("dataFolder is null");
         return new File(dataFolder.getAbsolutePath().replace(pluginName, "SinkPlugins"));
     }
 
@@ -313,7 +327,7 @@ public class SinkLibrary extends JavaPlugin
             }
         }
         if ( !ircAvailable ) return false;
-
+        SinkLibrary.getCustomLogger().debug("Firing new IRCSendMessageEvent(\"" + message + "\")");
         IRCSendMessageEvent event = new IRCSendMessageEvent(message);
         Bukkit.getPluginManager().callEvent(event);
         return true;
@@ -406,7 +420,7 @@ public class SinkLibrary extends JavaPlugin
      */
     public static void refreshDisplayName(Player player)
     {
-        if ( !getSettings().getDisplayNamesEnabled() ) return;
+        if ( !settings.isDisplayNamesEnabled() ) return;
         User user = SinkLibrary.getUser(player);
         PlayerConfiguration config = user.getPlayerConfiguration();
 
@@ -417,7 +431,7 @@ public class SinkLibrary extends JavaPlugin
 
         String nickname = user.getDisplayName();
 
-        if ( nickname == null || nickname.equals("null") || nickname.equals("") )
+        if ( nickname == null || nickname.equals("null") || nickname.isEmpty() )
         {
             config.setDisplayName(user.getDefaultDisplayName());
             config.setHasDisplayName(false);
@@ -427,6 +441,7 @@ public class SinkLibrary extends JavaPlugin
             nickname = user.getDefaultDisplayName();
         }
 
+        assert nickname != null;
         if ( nickname.equals(user.getDefaultDisplayName()) )
         {
             config.setHasDisplayName(false);
@@ -441,7 +456,7 @@ public class SinkLibrary extends JavaPlugin
      */
     public static List<JavaPlugin> getRegisteredPlugins()
     {
-        return registeredPlugins;
+        return Collections.unmodifiableList(registeredPlugins);
     }
 
     /**
@@ -481,7 +496,7 @@ public class SinkLibrary extends JavaPlugin
         User user = getUser(player);
         user.getPlayerConfiguration().save();
         String name = user.getPlayer().getName();
-        if ( name != null && !name.equals("") )
+        if ( name != null && !name.isEmpty() )
         {
             users.remove(name);
         }
@@ -494,7 +509,7 @@ public class SinkLibrary extends JavaPlugin
      */
     public static String getPluginName()
     {
-        return pluginName;
+        return description.getName();
     }
 
     /**
@@ -520,5 +535,10 @@ public class SinkLibrary extends JavaPlugin
     public static HashMap<String, User> getUsers()
     {
         return users;
+    }
+
+    public static Logger getCustomLogger()
+    {
+        return logger;
     }
 }

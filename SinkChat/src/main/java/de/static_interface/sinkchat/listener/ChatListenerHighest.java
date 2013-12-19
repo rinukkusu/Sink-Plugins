@@ -17,6 +17,7 @@
 package de.static_interface.sinkchat.listener;
 
 import de.static_interface.sinkchat.channel.ChannelHandler;
+import de.static_interface.sinkchat.channel.IChannel;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
@@ -29,6 +30,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.util.TreeMap;
+import java.util.logging.Level;
+
 import static de.static_interface.sinklibrary.configuration.LanguageConfiguration._;
 
 public class ChatListenerHighest implements Listener
@@ -36,19 +40,51 @@ public class ChatListenerHighest implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncPlayerChat(AsyncPlayerChatEvent event)
     {
+        try
+        {
+            onChat(event);
+        }
+        catch ( RuntimeException e )
+        {
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Warning! Unexpected exception occurred:", e);
+        }
+    }
+
+    private void onChat(AsyncPlayerChatEvent event)
+    {
         if ( event.isCancelled() )
         {
             return;
         }
 
+        SinkLibrary.getCustomLogger().debug("Channel Registered Call Chars:");
+        String set = "";
+        TreeMap<String, IChannel> registeredChars = ChannelHandler.getRegisteredCallChars();
+        for ( String callChar : registeredChars.keySet() )
+        {
+            set += String.format("%s" + ':' + registeredChars.get(callChar).getChannelName() + "%n", callChar);
+        }
+        SinkLibrary.getCustomLogger().debug(set);
+
+        SinkLibrary.getCustomLogger().debug("Message Call Char: " + event.getMessage().toCharArray()[0]);
+
         for ( String callChar : ChannelHandler.getRegisteredCallChars().keySet() )
         {
-            if ( event.getMessage().startsWith(callChar) && ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()) )
+            if ( event.getMessage().startsWith(callChar) )
             {
-                event.setCancelled(true);
+                if ( ChannelHandler.getRegisteredChannel(callChar).sendMessage(event.getPlayer(), event.getMessage()) )
+                {
+                    event.setCancelled(true);
+                }
+                else
+                {
+                    SinkLibrary.getCustomLogger().debug("sendMessage(\"" + event.getPlayer().getName() + "\", \"" + event.getMessage() + "\"); returned false!");
+                }
                 return;
             }
         }
+
+        SinkLibrary.getCustomLogger().debug("Call Char didnt match any registred call chars! Sending as locale message...");
 
         User eventPlayer = SinkLibrary.getUser(event.getPlayer());
 
@@ -58,10 +94,10 @@ public class ChatListenerHighest implements Listener
 
         if ( !SinkLibrary.isPermissionsAvailable() )
         {
-            formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.Chat.Local") + ChatColor.RESET + " " + formattedMessage;
+            formattedMessage = ChatColor.GRAY + _("SinkChat.Prefix.Chat.Local") + ChatColor.RESET + ' ' + formattedMessage;
         }
 
-        String spyPrefix = ChatColor.GRAY + _("SinkChat.Prefix.Spy") + " " + ChatColor.RESET;
+        String spyPrefix = ChatColor.GRAY + _("SinkChat.Prefix.Spy") + ' ' + ChatColor.RESET;
 
         double x = event.getPlayer().getLocation().getX();
         double y = event.getPlayer().getLocation().getY();
@@ -86,7 +122,7 @@ public class ChatListenerHighest implements Listener
             {
                 p.sendMessage(formattedMessage);
             }
-            else if ( (spyAll || canSpy) && config.getSpyEnabled() )
+            else if ( (spyAll || canSpy) && config.isSpyEnabled() )
             {
                 p.sendMessage(spyPrefix + formattedMessage);
             }

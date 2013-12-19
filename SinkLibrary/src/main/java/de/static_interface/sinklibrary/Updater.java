@@ -1,4 +1,20 @@
 /*
+ * Copyright (c) 2013 adventuria.eu / static-interface.de
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
  * Updater for Bukkit by h31ix. https://github.com/h31ix/Updater
  *
  * This class provides the means to safely and easily update a plugin, or check to see if it is updated using dev.bukkit.org
@@ -36,19 +52,19 @@ import java.util.zip.ZipInputStream;
  * @version 2.0
  */
 
-@SuppressWarnings("UnusedDeclaration")
+@SuppressWarnings({"UnusedDeclaration", "HardcodedFileSeparator"})
 public class Updater
 {
     public static final String CONSOLEPREFIX = "[SinkPluginsUpdate] ";
     public static final String PREFIX = ChatColor.DARK_GRAY + "[" + ChatColor.DARK_GREEN + "SinkPluginsUpdate" + ChatColor.DARK_GRAY + "] " + ChatColor.RESET;
 
     private UpdateType type;
-    private String versionName;
-    private String versionLink;
-    private String versionType;
-    private String versionGameVersion;
+    private String versionName = null;
+    private String versionLink = null;
+    private String versionType = null;
+    private String versionGameVersion = null;
 
-    private URL url; // Connecting to RSS
+    private URL url = null; // Connecting to RSS
     //private File file; // The plugin's file
     private Thread thread; // Updater thread
 
@@ -63,6 +79,7 @@ public class Updater
 
     private static final String[] NO_UPDATE_TAG = {"-DEV", "-PRE", "-SNAPSHOT"}; // If the version number contains one of these, don't update.
     private static final int BYTE_SIZE = 1024; // Used for downloading files
+    private static final String VERSION_PATTERN = " v";
 
     private String updateFolder;// The folder that downloads will be placed in
     private Updater.UpdateResult result = Updater.UpdateResult.SUCCESS; // Used for determining the outcome of the update process
@@ -137,12 +154,12 @@ public class Updater
     public Updater(UpdateType type)
     {
         this.type = type;
-        this.id = 66370;
-        this.updateFolder = Bukkit.getUpdateFolder();
+        id = 66370;
+        updateFolder = Bukkit.getUpdateFolder();
 
         //this.config.addDefault("api-key", "PUT_API_KEY_HERE");
 
-        if ( !SinkLibrary.getSettings().getUpdaterEnabled() )
+        if ( !SinkLibrary.getSettings().isUpdaterEnabled() )
         {
             result = UpdateResult.DISABLED;
             return;
@@ -154,7 +171,7 @@ public class Updater
         }
         catch ( MalformedURLException e )
         {
-            Bukkit.getLogger().severe(CONSOLEPREFIX + "The project ID provided for updating, " + id + " is invalid.");
+            SinkLibrary.getCustomLogger().severe(CONSOLEPREFIX + "The project ID provided for updating, " + id + " is invalid.");
             result = UpdateResult.FAIL_BADID;
             e.printStackTrace();
         }
@@ -169,7 +186,7 @@ public class Updater
     public Updater.UpdateResult getResult()
     {
         waitForThread();
-        return this.result;
+        return result;
     }
 
     /**
@@ -178,7 +195,7 @@ public class Updater
     public String getLatestType()
     {
         waitForThread();
-        return this.versionType;
+        return versionType;
     }
 
     /**
@@ -187,7 +204,7 @@ public class Updater
     public String getLatestGameVersion()
     {
         waitForThread();
-        return this.versionGameVersion;
+        return versionGameVersion;
     }
 
     /**
@@ -196,7 +213,7 @@ public class Updater
     public String getLatestName()
     {
         waitForThread();
-        return this.versionName;
+        return versionName;
     }
 
     /**
@@ -205,7 +222,7 @@ public class Updater
     public String getLatestFileLink()
     {
         waitForThread();
-        return this.versionLink;
+        return versionLink;
     }
 
     /**
@@ -218,7 +235,7 @@ public class Updater
         {
             try
             {
-                this.thread.join();
+                thread.join();
             }
             catch ( final InterruptedException e )
             {
@@ -239,7 +256,7 @@ public class Updater
         BufferedInputStream in = null;
         FileOutputStream fout = null;
         String tempFile = "temp.zip";
-        File downloadFile = new File(folder.getAbsolutePath() + "/" + tempFile);
+        File downloadFile = new File(folder.getAbsolutePath() + File.separator + tempFile);
         try
         {
             // Download the file
@@ -250,7 +267,7 @@ public class Updater
 
             final byte[] data = new byte[Updater.BYTE_SIZE];
             int count;
-            Bukkit.getLogger().info(CONSOLEPREFIX + "About to download a new update: " + this.versionName);
+            SinkLibrary.getCustomLogger().info(CONSOLEPREFIX + "About to download a new update: " + versionName);
             long downloaded = 0;
             while ( (count = in.read(data, 0, Updater.BYTE_SIZE)) != -1 )
             {
@@ -259,21 +276,21 @@ public class Updater
                 final int percent = (int) ((downloaded * 100) / fileLength);
                 if ( ((percent % 10) == 0) )
                 {
-                    Bukkit.getLogger().info(CONSOLEPREFIX + "Downloading update: " + percent + "% of " + fileLength + " bytes.");
+                    SinkLibrary.getCustomLogger().info(CONSOLEPREFIX + "Downloading update: " + percent + "% of " + fileLength + " bytes.");
                 }
             }
             //Just a quick check to make sure we didn't leave any files from last time...
-            for ( final File xFile : new File(SinkLibrary.getCustomDataFolder().getParent(), this.updateFolder).listFiles() )
+            for ( final File xFile : new File(SinkLibrary.getCustomDataFolder().getParent(), updateFolder).listFiles() )
             {
                 xFile.delete();
             }
             // Check to see if it's a zip file, if it is, unzip it.
-            final File dFile = new File(folder.getAbsolutePath() + "/" + tempFile);
-            this.unzip(dFile);
+            final File dFile = new File(folder.getAbsolutePath() + File.separator + tempFile);
+            unzip(dFile);
         }
         catch ( final Exception ex )
         {
-            Bukkit.getLogger().log(Level.WARNING, CONSOLEPREFIX + "The auto-updater tried to download a new update, but was unsuccessful.", ex);
+            SinkLibrary.getCustomLogger().log(Level.WARNING, CONSOLEPREFIX + "The auto-updater tried to download a new update, but was unsuccessful.", ex);
             result = Updater.UpdateResult.FAIL_DOWNLOAD;
         }
         finally
@@ -344,8 +361,8 @@ public class Updater
         }
         catch ( IOException ex )
         {
-            Bukkit.getLogger().warning("The auto-updater tried to unzip a new update file, but was unsuccessful.");
-            this.result = Updater.UpdateResult.FAIL_DOWNLOAD;
+            SinkLibrary.getCustomLogger().warning("The auto-updater tried to unzip a new update file, but was unsuccessful.");
+            result = Updater.UpdateResult.FAIL_DOWNLOAD;
             ex.printStackTrace();
         }
     }
@@ -353,37 +370,38 @@ public class Updater
     /**
      * Check to see if the program should continue by evaluation whether the plugin is already updated, or shouldn't be updated
      */
-    private boolean versionCheck(String title)
+    @SuppressWarnings("DynamicRegexReplaceableByCompiledPattern")
+    private boolean checkVersion(String title)
     {
-        if ( this.type != UpdateType.NO_VERSION_CHECK )
+        if ( type != UpdateType.NO_VERSION_CHECK )
         {
             final String version = SinkLibrary.getVersion();
-            if ( title.split(" v").length == 2 )
+            if ( title.split(VERSION_PATTERN).length == 2 )
             {
-                final String remoteVersion = title.split(" v")[1].split(" ")[0]; // Get the newest file's version number
+                final String remoteVersion = title.split(VERSION_PATTERN)[1].split(" ")[0]; // Get the newest file's version number
                 int remVer, curVer = 0;
                 try
                 {
-                    remVer = this.calVer(remoteVersion);
-                    curVer = this.calVer(version);
+                    remVer = calVer(remoteVersion);
+                    curVer = calVer(version);
                 }
-                catch ( final NumberFormatException nfe )
+                catch ( final NumberFormatException ignored )
                 {
                     remVer = -1;
                 }
-                if ( this.hasTag(version) || version.equalsIgnoreCase(remoteVersion) || (curVer >= remVer) )
+                if ( hasTag(version) || version.equalsIgnoreCase(remoteVersion) || (curVer >= remVer) )
                 {
                     // We already have the latest version, or this build is tagged for no-update
-                    this.result = Updater.UpdateResult.NO_UPDATE;
+                    result = Updater.UpdateResult.NO_UPDATE;
                     return false;
                 }
             }
             else
             {
                 // The file's name did not contain the string 'vVersion'
-                Bukkit.getLogger().warning("Couldn't get latest version of plugin.");
-                Bukkit.getLogger().warning("Please notify the author of this error.");
-                this.result = Updater.UpdateResult.FAIL_NOVERSION;
+                SinkLibrary.getCustomLogger().warning("Couldn't get latest version of plugin.");
+                SinkLibrary.getCustomLogger().warning("Please notify the author of this error.");
+                result = Updater.UpdateResult.FAIL_NOVERSION;
                 return false;
             }
         }
@@ -392,8 +410,10 @@ public class Updater
 
     /**
      * Used to calculate the version string as an Integer
+     *
+     * @throws NumberFormatException
      */
-    private Integer calVer(String s) throws NumberFormatException
+    private Integer calVer(String s)
     {
         if ( s.contains(".") )
         {
@@ -408,9 +428,9 @@ public class Updater
      */
     private boolean hasTag(String version)
     {
-        for ( final String string : Updater.NO_UPDATE_TAG )
+        for ( final String s : Updater.NO_UPDATE_TAG )
         {
-            if ( version.contains(string) )
+            if ( version.contains(s) )
             {
                 return true;
             }
@@ -418,16 +438,16 @@ public class Updater
         return false;
     }
 
-    private boolean read()
+    private boolean isUpdateAvailable()
     {
         try
         {
-            final URLConnection conn = this.url.openConnection();
+            final URLConnection conn = url.openConnection();
             conn.setConnectTimeout(5000);
 
             String version = SinkLibrary.getVersion();
 
-            conn.addRequestProperty("User-Agent", "SinkLibrary/v" + version + " (by Trojaner)");
+            conn.addRequestProperty("User-Agent", "SinkLibrary/v" + version + " (modified by Trojaner)");
 
             conn.setDoOutput(true);
 
@@ -438,15 +458,15 @@ public class Updater
 
             if ( array.size() == 0 )
             {
-                Bukkit.getLogger().warning("The updater could not find any files for the project id " + this.id);
-                this.result = UpdateResult.FAIL_BADID;
+                SinkLibrary.getCustomLogger().warning("The updater could not find any files for the project id " + id);
+                result = UpdateResult.FAIL_BADID;
                 return false;
             }
 
-            this.versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TITLE_VALUE);
-            this.versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.LINK_VALUE);
-            this.versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TYPE_VALUE);
-            this.versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.VERSION_VALUE);
+            versionName = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TITLE_VALUE);
+            versionLink = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.LINK_VALUE);
+            versionType = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.TYPE_VALUE);
+            versionGameVersion = (String) ((JSONObject) array.get(array.size() - 1)).get(Updater.VERSION_VALUE);
 
             return true;
         }
@@ -454,15 +474,15 @@ public class Updater
         {
             if ( e.getMessage().contains("HTTP response code: 403") )
             {
-                Bukkit.getLogger().warning("dev.bukkit.org rejected the API key provided in plugins/Updater/config.yml");
-                Bukkit.getLogger().warning("Please double-check your configuration to ensure it is correct.");
-                this.result = UpdateResult.FAIL_APIKEY;
+                SinkLibrary.getCustomLogger().warning("dev.bukkit.org rejected the API key provided in plugins/Updater/config.yml");
+                SinkLibrary.getCustomLogger().warning("Please double-check your configuration to ensure it is correct.");
+                result = UpdateResult.FAIL_APIKEY;
             }
             else
             {
-                Bukkit.getLogger().warning("The updater could not contact dev.bukkit.org for updating.");
-                Bukkit.getLogger().warning("If you have not recently modified your configuration and this is the first time you are seeing this message, the site may be experiencing temporary downtime.");
-                this.result = UpdateResult.FAIL_DBO;
+                SinkLibrary.getCustomLogger().warning("The updater could not contact dev.bukkit.org for updating.");
+                SinkLibrary.getCustomLogger().warning("If you have not recently modified your configuration and this is the first time you are seeing this message, the site may be experiencing temporary downtime.");
+                result = UpdateResult.FAIL_DBO;
             }
             e.printStackTrace();
             return false;
@@ -471,26 +491,28 @@ public class Updater
 
     private class UpdateRunnable implements Runnable
     {
+        UpdateRunnable() {}
+
         @Override
         public void run()
         {
-            if ( Updater.this.url != null )
+            if ( url != null )
             {
                 // Obtain the results of the project's file feed
-                if ( Updater.this.read() )
+                if ( isUpdateAvailable() )
                 {
-                    if ( Updater.this.versionCheck(Updater.this.versionName) )
+                    if ( checkVersion(versionName) )
                     {
-                        if ( (Updater.this.versionLink != null) && (Updater.this.type != UpdateType.NO_DOWNLOAD) )
+                        if ( (versionLink != null) && (type != UpdateType.NO_DOWNLOAD) )
                         {
                             // If it's a zip file, it shouldn't be downloaded as the plugin's name
                             //final String[] split = Updater.this.versionLink.split("/");
                             //name = split[split.length - 1];
-                            Updater.this.saveFile(new File(SinkLibrary.getCustomDataFolder().getParent(), Updater.this.updateFolder), Updater.this.versionLink);
+                            saveFile(new File(SinkLibrary.getCustomDataFolder().getParent(), updateFolder), versionLink);
                         }
                         else
                         {
-                            Updater.this.result = UpdateResult.UPDATE_AVAILABLE;
+                            result = UpdateResult.UPDATE_AVAILABLE;
                         }
                     }
                 }

@@ -28,7 +28,7 @@ public class IRCJoinEvent extends Event implements Cancellable
     private final String hostname;
     private final String channel;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCJoinEvent(String channel, String sender, String login, String hostname)
     {

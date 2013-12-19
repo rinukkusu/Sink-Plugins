@@ -46,7 +46,7 @@ public class StatsCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if ( config.getStatsEnabled() )
+            if ( config.isStatsEnabled() )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon aktiviert!");
                 return true;
@@ -75,7 +75,7 @@ public class StatsCommands
 
             PlayerConfiguration config = user.getPlayerConfiguration();
 
-            if ( !config.getStatsEnabled() )
+            if ( !config.isStatsEnabled() )
             {
                 player.sendMessage(PREFIX + ChatColor.RED + "Die Statistiken sind schon deaktiviert!");
                 return true;

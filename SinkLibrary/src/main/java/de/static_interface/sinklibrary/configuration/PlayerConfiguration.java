@@ -19,7 +19,6 @@ package de.static_interface.sinklibrary.configuration;
 import com.google.common.io.Files;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,11 +34,11 @@ public class PlayerConfiguration extends ConfigurationBase
     public static final int REQUIRED_VERSION = 1;
 
     private Player player;
-    private File yamlFile;
-    private YamlConfiguration yamlConfiguration;
+    private File yamlFile = null;
+    private YamlConfiguration yamlConfiguration = null;
     private User user;
 
-    HashMap<String, Object> defaultValues;
+    HashMap<String, Object> defaultValues = null;
 
     /**
      * Stores Player Informations and Settings in PlayerConfiguration YAML Files.
@@ -78,14 +77,14 @@ public class PlayerConfiguration extends ConfigurationBase
 
             if ( createNewConfiguration )
             {
-                Bukkit.getLogger().log(Level.INFO, "Creating new player configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.INFO, "Creating new player configuration: " + yamlFile);
             }
 
             Files.createParentDirs(yamlFile);
 
             if ( createNewConfiguration && !yamlFile.createNewFile() )
             {
-                Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player configuration: " + yamlFile);
+                SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create player configuration: " + yamlFile);
                 return;
             }
 
@@ -106,16 +105,16 @@ public class PlayerConfiguration extends ConfigurationBase
                 }
                 if ( version < REQUIRED_VERSION )
                 {
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
-                    Bukkit.getLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
+                    SinkLibrary.getCustomLogger().log(Level.WARNING, "***************");
+                    SinkLibrary.getCustomLogger().log(Level.WARNING, "Configuration: " + yamlFile + " is too old! Current Version: " + version + ", required Version: " + REQUIRED_VERSION);
                     recreate();
-                    Bukkit.getLogger().log(Level.WARNING, "***************");
+                    SinkLibrary.getCustomLogger().log(Level.WARNING, "***************");
                     return;
                 }
             }
             */
 
-            getYamlConfiguration().options().header(String.format("This configuration saves and loads variables to players.%nDon't edit it."));
+            yamlConfiguration.options().header(String.format("This configuration saves and loads variables to players.%nDon't edit it."));
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.StatsEnabled", true);
@@ -127,15 +126,15 @@ public class PlayerConfiguration extends ConfigurationBase
         }
         catch ( IOException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getAbsolutePath());
-            Bukkit.getLogger().log(Level.SEVERE, "Exception occurred: ", e);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create player config file: " + yamlFile.getAbsolutePath());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Exception occurred: ", e);
         }
         catch ( InvalidConfigurationException e )
         {
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
-            Bukkit.getLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
-            Bukkit.getLogger().log(Level.SEVERE, e.getMessage());
-            Bukkit.getLogger().log(Level.SEVERE, "***************");
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "***************");
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Invalid configuration file detected: " + yamlFile);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, e.getMessage());
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "***************");
             recreate();
         }
     }
@@ -162,7 +161,7 @@ public class PlayerConfiguration extends ConfigurationBase
     /**
      * @return True if spy is enabled
      */
-    public boolean getSpyEnabled()
+    public boolean isSpyEnabled()
     {
         return (boolean) get("Spy.Enabled");
     }
@@ -180,7 +179,7 @@ public class PlayerConfiguration extends ConfigurationBase
     /**
      * @return True if stats are enabled
      */
-    public boolean getStatsEnabled()
+    public boolean isStatsEnabled()
     {
         return (boolean) get("General.StatsEnabled");
     }
@@ -226,6 +225,7 @@ public class PlayerConfiguration extends ConfigurationBase
     /**
      * @return True if player has an custom Display Name
      */
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     public boolean getHasDisplayName()
     {
         return (boolean) get("Nick.HasDisplayName");

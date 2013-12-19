@@ -40,7 +40,12 @@ public class SinkAntiSpam extends JavaPlugin
         }
         SinkLibrary.registerPlugin(this);
         Bukkit.getPluginManager().registerEvents(new SinkAntiSpamListener(), this);
-        prefix = _("SinkAntiSpam.Prefix") + " " + ChatColor.RESET;
+        prefix = _("SinkAntiSpam.Prefix") + ' ' + ChatColor.RESET;
+    }
+
+    public void onDisable()
+    {
+        System.gc();
     }
 
     public static void warnPlayer(Player player, String reason)

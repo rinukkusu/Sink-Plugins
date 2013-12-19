@@ -32,8 +32,8 @@ public class LagCommand implements CommandExecutor
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
         double realTPS = SinkCommands.getCommandsTimer().getAverageTPS();
-        DecimalFormat f = new DecimalFormat("##.0");
-        String shownTPS = f.format(realTPS);
+        DecimalFormat decimalFormat = new DecimalFormat("##.0");
+        String shownTPS = decimalFormat.format(realTPS);
         if ( realTPS >= 18.5 )
         {
             sender.sendMessage(PREFIX + ChatColor.GREEN + "Der Server läuft ohne Probleme!");
@@ -46,7 +46,7 @@ public class LagCommand implements CommandExecutor
         {
             sender.sendMessage(PREFIX + ChatColor.RED + "Der Server laggt gerade!");
         }
-        sender.sendMessage(PREFIX + "(TPS: " + shownTPS + ")");
+        sender.sendMessage(PREFIX + "(TPS: " + shownTPS + ')');
         return true;
     }
 }

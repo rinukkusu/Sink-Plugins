@@ -29,7 +29,7 @@ public class IRCReceiveMessageEvent extends Event implements Cancellable
     private final String channel;
     private final String message;
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public IRCReceiveMessageEvent(String channel, String sender, String login, String hostname, String message)
     {

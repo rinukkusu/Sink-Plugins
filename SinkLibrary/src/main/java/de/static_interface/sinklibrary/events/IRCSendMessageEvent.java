@@ -28,7 +28,7 @@ public class IRCSendMessageEvent extends Event implements Cancellable
     private static final HandlerList handlers = new HandlerList();
 
     private String message;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     /**
      * Don't fire this event by yourself, use {@link de.static_interface.sinklibrary.SinkLibrary#sendIRCMessage(String)} instead!

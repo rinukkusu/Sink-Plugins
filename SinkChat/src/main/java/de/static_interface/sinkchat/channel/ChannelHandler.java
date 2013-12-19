@@ -41,7 +41,7 @@ public class ChannelHandler
 
         registeredChannelsMap.put(name, channel);
         callChars.put(callChar, channel);
-        registeredChannelNames = registeredChannelNames + name + " ";
+        registeredChannelNames = registeredChannelNames + name + ' ';
     }
 
     /**

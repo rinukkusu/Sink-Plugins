@@ -26,10 +26,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
+import static de.static_interface.sinklibrary.Constants.COMMAND_PREFIX;
+
 public class SinkDebugCommand implements CommandExecutor
 {
     public static final String PREFIX = ChatColor.BLUE + "[Debug] " + ChatColor.RESET;
 
+    @SuppressWarnings("OverlyBroadCatchBlock")
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -45,7 +48,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 3 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " getplayervalue <player> <path.to.key>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: " + COMMAND_PREFIX + cmd + " getplayervalue <player> <path.to.key>");
                     break;
                 }
                 String player = args[1];
@@ -60,7 +63,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 4 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " setplayervalue <player> <path.to.key> <value>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: " + COMMAND_PREFIX + cmd + " setplayervalue <player> <path.to.key> <value>");
                     break;
                 }
                 String player = args[1];
@@ -78,7 +81,7 @@ public class SinkDebugCommand implements CommandExecutor
             {
                 if ( args.length != 3 )
                 {
-                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: /" + cmd + " haspermission <player> <permission>");
+                    sender.sendMessage(PREFIX + "Wrong Usage! Correct Usage: " + COMMAND_PREFIX + cmd + " haspermission <player> <permission>");
                     break;
                 }
                 String player = args[1];
