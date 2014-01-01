@@ -26,6 +26,7 @@ permissions:
       sinklibrary.updatenotification: true
       sinklibrary.debug: true
       sinklibrary.reload: true
+      sinklibrary.trackexceptions: true
 
   sinklibrary.updatenotification:
     default: op
@@ -38,3 +39,7 @@ permissions:
   sinklibrary.reload:
     default: op
     description: Permission required for reloading SinkPlugins Configurations
+
+  sinklibrary.trackexceptions:
+    default: op
+    descriptions: Permission required for tracking exceptions

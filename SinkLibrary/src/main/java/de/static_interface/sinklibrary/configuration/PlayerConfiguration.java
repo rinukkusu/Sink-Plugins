@@ -118,6 +118,7 @@ public class PlayerConfiguration extends ConfigurationBase
 
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.StatsEnabled", true);
+            addDefault("General.ExceptionTrackingEnabled", false);
             addDefault("Spy.Enabled", true);
             addDefault("Nick.HasDisplayName", false);
             addDefault("Nick.DisplayName", user.getDefaultDisplayName());
@@ -238,4 +239,19 @@ public class PlayerConfiguration extends ConfigurationBase
     {
         set("Nick.HasDisplayName", value);
     }
+
+    /**
+     * @return
+     * True if exception tracking is enabled, false if not.
+     */
+    public boolean getHasExceptionTrackingEnabled()
+    {
+        return (boolean) get("General.ExceptionTrackingEnabled");
+    }
+
+    public void setHasExceptionTrackingEnabled(boolean value)
+    {
+        set("General.ExceptionTrackingEnabled", value);
+    }
+
 }

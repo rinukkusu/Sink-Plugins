@@ -204,25 +204,30 @@ public class PrivateChannelCommand implements CommandExecutor
             {
                 if ( args.length < 3 )
                 {
+                	//Not enough arguments. Sending command help
                     sendHelp(sender, cmd);
                     return true;
                 }
                 if ( !(privateChannel.contains((Player) sender)) || (privateChannel == null) )
                 {
+                	//Channel does not exist or command sender does not participate in that channel
                     sender.sendMessage(String.format(_("SinkChat.Commands.Channel.ChannelUnknown"), args[1]));
                     return true;
                 }
                 if ( !(privateChannel.getStarter().equals(sender)) )
                 {
+                	//Command sender is not the creator of that channel
                     sender.sendMessage(_("Permissions.General"));
                     return true;
                 }
                 if ( Bukkit.getPlayer(args[2]) == null )
                 {
+                	//Target is not online
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.HasInvitedToChat.ErrorNotOnline"), args[2]));
                 }
                 if ( !(privateChannel.contains(Bukkit.getPlayer(args[2]))) )
                 {
+                	//Target does not participate in that channel
                     sender.sendMessage(String.format(_("SinkChat.Channels.Private.PlayerKicked"), args[2]));
                     return true;
                 }
@@ -238,6 +243,9 @@ public class PrivateChannelCommand implements CommandExecutor
                     }
                     reason = reason + ' ' + args[x];
                 }
+                
+                Bukkit.getLogger().severe(privateChannel.toString());
+                //Target participates in channel, command sender is channel owner & channel participant. 
                 privateChannel.kickPlayer(Bukkit.getPlayer(args[2]), (Player) sender, reason);
                 return true;
             }
