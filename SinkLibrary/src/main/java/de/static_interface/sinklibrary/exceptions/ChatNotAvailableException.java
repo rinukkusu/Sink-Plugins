@@ -16,9 +16,9 @@
 
 package de.static_interface.sinklibrary.exceptions;
 
-public class ChatNotAvailabeException extends RuntimeException
+public class ChatNotAvailableException extends RuntimeException
 {
-    public ChatNotAvailabeException()
+    public ChatNotAvailableException()
     {
         super("Chat is not available!");
     }

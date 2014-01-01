@@ -17,7 +17,7 @@
 package de.static_interface.sinklibrary;
 
 import de.static_interface.sinklibrary.configuration.PlayerConfiguration;
-import de.static_interface.sinklibrary.exceptions.ChatNotAvailabeException;
+import de.static_interface.sinklibrary.exceptions.ChatNotAvailableException;
 import de.static_interface.sinklibrary.exceptions.EconomyNotAvailableException;
 import de.static_interface.sinklibrary.exceptions.PermissionsNotAvailableException;
 import net.milkbowl.vault.economy.Economy;
@@ -176,13 +176,13 @@ public class User
      * Get Prefix
      *
      * @return Player prefix
-     * @throws de.static_interface.sinklibrary.exceptions.ChatNotAvailabeException if chat is not available
+     * @throws de.static_interface.sinklibrary.exceptions.ChatNotAvailableException if chat is not available
      */
     public String getPrefix()
     {
         if ( !SinkLibrary.isChatAvailable() )
         {
-            throw new ChatNotAvailabeException();
+            throw new ChatNotAvailableException();
         }
         return ChatColor.translateAlternateColorCodes('&', SinkLibrary.getChat().getPlayerPrefix(base));
     }
