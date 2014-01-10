@@ -78,6 +78,7 @@ public class LanguageConfiguration
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
             addDefault("General.ConsoleNotAvailable", "&cThis command is only ingame available");
+            addDefault("General.CommandMisused.Arguments.TooFew", "You have missed two arguments");
 
             addDefault("SinkChat.Commands.Nick.OtherChanged", "%s's name is now %s!");
             addDefault("SinkChat.Commands.Nick.SelfChanged", "Your name is now %s!");
@@ -142,7 +143,7 @@ public class LanguageConfiguration
         catch ( IOException e )
         {
             SinkLibrary.getCustomLogger().log(Level.SEVERE, "Couldn't create configuration file: " + yamlFile.getName());
-            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Exception occured: ", e);
+            SinkLibrary.getCustomLogger().log(Level.SEVERE, "Exception occurred: ", e);
         }
         catch ( InvalidConfigurationException e )
         {
