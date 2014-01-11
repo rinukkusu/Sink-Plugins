@@ -203,7 +203,7 @@ public class IRCListener implements Listener
         String channel = event.getChannel();
         String sender = event.getSender();
 
-        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(' ' + sinkIrcBot.getName() + ' ') || message.toLowerCase().contains(" bot ")) )
+        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(sinkIrcBot.getName() + ' ') || message.toLowerCase().contains(" bot ")) )
         {
             sinkIrcBot.sendMessage(channel, "Hallo, " + sender);
             return;
