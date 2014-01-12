@@ -244,14 +244,14 @@ public class SinkIRCBot extends PircBot
                     }
                 });
 
-                sinkIrcBot.sendMessage(source, "Executed command: \"" + commandWithArgs + '"');
+                sinkIrcBot.sendMessage(source, source + ": " + "Executed command: \"" + commandWithArgs + '"');
             }
 
             if ( command.equals("say") ) //Speak to ingame players
             {
                 if ( args.length < 2 )
                 {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: " + prefix + "say <text>");
+                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + prefix + "say <text>");
                     return;
                 }
                 if ( privateMessageCommand )
@@ -286,7 +286,7 @@ public class SinkIRCBot extends PircBot
                 }
                 catch ( Exception ignored )
                 {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: " + prefix + "kick <player> <reason>");
+                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + prefix + "kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
@@ -326,7 +326,7 @@ public class SinkIRCBot extends PircBot
             {
                 if ( args.length < 2 )
                 {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: " + IRCListener.COMMAND_PREFIX + "privmsg <target> <msg>");
+                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + IRCListener.COMMAND_PREFIX + "privmsg <target> <msg>");
                     return;
                 }
                 de.static_interface.sinklibrary.User target;
@@ -392,11 +392,11 @@ public class SinkIRCBot extends PircBot
         }
         catch ( UnauthorizedAccessException ignored )
         {
-            sinkIrcBot.sendMessage(source, "You may not use that command");
+            sinkIrcBot.sendMessage(source, source + ": " + "You may not use that command");
         }
         catch ( Exception e )
         {
-            sinkIrcBot.sendMessage(source, "Unexpected exception occurred while trying to execute command: " + command);
+            sinkIrcBot.sendMessage(source, source + ": " + "Unexpected exception occurred while trying to execute command: " + command);
             sinkIrcBot.sendMessage(source, e.getMessage());
         }
     }
