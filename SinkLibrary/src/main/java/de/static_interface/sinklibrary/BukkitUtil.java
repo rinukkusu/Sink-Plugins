@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,7 +76,7 @@ public class BukkitUtil
      * It will also send the message also to IRC
      *
      * @param message Message to send
-     * @param sendIRC If true, message will broadcasted to IRC if available
+     * @param sendIRC If true, message will be broadcasted to IRC if available
      */
     public static void broadcastMessage(String message, boolean sendIRC)
     {

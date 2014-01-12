@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package de.static_interface.sinkirc;
 
 import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
+import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.events.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -185,6 +186,10 @@ public class SinkIRCBot extends PircBot
         {
             boolean isOp = isOp(SinkIRC.getMainChannel(), sender, sinkIrcBot);
 
+            String prefix = IRCListener.COMMAND_PREFIX;
+            boolean privateMessageCommand = !source.startsWith("#");
+            if ( privateMessageCommand ) prefix = "";
+
             if ( command.equals("toggle") )
             {
                 if ( !isOp )
@@ -244,23 +249,15 @@ public class SinkIRCBot extends PircBot
 
             if ( command.equals("say") ) //Speak to ingame players
             {
-                boolean privateMessageCommand = !source.startsWith("#");
-
-                String prefix = IRCListener.COMMAND_PREFIX;
-
-                if ( privateMessageCommand )
-                {
-                    source = "Query";
-                    prefix = "";
-                }
-
-
                 if ( args.length < 2 )
                 {
                     sinkIrcBot.sendCleanMessage(source, "Usage: " + prefix + "say <text>");
                     return;
                 }
-
+                if ( privateMessageCommand )
+                {
+                    source = "Query";
+                }
                 String messageWithPrefix;
 
                 if ( isOp )
@@ -289,7 +286,7 @@ public class SinkIRCBot extends PircBot
                 }
                 catch ( Exception ignored )
                 {
-                    sinkIrcBot.sendCleanMessage(source, "Usage: !kick <player> <reason>");
+                    sinkIrcBot.sendCleanMessage(source, "Usage: " + prefix + "kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
@@ -303,7 +300,7 @@ public class SinkIRCBot extends PircBot
                 if ( args.length > 1 )
                 {
                     String reason = label.replace(targetPlayerName, "");
-                    reason = reason.replace("kick ", "");
+                    reason = reason.replace("kick ", "").trim();
                     formattedReason = " (Reason: " + reason + ')';
                 }
                 else
@@ -322,6 +319,28 @@ public class SinkIRCBot extends PircBot
                 });
                 BukkitUtil.broadcastMessage(finalReason);
 
+            }
+
+
+            if ( command.equals("privmsg") )
+            {
+                de.static_interface.sinklibrary.User target;
+                target = SinkLibrary.getUser(args[0]);
+                if ( target == null )
+                {
+                    SinkIRC.getIRCBot().sendMessage(source, LanguageConfiguration._("General.NotOnline").replace("%c", args[1]));
+                    return;
+                }
+
+                String message = ChatColor.DARK_GRAY + "[IRC] [PRIVMSG] " + source + ": " + ChatColor.WHITE;
+
+                for ( int x = 1; x < args.length; x++ )
+                {
+                    message = message + args[x];
+                }
+
+                target.getPlayer().sendMessage(message);
+                return;
             }
 
             if ( command.equals("list") ) //List Players

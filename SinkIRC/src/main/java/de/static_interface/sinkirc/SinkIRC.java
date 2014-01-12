@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,14 +61,23 @@ public class SinkIRC extends JavaPlugin
             {
                 sinkIrcBot.connect(host, port);
             }
-            sinkIrcBot.joinChannel(mainChannel);
 
             if ( SinkLibrary.getSettings().isIRCAuthentificationEnabled() )
             {
                 String authBot = SinkLibrary.getSettings().getIRCAuthBot();
                 String authMessage = SinkLibrary.getSettings().getIRCAuthMessage();
                 sinkIrcBot.sendMessage(authBot, authMessage);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        sinkIrcBot.joinChannel(mainChannel);
+                    }
+                }, 1000); //Very ugly
+                return;
             }
+            sinkIrcBot.joinChannel(mainChannel);
         }
         catch ( IOException | IrcException e )
         {

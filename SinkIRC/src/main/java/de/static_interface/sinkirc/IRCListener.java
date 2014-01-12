@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package de.static_interface.sinkirc;
 import de.static_interface.sinklibrary.BukkitUtil;
 import de.static_interface.sinklibrary.SinkLibrary;
 import de.static_interface.sinklibrary.User;
-import de.static_interface.sinklibrary.configuration.LanguageConfiguration;
 import de.static_interface.sinklibrary.events.*;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -29,7 +28,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jibble.pircbot.Colors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,6 +106,10 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCJoin(IRCJoinEvent event)
     {
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
         if ( event.getSender().equals(sinkIrcBot.getNick()) )
         {
             return;
@@ -119,12 +121,16 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCKick(IRCKickEvent event)
     {
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
         String reason = event.getReason();
         if ( reason.equals(event.getKickerNick()) )
         {
             reason = "";
         }
-        String formattedReason = "Grund: " + reason + '.';
+        String formattedReason = "Grund: " + reason;
         if ( reason.isEmpty() || reason.equals("\"\"") )
         {
             formattedReason = "";
@@ -135,18 +141,30 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCNickChange(IRCNickChangeEvent event)
     {
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
         BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPart(IRCPartEvent event)
     {
-        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " hat den Kanal verlassen.");
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
+        BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " hat den Kanal verlassen.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPing(IRCPingEvent event)
     {
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
         sinkIrcBot.sendMessage(SinkIRC.getMainChannel(), event.getSourceNick() + " hat mich mit dem Wert \"" + event.getPingValue() + "\" angepingt.");
     }
 
@@ -154,28 +172,6 @@ public class IRCListener implements Listener
     public void onIRCPrivateMessage(IRCPrivateMessageEvent event)
     {
         String[] args = event.getMessage().split(" ");
-
-        if ( args[0].equalsIgnoreCase("privmsg") )
-        {
-            User target = null;
-            target = SinkLibrary.getUser(args[1]);
-            if ( target == null )
-            {
-                SinkIRC.getIRCBot().sendMessage( event.getSender(), LanguageConfiguration._( "General.NotOnline" ).replace( "%c", args[1] ) );
-                return;
-            }
-
-            String message = ChatColor.DARK_AQUA+"[IRC] "+event.getSender()+": ";
-
-            for ( int x = 2; x < args.length; x++ )
-            {
-                message = message + args[x];
-            }
-
-            target.getPlayer().sendMessage( message );
-            return;
-        }
-
         String cmd = args[0];
         List<String> tmp = new ArrayList<>(Arrays.asList(args));
         tmp.remove(0);
@@ -186,6 +182,10 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCQuit(IRCQuitEvent event)
     {
+        if ( SinkIRCBot.isDisabled() )
+        {
+            return;
+        }
         String formattedReason = " (" + event.getReason() + ')';
         if ( event.getReason().isEmpty() || event.getReason().equals("\"\"") )
         {
@@ -203,7 +203,9 @@ public class IRCListener implements Listener
         String channel = event.getChannel();
         String sender = event.getSender();
 
-        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") || message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") || message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(sinkIrcBot.getName() + ' ') || message.toLowerCase().contains(" bot ")) )
+        if ( (message.toLowerCase().contains("hello") || message.toLowerCase().contains("hi") ||
+                message.toLowerCase().contains("huhu") || message.toLowerCase().contains("hallo") ||
+                message.toLowerCase().contains("moin") || message.toLowerCase().contains("morgen")) && (message.toLowerCase().contains(sinkIrcBot.getName() + ' ') || message.toLowerCase().contains(' ' + sinkIrcBot.getName() + ' ')) )
         {
             sinkIrcBot.sendMessage(channel, "Hallo, " + sender);
             return;
@@ -213,7 +215,7 @@ public class IRCListener implements Listener
         {
             return;
         }
-        message = message.replaceFirst("~", "");
+        message = message.replaceFirst(IRCListener.COMMAND_PREFIX, "");
         String[] args = message.split(" ");
         String cmd = args[0];
         List<String> tmp = new ArrayList<>(Arrays.asList(args));
