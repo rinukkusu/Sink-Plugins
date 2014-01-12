@@ -77,7 +77,7 @@ public class LanguageConfiguration
             addDefault("Main.ConfigVersion", REQUIRED_VERSION);
             addDefault("General.NotOnline", "&c%s is not online!");
             addDefault("General.ConsoleNotAvailable", "&cThis command is only ingame available");
-            addDefault("General.CommandMisused.Arguments.TooFew", "You have missed two arguments");
+            addDefault("General.CommandMisused.Arguments.TooFew", "You have missed arguments");
 
             addDefault("SinkChat.Commands.Nick.OtherChanged", "%s's name is now %s!");
             addDefault("SinkChat.Commands.Nick.SelfChanged", "Your name is now %s!");

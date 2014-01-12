@@ -16,6 +16,7 @@
 
 package de.static_interface.sinkirc;
 
+import de.static_interface.sinkirc.commands.IrcPrivateMessageCommand;
 import de.static_interface.sinkirc.commands.IrclistCommand;
 import de.static_interface.sinklibrary.SinkLibrary;
 import org.bukkit.Bukkit;
@@ -88,6 +89,7 @@ public class SinkIRC extends JavaPlugin
                 try
                 {
                     getCommand("irclist").setExecutor(new IrclistCommand());
+                    getCommand("ircmsg").setExecutor(new IrcPrivateMessageCommand());
                 }
                 catch ( Exception ignored )
                 {
