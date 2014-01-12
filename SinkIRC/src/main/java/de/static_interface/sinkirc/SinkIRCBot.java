@@ -41,7 +41,7 @@ public class SinkIRCBot extends PircBot
         String botName = SinkLibrary.getSettings().getIRCBotUsername();
         setName(botName);
         setLogin(botName);
-        setVersion("SinkIRC for Bukkit, visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
+        setVersion("SinkIRC for Bukkit - visit http://dev.bukkit.org/bukkit-plugins/sink-plugins/");
         disabled = !SinkLibrary.getSettings().isIRCBotEnabled();
     }
 
@@ -332,11 +332,11 @@ public class SinkIRCBot extends PircBot
                     return;
                 }
 
-                String message = ChatColor.DARK_GRAY + "[IRC] [PRIVMSG] " + source + ": " + ChatColor.WHITE;
+                String message = ChatColor.GRAY + "[IRC] [PRIVMSG] " + ChatColor.DARK_AQUA + source + ChatColor.GRAY + ": " + ChatColor.WHITE;
 
                 for ( int x = 1; x < args.length; x++ )
                 {
-                    message = message + args[x];
+                    message += ' ' + args[x];
                 }
 
                 target.getPlayer().sendMessage(message);

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -318,7 +317,7 @@ public class SinkLibrary extends JavaPlugin
     public static boolean sendIRCMessage(String message)
     {
         boolean ircAvailable = false;
-        for ( Plugin plugin : getRegisteredPlugins() )
+        for ( Plugin plugin : registeredPlugins )
         {
             if ( plugin.getName().equals("SinkIRC") )
             {
@@ -456,7 +455,7 @@ public class SinkLibrary extends JavaPlugin
      */
     public static List<JavaPlugin> getRegisteredPlugins()
     {
-        return Collections.unmodifiableList(registeredPlugins);
+        return registeredPlugins;
     }
 
     /**

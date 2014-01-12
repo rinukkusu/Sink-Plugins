@@ -96,20 +96,12 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCMessage(IRCSendMessageEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), event.getMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCJoin(IRCJoinEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         if ( event.getSender().equals(sinkIrcBot.getNick()) )
         {
             return;
@@ -121,10 +113,6 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCKick(IRCKickEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         String reason = event.getReason();
         if ( reason.equals(event.getKickerNick()) )
         {
@@ -141,30 +129,18 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCNickChange(IRCNickChangeEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + "Server" + "] " + ChatColor.DARK_AQUA + event.getOldNick() + ChatColor.WHITE + " ist jetzt als " + ChatColor.DARK_AQUA + event.getNewNick() + ChatColor.WHITE + " bekannt.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPart(IRCPartEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         BukkitUtil.broadcastMessage(IRC_PREFIX + ChatColor.GRAY + '[' + event.getChannel() + "] " + ChatColor.DARK_AQUA + event.getSender() + ChatColor.WHITE + " hat den Kanal verlassen.", false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCPing(IRCPingEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         sinkIrcBot.sendMessage(SinkIRC.getMainChannel(), event.getSourceNick() + " hat mich mit dem Wert \"" + event.getPingValue() + "\" angepingt.");
     }
 
@@ -182,10 +158,6 @@ public class IRCListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onIRCQuit(IRCQuitEvent event)
     {
-        if ( SinkIRCBot.isDisabled() )
-        {
-            return;
-        }
         String formattedReason = " (" + event.getReason() + ')';
         if ( event.getReason().isEmpty() || event.getReason().equals("\"\"") )
         {

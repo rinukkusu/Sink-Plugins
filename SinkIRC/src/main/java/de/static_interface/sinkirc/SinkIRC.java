@@ -44,47 +44,57 @@ public class SinkIRC extends JavaPlugin
 
         sinkIrcBot = new SinkIRCBot(this);
         SinkLibrary.registerPlugin(this);
-        String host = SinkLibrary.getSettings().getIRCAddress();
-        int port = SinkLibrary.getSettings().getIRCPort();
-        mainChannel = SinkLibrary.getSettings().getIRCChannel();
-
-        boolean usingPassword = SinkLibrary.getSettings().isIRCPasswordEnabled();
-
-        try
+        new Thread()
         {
-            if ( usingPassword )
+            @Override
+            public void run()
             {
-                String password = SinkLibrary.getSettings().getIRCPassword();
-                sinkIrcBot.connect(host, port, password);
-            }
-            else
-            {
-                sinkIrcBot.connect(host, port);
-            }
+                mainChannel = SinkLibrary.getSettings().getIRCChannel();
+                String host = SinkLibrary.getSettings().getIRCAddress();
+                int port = SinkLibrary.getSettings().getIRCPort();
+                boolean usingPassword = SinkLibrary.getSettings().isIRCPasswordEnabled();
 
-            if ( SinkLibrary.getSettings().isIRCAuthentificationEnabled() )
-            {
-                String authBot = SinkLibrary.getSettings().getIRCAuthBot();
-                String authMessage = SinkLibrary.getSettings().getIRCAuthMessage();
-                sinkIrcBot.sendMessage(authBot, authMessage);
-                Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable()
+                try
                 {
-                    @Override
-                    public void run()
+                    if ( usingPassword )
                     {
-                        sinkIrcBot.joinChannel(mainChannel);
+                        String password = SinkLibrary.getSettings().getIRCPassword();
+                        sinkIrcBot.connect(host, port, password);
                     }
-                }, 1000); //Very ugly
-                return;
+                    else
+                    {
+                        sinkIrcBot.connect(host, port);
+                    }
+
+                    if ( SinkLibrary.getSettings().isIRCAuthentificationEnabled() )
+                    {
+                        String authBot = SinkLibrary.getSettings().getIRCAuthBot();
+                        String authMessage = SinkLibrary.getSettings().getIRCAuthMessage();
+                        sinkIrcBot.sendMessage(authBot, authMessage);
+                        SinkLibrary.getCustomLogger().debug("Thread sleep for 3000ms");
+                        Thread.sleep(3000);
+                    }
+                    sinkIrcBot.joinChannel(mainChannel);
+                }
+                catch ( IOException | IrcException e )
+                {
+                    SinkLibrary.getCustomLogger().severe("An Exception occurred while trying to connect to " + host + ':');
+                    SinkLibrary.getCustomLogger().severe(e.getMessage());
+                }
+                catch ( InterruptedException ignored )
+                {
+                    sinkIrcBot.joinChannel(mainChannel);
+                }
+                try
+                {
+                    getCommand("irclist").setExecutor(new IrclistCommand());
+                }
+                catch ( Exception ignored )
+                {
+                    //Already registered? Throws NullPointer with /sreload
+                }
             }
-            sinkIrcBot.joinChannel(mainChannel);
-        }
-        catch ( IOException | IrcException e )
-        {
-            SinkLibrary.getCustomLogger().severe("An Exception occurred while trying to connect to " + host + ':');
-            SinkLibrary.getCustomLogger().severe(e.getMessage());
-        }
-        getCommand("irclist").setExecutor(new IrclistCommand());
+        }.start();
         Bukkit.getPluginManager().registerEvents(new IRCListener(sinkIrcBot), this);
     }
 

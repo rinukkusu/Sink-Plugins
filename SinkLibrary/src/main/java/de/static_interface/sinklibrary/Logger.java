@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 adventuria.eu / static-interface.de
+ * Copyright (c) 2014 adventuria.eu / static-interface.de
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,18 @@ public class Logger
 
     public void logToFile(Level level, String message)
     {
-        if ( !SinkLibrary.getSettings().isLogEnabled() ) return;
+
+        boolean enabled;
+        try
+        {
+            enabled = SinkLibrary.getSettings().isLogEnabled();
+        }
+        catch ( Exception ignored )
+        {
+            return;
+        }
+        if ( !enabled ) return;
+
         File logFile = new File(SinkLibrary.getCustomDataFolder() + File.separator + "SinkPlugins.log");
         if ( !failed && !logFile.exists() ) // Prevent creating/checking every time
         {
