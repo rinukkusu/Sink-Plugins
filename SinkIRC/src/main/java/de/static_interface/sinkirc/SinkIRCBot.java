@@ -251,7 +251,7 @@ public class SinkIRCBot extends PircBot
             {
                 if ( args.length < 2 )
                 {
-                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + prefix + "say <text>");
+                    sinkIrcBot.sendCleanMessage(source, sender + ": " + "Usage: " + prefix + "say <text>");
                     return;
                 }
                 if ( privateMessageCommand )
@@ -286,7 +286,7 @@ public class SinkIRCBot extends PircBot
                 }
                 catch ( Exception ignored )
                 {
-                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + prefix + "kick <player> <reason>");
+                    sinkIrcBot.sendCleanMessage(source, sender + ": " + "Usage: " + prefix + "kick <player> <reason>");
                     return;
                 }
                 final Player targetPlayer = BukkitUtil.getPlayer(targetPlayerName);
@@ -326,7 +326,7 @@ public class SinkIRCBot extends PircBot
             {
                 if ( args.length < 2 )
                 {
-                    sinkIrcBot.sendCleanMessage(source, source + ": " + "Usage: " + IRCListener.COMMAND_PREFIX + "privmsg <target> <msg>");
+                    sinkIrcBot.sendCleanMessage(sender, sender + ": " + "Usage: " + IRCListener.COMMAND_PREFIX + "privmsg <target> <msg>");
                     return;
                 }
                 de.static_interface.sinklibrary.User target;
@@ -337,7 +337,7 @@ public class SinkIRCBot extends PircBot
                     return;
                 }
 
-                String message = ChatColor.GRAY + "[IRC] [PRIVMSG] " + ChatColor.DARK_AQUA + source + ChatColor.GRAY + ": " + ChatColor.WHITE;
+                String message = ChatColor.GRAY + "[IRC] [PRIVMSG] " + ChatColor.DARK_AQUA + sender + ChatColor.GRAY + ": " + ChatColor.WHITE;
 
                 for ( int x = 1; x < args.length; x++ )
                 {
@@ -392,12 +392,11 @@ public class SinkIRCBot extends PircBot
         }
         catch ( UnauthorizedAccessException ignored )
         {
-            sinkIrcBot.sendMessage(source, source + ": " + "You may not use that command");
+            sinkIrcBot.sendMessage(source, sender + ": " + "You may not use that command");
         }
         catch ( Exception e )
         {
-            sinkIrcBot.sendMessage(source, source + ": " + "Unexpected exception occurred while trying to execute command: " + command);
-            sinkIrcBot.sendMessage(source, e.getMessage());
+            sinkIrcBot.sendMessage(source, sender + ": " + "Unexpected exception occurred while trying to execute command \"" + command + "\": " + e.getMessage());
         }
     }
 
