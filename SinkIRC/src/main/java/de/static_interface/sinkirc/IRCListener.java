@@ -44,7 +44,7 @@ public class IRCListener implements Listener
         this.sinkIrcBot = sinkIrcBot;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
@@ -59,7 +59,7 @@ public class IRCListener implements Listener
         sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), message);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
@@ -70,7 +70,7 @@ public class IRCListener implements Listener
         sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), message);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerKick(PlayerKickEvent event)
     {
         if ( SinkIRCBot.isDisabled() )
@@ -83,7 +83,7 @@ public class IRCListener implements Listener
         sinkIrcBot.sendCleanMessage(SinkIRC.getMainChannel(), user.getDisplayName() + ChatColor.RESET + " has been kicked" + reason);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
         if ( SinkIRCBot.isDisabled() )

@@ -324,11 +324,16 @@ public class SinkIRCBot extends PircBot
 
             if ( command.equals("privmsg") )
             {
+                if ( args.length < 2 )
+                {
+                    sinkIrcBot.sendCleanMessage(source, "Usage: " + IRCListener.COMMAND_PREFIX + "privmsg <target> <msg>");
+                    return;
+                }
                 de.static_interface.sinklibrary.User target;
                 target = SinkLibrary.getUser(args[0]);
-                if ( target == null )
+                if ( !target.isOnline() )
                 {
-                    SinkIRC.getIRCBot().sendMessage(source, LanguageConfiguration._("General.NotOnline").replace("%c", args[1]));
+                    sinkIrcBot.sendCleanMessage(source, LanguageConfiguration._("General.NotOnline").replace("%c", args[1]));
                     return;
                 }
 
@@ -391,7 +396,7 @@ public class SinkIRCBot extends PircBot
         }
         catch ( Exception e )
         {
-            sinkIrcBot.sendMessage(source, "Unexpected exception occured while trying to execute command: " + command);
+            sinkIrcBot.sendMessage(source, "Unexpected exception occurred while trying to execute command: " + command);
             sinkIrcBot.sendMessage(source, e.getMessage());
         }
     }
